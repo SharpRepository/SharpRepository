@@ -47,3 +47,8 @@ logs/
 ehthumbs.db
 Icon?
 Thumbs.db
+
+# Integration Test Output #
+###########################
+**/Data/Ef/**
+**/Data/Xml/**
