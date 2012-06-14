@@ -1,6 +1,49 @@
-# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-bin
-obj
+# compiled source #
+###################
+*.com
+*.class
+#*.dll
+*.exe
+*.pdb
+*.dll.config
+*.cache
+*.suo
+*.user
+*.bak
 
-# mstest test results
-TestResults
+# Include dlls if they’re in the NuGet packages directory
+!/packages/*/lib/**/*.dll
+
+# VS Upgrade stuff #
+####################
+UpgradeLog.XML
+_UpgradeReport_Files/
+
+# Directories #
+###############
+bin/
+obj/
+TestResults/
+logs/
+
+# Web publish log #
+###################
+*.Publish.xml
+
+# Resharper #
+#############
+/_ReSharper.*
+*.ReSharper.*
+*.dotCover
+
+# Logs and databases #
+######################
+*.log
+*.sqlite
+
+# OS generated files #
+######################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
