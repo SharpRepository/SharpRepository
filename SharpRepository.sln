@@ -24,6 +24,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E6212FD3-A742-4D07-A4BD-EF536CAE4EE6}"
 	ProjectSection(SolutionItems) = preProject
 		CommonAssembly.cs = CommonAssembly.cs
+		license.txt = license.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.InMemoryRepository", "SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj", "{13AD3FCA-4C9D-4674-B786-F30843638D3B}"
