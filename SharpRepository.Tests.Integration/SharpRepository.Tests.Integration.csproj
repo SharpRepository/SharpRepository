@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{72E04281-9654-41BE-952D-A18ED24E3ACB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpRepository.Tests.Integration</RootNamespace>
+    <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\SharpRepository.Tests\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.NRefactory">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.Spatial">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Lucene.Net.Contrib.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net.Contrib.SpellChecker">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Embedded">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Client.Embedded.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight.FSharp">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Client.Lightweight.FSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.MvcIntegration">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Client.MvcIntegration.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Munin">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Munin.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Storage.Esent">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Storage.Esent.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Storage.Managed">
+      <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Raven.Storage.Managed.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Should">
+      <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
+    <Compile Include="Data\DataDirectoryHelper.cs" />
+    <Compile Include="Data\EfDataDirectoryFactory.cs" />
+    <Compile Include="Helpers\CurrentDirectory.cs" />
+    <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
+    <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
+    <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
+    <Compile Include="RepositoryAddTests.cs" />
+    <Compile Include="RepositoryDeleteTests.cs" />
+    <Compile Include="RepositoryFindAllTests.cs" />
+    <Compile Include="RepositoryFindTests.cs" />
+    <Compile Include="RepositoryGetAllTests.cs" />
+    <Compile Include="RepositoryGetTests.cs" />
+    <Compile Include="Data\RepositoryTestCaseDataFactory.cs" />
+    <Compile Include="RepositoryTypes.cs" />
+    <Compile Include="RepositoryUpdateTests.cs" />
+    <Compile Include="Data\XmlDataDirectoryFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Helpers\RelativeDirectory.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\EmailAddress.cs" />
+    <Compile Include="TestObjects\PhoneNumber.cs" />
+    <Compile Include="TestObjects\TestObjectEntities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
+      <Project>{DAFB3EB8-A771-4CC5-9375-E56F0DED60D6}</Project>
+      <Name>SharpRepository.EfRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
+      <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
+      <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj">
+      <Project>{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}</Project>
+      <Name>SharpRepository.RavenDbRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
+      <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
+      <Name>SharpRepository.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj">
+      <Project>{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}</Project>
+      <Name>SharpRepository.XmlRepository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Ef\" />
+    <Folder Include="Data\Xml\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Raven.Client.Lightweight.FSharp</name></assembly>
+<members>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Raven.Client.DocumentStoreExt">
+
+</member>
+<member name="M:Raven.Client.Linq.toLinqExpression``1(Microsoft.FSharp.Core.FSharpFunc`2{Microsoft.FSharp.Collections.FSharpList{System.Linq.Expressions.ParameterExpression},Microsoft.FSharp.Core.FSharpFunc`2{System.Linq.Expressions.Expression,System.Linq.Expressions.Expression{``0}}},Microsoft.FSharp.Quotations.FSharpExpr)">
+<summary>
+From http://stackoverflow.com/questions/2682475/converting-f-quotations-into-linq-expressions
+</summary>
+</member>
+<member name="T:Raven.Client.Linq">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Raven.Client.Operators">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Raven.Client.Raven">
+
+</member>
+</members>
+</doc>

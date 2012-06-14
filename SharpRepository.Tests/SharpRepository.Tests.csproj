@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{208B5ECD-8CF5-4B63-BC3E-131D45F23374}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpRepository.Tests</RootNamespace>
+    <AssemblyName>SharpRepository.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks">
+      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Should">
+      <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
+    <Compile Include="Batch\BatchTests.cs" />
+    <Compile Include="Caching\CachingTests.cs" />
+    <Compile Include="Caching\StandardCachingWithPartitionStrategyTests.cs" />
+    <Compile Include="Caching\StandardCachingStrategyTests.cs" />
+    <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />
+    <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
+    <Compile Include="QueryOptions\PagingOptionsTests.cs" />
+    <Compile Include="QueryOptions\SortingOptionsTests.cs" />
+    <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="RelativePath.cs" />
+    <Compile Include="Specifications\SpecificationTests.cs" />
+    <Compile Include="Spikes\BatchSpike.cs" />
+    <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
+    <Compile Include="Spikes\ExpressionParsingSpike.cs" />
+    <Compile Include="TestBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\EmailAddress.cs" />
+    <Compile Include="TestObjects\PhoneNumber.cs" />
+    <Compile Include="TestObjects\TestObjectEntities.cs" />
+    <Compile Include="Traits\ICanGetTraitTests.cs" />
+    <Compile Include="Traits\ICanUpdateTraitTests.cs" />
+    <Compile Include="Traits\ICanAddTraitTests.cs" />
+    <Compile Include="Traits\ICanBatchTraitTests.cs" />
+    <Compile Include="Traits\ICanDeleteTraitTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
+      <Project>{DAFB3EB8-A771-4CC5-9375-E56F0DED60D6}</Project>
+      <Name>SharpRepository.EfRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
+      <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
+      <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
+      <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
+      <Name>SharpRepository.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj">
+      <Project>{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}</Project>
+      <Name>SharpRepository.XmlRepository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

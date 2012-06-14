@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SharpRepository.Repository</RootNamespace>
+    <AssemblyName>SharpRepository.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Enyim.Caching">
+      <HintPath>..\packages\EnyimMemcached.2.11\lib\net35\Enyim.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
+    <Compile Include="Caching\TimeoutCachingStrategyBase.cs" />
+    <Compile Include="Caching\NoCachingStrategyBase.cs" />
+    <Compile Include="Caching\StandardCachingStrategyBase.cs" />
+    <Compile Include="Helpers\CustomAttributeExtensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RepositoryBase.BatchItem.cs" />
+    <Compile Include="Specifications\AndAlsoSpecification.cs" />
+    <Compile Include="Specifications\OrElseSpecification.cs" />
+    <Compile Include="Traits\ICanBatch.cs" />
+    <Compile Include="Transactions\IBatch.cs" />
+    <Compile Include="Transactions\BatchAction.cs" />
+    <Compile Include="RepositoryBase.Batch.cs" />
+    <Compile Include="Caching\StandardCachingStrategy.cs" />
+    <Compile Include="Caching\AppFabricCachingProvider.cs" />
+    <Compile Include="Caching\ICachingStrategy.cs" />
+    <Compile Include="Caching\InMemoryCachingProvider.cs" />
+    <Compile Include="Caching\ICachingProvider.cs" />
+    <Compile Include="Caching\NoCachingProvider.cs" />
+    <Compile Include="Caching\NoCachingStrategy.cs" />
+    <Compile Include="Caching\TimeoutCachingStrategy.cs" />
+    <Compile Include="Queries\QueryManager.cs" />
+    <Compile Include="Queries\PagingOptions.cs" />
+    <Compile Include="Queries\IQueryOptions.cs" />
+    <Compile Include="Exceptions\PrimaryKeyInvalidException.cs" />
+    <Compile Include="FetchStrategies\FetchStrategyExtensions.cs" />
+    <Compile Include="FetchStrategies\GenericFetchStrategy.cs" />
+    <Compile Include="FetchStrategies\IFetchStrategy.cs" />
+    <Compile Include="Helpers\Md5Helper.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="Caching\MemcachedCachingProvider.cs" />
+    <Compile Include="LinqRepositoryBase.cs" />
+    <Compile Include="Linq\Dynamic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\SortingOptions.cs" />
+    <Compile Include="RepositoryBase.cs" />
+    <Compile Include="RepositoryPrimaryKeyAttribute.cs" />
+    <Compile Include="Specifications\AndNotSpecification.cs" />
+    <Compile Include="Specifications\AndSpecification.cs" />
+    <Compile Include="Specifications\CompositeSpecification.cs" />
+    <Compile Include="Specifications\ExpressionExtensions.cs" />
+    <Compile Include="Specifications\ISpecification.cs" />
+    <Compile Include="Specifications\NotSpecification.cs" />
+    <Compile Include="Specifications\OrNotSpecification.cs" />
+    <Compile Include="Specifications\OrSpecification.cs" />
+    <Compile Include="Specifications\Specification.cs" />
+    <Compile Include="Traits\ICanAdd.cs" />
+    <Compile Include="Traits\ICanDelete.cs" />
+    <Compile Include="Traits\ICanFind.cs" />
+    <Compile Include="Traits\ICanGet.cs" />
+    <Compile Include="Traits\ICanUpdate.cs" />
+    <Compile Include="Transactions\IBatchItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
