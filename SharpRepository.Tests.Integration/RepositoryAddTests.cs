@@ -29,20 +29,18 @@ namespace SharpRepository.Tests.Integration
             result.Count().ShouldEqual(1);
         }
 
-        [ExecuteForRepositories(RepositoryTypes.Xml, RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        [ExecuteForAllRepositories]
         public void Add_InBatchMode_Should_Delay_The_Action(IRepository<Contact, int> repository)
         {
             using (var batch = repository.BeginBatch())
             {
                 batch.Add(new Contact { Name = "Test User 1" });
 
-                var result = repository.GetAll();
-                result.Count().ShouldEqual(0); // shouldn't have really been added yet
+                repository.GetAll().Count().ShouldEqual(0); // shouldn't have really been added yet
 
                 batch.Add(new Contact { Name = "Test User 2" });
 
-                result = repository.GetAll();
-                result.Count().ShouldEqual(0); // shouldn't have really been added yet
+                repository.GetAll().Count().ShouldEqual(0); // shouldn't have really been added yet
 
                 batch.Commit();
             }

@@ -26,7 +26,7 @@ namespace SharpRepository.Tests.Integration
             result.Count().ShouldEqual(2);
         }
 
-        [ExecuteForRepositories(RepositoryTypes.Xml, RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        [ExecuteForAllRepositories]
         public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging(IRepository<Contact, int> repository)
         {
             const int resultingPage = 2;
@@ -37,19 +37,20 @@ namespace SharpRepository.Tests.Integration
 
             for (int i = 1; i <= totalItems; i++)
             {
-                var contact = new Contact { Name = "Test User " + i };
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId = i};
                 repository.Add(contact);
             }
 
             // this fails for RavenDb because the ContactId is an int but is being used as the key, so the check on ContactId <= 5 is doing a string comparison and including ContactId = 10 as well
             //  need to look into why this happens and how to get around it
-            IEnumerable<Contact> result = repository.FindAll(new Specification<Contact>(p => p.ContactId <= totalItems / 2), queryOptions);
+            var result = repository.FindAll(new Specification<Contact>(p => p.ContactTypeId <= totalItems / 2), queryOptions);
             result.Count().ShouldEqual(pageSize);
             queryOptions.TotalItems.ShouldEqual(totalItems / 2);
             result.First().Name.ShouldEqual("Test User 3");
         }
 
-        [ExecuteForRepositories(RepositoryTypes.Xml,RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        //[ExecuteForRepositories(RepositoryTypes.Xml,RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        [ExecuteForAllRepositories]
         public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging_MagicString(IRepository<Contact, int> repository)
         {
             const int resultingPage = 2;
@@ -60,13 +61,13 @@ namespace SharpRepository.Tests.Integration
 
             for (int i = 1; i <= totalItems; i++)
             {
-                var contact = new Contact { Name = "Test User " + i };
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId = i };
                 repository.Add(contact);
             }
 
             // this fails for RavenDb because the ContactId is an int but is being used as the key, so the check on ContactId <= 5 is doing a string comparison and including ContactId = 10 as well
             //  need to look into why this happens and how to get around it
-            IEnumerable<Contact> result = repository.FindAll(new Specification<Contact>(p => p.ContactId <= totalItems / 2), queryOptions);
+            var result = repository.FindAll(new Specification<Contact>(p => p.ContactTypeId <= totalItems / 2), queryOptions);
             result.Count().ShouldEqual(pageSize);
             queryOptions.TotalItems.ShouldEqual(totalItems / 2);
             result.First().Name.ShouldEqual("Test User 3");

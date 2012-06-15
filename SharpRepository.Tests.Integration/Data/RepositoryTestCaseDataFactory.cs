@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
+using Raven.Client.Document;
 using Raven.Client.Embedded;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
@@ -38,7 +39,12 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
             {
-                var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
+                var documentStore = new EmbeddableDocumentStore
+                                        {
+                                            RunInMemory = true,
+                                            Conventions =
+                                                {DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites}
+                                        };
                 yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
             }
         }
