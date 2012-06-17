@@ -65,7 +65,7 @@ namespace SharpRepository.XmlRepository
 
         private static IEnumerable<T> CloneList(IList<T> list)
         {
-            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or haivng the T be Serializable
+            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
 
             var type = typeof(T);
@@ -91,7 +91,7 @@ namespace SharpRepository.XmlRepository
         {
             TKey id;
 
-            if (GetPrimaryKey(entity, out id) && object.Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
