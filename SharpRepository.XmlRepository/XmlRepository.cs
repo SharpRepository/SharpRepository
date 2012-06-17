@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository.Caching;
+﻿using System;
+using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.XmlRepository
 {
@@ -16,6 +17,7 @@ namespace SharpRepository.XmlRepository
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
         public XmlRepository(string storagePath, ICachingStrategy<T, TKey> cachingStrategy = null) : base(storagePath, cachingStrategy) 
         {
+            if (String.IsNullOrEmpty(storagePath)) throw new ArgumentNullException("storagePath");
         }
     }
 

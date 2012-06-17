@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository.Caching;
+﻿using System;
+using SharpRepository.Repository.Caching;
 using Raven.Client.Document;
 
 namespace SharpRepository.RavenDbRepository
@@ -25,6 +26,7 @@ namespace SharpRepository.RavenDbRepository
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
         public RavenDbRepository(string url, ICachingStrategy<T, TKey> cachingStrategy = null) : base(url, cachingStrategy) 
         {
+            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
         }
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace SharpRepository.RavenDbRepository
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
         public RavenDbRepository(DocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(documentStore, cachingStrategy) 
         {
+            if (documentStore == null) throw new ArgumentNullException("documentStore");
         }  
     }
 
@@ -58,6 +61,7 @@ namespace SharpRepository.RavenDbRepository
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
         public RavenDbRepository(string url, ICachingStrategy<T, string> cachingStrategy = null) : base(url, cachingStrategy)
         {
+            if (String.IsNullOrEmpty(url)) throw new ArgumentNullException("url");
         }
 
         /// <summary>
@@ -67,6 +71,7 @@ namespace SharpRepository.RavenDbRepository
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
         public RavenDbRepository(DocumentStore documentStore, ICachingStrategy<T, string> cachingStrategy = null) : base(documentStore, cachingStrategy)
         {
+            if (documentStore == null) throw new ArgumentNullException("documentStore");
         }  
     }
 }

@@ -15,7 +15,7 @@ namespace SharpRepository.RavenDbRepository
 
         internal RavenDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {
-            Initialize(new DocumentStore());
+            Initialize();
         }
 
         internal RavenDbRepositoryBase(string url, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 

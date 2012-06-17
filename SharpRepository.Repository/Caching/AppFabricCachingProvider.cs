@@ -14,7 +14,7 @@ namespace SharpRepository.Repository.Caching
         protected DataCacheFactory CacheFactory { get; set;}
         protected DataCache Cache { get; set; }
 
-        private static object _lockObject = new object();
+        private static readonly object LockObject = new object();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppFabricCachingProvider"/> class.
@@ -33,6 +33,7 @@ namespace SharpRepository.Repository.Caching
         public AppFabricCachingProvider(DataCacheFactoryConfiguration configuration, string cacheName = null)
             : this(new DataCacheFactory(configuration), cacheName)
         {
+            if (configuration == null) throw new ArgumentNullException("configuration");
         }
 
         /// <summary>
@@ -42,6 +43,8 @@ namespace SharpRepository.Repository.Caching
         /// <param name="cacheName">Name of the cache.</param>
         public AppFabricCachingProvider(DataCacheFactory cacheFactory, string cacheName = null)
         {
+            if (cacheFactory == null) throw new ArgumentNullException("cacheFactory");
+
             CacheFactory = cacheFactory;
 
             // TODO: don't know enough about AppFabric to know if we should use the GetDefaultCache() if no cache name provided, or if we should use our own name like SharpRepository
@@ -50,6 +53,7 @@ namespace SharpRepository.Repository.Caching
 
         public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? cacheTime = null)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
             if (!cacheTime.HasValue)
             {
@@ -63,16 +67,22 @@ namespace SharpRepository.Repository.Caching
 
         public void Clear(string key)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             Cache.Remove(key);
         }
 
         public bool Exists(string key)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             return Cache.Get(key) != null;
         }
 
         public bool Get<T>(string key, out T value)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             value = default(T);
 
             try
@@ -93,9 +103,11 @@ namespace SharpRepository.Repository.Caching
 
         public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Default)
         {
-            lock (_lockObject)
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
+            lock (LockObject)
             {
-                var current = 0;
+                int current;
                 if (!Get(key, out current))
                 {
                     current = defaultValue;

@@ -15,7 +15,7 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository.Caching
 {
-    public abstract class StandardCachingStrategyBase<T, TKey, TPartition> : ICachingStrategy<T, TKey>
+    public abstract class StandardCachingStrategyBase<T, TKey, TPartition> : ICachingStrategy<T, TKey> where T : class
     {
         public ICachingProvider CachingProvider { get; set; }
         public string CachePrefix { get; set; }
@@ -369,10 +369,10 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria.ToString() + ":" + queryOptions ?? "null"));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + ":" + queryOptions ?? "null"));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria.ToString() + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
         }
 
         private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
@@ -380,25 +380,24 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria.ToString() + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria.ToString() + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
         }
 
         private int GetGeneration()
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            var generation = 1;
-
+            int generation;
             return !CachingProvider.Get(GetGenerationKey(), out generation) ? 1 : generation;
         }
 
         private int IncrementGeneration()
         {
             var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
-            Trace.WriteLine("Increment Generation to " + generation);
+            
             return generation;
         }
 
@@ -411,8 +410,7 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            var generation = 1;
-
+            int generation;
             return !CachingProvider.Get(GetPartitionGenerationKey(partition), out generation) ? 1 : generation;
         }
 

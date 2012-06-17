@@ -141,7 +141,7 @@ namespace SharpRepository.XmlRepository
 
         public override void Dispose()
         {
-            // TODO: do we need anything here
+            
         }
 
         private TKey GeneratePrimaryKey()

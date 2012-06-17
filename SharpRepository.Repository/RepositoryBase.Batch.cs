@@ -24,11 +24,15 @@ namespace SharpRepository.Repository
 
             public void Add(T entity)
             {
+                if (entity == null) throw new ArgumentNullException("entity");
+
                 _items.Add(new BatchItem { Action = BatchAction.Add, Item = entity});
             }
 
             public void Add(IEnumerable<T> entities)
             {
+                if (entities == null) throw new ArgumentNullException("entities");
+
                 foreach (var entity in entities)
                 {
                     Add(entity);
@@ -37,11 +41,15 @@ namespace SharpRepository.Repository
 
             public void Update(T entity)
             {
+                if (entity == null) throw new ArgumentNullException("entity");
+
                 _items.Add(new BatchItem { Action = BatchAction.Update, Item = entity });
             }
 
             public void Update(IEnumerable<T> entities)
             {
+                if (entities == null) throw new ArgumentNullException("entities");
+
                 foreach (var entity in entities)
                 {
                     Update(entity);
@@ -50,11 +58,15 @@ namespace SharpRepository.Repository
 
             public void Delete(T entity)
             {
+                if (entity == null) throw new ArgumentNullException("entity");
+
                 _items.Add(new BatchItem { Action = BatchAction.Delete, Item = entity });
             }
 
             public void Delete(IEnumerable<T> entities)
             {
+                if (entities == null) throw new ArgumentNullException("entities");
+
                 foreach (var entity in entities)
                 {
                     Delete(entity);

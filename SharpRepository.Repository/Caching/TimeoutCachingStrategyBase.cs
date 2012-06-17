@@ -7,7 +7,7 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository.Caching
 {
-    public abstract class TimeoutCachingStrategyBase<T, TKey> : ICachingStrategy<T, TKey>
+    public abstract class TimeoutCachingStrategyBase<T, TKey> : ICachingStrategy<T, TKey> where T : class
     {
         public ICachingProvider CachingProvider { get; set; }
         public string CachePrefix { get; set; }
@@ -117,18 +117,6 @@ namespace SharpRepository.Repository.Caching
             }
         }
 
-        private void ClearCache(string cacheKey)
-        {
-            try
-            {
-                CachingProvider.Clear(cacheKey);
-            }
-            catch (Exception)
-            {
-                // don't let caching errors mess with the repository
-            }
-        }
-
         private string GetWriteThroughCacheKey(TKey key)
         {
             return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, key);
@@ -136,17 +124,17 @@ namespace SharpRepository.Repository.Caching
 
         private string GetAllCacheKey(IQueryOptions<T> queryOptions)
         {
-            return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, Md5Helper.CalculateMd5("All:" + queryOptions.ToString()));
+            return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, Md5Helper.CalculateMd5("All:" + queryOptions));
         }
 
         private string FindAllCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "FindAll", Md5Helper.CalculateMd5(criteria.ToString() + ":" + queryOptions.ToString()));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "FindAll", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
         }
 
         private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "Find", Md5Helper.CalculateMd5(criteria.ToString() + ":" + queryOptions.ToString()));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "Find", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
         }
     }
 }

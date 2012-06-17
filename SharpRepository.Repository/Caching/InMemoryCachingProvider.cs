@@ -14,10 +14,12 @@ namespace SharpRepository.Repository.Caching
             get { return MemoryCache.Default; }
         }
 
-        private static object _lockObject = new object();
+        private static readonly object LockObject = new object();
 
         public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? cacheTime = null)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             var policy = new CacheItemPolicy
                              {
                                  Priority = priority
@@ -32,16 +34,22 @@ namespace SharpRepository.Repository.Caching
 
         public void Clear(string key)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             Cache.Remove(key);
         }
 
         public bool Exists(string key)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             return Cache.Any(x => x.Key == key);
         }
 
         public bool Get<T>(string key, out T value)
         {
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
             value = default(T);
 
             try
@@ -62,9 +70,11 @@ namespace SharpRepository.Repository.Caching
 
         public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Default)
         {
-            lock (_lockObject)
+            if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
+
+            lock (LockObject)
             {
-                var current = 0;
+                int current;
                 if (!Get(key, out current))
                 {
                     current = defaultValue;
