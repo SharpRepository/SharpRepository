@@ -161,9 +161,8 @@ namespace SharpRepository.XmlRepository
                 var nextInt = Convert.ToInt32(pkValue) + 1;
                 return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
             }
-            
-            throw new Repository.Exceptions.PrimaryKeyInvalidException(
-                "Primary key could not be generated. This only works for GUID and Int32.");
+
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID and Int32.");
         }
 
         public override string ToString()

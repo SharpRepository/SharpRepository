@@ -40,7 +40,7 @@ namespace SharpRepository.Repository
             if (typeof(T) == typeof(TKey))
             {
                 // this check is mainly because of the overloaded Delete methods Delete(T) and Delete(TKey), ambiguous reference if the generics are the same
-                throw new Exception("The repository type and the primary key type can not be the same.");
+                throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
@@ -48,8 +48,9 @@ namespace SharpRepository.Repository
             _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
         }
 
-        public abstract IQueryable<T> AsQueryable(); 
-        
+        public abstract IQueryable<T> AsQueryable();
+
+        // These are the actual implementation that the derived class needs to implement
         protected abstract IEnumerable<T> GetAllQuery();
         protected abstract IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions);
 
@@ -68,15 +69,16 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return GetAll(queryOptions)
                 .AsQueryable()
                 .Select(selector);
         }
 
-        // This is the actual implementation that the derived class needs to implement
+        // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key);
 
-        // this is what is called and uses the Write Through caching logic
         public T Get(TKey key)
         {
             return _queryManager.ExecuteGet(
@@ -87,6 +89,8 @@ namespace SharpRepository.Repository
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             var result = Get(key);
             if (result == null)
                 return default(TResult);
@@ -95,13 +99,14 @@ namespace SharpRepository.Repository
             return results.AsQueryable().Select(selector).FirstOrDefault();
         }
 
-        // This is the actual implementation that the derived class needs to implement
+        // These are the actual implementation that the derived class needs to implement
         protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria);
         protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
 
-        // this is what is called and uses Generational Caching
         public IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
+            if (criteria == null) throw new ArgumentNullException("criteria");
+
             return _queryManager.ExecuteFindAll(
                 () => queryOptions == null ? FindAllQuery(criteria).ToList() : FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
@@ -111,24 +116,34 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
+            if (criteria == null) throw new ArgumentNullException("criteria");
+
             return FindAll(criteria, queryOptions).AsQueryable().Select(selector).ToList();
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+
             return FindAll(new Specification<T>(predicate), queryOptions);
         }
 
         public IEnumerable<TResult> FindAll<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return FindAll(new Specification<T>(predicate), selector, queryOptions);
         }
 
+        // These are the actual implementation that the derived class needs to implement
         protected abstract T FindQuery(ISpecification<T> criteria);
         protected abstract T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
 
         public T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
+            if (criteria == null) throw new ArgumentNullException("criteria");
+
             return _queryManager.ExecuteFind(
                 () => queryOptions == null ? FindQuery(criteria) : FindQuery(criteria, queryOptions),
                 criteria,
@@ -138,6 +153,9 @@ namespace SharpRepository.Repository
 
         public TResult Find<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
+            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (selector == null) throw new ArgumentNullException("selector");
+
             var result = Find(criteria, queryOptions);
             if (result == null)
                 return default(TResult);
@@ -148,18 +166,26 @@ namespace SharpRepository.Repository
 
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+
             return Find(new Specification<T>(predicate), queryOptions);
         }
 
         public TResult Find<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (selector == null) throw new ArgumentNullException("selector");
+
             return Find(new Specification<T>(predicate), selector, queryOptions);
         }
 
+        // This is the actual implementation that the derived class needs to implement
         protected abstract void AddItem(T entity);
 
         public void Add(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
+
             ProcessAdd(entity, BatchMode);
         }
 
@@ -178,16 +204,21 @@ namespace SharpRepository.Repository
 
         public void Add(IEnumerable<T> entities)
         {
+            if (entities == null) throw new ArgumentNullException("entities");
+
             foreach (var entity in entities)
             {
                 Add(entity);
             }
         }
 
+        // This is the actual implementation that the derived class needs to implement
         protected abstract void DeleteItem(T entity);
 
         public void Delete(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
+
             ProcessDelete(entity, BatchMode);
         }
 
@@ -216,18 +247,18 @@ namespace SharpRepository.Repository
         {
             var entity = Get(key);
 
-            if (entity == default(T))
-            {
-                throw new ArgumentException("No entity exists with this key."); // TODO: should this be a custom exception?
-            }
+            if (entity == null) throw new ArgumentException("No entity exists with this key.", "key");
 
             Delete(entity);
         }
 
+        // This is the actual implementation that the derived class needs to implement
         protected abstract void UpdateItem(T entity);
 
         public void Update(T entity)
         {
+            if (entity == null) throw new ArgumentNullException("entity");
+
             ProcessUpdate(entity, BatchMode);
         }
 
@@ -246,6 +277,8 @@ namespace SharpRepository.Repository
 
         public void Update(IEnumerable<T> entities)
         {
+            if (entities == null) throw new ArgumentNullException("entities");
+
             foreach (var entity in entities)
             {
                 Update(entity);

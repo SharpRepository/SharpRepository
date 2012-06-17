@@ -20,7 +20,7 @@ namespace SharpRepository.Repository.FetchStrategies
             var me = selector.Body as MemberExpression;
             if (me == null)
             {
-                throw new ArgumentException("MemberExpression expected.");
+                throw new ArgumentException("MemberExpression expected.", "selector");
             }
 
             var trimPrefix = me.ToString();

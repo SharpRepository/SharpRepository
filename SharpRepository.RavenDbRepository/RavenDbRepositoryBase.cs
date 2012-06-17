@@ -118,8 +118,7 @@ namespace SharpRepository.RavenDbRepository
                 return (TKey) Convert.ChangeType(TypeName + "s/", typeof (string));
             }
 
-            throw new Repository.Exceptions.PrimaryKeyInvalidException(
-                "Primary key could not be generated. This only works for GUID, Int32 and String.");
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
         }
     }
 }

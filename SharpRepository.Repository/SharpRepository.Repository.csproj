@@ -74,7 +74,6 @@
     <Compile Include="Queries\QueryManager.cs" />
     <Compile Include="Queries\PagingOptions.cs" />
     <Compile Include="Queries\IQueryOptions.cs" />
-    <Compile Include="Exceptions\PrimaryKeyInvalidException.cs" />
     <Compile Include="FetchStrategies\FetchStrategyExtensions.cs" />
     <Compile Include="FetchStrategies\GenericFetchStrategy.cs" />
     <Compile Include="FetchStrategies\IFetchStrategy.cs" />
