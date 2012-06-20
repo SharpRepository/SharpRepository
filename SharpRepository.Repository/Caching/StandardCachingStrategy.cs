@@ -7,7 +7,7 @@ namespace SharpRepository.Repository.Caching
     /// Implements Write-Through caching for all CRUD operations (writing to the database and cache at the same time), and Generational caching for all queries (FindAll, GetAll, Find).
     /// </summary>
     /// <typeparam name="T">Type of the entity the corresponding repository queries against.</typeparam>
-    public class StandardCachingStrategy<T> : StandardCachingStrategyBase<T, int, int>
+    public class StandardCachingStrategy<T> : StandardCachingStrategyBase<T, int, int> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T&gt;"/> class.
@@ -53,7 +53,7 @@ namespace SharpRepository.Repository.Caching
     /// </summary>
     /// <typeparam name="T">Type of the entity the corresponding repository queries against.</typeparam>
     /// <typeparam name="TKey">The primary key type of the entity</typeparam>
-    public class StandardCachingStrategy<T, TKey> : StandardCachingStrategyBase<T, TKey, int>
+    public class StandardCachingStrategy<T, TKey> : StandardCachingStrategyBase<T, TKey, int> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey&gt;"/> class.
@@ -99,7 +99,7 @@ namespace SharpRepository.Repository.Caching
     /// <typeparam name="T">Type of the entity the corresponding repository queries against.</typeparam>
     /// <typeparam name="TKey">The primary key type of the entity</typeparam>
     /// <typeparam name="TPartition">The type of the column that the Generational Cache will be partitioned on.</typeparam>
-    public class StandardCachingStrategy<T, TKey, TPartition> : StandardCachingStrategyBase<T, TKey, TPartition>
+    public class StandardCachingStrategy<T, TKey, TPartition> : StandardCachingStrategyBase<T, TKey, TPartition> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey, TPartition&gt;"/> class.
