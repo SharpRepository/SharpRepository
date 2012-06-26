@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{85E4FB46-FFB2-47DC-83B5-4ECBD80B66D8}</ProjectGuid>
+    <ProjectGuid>{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpRepository.Samples</RootNamespace>
-    <AssemblyName>SharpRepository.Samples</AssemblyName>
+    <RootNamespace>SharpRepository.MongoDbRepository</RootNamespace>
+    <AssemblyName>SharpRepository.MongoDbRepository</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\packages\mongocsharpdriver.1.4.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="Should">
-      <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\packages\mongocsharpdriver.1.4.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,23 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
+      <Link>CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="HowToPageAndSort.cs" />
-    <Compile Include="GettingStarted.cs" />
-    <Compile Include="HowToBatch.cs" />
-    <Compile Include="HowToAbstractAwayTheGenericRepository.cs" />
-    <Compile Include="HowToUseTraits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MongoDbRepository.cs" />
+    <Compile Include="MongoDbRepositoryBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
-      <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
-      <Name>SharpRepository.InMemoryRepository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
       <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
       <Name>SharpRepository.Repository</Name>
