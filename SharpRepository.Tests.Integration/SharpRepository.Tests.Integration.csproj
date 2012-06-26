@@ -141,6 +141,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpRepository.Db4o\SharpRepository.Db4o.csproj">
+      <Project>{12DD3830-5A12-484C-98B4-D30811DEC8A9}</Project>
+      <Name>SharpRepository.Db4o</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
       <Project>{DAFB3EB8-A771-4CC5-9375-E56F0DED60D6}</Project>
       <Name>SharpRepository.EfRepository</Name>
@@ -156,10 +160,6 @@
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
       <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
       <Name>SharpRepository.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Sqlite\SharpRepository.Db4o.csproj">
-      <Project>{12DD3830-5A12-484C-98B4-D30811DEC8A9}</Project>
-      <Name>SharpRepository.Db4o</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj">
       <Project>{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}</Project>

@@ -40,9 +40,8 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Dbo4))
             {
-                var db4oPath = Db4oDataDirectoryFactory.Build("Contact");
-                yield return
-                new TestCaseData(new Db4oRepository<Contact, int>(db4oPath)).SetName("Db4oRepository Test");
+                var dbPath = Db4oDataDirectoryFactory.Build("Contact");
+                yield return new TestCaseData(new Db4oRepository<Contact, int>(dbPath)).SetName("Db4oRepository Test");
             }
 
             if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
@@ -50,8 +49,7 @@ namespace SharpRepository.Tests.Integration.Data
                 var documentStore = new EmbeddableDocumentStore
                                         {
                                             RunInMemory = true,
-                                            Conventions =
-                                                {DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites}
+                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
                                         };
                 yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
             }
