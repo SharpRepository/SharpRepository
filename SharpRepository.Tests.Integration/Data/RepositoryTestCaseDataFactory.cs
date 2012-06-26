@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using SharpRepository.Db4o;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
@@ -37,13 +38,18 @@ namespace SharpRepository.Tests.Integration.Data
                     new TestCaseData(new EfRepository<Contact, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
+            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Dbo4))
+            {
+                var dbPath = Db4oDataDirectoryFactory.Build("Contact");
+                yield return new TestCaseData(new Db4oRepository<Contact, int>(dbPath)).SetName("Db4oRepository Test");
+            }
+
             if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
             {
                 var documentStore = new EmbeddableDocumentStore
                                         {
                                             RunInMemory = true,
-                                            Conventions =
-                                                {DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites}
+                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
                                         };
                 yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
             }

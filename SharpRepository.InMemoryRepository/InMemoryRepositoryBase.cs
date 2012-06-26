@@ -110,11 +110,11 @@ namespace SharpRepository.Repository
                 return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
             }
 
-            var last = _items.LastOrDefault() ?? new T();
-            
             if (typeof(TKey) == typeof(Int32))
             {
                 TKey pkValue;
+
+                var last = _items.LastOrDefault() ?? new T();
                 GetPrimaryKey(last, out pkValue);
 
                 var nextInt = Convert.ToInt32(pkValue) + 1;
