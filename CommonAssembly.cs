@@ -17,15 +17,15 @@ using System.Runtime.InteropServices;
 // and in the AssemblyRef table of any assembly that references it. 
 // Take care when changing the AssemblyVersion as it may impact referencing 
 // assemblies.
-[assembly: AssemblyVersion("0.1")]
+[assembly: AssemblyVersion("0.2")]
 
 // The AssemblyFileVersion is intended to uniquely identify a build of the individual assembly
 // Ideally we would have the build server update this value. This version number is stored 
 // in the Win32 version resource and can be seen when viewing the Windows Explorer property 
 // pages for the assembly. The CLR does not care about nor examine the AssemblyFileVersion.
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.2.0.0")]
 
 // The AssemblyInformationalVersion is intended to represent the version of your entire product.
 // The CLR does not care about nor examine the AssemblyInformationalVersion. You will find this
 // value represented as the assembly's product version in Windows Explorer.
-[assembly: AssemblyInformationalVersion("0.1.0.0")]
+[assembly: AssemblyInformationalVersion("0.2.0.0")]
