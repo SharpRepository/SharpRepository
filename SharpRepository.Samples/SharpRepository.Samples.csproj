@@ -49,6 +49,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="GettingStarted.cs" />
     <Compile Include="HowToBatch.cs" />
     <Compile Include="HowToAbstractAwayTheGenericRepository.cs" />
     <Compile Include="HowToUseTraits.cs" />
