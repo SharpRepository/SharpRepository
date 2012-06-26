@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
-using SharpRepository.Db4o;
+using SharpRepository.Db4oRepository;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;

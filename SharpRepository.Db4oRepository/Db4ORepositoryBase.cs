@@ -6,11 +6,10 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 
-namespace SharpRepository.Db4o
+namespace SharpRepository.Db4oRepository
 {
     public class Db4oRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        //Nice reference: http://jamesrhicks.blogspot.com/2010/02/getting-started-with-db4o.html
         private IObjectContainer _documentStore;
 
         internal Db4oRepositoryBase(string storagePath, ICachingStrategy<T, TKey> cachingStrategy = null)

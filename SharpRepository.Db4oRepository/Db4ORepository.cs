@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpRepository.Repository.Caching;
 
-namespace SharpRepository.Db4o
+namespace SharpRepository.Db4oRepository
 {
     /// <summary>
     /// XML Repository layer
