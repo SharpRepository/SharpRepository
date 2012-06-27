@@ -47,7 +47,7 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.MongoDb))
             {
-                const string connectionString = "mongodb://localhost/?safe=true";
+                string connectionString = MongoDbDataDirectoryFactory.Build("Contact");
                 yield return new TestCaseData(new MongoDbRepository<Contact, int>(connectionString)).SetName("MongoDb Test");
             }
 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -17,7 +16,7 @@ namespace SharpRepository.Tests.Integration
         {
             var contact = new Contact { Name = "Test User" };
             repository.Add(contact);
-            contact.ContactId.ShouldEqual(1);
+            contact.ContactId.ShouldNotEqual(default(int));
         }
         
         [ExecuteForAllRepositories]
@@ -59,9 +58,9 @@ namespace SharpRepository.Tests.Integration
                                         };
 
             repository.Add(contacts);
-            contacts.First().ContactId.ShouldEqual(1);
-            contacts.Last().ContactId.ShouldEqual(3);
-
+            contacts.First().ContactId.ShouldNotEqual(default(int));
+            contacts.Last().ContactId.ShouldNotEqual(default(int));
+            
             var added = repository.GetAll();
             added.Count().ShouldEqual(3);
         }

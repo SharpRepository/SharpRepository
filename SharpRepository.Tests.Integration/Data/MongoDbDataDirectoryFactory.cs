@@ -9,15 +9,10 @@ namespace SharpRepository.Tests.Integration.Data
 
         public static string Build(string type)
         {
-            var dataDirectory = DataDirectoryHelper.GetDataDirectory();
-            string mongoPath = Path.Combine(dataDirectory, @"MongoDb");
-
-            var file = String.Format("{0}\\{1}.yap", mongoPath, _num);
-            _num++; // since it goes through and calls this for each test before running them, we need a different database for each test 
+            var connectionString = String.Format("mongodb://127.0.0.1/{0}{1}?strict=false", type, _num);
+            _num++; 
             
-            if (File.Exists(file)) { File.Delete(file); }
-
-            return file;
+            return connectionString;
         }
     }
 }
