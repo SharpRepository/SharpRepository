@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class RepositoryAddTests : TestBase
     {
-        [ExecuteForRepositories(RepositoryTypes.Dbo4)]
+        [ExecuteForAllRepositories]
         public void Add_Should_Save_And_Assigned_New_Id(IRepository<Contact, int> repository)
         {
             var contact = new Contact { Name = "Test User" };

@@ -1,7 +1,11 @@
 using System;
 using System.Linq;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
@@ -9,6 +13,34 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.MongoDbRepository
 {
+    public class EndsWithIdConvention : IIdMemberConvention
+    {
+        public string FindIdMember(Type type)
+        {
+            foreach (var property in type.GetProperties())
+            {
+                if (property.Name.EndsWith("Id"))
+                {
+                    return property.Name;
+                }
+            }
+            return null;
+        }
+    }
+    public class EmployeeIdGenerator : IIdGenerator
+    {
+        // implement GenerateId
+        // implement IsEmpty
+        public object GenerateId(object container, object document)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEmpty(object id)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class MongoDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         private MongoServer _mongoServer;
@@ -34,6 +66,31 @@ namespace SharpRepository.MongoDbRepository
         private void Initialize(MongoServer mongoServer = null)
         {
             _mongoServer = mongoServer ?? MongoServer.Create("mongodb://localhost/?safe=true");
+            //BsonClassMap.RegisterClassMap<Employee>(cm =>
+            //{
+            //    cm.AutoMap();
+                
+            //});
+            //if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
+            //{
+            //    BsonClassMap.RegisterClassMap<T>(cm =>
+            //        {
+            //            cm.AutoMap();
+            //            cm.IdMember.SetIdGenerator(new EmployeeIdGenerator());
+            //            cm.SetIdMember(cm.GetMemberMap(GetPrimaryKeyPropertyInfo().Name));
+            //        }
+            //        //  cm.MapIdProperty(GetPrimaryKeyPropertyInfo().Name)
+
+            //     );
+            //}
+
+            //var myConventions = new ConventionProfile();
+            //myConventions.SetIdMemberConvention(new EndsWithIdConvention());
+            //BsonClassMap.RegisterConventions(
+            //    myConventions,
+            //    t => t.FullName.StartsWith("MyNamespace.")
+            //);
+
             _database = _mongoServer.GetDatabase(TypeName);
             _session = _database.GetCollection<T>(TypeName);
         }
@@ -98,8 +155,9 @@ namespace SharpRepository.MongoDbRepository
             if (typeof(TKey) == typeof(Int32))
             {
                 TKey pkValue;
-
-                T last = GetAll().LastOrDefault() ?? new T();
+                
+                SortByBuilder sortBy = SortBy.Descending(GetPrimaryKeyPropertyInfo().Name);
+                T last = _session.FindAllAs<T>().SetSortOrder(sortBy).FirstOrDefault();
                 GetPrimaryKey(last, out pkValue);
 
                 int nextInt = Convert.ToInt32(pkValue) + 1;

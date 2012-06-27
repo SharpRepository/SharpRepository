@@ -7,6 +7,7 @@ namespace SharpRepository.Tests.Integration
         InMemory,
         Ef,
         RavenDb,
-        Dbo4
+        Dbo4,
+        MongoDb
     }
 }

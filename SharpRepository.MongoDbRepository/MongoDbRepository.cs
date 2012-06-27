@@ -29,17 +29,6 @@ namespace SharpRepository.MongoDbRepository
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T, TKey&gt;"/> class.
-        /// </summary>
-        /// <param name="mongoServer">The instantiated MongoDb Server.</param>
-        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
-        public MongoDbRepository(MongoServer mongoServer, ICachingStrategy<T, TKey> cachingStrategy = null)
-            : base(mongoServer, cachingStrategy) 
-        {
-            if (mongoServer == null) throw new ArgumentNullException("mongoServer");
-        }  
     }
 
     /// <summary>
@@ -66,16 +55,5 @@ namespace SharpRepository.MongoDbRepository
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="mongoServer">The instantiated MongoDb server.</param>
-        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
-        public MongoDbRepository(MongoServer mongoServer, ICachingStrategy<T, string> cachingStrategy = null)
-            : base(mongoServer, cachingStrategy)
-        {
-            if (mongoServer == null) throw new ArgumentNullException("mongoServer");
-        }  
     }
 }
