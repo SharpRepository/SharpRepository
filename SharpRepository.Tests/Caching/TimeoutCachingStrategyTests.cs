@@ -3,6 +3,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Caching
 {

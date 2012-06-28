@@ -72,6 +72,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
     <Compile Include="TestObjects\TestObjectEntities.cs" />

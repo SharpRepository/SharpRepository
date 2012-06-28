@@ -1,6 +1,6 @@
 using SharpRepository.Repository.Caching;
 
-namespace SharpRepository.Repository
+namespace SharpRepository.InMemoryRepository
 {
     public class InMemoryRepository<T, TKey> : InMemoryRepositoryBase<T, TKey> where T : class, new()
     {

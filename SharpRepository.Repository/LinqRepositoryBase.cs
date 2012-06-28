@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
@@ -13,7 +15,7 @@ namespace SharpRepository.Repository
         {   
         }
 
-        public override IQueryable<T> AsQueryable()
+        public override IQueryable<T>  AsQueryable()
         {
             return BaseQuery();
         }
@@ -72,5 +74,25 @@ namespace SharpRepository.Repository
 
             return queryOptions.Apply(query).ToList();
         }
+
+        public override IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        {
+            var innerQuery = innerRepository.AsQueryable();
+            var outerQuery = BaseQuery();
+
+            var resultQuery = outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector);
+
+            return new CompositeRepository<TResult, TResultKey>(resultQuery);
+        }
+
+        //public override IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        //{
+        //    var innerQuery = innerRepository.AsQueryable();
+        //    var outerQuery = BaseQuery();
+
+        //    var resultQuery = outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector);
+
+        //    return new CompositeRepository<TResult, TResultKey>(resultQuery);
+        //}
     }
 }

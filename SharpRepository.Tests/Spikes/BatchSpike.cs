@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Spikes
 {

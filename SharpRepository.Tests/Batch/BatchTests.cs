@@ -5,6 +5,7 @@ using SharpRepository.Repository.Transactions;
 using SharpRepository.Tests.TestObjects;
 using Should;
 using System.Linq;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Batch
 {

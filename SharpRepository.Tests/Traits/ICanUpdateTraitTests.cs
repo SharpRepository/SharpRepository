@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Traits;
 using SharpRepository.Tests.TestObjects;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Traits
 {
