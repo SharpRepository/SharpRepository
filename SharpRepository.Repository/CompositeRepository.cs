@@ -4,7 +4,8 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.Repository
 {
-    public class CompositeRepository<T, TKey> : LinqRepositoryBase<T, TKey>, IRepositoryQueryable<T, TKey> where T : class, new()
+    // right now int is hard coded but it's sloppy and need to fix this inheritance
+    public class CompositeRepository<T> : LinqRepositoryBase<T, int> where T : class
     {
         private readonly IQueryable<T> _baseQuery;
 

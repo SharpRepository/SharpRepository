@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
@@ -26,9 +23,9 @@ namespace SharpRepository.Tests.Integration
             var contactTypeRepository = new InMemoryRepository<ContactType, int>();
             contactTypeRepository.Add(new ContactType() { ContactTypeId = 1, Abbreviation = "T1"});
             contactTypeRepository.Add(new ContactType() { ContactTypeId = 2, Abbreviation = "T2" });
-            
-            var compositeRepos = repository.Join<int, ContactType, ContactTypeResult, int>(contactTypeRepository, c => c.ContactTypeId, ct => ct.ContactTypeId,
-                            (c, ct) => new ContactTypeResult { Id = c.ContactId, Name = c.Name, TypeAbbrev = ct.Abbreviation });
+
+            var compositeRepos = repository.Join(contactTypeRepository, c => c.ContactTypeId, ct => ct.ContactTypeId,
+                            (c, ct) => new { Id = c.ContactId, Name = c.Name, TypeAbbrev = ct.Abbreviation });
 
             var all = compositeRepos.GetAll().ToList();
 

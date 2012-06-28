@@ -9,7 +9,7 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository
 {
-    public abstract class LinqRepositoryBase<T, TKey> : RepositoryBase<T, TKey> where T : class, new()
+    public abstract class LinqRepositoryBase<T, TKey> : RepositoryBase<T, TKey> where T : class
     {
         protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {   
@@ -75,14 +75,14 @@ namespace SharpRepository.Repository
             return queryOptions.Apply(query).ToList();
         }
 
-        public override IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
             var innerQuery = innerRepository.AsQueryable();
             var outerQuery = BaseQuery();
 
             var resultQuery = outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector);
 
-            return new CompositeRepository<TResult, TResultKey>(resultQuery);
+            return new CompositeRepository<TResult>(resultQuery);
         }
     }
 }

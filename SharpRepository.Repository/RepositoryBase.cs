@@ -79,9 +79,9 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key);
 
-        public abstract IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
             where TInner : class
-            where TResult : class, new();
+            where TResult : class;
 
         public T Get(TKey key)
         {

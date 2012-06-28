@@ -7,29 +7,13 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository
 {
-    public interface IRepositoryQueryable<T, in TKey> : IDisposable where T : class
+    public interface IRepositoryQueryable<T> : IDisposable where T : class
     {
         IQueryable<T> AsQueryable(); // don't want this public, just for POC
 
-        IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
             where TInner : class
-            where TResult : class, new();
-            
-        /// <summary>
-        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
-        /// </summary>
-        /// <param name="key">The primary key.</param>
-        /// <returns>The entity that matches on the primary key</returns>
-        T Get(TKey key);
-
-        /// <summary>
-        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key and maps it to the result of type <typeparamref name="TResult"/>.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="key">The primary key.</param>
-        /// <param name="selector">The mapping selector that returns the result type.</param>
-        /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
-        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+            where TResult : class;
 
         /// <summary>
         /// Gets all entities from the repository.
