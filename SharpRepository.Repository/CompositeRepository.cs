@@ -13,6 +13,35 @@ namespace SharpRepository.Repository
             _baseQuery = baseQuery;
         }
 
+        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
+        {
+            return _baseQuery;
+        }
+
+        protected override void AddItem(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void DeleteItem(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void UpdateItem(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Dispose()
+        {
+            
+        }
 
         //public void Dispose()
         //{
@@ -93,34 +122,5 @@ namespace SharpRepository.Repository
         //{
         //    return _baseRepository.FindAll(criteria, selector, queryOptions);
         //}
-        protected override void AddItem(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void DeleteItem(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void UpdateItem(T entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SaveChanges()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Dispose()
-        {
-            
-        }
-
-        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
-        {
-            return _baseQuery;
-        }
     }
 }

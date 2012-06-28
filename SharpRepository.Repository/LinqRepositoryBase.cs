@@ -84,15 +84,5 @@ namespace SharpRepository.Repository
 
             return new CompositeRepository<TResult, TResultKey>(resultQuery);
         }
-
-        //public override IRepositoryQueryable<TResult, TResultKey> Join<TOuterKey, TInner, TResult, TResultKey>(IRepositoryQueryable<TInner, TOuterKey> innerRepository, Expression<Func<T, TOuterKey>> outerKeySelector, Expression<Func<TInner, TOuterKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
-        //{
-        //    var innerQuery = innerRepository.AsQueryable();
-        //    var outerQuery = BaseQuery();
-
-        //    var resultQuery = outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector);
-
-        //    return new CompositeRepository<TResult, TResultKey>(resultQuery);
-        //}
     }
 }
