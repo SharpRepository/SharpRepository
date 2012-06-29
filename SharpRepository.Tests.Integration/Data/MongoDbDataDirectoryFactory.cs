@@ -9,7 +9,7 @@ namespace SharpRepository.Tests.Integration.Data
 
         public static string Build(string type)
         {
-            var connectionString = String.Format("mongodb://127.0.0.1/{0}{1}?strict=false", type, _num);
+            var connectionString = String.Format("mongodb://127.0.0.1");
             _num++; 
             
             return connectionString;

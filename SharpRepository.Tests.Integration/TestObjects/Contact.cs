@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using Norm;
+using MongoDB.Bson;
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {
     public class Contact
     {
-        [MongoIdentifier]
+        public ObjectId Id { get; set; }
         public int ContactId { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }

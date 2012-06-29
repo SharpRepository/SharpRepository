@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
-using Norm;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -9,8 +12,8 @@ namespace SharpRepository.MongoDbRepository
 {
     public class MongoDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private IMongo _provider;
-        private IMongoDatabase _database;
+        private MongoServer _server;
+        private MongoDatabase _database;
         
         internal MongoDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy) 
@@ -21,59 +24,49 @@ namespace SharpRepository.MongoDbRepository
         internal MongoDbRepositoryBase(string connectionString, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
         {
-            Initialize(Mongo.Create(connectionString));
+            Initialize(MongoServer.Create(connectionString));
         }
 
-        internal MongoDbRepositoryBase(IMongo mongoProvider, ICachingStrategy<T, TKey> cachingStrategy = null)
+        internal MongoDbRepositoryBase(MongoServer mongoServer, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy) 
         {
-            Initialize(mongoProvider);
+            Initialize(mongoServer);
         }
 
-        private void Initialize(IMongo mongoProvider = null)
+        private void Initialize(MongoServer mongoServer = null)
         {
-            _provider = mongoProvider ?? Mongo.Create("mongodb://127.0.0.1/Test?strict=false");
-            _database = _provider.Database;
+            _server = mongoServer ?? MongoServer.Create("mongodb://localhost");
+            _database = _server.GetDatabase(TypeName);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return _database.GetCollection<T>().AsQueryable();
+            return _database.GetCollection<T>(TypeName).AsQueryable();
         }
 
         protected override T GetQuery(TKey key)
         {
-            return _database.GetCollection<T>().AsQueryable().ToList()
-                .FirstOrDefault(x => MatchOnPrimaryKey(x, key));
-        }
-
-        private bool MatchOnPrimaryKey(T item, TKey keyValue)
-        {
-            TKey value;
-            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
+            return BaseQuery().FirstOrDefault();
         }
         
         protected override void AddItem(T entity)
         {
-            TKey id;
-
-            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
-            {
-                id = GeneratePrimaryKey();
-                SetPrimaryKey(entity, id);
-            }
-            
-            _database.GetCollection<T>().Save(entity);
+            _database.GetCollection<T>(TypeName).Insert(entity);
         }
-
+       
         protected override void DeleteItem(T entity)
         {
-            _database.GetCollection<T>().Delete(entity);
+            // Yikes. 
+            //IMongoQuery mq = new QueryDocument(entity.ToBsonDocument());  
+            TKey pkValue;
+            GetPrimaryKey(entity, out pkValue);
+            _database.GetCollection<T>(TypeName).Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
+            //_database.GetCollection<T>(TypeName).Remove(mq);
         }
 
         protected override void UpdateItem(T entity)
         {
-            _database.GetCollection<T>().Save(entity);
+            _database.GetCollection<T>(TypeName).Save(entity);
         }
 
         protected override void SaveChanges()
@@ -93,19 +86,26 @@ namespace SharpRepository.MongoDbRepository
                 return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
             }
 
-            if (typeof(TKey) == typeof(Int32))
-            {
-                var nextInt = Convert.ToInt32(_database.GetCollection<T>().GenerateId());
-                return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
-            }
+            //if (typeof(TKey) == typeof(Int32))
+            //{
+            //    var nextInt = Convert.ToInt32(_database.GetCollection<T>(TypeName).GenerateId());
+            //    return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
+            //}
 
-            if (typeof(TKey) == typeof(Int64))
-            {
-                var nextLong = _database.GetCollection<T>().GenerateId();
-                return (TKey)Convert.ChangeType(nextLong, typeof(TKey));
-            }
+            //if (typeof(TKey) == typeof(Int64))
+            //{
+            //    var nextLong = _database.GetCollection<T>().GenerateId();
+            //    return (TKey)Convert.ChangeType(nextLong, typeof(TKey));
+            //}
             
             throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and Int64.");
+        }
+
+
+        private bool MatchOnPrimaryKey(T item, TKey keyValue)
+        {
+            TKey value;
+            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
         }
     }
 }
