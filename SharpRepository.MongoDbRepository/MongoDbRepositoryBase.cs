@@ -46,22 +46,19 @@ namespace SharpRepository.MongoDbRepository
 
         protected override T GetQuery(TKey key)
         {
-            return BaseQuery().FirstOrDefault();
+            return _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", new ObjectId(key.ToString())));
         }
         
         protected override void AddItem(T entity)
         {
             _database.GetCollection<T>(TypeName).Insert(entity);
         }
-       
+        
         protected override void DeleteItem(T entity)
         {
-            // Yikes. 
-            //IMongoQuery mq = new QueryDocument(entity.ToBsonDocument());  
             TKey pkValue;
             GetPrimaryKey(entity, out pkValue);
             _database.GetCollection<T>(TypeName).Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
-            //_database.GetCollection<T>(TypeName).Remove(mq);
         }
 
         protected override void UpdateItem(T entity)
@@ -71,41 +68,11 @@ namespace SharpRepository.MongoDbRepository
 
         protected override void SaveChanges()
         {
-            //_session.Save();
         }
 
         public override void Dispose()
         {
             
-        }
-
-        private TKey GeneratePrimaryKey()
-        {
-            if (typeof(TKey) == typeof(Guid))
-            {
-                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
-            }
-
-            //if (typeof(TKey) == typeof(Int32))
-            //{
-            //    var nextInt = Convert.ToInt32(_database.GetCollection<T>(TypeName).GenerateId());
-            //    return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
-            //}
-
-            //if (typeof(TKey) == typeof(Int64))
-            //{
-            //    var nextLong = _database.GetCollection<T>().GenerateId();
-            //    return (TKey)Convert.ChangeType(nextLong, typeof(TKey));
-            //}
-            
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and Int64.");
-        }
-
-
-        private bool MatchOnPrimaryKey(T item, TKey keyValue)
-        {
-            TKey value;
-            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
         }
     }
 }
