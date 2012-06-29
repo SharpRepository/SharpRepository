@@ -10,7 +10,7 @@ namespace SharpRepository.Db4oRepository
 {
     public class Db4oRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private IObjectContainer _documentStore;
+        private IObjectContainer _container;
 
         internal Db4oRepositoryBase(string storagePath, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
@@ -20,17 +20,17 @@ namespace SharpRepository.Db4oRepository
 
         private void Initialize(string storagePath)
         {
-            _documentStore = Db4oEmbedded.OpenFile(Db4oEmbedded.NewConfiguration(), storagePath);
+            _container = Db4oEmbedded.OpenFile(Db4oEmbedded.NewConfiguration(), storagePath);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return _documentStore.AsQueryable<T>();
+            return _container.AsQueryable<T>();
         }
 
         protected override T GetQuery(TKey key)
         {
-            return _documentStore.AsQueryable<T>().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+            return _container.AsQueryable<T>().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
         }
 
         private bool MatchOnPrimaryKey(T item, TKey keyValue)
@@ -49,29 +49,29 @@ namespace SharpRepository.Db4oRepository
                 SetPrimaryKey(entity, id);
             }
 
-            _documentStore.Store(entity);
+            _container.Store(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            _documentStore.Delete(entity);
+            _container.Delete(entity);
         }
 
         protected override void UpdateItem(T entity)
         {
-            _documentStore.Store(entity);
+            _container.Store(entity);
         }
 
         protected override void SaveChanges()
         {
-            _documentStore.Commit();
+            _container.Commit();
         }
 
         public override void Dispose()
         {
-            _documentStore.Close();
-            if (_documentStore != null)
-                _documentStore.Dispose();
+            _container.Close();
+            if (_container != null)
+                _container.Dispose();
         }
 
         private TKey GeneratePrimaryKey()
@@ -88,7 +88,7 @@ namespace SharpRepository.Db4oRepository
                 T last = GetAll().LastOrDefault() ?? new T();
                 GetPrimaryKey(last, out pkValue);
 
-                int nextInt = Convert.ToInt32(pkValue) + 1;
+                var nextInt = Convert.ToInt32(pkValue) + 1;
                 return (TKey) Convert.ChangeType(nextInt, typeof (TKey));
             }
 
