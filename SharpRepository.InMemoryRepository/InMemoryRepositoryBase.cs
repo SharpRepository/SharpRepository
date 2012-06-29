@@ -19,6 +19,11 @@ namespace SharpRepository.Repository
             return CloneList(_items).AsQueryable();
         }
         
+        protected override T GetQuery(TKey key)
+        {
+            return BaseQuery().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+        }
+        
         private static IEnumerable<T> CloneList(IList<T> list)
         {
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
@@ -112,7 +117,7 @@ namespace SharpRepository.Repository
 
             if (typeof(TKey) == typeof(string))
             {
-                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString(), typeof(TKey));
+                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
             }
 
             if (typeof(TKey) == typeof(Int32))

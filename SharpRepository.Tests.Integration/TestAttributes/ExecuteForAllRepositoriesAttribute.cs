@@ -12,8 +12,10 @@ namespace SharpRepository.Tests.Integration.TestAttributes
                                                                  {
                                                                      RepositoryTypes.Dbo4, 
                                                                      RepositoryTypes.RavenDb, 
-                                                                     //RepositoryTypes.Xml,
+                                                                     RepositoryTypes.Xml,
                                                                      RepositoryTypes.MongoDb, 
+                                                                     RepositoryTypes.InMemory, 
+                                                                     RepositoryTypes.Ef, 
                                                                  }); }
         }
 
