@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -12,17 +11,12 @@ namespace SharpRepository.MongoDbRepository
 {
     public class MongoDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private MongoServer _server;
-        private MongoDatabase _database;
         private readonly string _databaseName;
-
-        private string DatabaseName
-        {
-            get { return string.IsNullOrEmpty(_databaseName) ? TypeName : _databaseName; }
-        }
+        private MongoDatabase _database;
+        private MongoServer _server;
 
         internal MongoDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
-            : base(cachingStrategy) 
+            : base(cachingStrategy)
         {
             Initialize();
         }
@@ -35,9 +29,14 @@ namespace SharpRepository.MongoDbRepository
         }
 
         internal MongoDbRepositoryBase(MongoServer mongoServer, ICachingStrategy<T, TKey> cachingStrategy = null)
-            : base(cachingStrategy) 
+            : base(cachingStrategy)
         {
             Initialize(mongoServer);
+        }
+
+        private string DatabaseName
+        {
+            get { return string.IsNullOrEmpty(_databaseName) ? TypeName : _databaseName; }
         }
 
         private void Initialize(MongoServer mongoServer = null)
@@ -53,23 +52,25 @@ namespace SharpRepository.MongoDbRepository
 
         protected override T GetQuery(TKey key)
         {
-            var s = key.ToString();
-            if (string.IsNullOrEmpty(s)) return default(T);
-
-            var objectId = new ObjectId(s);
-            return _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", objectId));
+            return IsValidKey(key)
+                       ? _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", new ObjectId(key.ToString())))
+                       : default(T);
         }
 
         protected override void AddItem(T entity)
         {
             _database.GetCollection<T>(TypeName).Insert(entity);
         }
-        
+
         protected override void DeleteItem(T entity)
         {
             TKey pkValue;
             GetPrimaryKey(entity, out pkValue);
-            _database.GetCollection<T>(TypeName).Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
+
+            if (IsValidKey(pkValue))
+            {
+                _database.GetCollection<T>(TypeName).Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
+            }
         }
 
         protected override void UpdateItem(T entity)
@@ -83,7 +84,11 @@ namespace SharpRepository.MongoDbRepository
 
         public override void Dispose()
         {
-            
+        }
+
+        private static bool IsValidKey(TKey key)
+        {
+            return !string.IsNullOrEmpty(key.ToString());
         }
     }
 }

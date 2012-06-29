@@ -31,8 +31,8 @@ namespace SharpRepository.MongoDbRepository
         public static void DropDatabase(string connectionString)
         {
             MongoServer server = MongoServer.Create(connectionString);
-            var db = DatabaseName(connectionString);
-            server.DropDatabase(db); 
+            string db = DatabaseName(connectionString);
+            server.DropDatabase(db);
         }
     }
 }

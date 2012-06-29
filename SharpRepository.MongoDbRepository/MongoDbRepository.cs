@@ -13,8 +13,8 @@ namespace SharpRepository.MongoDbRepository
         /// <summary>
         /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T, TKey&gt;"/> class.
         /// </summary>
-        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
-        public MongoDbRepository(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
+        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy{T,TKey}" />.</param>
+        public MongoDbRepository(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
         }
 
@@ -24,7 +24,7 @@ namespace SharpRepository.MongoDbRepository
         /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
         public MongoDbRepository(string connectionString, ICachingStrategy<T, TKey> cachingStrategy = null)
-            : base(connectionString, cachingStrategy) 
+            : base(connectionString, cachingStrategy)
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
         }
