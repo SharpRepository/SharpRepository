@@ -34,13 +34,13 @@ namespace SharpRepository.MongoDbRepository
     /// MongoDb repository layer
     /// </summary>
     /// <typeparam name="T">The type of object the repository acts on.</typeparam>
-    public class MongoDbRepository<T> : MongoDbRepositoryBase<T, int> where T : class, new()
+    public class MongoDbRepository<T> : MongoDbRepositoryBase<T, string> where T : class, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
-        public MongoDbRepository(ICachingStrategy<T, int> cachingStrategy = null)
+        public MongoDbRepository(ICachingStrategy<T, string> cachingStrategy = null)
             : base(cachingStrategy)
         {
         }
@@ -50,7 +50,7 @@ namespace SharpRepository.MongoDbRepository
         /// </summary>
         /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
-        public MongoDbRepository(string connectionString, ICachingStrategy<T, int> cachingStrategy = null)
+        public MongoDbRepository(string connectionString, ICachingStrategy<T, string> cachingStrategy = null)
             : base(connectionString, cachingStrategy)
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");

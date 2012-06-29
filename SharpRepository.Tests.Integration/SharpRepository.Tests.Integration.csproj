@@ -123,9 +123,10 @@
     <Compile Include="Data\DataDirectoryHelper.cs" />
     <Compile Include="Data\Db4oDataDirectoryFactory.cs" />
     <Compile Include="Data\EfDataDirectoryFactory.cs" />
-    <Compile Include="Data\MongoDbDataDirectoryFactory.cs" />
+    <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
-    <Compile Include="MongoRepositoryTests.cs" />
+    <Compile Include="RepositoryRunningTest.cs" />
+    <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
@@ -183,7 +184,6 @@
   <ItemGroup>
     <Folder Include="Data\Db4o\" />
     <Folder Include="Data\Ef\" />
-    <Folder Include="Data\MongoDb\" />
     <Folder Include="Data\Xml\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

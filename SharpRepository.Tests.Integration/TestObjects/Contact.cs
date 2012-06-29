@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {

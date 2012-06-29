@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -48,11 +49,13 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.MongoDb))
             {
-                string connectionString = MongoDbDataDirectoryFactory.Build("Contact");
-                string databaseName = MongoUrl.Create(connectionString).DatabaseName;
-                MongoServer server = MongoServer.Create(connectionString);
-                server.DropDatabase(databaseName);
-                yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
+                string connectionString = MongoDbConnectionStringFactory.Build("Contact");
+           
+                if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
+                {
+                    MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
+                    yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
+                }
             }
 
             if (includeTypes.Contains(RepositoryTypes.RavenDb))

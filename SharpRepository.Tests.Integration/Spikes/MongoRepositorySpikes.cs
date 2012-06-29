@@ -12,7 +12,7 @@ using SharpRepository.MongoDbRepository;
 using SharpRepository.Tests.Integration.TestObjects;
 using Should;
 
-namespace SharpRepository.Tests.Integration
+namespace SharpRepository.Tests.Integration.Spikes
 {
     // Getting MongoDb installed on Windows
     // http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/
@@ -31,12 +31,19 @@ namespace SharpRepository.Tests.Integration
     }
 
     [TestFixture]
-    public class MongoRepositoryTests : TestBase
+    public class MongoRepositorySpikes : TestBase
     {
         [Test]
-        public void Mongo()
+        public void MongoDb_Supports_Basic_Crud_Operations()
         {
-            MongoServer server = MongoServer.Create("mongodb://localhost");
+            const string connectionString = "mongodb://localhost";
+            
+            if (!MongoDbRepositoryManager.ServerIsRunning(connectionString))
+            {
+                AssertIgnores.MongoServerIsNotRunning();
+            }
+            
+            MongoServer server = MongoServer.Create(connectionString);
             var databaseNames = server.GetDatabaseNames();
             foreach (var db in databaseNames)
             {
@@ -102,6 +109,12 @@ namespace SharpRepository.Tests.Integration
         public void MongoRepository_Supports_Basic_Crud_Operations()
         {
             const string connectionString = "mongodb://127.0.0.1";
+
+            if (!MongoDbRepositoryManager.ServerIsRunning(connectionString))
+            {
+                AssertIgnores.MongoServerIsNotRunning();
+            }
+
             var repo = new MongoDbRepository<Order, string>(connectionString);
             
             // Create 
