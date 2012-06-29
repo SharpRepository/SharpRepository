@@ -13,7 +13,7 @@ namespace SharpRepository.Repository
     /// </summary>
     /// <typeparam name="T">The entity type that the repository acts on.</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
-    public interface IRepository<T, in TKey> : IDisposable where T : class
+    public interface IRepository<T, in TKey> : IEnumerable<T>, IDisposable where T : class
     {
         /// <summary>
         /// Gives access to an IQueryable&lt;T&gt; for this repository.  You can then use this to join with other IQueryable's for more complicated queries.
