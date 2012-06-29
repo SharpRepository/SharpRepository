@@ -8,8 +8,8 @@ namespace SharpRepository.Repository.Queries
     /// Used to define the paging criteria on queries run against a repository.
     /// </summary>
     /// <typeparam name="T">The entity type of the repository.</typeparam>
-    /// <typeparam name="TKey">The type of the property that is being sorted.</typeparam>
-    public class PagingOptions<T, TKey> : SortingOptions<T, TKey>
+    /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
+    public class PagingOptions<T, TSortKey> : SortingOptions<T, TSortKey>
     {
         public int PageSize { get; internal set; }
         public int PageNumber { get; internal set; }
@@ -17,7 +17,8 @@ namespace SharpRepository.Repository.Queries
         public int Take { get { return PageSize; } }
         public int TotalItems { get; internal set; }
 
-        public PagingOptions(int pageNumber, int pageSize, Expression<Func<T, TKey>> sortExpression, bool isDescending = false) : base(sortExpression, isDescending)
+        public PagingOptions(int pageNumber, int pageSize, Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
+            : base(sortExpression, isDescending)
         {
             PageSize = pageSize;
             PageNumber = pageNumber;
