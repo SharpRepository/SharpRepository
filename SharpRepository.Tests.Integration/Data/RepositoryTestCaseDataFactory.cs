@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using MongoDB.Driver;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
@@ -19,46 +20,49 @@ namespace SharpRepository.Tests.Integration.Data
     {
         public static IEnumerable<TestCaseData> Build(RepositoryTypes[] includeTypes)
         {
-            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.InMemory))
+            if (includeTypes.Contains(RepositoryTypes.InMemory))
             {
-                yield return new TestCaseData(new InMemoryRepository<Contact, int>()).SetName("InMemoryRepository Test");
+                yield return new TestCaseData(new InMemoryRepository<Contact, string>()).SetName("InMemoryRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Xml))
+            if (includeTypes.Contains(RepositoryTypes.Xml))
             {
                 var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
                 yield return
-                    new TestCaseData(new XmlRepository<Contact, int>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
+                    new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Ef))
+            if (includeTypes.Contains(RepositoryTypes.Ef))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return
-                    new TestCaseData(new EfRepository<Contact, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Dbo4))
+            if (includeTypes.Contains(RepositoryTypes.Dbo4))
             {
                 var dbPath = Db4oDataDirectoryFactory.Build("Contact");
-                yield return new TestCaseData(new Db4oRepository<Contact, int>(dbPath)).SetName("Db4oRepository Test");
+                yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository Test");
             }
 
-            //if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.MongoDb))
-            //{
-            //    string connectionString = MongoDbDataDirectoryFactory.Build("Contact");
-            //    yield return new TestCaseData(new MongoDbRepository<Contact, int>(connectionString)).SetName("MongoDb Test");
-            //}
+            if (includeTypes.Contains(RepositoryTypes.MongoDb))
+            {
+                string connectionString = MongoDbDataDirectoryFactory.Build("Contact");
+                string databaseName = MongoUrl.Create(connectionString).DatabaseName;
+                MongoServer server = MongoServer.Create(connectionString);
+                server.DropDatabase(databaseName);
+                yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
+            }
 
-            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
+            if (includeTypes.Contains(RepositoryTypes.RavenDb))
             {
                 var documentStore = new EmbeddableDocumentStore
                                         {
                                             RunInMemory = true,
                                             Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
                                         };
-                yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
+                yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
         }
     }

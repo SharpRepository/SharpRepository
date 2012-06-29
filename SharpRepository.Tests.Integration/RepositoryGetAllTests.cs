@@ -13,7 +13,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryGetAllTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void GetAll_Should_Return_Every_Item(IRepository<Contact, int> repository)
+        public void GetAll_Should_Return_Every_Item(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 5; i++)
             {
@@ -26,7 +26,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void GetAll_Should_Return_Every_Items_With_Paging(IRepository<Contact, int> repository)
+        public void GetAll_Should_Return_Every_Items_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -47,7 +47,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void GetAll_With_Selector_Should_Return_Every_Item(IRepository<Contact, int> repository)
+        public void GetAll_With_Selector_Should_Return_Every_Item(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 5; i++)
             {
@@ -60,7 +60,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void GetAll_With_Selector_Should_Return_Every_Items_With_Paging(IRepository<Contact, int> repository)
+        public void GetAll_With_Selector_Should_Return_Every_Items_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;

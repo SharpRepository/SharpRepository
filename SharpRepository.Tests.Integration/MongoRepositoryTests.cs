@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -8,6 +9,7 @@ using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 using NUnit.Framework;
 using SharpRepository.MongoDbRepository;
+using SharpRepository.Tests.Integration.TestObjects;
 using Should;
 
 namespace SharpRepository.Tests.Integration
@@ -21,6 +23,11 @@ namespace SharpRepository.Tests.Integration
         [BsonRepresentation(BsonType.ObjectId)]
         public string OrderId { get; set; }
         public string Name { get; set; }
+        public string Title { get; set; }
+        public int ContactTypeId { get; set; } // for partitioning on 
+
+        public List<EmailAddress> EmailAddresses { get; set; }
+        public List<PhoneNumber> PhoneNumbers { get; set; }
     }
 
     [TestFixture]
@@ -30,7 +37,12 @@ namespace SharpRepository.Tests.Integration
         public void Mongo()
         {
             MongoServer server = MongoServer.Create("mongodb://localhost");
-            server.DropDatabase("Order");
+            var databaseNames = server.GetDatabaseNames();
+            foreach (var db in databaseNames)
+            {
+                server.DropDatabase(db);    
+            }
+            
             MongoDatabase database = server.GetDatabase("Order");
             MongoCollection<Order> orders = database.GetCollection<Order>("Order");
             
@@ -103,6 +115,8 @@ namespace SharpRepository.Tests.Integration
             // Update
             read.Name = "Really big sale";
             repo.Update(read);
+
+            var all = repo.GetAll();
             
             var update = repo.Get(read.OrderId);
             update.OrderId.ShouldEqual(read.OrderId);

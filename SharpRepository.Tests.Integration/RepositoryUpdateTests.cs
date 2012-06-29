@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryUpdateTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void Update_Should_Save_Modified_Business_Name(IRepository<Contact, int> repository)
+        public void Update_Should_Save_Modified_Business_Name(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };
             repository.Add(contact);
@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Integration
         //}
 
         [ExecuteForAllRepositories]
-        public void Update_Should_Update_Multiple_Items(IRepository<Contact, int> repository)
+        public void Update_Should_Update_Multiple_Items(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>
                                         {

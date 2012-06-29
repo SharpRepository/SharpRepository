@@ -12,15 +12,15 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryAddTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void Add_Should_Save_And_Assigned_New_Id(IRepository<Contact, int> repository)
+        public void Add_Should_Save_And_Assigned_New_Id(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };
             repository.Add(contact);
-            contact.ContactId.ShouldNotEqual(default(int));
+            contact.ContactId.ShouldNotBeEmpty();
         }
         
         [ExecuteForAllRepositories]
-        public void Add_Should_Result_In_Proper_Total_Items(IRepository<Contact, int> repository)
+        public void Add_Should_Result_In_Proper_Total_Items(IRepository<Contact, string> repository)
         {
             repository.Add(new Contact { Name = "Test User" });
             
@@ -29,7 +29,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Add_InBatchMode_Should_Delay_The_Action(IRepository<Contact, int> repository)
+        public void Add_InBatchMode_Should_Delay_The_Action(IRepository<Contact, string> repository)
         {
             using (var batch = repository.BeginBatch())
             {
@@ -48,7 +48,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Add_Should_Save_And_Assigned_New_Ids_To_Multiple(IRepository<Contact, int> repository)
+        public void Add_Should_Save_And_Assigned_New_Ids_To_Multiple(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>
                                             {
@@ -58,8 +58,9 @@ namespace SharpRepository.Tests.Integration
                                         };
 
             repository.Add(contacts);
-            contacts.First().ContactId.ShouldNotEqual(default(int));
-            contacts.Last().ContactId.ShouldNotEqual(default(int));
+            contacts.First().ContactId.ShouldNotBeEmpty();
+            contacts.Last().ContactId.ShouldNotBeEmpty();
+            contacts.First().ShouldNotBeSameAs(contacts.Last().ContactId);
             
             var added = repository.GetAll();
             added.Count().ShouldEqual(3);

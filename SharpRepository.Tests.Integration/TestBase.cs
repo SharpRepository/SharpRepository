@@ -1,9 +1,23 @@
+using MongoDB.Driver;
+using NUnit.Framework;
 using Rhino.Mocks;
 
 namespace SharpRepository.Tests.Integration
 {
     public abstract class TestBase
     {
+        [SetUp]
+        public void Setup()
+        {
+           
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+           
+        }
+
         protected static T N<T>() where T : class
         {
             return default(T);

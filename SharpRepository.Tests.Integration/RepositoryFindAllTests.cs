@@ -14,7 +14,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryFindAllTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
@@ -22,12 +22,12 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var result = repository.FindAll(new Specification<Contact>(p => p.ContactId < 3));
-            result.Count().ShouldEqual(2);
+            var result = repository.FindAll(new Specification<Contact>(p => p.Name == "Test User 1")); // Note: Raven doesn't like p.Name.Equals("...");
+            result.Count().ShouldEqual(1);
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -51,7 +51,7 @@ namespace SharpRepository.Tests.Integration
 
         //[ExecuteForRepositories(RepositoryTypes.Xml,RepositoryTypes.InMemory, RepositoryTypes.Ef)]
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging_MagicString(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging_MagicString(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -74,7 +74,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
@@ -87,7 +87,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -111,7 +111,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_And_Sort_Descending(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_And_Sort_Descending(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -135,7 +135,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_MagicString(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_MagicString(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;
@@ -159,7 +159,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_MagicString_And_Sort_Descending(IRepository<Contact, int> repository)
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Composite_Specification_With_Paging_MagicString_And_Sort_Descending(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
             const int pageSize = 2;

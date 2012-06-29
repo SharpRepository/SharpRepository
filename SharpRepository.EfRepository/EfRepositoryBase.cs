@@ -26,6 +26,15 @@ namespace SharpRepository.EfRepository
 
         protected override void AddItem(T entity)
         {
+            if (typeof(TKey) == typeof(Guid) || typeof(TKey) == typeof(string))
+            {
+                TKey id;
+                if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+                {
+                    id = GeneratePrimaryKey();
+                    SetPrimaryKey(entity, id);
+                }
+            }
             DbSet.Add(entity);
         }
 
@@ -85,6 +94,21 @@ namespace SharpRepository.EfRepository
 
             Context.Dispose();
             Context = null;
+        }
+
+        private TKey GeneratePrimaryKey()
+        {
+            if (typeof(TKey) == typeof(Guid))
+            {
+                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
+            }
+
+            if (typeof(TKey) == typeof(string))
+            {
+                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString(), typeof(TKey));
+            }
+            
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
         }
     }
 }

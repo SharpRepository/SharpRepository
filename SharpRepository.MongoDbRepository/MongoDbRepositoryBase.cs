@@ -14,7 +14,13 @@ namespace SharpRepository.MongoDbRepository
     {
         private MongoServer _server;
         private MongoDatabase _database;
-        
+        private readonly string _databaseName;
+
+        private string DatabaseName
+        {
+            get { return string.IsNullOrEmpty(_databaseName) ? TypeName : _databaseName; }
+        }
+
         internal MongoDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy) 
         {
@@ -24,6 +30,7 @@ namespace SharpRepository.MongoDbRepository
         internal MongoDbRepositoryBase(string connectionString, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
         {
+            _databaseName = MongoUrl.Create(connectionString).DatabaseName;
             Initialize(MongoServer.Create(connectionString));
         }
 
@@ -36,7 +43,7 @@ namespace SharpRepository.MongoDbRepository
         private void Initialize(MongoServer mongoServer = null)
         {
             _server = mongoServer ?? MongoServer.Create("mongodb://localhost");
-            _database = _server.GetDatabase(TypeName);
+            _database = _server.GetDatabase(DatabaseName);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
@@ -46,9 +53,13 @@ namespace SharpRepository.MongoDbRepository
 
         protected override T GetQuery(TKey key)
         {
-            return _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", new ObjectId(key.ToString())));
+            var s = key.ToString();
+            if (string.IsNullOrEmpty(s)) return default(T);
+
+            var objectId = new ObjectId(s);
+            return _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", objectId));
         }
-        
+
         protected override void AddItem(T entity)
         {
             _database.GetCollection<T>(TypeName).Insert(entity);

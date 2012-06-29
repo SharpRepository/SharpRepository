@@ -14,7 +14,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
             }
         }
 
-        private static RepositoryTypes[] _includeTypes = new[] { RepositoryTypes.All };
+        private static RepositoryTypes[] _includeTypes;
                 
         public ExecuteForRepositoriesAttribute(params RepositoryTypes[] repositoryTypes) : this()
         {
