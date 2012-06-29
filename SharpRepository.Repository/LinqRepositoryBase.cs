@@ -72,5 +72,10 @@ namespace SharpRepository.Repository
 
             return queryOptions.Apply(query).ToList();
         }
+
+        public override IEnumerator<T> GetEnumerator()
+        {
+            return BaseQuery().GetEnumerator();
+        }
     }
 }

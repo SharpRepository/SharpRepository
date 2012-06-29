@@ -60,6 +60,7 @@
     <Compile Include="Caching\StandardCachingWithPartitionStrategyTests.cs" />
     <Compile Include="Caching\StandardCachingStrategyTests.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />
+    <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
     <Compile Include="QueryOptions\PagingOptionsTests.cs" />
     <Compile Include="QueryOptions\SortingOptionsTests.cs" />

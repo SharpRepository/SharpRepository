@@ -9,13 +9,13 @@ namespace SharpRepository.Repository.Queries
     /// Used to define the sorting on queries run against a repository.
     /// </summary>
     /// <typeparam name="T">The entity type of the repository.</typeparam>
-    /// <typeparam name="TKey">The type of the property that is being sorted.</typeparam>
-    public class SortingOptions<T, TKey> : IQueryOptions<T>
+    /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
+    public class SortingOptions<T, TSortKey> : IQueryOptions<T>
     {
-        public Expression<Func<T, TKey>> SortExpression { get; internal set; }
+        public Expression<Func<T, TSortKey>> SortExpression { get; internal set; }
         public bool IsDescending { get; internal set; }
 
-        public SortingOptions(Expression<Func<T, TKey>> sortExpression, bool isDescending = false)
+        public SortingOptions(Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
         {
             SortExpression = sortExpression;
             IsDescending = isDescending;
@@ -46,7 +46,7 @@ namespace SharpRepository.Repository.Queries
         {
             return String.Format("SortingOptions<{0},{1}>\nSort Expression: {2}\nIsDescending: {3}",
                 (typeof(T)).Name,
-                (typeof(TKey)).Name,
+                (typeof(TSortKey)).Name,
                 SortExpression == null ? "null" : SortExpression.ToString(),
                 IsDescending
                 );
