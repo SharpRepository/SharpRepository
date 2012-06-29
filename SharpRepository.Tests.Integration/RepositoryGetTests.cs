@@ -10,7 +10,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryGetTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void Get_Should_Return_Item_If_Item_Exists(IRepository<Contact, int> repository)
+        public void Get_Should_Return_Item_If_Item_Exists(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User", ContactTypeId = 1 };
             repository.Add(contact);
@@ -21,14 +21,14 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Get_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, int> repository)
+        public void Get_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
-            var result = repository.Get(1);
+            var result = repository.Get(string.Empty);
             result.ShouldBeNull();
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_String_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, int> repository)
+        public void Get_With_String_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };
             repository.Add(contact);
@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_Int_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, int> repository)
+        public void Get_With_Int_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User", ContactTypeId = 2 };
             repository.Add(contact);
@@ -48,7 +48,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_Anonymous_Class_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, int> repository)
+        public void Get_With_Anonymous_Class_Selector_Should_Return_Item_If_Item_Exists(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User", ContactTypeId = 2 };
             repository.Add(contact);
@@ -59,23 +59,23 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_String_Selector_Should_Return_Default_If_Item_Does_Not_Exists(IRepository<Contact, int> repository)
+        public void Get_With_String_Selector_Should_Return_Default_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
-            var result = repository.Get(1, c => c.Name);
+            var result = repository.Get(string.Empty, c => c.Name);
             result.ShouldEqual(default(string));
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_Int_Selector_Should_Return_Default_If_Item_Does_Not_Exists(IRepository<Contact, int> repository)
+        public void Get_With_Int_Selector_Should_Return_Default_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
-            var result = repository.Get(1, c => c.ContactTypeId);
+            var result = repository.Get(string.Empty, c => c.ContactTypeId);
             result.ShouldEqual(default(int));
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_Anonymouse_Class_Selector_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, int> repository)
+        public void Get_With_Anonymouse_Class_Selector_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
-            var result = repository.Get(1, c => new { c.ContactTypeId, c.Name});
+            var result = repository.Get(string.Empty, c => new { c.ContactTypeId, c.Name });
             result.ShouldBeNull();
         }
     }

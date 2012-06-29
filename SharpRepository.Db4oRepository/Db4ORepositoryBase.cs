@@ -76,9 +76,14 @@ namespace SharpRepository.Db4oRepository
 
         private TKey GeneratePrimaryKey()
         {
-            if (typeof (TKey) == typeof (Guid))
+            if (typeof(TKey) == typeof(Guid))
             {
-                return (TKey) Convert.ChangeType(Guid.NewGuid(), typeof (TKey));
+                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
+            }
+
+            if (typeof(TKey) == typeof(string))
+            {
+                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString(), typeof(TKey));
             }
 
             if (typeof (TKey) == typeof (Int32))
@@ -92,8 +97,7 @@ namespace SharpRepository.Db4oRepository
                 return (TKey) Convert.ChangeType(nextInt, typeof (TKey));
             }
 
-            throw new InvalidOperationException(
-                "Primary key could not be generated.  This only works for GUID and Int32.");
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
         }
     }
 }

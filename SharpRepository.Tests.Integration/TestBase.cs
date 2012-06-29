@@ -1,9 +1,23 @@
+using MongoDB.Driver;
+using NUnit.Framework;
 using Rhino.Mocks;
 
 namespace SharpRepository.Tests.Integration
 {
     public abstract class TestBase
     {
+        [SetUp]
+        public void Setup()
+        {
+           
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+           
+        }
+
         protected static T N<T>() where T : class
         {
             return default(T);
@@ -41,5 +55,14 @@ namespace SharpRepository.Tests.Integration
         {
             return MockRepository.GenerateStub<T>(argumentsForConstructor);
         }
+
+        protected static class AssertIgnores
+        {
+            public static void MongoServerIsNotRunning()
+            {
+                Assert.Ignore("MongoServer is NOT running. MongoDbRepository integration tests are excluded from the test suite until MongoDb installed on this machine. Get MongoDb installed and running on Windows: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/");
+            }    
+        }
+        
     }
 }

@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryFindTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void Find_Should_Return_Single_Item_Which_Satisfies_Specification(IRepository<Contact, int> repository)
+        public void Find_Should_Return_Single_Item_Which_Satisfies_Specification(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
@@ -25,7 +25,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Find_Should_Return_Single_Item_Which_Satisfies_Composite_Specification(IRepository<Contact, int> repository)
+        public void Find_Should_Return_Single_Item_Which_Satisfies_Composite_Specification(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Find_Should_Return_First_Ordered_Item_Which_Satisfies_Specification(IRepository<Contact, int> repository)
+        public void Find_Should_Return_First_Ordered_Item_Which_Satisfies_Specification(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
@@ -54,7 +54,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Find_Should_Return_First_Ordered_Item_Which_Satisfies_Specification_WIth_Sorting_Predicate(IRepository<Contact, int> repository)
+        public void Find_Should_Return_First_Ordered_Item_Which_Satisfies_Specification_WIth_Sorting_Predicate(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 3; i++)
             {
