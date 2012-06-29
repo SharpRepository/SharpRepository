@@ -26,14 +26,14 @@ namespace SharpRepository.Db4oRepository
     /// XML Repository layer
     /// </summary>
     /// <typeparam name="T">The object type that is stored.</typeparam>
-    public class Db4oRepository<T> : Db4oRepositoryBase<T, int> where T : class, new()
+    public class Db4oRepository<T> : Db4oRepositoryBase<T, string> where T : class, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Db4oRepository&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="storagePath">Path to the directory where the yap files are stored.  The yap filename is determined by the TypeName</param>
         /// <param name="cachingStrategy">The caching strategy. Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
-        public Db4oRepository(string storagePath, ICachingStrategy<T, int> cachingStrategy = null)
+        public Db4oRepository(string storagePath, ICachingStrategy<T, string> cachingStrategy = null)
             : base(storagePath, cachingStrategy)
         {
         }
