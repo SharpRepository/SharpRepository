@@ -3,6 +3,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Traits;
 using System.Linq;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
 {

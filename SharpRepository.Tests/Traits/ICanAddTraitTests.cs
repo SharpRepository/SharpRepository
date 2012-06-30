@@ -5,6 +5,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Traits;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Traits
 {

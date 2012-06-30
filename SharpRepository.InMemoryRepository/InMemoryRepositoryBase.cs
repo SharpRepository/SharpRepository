@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 
-namespace SharpRepository.Repository
+namespace SharpRepository.InMemoryRepository
 {
     public abstract class InMemoryRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {

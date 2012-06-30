@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +48,8 @@ namespace SharpRepository.Repository
             _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
         }
 
+        public abstract IQueryable<T> AsQueryable();
+
         // These are the actual implementation that the derived class needs to implement
         protected abstract IEnumerable<T> GetAllQuery();
         protected abstract IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions);
@@ -78,7 +79,9 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key);
 
-        public abstract IQueryable<T> AsQueryable();
+        public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+            where TInner : class
+            where TResult : class;
 
         public T Get(TKey key)
         {
@@ -355,12 +358,6 @@ namespace SharpRepository.Repository
             const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
 
             return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
-        }
-
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

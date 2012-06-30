@@ -127,6 +127,7 @@
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
+    <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Helpers\RelativeDirectory.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
     <Compile Include="TestObjects\TestObjectEntities.cs" />
