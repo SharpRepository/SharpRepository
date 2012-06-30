@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Integration
     public class RepositoryJoinTests : TestBase
     {
         [ExecuteForAllRepositories]
-        public void Join_GetAll_Should_Return_All_Items(IRepository<Contact, int> repository)
+        public void Join_GetAll_Should_Return_All_Items(IRepository<Contact, string> repository)
         {
             for (int i = 1; i <= 5; i++)
             {

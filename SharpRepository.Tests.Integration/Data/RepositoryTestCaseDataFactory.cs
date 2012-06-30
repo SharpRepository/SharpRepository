@@ -1,19 +1,17 @@
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using MongoDB.Driver;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using SharpRepository.Db4oRepository;
-using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
 using SharpRepository.EfRepository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Integration.Data
 {

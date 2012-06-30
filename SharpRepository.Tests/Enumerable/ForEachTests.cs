@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Enumerable
 {
@@ -22,7 +22,6 @@ namespace SharpRepository.Tests.Enumerable
             foreach (var contact in repository)
             {
                 i++;
-                contact.ContactId.ShouldEqual(i); // just making sure it's getting each item separately
             }
 
             i.ShouldEqual(5);

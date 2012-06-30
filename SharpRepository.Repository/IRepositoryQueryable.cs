@@ -7,7 +7,7 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository
 {
-    public interface IRepositoryQueryable<T> : IDisposable where T : class
+    public interface IRepositoryQueryable<T> : IEnumerable<T>, IDisposable where T : class
     {
         IQueryable<T> AsQueryable(); // don't want this public, just for POC
 

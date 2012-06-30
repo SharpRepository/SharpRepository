@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Specifications;
 using Should;
+using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
 {
