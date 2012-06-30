@@ -23,31 +23,30 @@ namespace SharpRepository.Tests.Integration.Data
                 yield return new TestCaseData(new InMemoryRepository<Contact, int>()).SetName("InMemoryRepository Test");
             }
 
-            //if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Xml))
-            //{
-            //    var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
-            //    yield return
-            //        new TestCaseData(new XmlRepository<Contact, int>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
-            //}
+            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Xml))
+            {
+                var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
+                yield return
+                    new TestCaseData(new XmlRepository<Contact, int>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
+            }
 
-            //if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Ef))
-            //{
-            //    var dbPath = EfDataDirectoryFactory.Build();
-            //    Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
-            //    yield return
-            //        new TestCaseData(new EfRepository<Contact, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
-            //}
+            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.Ef))
+            {
+                var dbPath = EfDataDirectoryFactory.Build();
+                Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
+                yield return
+                    new TestCaseData(new EfRepository<Contact, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+            }
 
-            //if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
-            //{
-            //    var documentStore = new EmbeddableDocumentStore
-            //                            {
-            //                                RunInMemory = true,
-            //                                Conventions =
-            //                                    {DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites}
-            //                            };
-            //    yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
-            //}
+            if (includeTypes.Contains(RepositoryTypes.All) || includeTypes.Contains(RepositoryTypes.RavenDb))
+            {
+                var documentStore = new EmbeddableDocumentStore
+                                        {
+                                            RunInMemory = true,
+                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
+                                        };
+                yield return new TestCaseData(new RavenDbRepository<Contact, int>(documentStore)).SetName("RavenDbRepository Test");
+            }
         }
     }
 }

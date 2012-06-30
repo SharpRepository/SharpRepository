@@ -34,12 +34,5 @@ namespace SharpRepository.Tests.Integration
             //IEnumerable<Contact> result = repository.GetAll().ToList();
             //result.Count().ShouldEqual(5);
         }
-
-        public class ContactTypeResult
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string TypeAbbrev { get; set; }
-        }
     }
 }
