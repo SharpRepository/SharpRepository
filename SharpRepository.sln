@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Db4oReposit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.MongoDbRepository", "SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj", "{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.NHibernateRepository", "SharpRepository.NHibernateRepository\SharpRepository.NHibernateRepository.csproj", "{FB08F966-DFD1-494F-B007-590D3CE885FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB08F966-DFD1-494F-B007-590D3CE885FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB08F966-DFD1-494F-B007-590D3CE885FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB08F966-DFD1-494F-B007-590D3CE885FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB08F966-DFD1-494F-B007-590D3CE885FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
