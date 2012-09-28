@@ -31,17 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Enyim.Caching">
-      <HintPath>..\packages\EnyimMemcached.2.11\lib\net35\Enyim.Caching.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
@@ -66,7 +55,6 @@
     <Compile Include="Transactions\BatchAction.cs" />
     <Compile Include="RepositoryBase.Batch.cs" />
     <Compile Include="Caching\StandardCachingStrategy.cs" />
-    <Compile Include="Caching\AppFabricCachingProvider.cs" />
     <Compile Include="Caching\ICachingStrategy.cs" />
     <Compile Include="Caching\InMemoryCachingProvider.cs" />
     <Compile Include="Caching\ICachingProvider.cs" />
@@ -81,7 +69,6 @@
     <Compile Include="FetchStrategies\IFetchStrategy.cs" />
     <Compile Include="Helpers\Md5Helper.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Caching\MemcachedCachingProvider.cs" />
     <Compile Include="LinqRepositoryBase.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
