@@ -31,7 +31,7 @@ namespace SharpRepository.Repository.Specifications
 
         #region ISpecification<T> Members
 
-        public Expression<Func<T, bool>> Predicate { get; internal set; }
+        public Expression<Func<T, bool>> Predicate { get; set; }
 
         public T SatisfyingEntityFrom(IQueryable<T> query)
         {
