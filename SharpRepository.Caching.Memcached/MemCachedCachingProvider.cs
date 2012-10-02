@@ -28,7 +28,7 @@ namespace SharpRepository.Caching.Memcached
         /// <param name="configSectionName">Name of the configuration file section.</param>
         public MemcachedCachingProvider(string configSectionName)
         {
-            if (configSectionName == null) throw new ArgumentNullException("configSectionName");
+            if (String.IsNullOrEmpty(configSectionName)) throw new ArgumentNullException("configSectionName");
 
             Client = new MemcachedClient(configSectionName);
         }
@@ -91,14 +91,14 @@ namespace SharpRepository.Caching.Memcached
         /// <param name="value">Item to be cached</param>
         /// <param name="key">Name of item</param>
         /// <param name="priority"></param>
-        /// <param name="cacheTime">Seconds to cache</param>
-        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? cacheTime = null)
+        /// <param name="timeoutInSeconds">Seconds to cache</param>
+        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? timeoutInSeconds = null)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            if (cacheTime.HasValue)
+            if (timeoutInSeconds.HasValue)
             {
-                Client.Store(StoreMode.Set, key, value, new TimeSpan(0, 0, 0, cacheTime.Value)); // time is in milliseconds in memcache, but we pass in seconds
+                Client.Store(StoreMode.Set, key, value, new TimeSpan(0, 0, 0, timeoutInSeconds.Value)); 
             }
             else
             {

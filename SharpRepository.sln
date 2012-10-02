@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Mem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.AppFabric", "SharpRepository.Caching.AppFabric\SharpRepository.Caching.AppFabric.csproj", "{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Redis", "SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj", "{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
