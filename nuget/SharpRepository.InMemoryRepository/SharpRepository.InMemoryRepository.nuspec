@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SharpRepository.InMemoryRepository</id>
-    <version>1.0.0.1</version>
+    <version>1.0.0.211</version>
     <title>SharpRepository for InMemory</title>
     <authors>Ben Griswold, Jeff Treuting, Fairway Technologies</authors>
     <owners>jtreuting, bgriswold</owners>

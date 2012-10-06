@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SharpRepository.Caching.Memcached</id>
-    <version>1.0.0.211</version>
+    <version></version>
     <title>SharpRepository Caching Provider for Memcached</title>
     <authors>Ben Griswold, Jeff Treuting, Fairway Technologies</authors>
     <owners>jtreuting, bgriswold</owners>

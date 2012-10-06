@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SharpRepository.Ef5Repository</id>
-    <version>1.0.0.1</version>
+    <version>1.0.0.211</version>
     <title>SharpRepository for EF5</title>
     <authors>Ben Griswold, Jeff Treuting, Fairway Technologies</authors>
     <owners>jtreuting, bgriswold</owners>
