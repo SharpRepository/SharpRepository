@@ -104,7 +104,7 @@ namespace SharpRepository.Caching.Redis
             {
                 value = Client.Get<T>(key);
 
-                if (Object.Equals(value, default(T)))
+                if (Equals(value, default(T)))
                 {
                     value = default(T);
                     return false;

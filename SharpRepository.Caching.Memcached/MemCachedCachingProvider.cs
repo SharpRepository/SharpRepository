@@ -145,7 +145,7 @@ namespace SharpRepository.Caching.Memcached
             {
                 value = Client.Get<T>(key);
 
-                if (Object.Equals(value, default(T)))
+                if (Equals(value, default(T)))
                 {
                     value = default(T);
                     return false;

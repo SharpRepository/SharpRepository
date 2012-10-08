@@ -107,7 +107,7 @@ namespace SharpRepository.Repository
                 _items.Clear();
             }
 
-            private bool _disposed = false;
+            private bool _disposed;
 
             private void Dispose(bool disposing)
             {

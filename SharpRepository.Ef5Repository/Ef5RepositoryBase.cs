@@ -54,7 +54,7 @@ namespace SharpRepository.Ef5Repository
             Context.SaveChanges();
         }
 
-        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy)
+        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             var query = DbSet.AsQueryable();
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
@@ -65,21 +65,6 @@ namespace SharpRepository.Ef5Repository
         {
             return DbSet.Find(key);
         }
-
-        // TODO: use logic like this to override GetPrimaryKey
-        //  below is using the older EF stuff and it doesn't translate exactly
-        //private EntityKey GetEntityKey(object keyValue)
-        //{
-        //    var entitySetName = GetEntityName();
-        //    var keyPropertyName = _dbSet.EntitySet.ElementType.KeyMembers[0].ToString();
-        //    return new EntityKey(entitySetName, new[] { new EntityKeyMember(keyPropertyName, keyValue) });
-
-        //}
-
-        //private string GetEntityName()
-        //{
-        //    return string.Format("{0}.{1}", Context.DefaultContainerName, QueryBase.EntitySet.Name);
-        //}
 
         public override void Dispose()
         {

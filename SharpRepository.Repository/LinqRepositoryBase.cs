@@ -86,7 +86,7 @@ namespace SharpRepository.Repository
             var outerQuery = BaseQuery();
 
             var innerType = innerRepository.GetType();
-            var outerType = this.GetType();
+            var outerType = GetType();
 
             // if these are 2 different Repository types then let's bring down each query into memory so that they can be joined
             // if they are the same type then they will use the native IQueryable and take advantage of the back-end side join if possible
