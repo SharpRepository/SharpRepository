@@ -23,9 +23,9 @@ using System.Runtime.InteropServices;
 // Ideally we would have the build server update this value. This version number is stored 
 // in the Win32 version resource and can be seen when viewing the Windows Explorer property 
 // pages for the assembly. The CLR does not care about nor examine the AssemblyFileVersion.
-[assembly: AssemblyFileVersion("1.0.0.1")]
+[assembly: AssemblyFileVersion("1.0.0.2")]
 
 // The AssemblyInformationalVersion is intended to represent the version of your entire product.
 // The CLR does not care about nor examine the AssemblyInformationalVersion. You will find this
 // value represented as the assembly's product version in Windows Explorer.
-[assembly: AssemblyInformationalVersion("1.0.0.1")]
+[assembly: AssemblyInformationalVersion("1.0.0.2")]
