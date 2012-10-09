@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NHibernate.Linq</id>
+    <version>1.0</version>
+    <title>NHibernate.Linq</title>
+    <authors>Ayende</authors>
+    <owners>Ayende</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>NHibernate Linq support is based on the existing, proven in production, Linq provider in NHibernate Contrib. The plans to overhaul that and merge that into NHibernate’s proper for the next release are still active, but the project team feels most strongly that production quality Linq support is something that we ought to provide for our users now.</description>
+    <summary>NHibernate Linq support is based on the existing, proven in production, Linq provider in NHibernate Contrib. The plans to overhaul that and merge that into NHibernate’s proper for the next release are still active, but the project team feels most strongly that production quality Linq support is something that we ought to provide for our users now.</summary>
+    <dependencies>
+      <dependency id="NHibernate" version="2.1.2.4000" />
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Castle.DynamicProxy</id>
+    <version>2.1.0</version>
+    <title>Castle.DynamicProxy</title>
+    <authors>Castle Project Contributors</authors>
+    <owners>Castle Project Contributors</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>http://www.castleproject.org/</projectUrl>
+    <iconUrl>http://www.castleproject.org/images/dp_logo32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Castle DynamicProxy is a library for generating lightweight .NET proxies on the fly at runtime. Proxy objects allow calls to members of an object to be intercepted without modifying the code of the class.</description>
+    <summary>Castle DynamicProxy is a library for generating lightweight .NET proxies on the fly at runtime. Proxy objects allow calls to members of an object to be intercepted without modifying the code of the class.</summary>
+    <dependencies>
+      <dependency id="Castle.Core" version="[1.1.0]" />
+    </dependencies>
+  </metadata>
+</package>

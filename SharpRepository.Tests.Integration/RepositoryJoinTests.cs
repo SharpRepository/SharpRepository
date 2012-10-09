@@ -20,9 +20,11 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var contactTypeRepository = new InMemoryRepository<ContactType, int>();
-            contactTypeRepository.Add(new ContactType() { ContactTypeId = 1, Abbreviation = "T1"});
-            contactTypeRepository.Add(new ContactType() { ContactTypeId = 2, Abbreviation = "T2" });
+            var contactTypeRepository = new InMemoryRepository<ContactType, int>
+                                            {
+                                                new ContactType() {ContactTypeId = 1, Abbreviation = "T1"},
+                                                new ContactType() {ContactTypeId = 2, Abbreviation = "T2"}
+                                            };
 
             var compositeRepos = repository.Join(contactTypeRepository, c => c.ContactTypeId, ct => ct.ContactTypeId,
                             (c, ct) => new { Id = c.ContactId, Name = c.Name, TypeAbbrev = ct.Abbreviation });

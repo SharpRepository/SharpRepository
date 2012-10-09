@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Iesi.Collections</id>
+    <version>1.0.1</version>
+    <title>Iesi.Collections</title>
+    <authors>Jason Smith</authors>
+    <owners>Jason Smith</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The IESI Collections fills a gap in the Sytems Collection by providing a set collection. This collection comes in handy when an array or list are insufficient either because you need to add and remove elements often (tedious in an array) and duplicates are undesirable.</description>
+    <summary>The IESI Collections fills a gap in the Sytems Collection by providing a set collection. This collection comes in handy when an array or list are insufficient either because you need to add and remove elements often (tedious in an array) and duplicates are undesirable.</summary>
+  </metadata>
+</package>
