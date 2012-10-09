@@ -12,12 +12,8 @@ namespace SharpRepository.Tests.Enumerable
         public void ForEach_Should_Loop_Through_All()
         {
             var i = 0;
-            var repository = new InMemoryRepository<Contact, int>();
-            repository.Add(new Contact());
-            repository.Add(new Contact());
-            repository.Add(new Contact());
-            repository.Add(new Contact());
-            repository.Add(new Contact());
+            var repository = new InMemoryRepository<Contact, int>
+                                 {new Contact(), new Contact(), new Contact(), new Contact(), new Contact()};
 
             foreach (var contact in repository)
             {
