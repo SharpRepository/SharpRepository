@@ -10,12 +10,7 @@ namespace SharpRepository.NHibernateRepository
 {
     public class NHibernateRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private ISession _session;
-
-        //internal NHibernateRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
-        //{
-        //    Initialize();
-        //}
+        protected  ISession Session;
 
         internal NHibernateRepositoryBase(ISession session, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {
@@ -30,14 +25,14 @@ namespace SharpRepository.NHibernateRepository
 
         private void Initialize(ISession session)
         {
-            _session = session;
+            Session = session;
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             // TODO: see about NHibernate Include syntax
             //  NHibernateUtil.Initialize() - http://nhforge.org/wikis/howtonh/lazy-loading-eager-loading.aspx
-            return _session.Linq<T>();
+            return Session.Linq<T>();
         }
 
         protected override void AddItem(T entity)
@@ -50,17 +45,17 @@ namespace SharpRepository.NHibernateRepository
                 SetPrimaryKey(entity, id);
             }
 
-             _session.Save(entity);
+             Session.Save(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            _session.Delete(entity);
+            Session.Delete(entity);
         }
 
         protected override void UpdateItem(T entity)
         {
-             _session.Update(entity);
+             Session.Update(entity);
         }
 
         protected override void SaveChanges()
@@ -70,8 +65,8 @@ namespace SharpRepository.NHibernateRepository
 
         public override void Dispose()
         {
-            if (_session != null)
-                _session.Dispose();
+            if (Session != null)
+                Session.Dispose();
         }
 
         private TKey GeneratePrimaryKey()
