@@ -14,7 +14,7 @@
     <copyright>Copyright 2012</copyright>
     <tags>SharpRepository Repository Caching Memcached ElastiCache</tags>
 	<dependencies>
-      <dependency id="SharpRepository.Repository" version="1.0.0.0" />
+      <dependency id="SharpRepository.Repository" version="1.0.0.1" />
     </dependencies>
   </metadata>
 </package>
