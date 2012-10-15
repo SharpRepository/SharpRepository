@@ -12,6 +12,7 @@ using SharpRepository.EfRepository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
+using SharpRepository.CouchDbRepository;
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -64,6 +65,19 @@ namespace SharpRepository.Tests.Integration.Data
                                             Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
                                         };
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
+            }
+
+            if (includeTypes.Contains(RepositoryTypes.CouchDb))
+            {
+                if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Url))
+                {
+                    var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
+                    CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Url, databaseName);
+                    CouchDbRepositoryManager.CreatDatabase(CouchDbUrl.Url, databaseName);
+
+                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Url, databaseName)).SetName("CouchDbRepository Test");    
+                }
+                
             }
         }
     }

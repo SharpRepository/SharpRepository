@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SharpRepository.MongoDbRepository;
+using SharpRepository.CouchDbRepository;
 using SharpRepository.Tests.Integration.Data;
 
 namespace SharpRepository.Tests.Integration
@@ -10,7 +11,7 @@ namespace SharpRepository.Tests.Integration
         [Test]
         public void MongoServer_Is_Running()
         {
-            string connectionString = MongoDbConnectionStringFactory.Build("Test");
+            var connectionString = MongoDbConnectionStringFactory.Build("Test");
 
             if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
             {
@@ -21,6 +22,20 @@ namespace SharpRepository.Tests.Integration
             {
                 AssertIgnores.MongoServerIsNotRunning();
             }
+        }
+
+        [Test]
+        public void CouchDb_Is_Running()
+        {
+            if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Url))
+            {
+                Assert.Pass("CouchDb is running");
+            }
+            else
+            {
+                AssertIgnores.CouchDbServerIsNotRunning();
+            }
+
         }
     }
 }

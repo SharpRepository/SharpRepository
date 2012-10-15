@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching Providers", "Cachin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.NHibernateRepository", "SharpRepository.NHibernateRepository\SharpRepository.NHibernateRepository.csproj", "{B6295743-F164-4FE9-B0DA-2EA2C34064B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{B6295743-F164-4FE9-B0DA-2EA2C34064B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6295743-F164-4FE9-B0DA-2EA2C34064B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6295743-F164-4FE9-B0DA-2EA2C34064B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

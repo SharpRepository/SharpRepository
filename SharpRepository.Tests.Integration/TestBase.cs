@@ -61,7 +61,12 @@ namespace SharpRepository.Tests.Integration
             public static void MongoServerIsNotRunning()
             {
                 Assert.Ignore("MongoServer is NOT running. MongoDbRepository integration tests are excluded from the test suite until MongoDb installed on this machine. Get MongoDb installed and running on Windows: http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/");
-            }    
+            }
+
+            public static void CouchDbServerIsNotRunning()
+            {
+                Assert.Ignore("CouchDb  is NOT running. CouchDbRepository integration tests are excluded from the test suite until CouchDb installed on this machine. Get CouchDb installed and running on Windows: http://wiki.apache.org/couchdb/Installing_on_Windows");
+            }  
         }
         
     }
