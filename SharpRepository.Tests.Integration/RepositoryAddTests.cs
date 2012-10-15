@@ -48,7 +48,8 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldEqual(2);
         }
 
-        [ExecuteForAllRepositories]
+        //[ExecuteForAllRepositories]
+        [ExecuteForRepositories(RepositoryTypes.CouchDb)]
         public void Add_Should_Save_And_Assigned_New_Ids_To_Multiple(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>

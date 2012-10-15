@@ -39,14 +39,28 @@ namespace SharpRepository.CouchDbRepository
             // TODO: this is terrible and ridiculously non-performant, change to be able to convert and use the Hammock fluent syntax or convert to JS map/reduce that CouchDb uses
 
             var hammockRepository = new Repository<T>(Session);
-            return hammockRepository.All().AsQueryable();
+            var all = hammockRepository.All();
+
+            //var query = new Query<T>(all.Query.Session, all.Query.Design, all.Query.View)
+
+           
+             return all .ToList().AsQueryable();
+
+            //var all = Session.ListDocuments();
+           // return all.Select(x => Session.Load<T>(x.Id)).AsQueryable();
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in 
-        //protected override T GetQuery(string key)
-        //{
-        //    return Session.Load<T>(key); // this is using the internal ID which isn't the same as the PK property on the object
-        //}
+        protected override T GetQuery(string key)
+        {
+            var item =  Session.Load<T>(key);
+
+            // this always returns an object, so check to see if the PK is null, if so then return null
+            string id;
+            GetPrimaryKey(item, out id);
+
+            return id == null ? null : item;
+        }
 
         protected override void AddItem(T entity)
         {
@@ -57,7 +71,7 @@ namespace SharpRepository.CouchDbRepository
                 SetPrimaryKey(entity, id);
             }
 
-            Session.Save(entity);
+            Session.Save(entity, id); // save the generated PK as the internal id (_id) and as the entity PK
         }
 
         protected override void DeleteItem(T entity)

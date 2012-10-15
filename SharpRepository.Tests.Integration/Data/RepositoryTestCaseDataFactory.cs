@@ -73,7 +73,7 @@ namespace SharpRepository.Tests.Integration.Data
                 {
                     var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
                     CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Url, databaseName);
-                    CouchDbRepositoryManager.CreatDatabase(CouchDbUrl.Url, databaseName);
+                    CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Url, databaseName);
 
                     yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Url, databaseName)).SetName("CouchDbRepository Test");    
                 }

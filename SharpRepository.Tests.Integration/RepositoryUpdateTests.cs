@@ -11,8 +11,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class RepositoryUpdateTests : TestBase
     {
-       // [ExecuteForAllRepositories]
-        [ExecuteForRepositories(RepositoryTypes.CouchDb)]
+        [ExecuteForAllRepositories]
         public void Update_Should_Save_Modified_Business_Name(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };

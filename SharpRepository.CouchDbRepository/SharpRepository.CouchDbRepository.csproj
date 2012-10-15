@@ -35,7 +35,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RedBranch.Hammock\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RedBranch.Hammock">
+    <Reference Include="RedBranch.Hammock, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RedBranch.Hammock\RedBranch.Hammock.dll</HintPath>
     </Reference>
     <Reference Include="System" />

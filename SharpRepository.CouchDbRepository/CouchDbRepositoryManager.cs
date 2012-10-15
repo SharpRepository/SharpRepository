@@ -28,7 +28,7 @@ namespace SharpRepository.CouchDbRepository
             return true;
         }
 
-        public static void CreatDatabase(string url, string databaseName)
+        public static void CreateDatabase(string url, string databaseName)
         {
             var connection = new Connection(new Uri(url));
 

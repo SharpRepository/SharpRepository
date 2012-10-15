@@ -73,7 +73,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void Get_With_Anonymouse_Class_Selector_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
+        public void Get_With_Anonymous_Class_Selector_Should_Return_Null_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
             var result = repository.Get(string.Empty, c => new { c.ContactTypeId, c.Name });
             result.ShouldBeNull();
