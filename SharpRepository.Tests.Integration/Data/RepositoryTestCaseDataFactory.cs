@@ -48,7 +48,7 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.MongoDb))
             {
-                string connectionString = MongoDbConnectionStringFactory.Build("Contact");
+                var connectionString = MongoDbConnectionStringFactory.Build("Contact");
            
                 if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
                 {
@@ -69,13 +69,13 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeTypes.Contains(RepositoryTypes.CouchDb))
             {
-                if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Url))
+                if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
                 {
                     var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
-                    CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Url, databaseName);
-                    CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Url, databaseName);
+                    CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+                    CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
 
-                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Url, databaseName)).SetName("CouchDbRepository Test");    
+                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");    
                 }
                 
             }

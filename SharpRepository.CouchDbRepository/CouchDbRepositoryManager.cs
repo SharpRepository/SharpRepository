@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using RedBranch.Hammock;
 
 namespace SharpRepository.CouchDbRepository
 {
     public static class CouchDbRepositoryManager
     {
-        public static bool ServerIsRunning(string url)
+        public static bool ServerIsRunning(string host = "localhost", int port = 5984)
         {
             try
             {
+                var url = String.Format("http://{0}:{1}", host, port);
+
                 // Send a HEAD request to the url
                 var request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = 2000;
@@ -28,23 +28,23 @@ namespace SharpRepository.CouchDbRepository
             return true;
         }
 
-        public static void CreateDatabase(string url, string databaseName)
+        public static void CreateDatabase(string host, int port, string database)
         {
-            var connection = new Connection(new Uri(url));
+            var url = String.Format("http://{0}:{1}", host, port);
 
-            if (!connection.ListDatabases().Contains(databaseName))
+            if (!CouchDbManager.HasDatabase(url, database))
             {
-                connection.CreateDatabase(databaseName);
+                CouchDbManager.CreateDatabase(url, database);
             }
         }
 
-        public static void DropDatabase(string url, string databaseName)
+        public static void DropDatabase(string host, int port, string database)
         {
-            var connection = new Connection(new Uri(url));
+            var url = String.Format("http://{0}:{1}", host, port);
 
-            if (connection.ListDatabases().Contains(databaseName))
+            if (CouchDbManager.HasDatabase(url, database))
             {
-                connection.DeleteDatabase(databaseName);    
+                CouchDbManager.DeleteDatabase(url, database);
             }
         }
     }

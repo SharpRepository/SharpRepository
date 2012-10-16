@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using RedBranch.Hammock; // reference: http://code.google.com/p/relax-net/
 using SharpRepository.Repository;
 using SharpRepository.Repository.FetchStrategies;
 
@@ -8,52 +7,48 @@ namespace SharpRepository.CouchDbRepository
 {
     public class CouchDbRepositoryBase<T> : LinqRepositoryBase<T, string> where T : class, new()
     {
-        protected Connection Connection;
-        protected Session Session;
+        protected CouchDbClient<T> Client;
+        private readonly string _serverUrl;
 
         internal CouchDbRepositoryBase()
-            : this("http://127.0.0.1:5984/")
+            : this("127.0.0.1", 5984)
          {
          }
 
-        internal CouchDbRepositoryBase(string url)
+        internal CouchDbRepositoryBase(string host)
+            : this(host, 5984)
         {
-            Initialize(url, typeof(T).Name);
         }
 
-        internal CouchDbRepositoryBase(string url, string database)
+        internal CouchDbRepositoryBase(string host, int port, string database = null, string username = null, string password = null)
         {
-            Initialize(url, database);
-        }
-
-        private void Initialize(string url, string database)
-        {
+            if (String.IsNullOrEmpty(database))
+            {
+                database = typeof (T).Name;
+            }
             database = database.ToLower(); // CouchDb requires lowercase  database names
 
-            Connection = new Connection(new Uri(url));
-            Session = Connection.CreateSession(database);
+            _serverUrl = String.Format("http://{0}:{1}", host, port);
+
+            Client = new CouchDbClient<T>(_serverUrl, database);
+
+            if (!CouchDbManager.HasDatabase(_serverUrl, database))
+            {
+                CouchDbManager.CreateDatabase(_serverUrl, database);
+            }
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             // TODO: this is terrible and ridiculously non-performant, change to be able to convert and use the Hammock fluent syntax or convert to JS map/reduce that CouchDb uses
 
-            var hammockRepository = new Repository<T>(Session);
-            var all = hammockRepository.All();
-
-            //var query = new Query<T>(all.Query.Session, all.Query.Design, all.Query.View)
-
-           
-             return all .ToList().AsQueryable();
-
-            //var all = Session.ListDocuments();
-           // return all.Select(x => Session.Load<T>(x.Id)).AsQueryable();
+            return Client.GetAllDocuments().AsQueryable();
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in 
         protected override T GetQuery(string key)
         {
-            var item =  Session.Load<T>(key);
+            var item = Client.GetDocument(key);
 
             // this always returns an object, so check to see if the PK is null, if so then return null
             string id;
@@ -71,17 +66,24 @@ namespace SharpRepository.CouchDbRepository
                 SetPrimaryKey(entity, id);
             }
 
-            Session.Save(entity, id); // save the generated PK as the internal id (_id) and as the entity PK
+            Client.CreateDocument(entity, id);
         }
 
         protected override void DeleteItem(T entity)
         {
-            Session.Delete(entity);
+            string id;
+            if (!GetPrimaryKey(entity, out id))
+                return;
+
+            Client.DeleteDocument(id);
         }
 
         protected override void UpdateItem(T entity)
         {
-            Session.Save(entity);
+            string id;
+            GetPrimaryKey(entity, out id);
+
+            Client.UpdateDocument(entity, id);
         }
 
         protected override void SaveChanges()
