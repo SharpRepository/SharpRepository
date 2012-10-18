@@ -27,7 +27,7 @@ namespace SharpRepository.Tests.Integration
         [Test]
         public void CouchDb_Is_Running()
         {
-            if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Url))
+            if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
             {
                 Assert.Pass("CouchDb is running");
             }

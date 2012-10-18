@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
 
@@ -27,13 +28,21 @@ namespace SharpRepository.CouchDbRepository
                 }
             }
 
-            var resp = req.GetResponse() as HttpWebResponse;
-            string result;
-            using (var reader = new StreamReader(resp.GetResponseStream()))
+            try
             {
-                result = reader.ReadToEnd();
+                var resp = req.GetResponse() as HttpWebResponse;
+                string result;
+                using (var reader = new StreamReader(resp.GetResponseStream()))
+                {
+                    result = reader.ReadToEnd();
+                }
+                return result;
             }
-            return result;
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
         }
     }
 }

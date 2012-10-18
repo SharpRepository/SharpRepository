@@ -114,7 +114,7 @@ namespace SharpRepository.CouchDbRepository
         /// it will be assigned one by the server.
         /// </summary>
         /// <param name="entity">The item to store in the database.</param>
-        public void CreateDocument(T entity, string id=null)
+        public void CreateDocument(T entity, string id)
         {
             var item = JsonConvert.SerializeObject(entity);
 
@@ -128,44 +128,64 @@ namespace SharpRepository.CouchDbRepository
             CouchDbRequest.Execute(_server + "/" + _database, "POST", item, "application/json");
         }
 
+        public string GetLatestRevision(string id)
+        {
+            var json = Get(id);
+
+            var obj = JObject.Parse(json);
+
+            return obj.Value<string>("_rev");
+        }
+
         /// <summary>
         /// Updates a document.
         /// </summary>
         /// <param name="entity">The item to store in the database.</param>
-        public void UpdateDocument(T entity, string id=null)
+        /// <param name="id">The document ID.</param>
+        public void UpdateDocument(T entity, string id)
         {
             var item = JsonConvert.SerializeObject(entity);
 
+            //needs the revision for updates and deletes, this isn't a great way because it's an extra API call, but it is what it is for now, just want to get it working then refactor
+            var rev = GetLatestRevision(id);
+
             // add the _id so that it is the same as the PK of the entity
             //  this is a crappy way of doing it I think, but just trying to get it to work for now
-            if (!String.IsNullOrEmpty(id))
-            {
-                item = "{\"_id\":\"" + id + "\"," + item.Substring(1);
-            }
+            item = "{\"_id\":\"" + id + "\",\"_rev\":\"" + rev + "\"," + item.Substring(1);
 
-            CouchDbRequest.Execute(_server + "/" + _database, "PUT", item, "application/json");
+            CouchDbRequest.Execute(_server + "/" + _database + "/" + id, "PUT", item, "application/json");
         }
 
         /// <summary>
         /// Get a document.
         /// </summary>
-        /// <param name="docid">The document ID.</param>
+        /// <param name="id">The document ID.</param>
         /// <returns>The document contents (JSON)</returns>
-        public T GetDocument(string docid)
+        public T GetDocument(string id)
         {
-            var url = _server + "/" + _database + "/" + docid;
-            var json = CouchDbRequest.Execute(url, "GET");
+            var json = Get(id);
+            if (String.IsNullOrEmpty(json))
+                return null;
 
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        private string Get(string id)
+        {
+            var url = _server + "/" + _database + "/" + id;
+            return CouchDbRequest.Execute(url, "GET");
         }
 
         /// <summary>
         /// Delete a document.
         /// </summary>
-        /// <param name="docid">The document ID.</param>
-        public void DeleteDocument(string docid)
+        /// <param name="id">The document ID.</param>
+        public void DeleteDocument(string id)
         {
-            CouchDbRequest.Execute(_server + "/" + _database + "/" + docid, "DELETE");
+            //needs the revision for updates and deletes, this isn't a great way because it's an extra API call, but it is what it is for now, just want to get it working then refactor
+            var rev = GetLatestRevision(id);
+
+            CouchDbRequest.Execute(_server + "/" + _database + "/" + id + "?rev=" + rev, "DELETE");
         }
     }
 }

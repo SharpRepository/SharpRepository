@@ -50,6 +50,9 @@ namespace SharpRepository.CouchDbRepository
         {
             var item = Client.GetDocument(key);
 
+            if (item == null)
+                return null;
+
             // this always returns an object, so check to see if the PK is null, if so then return null
             string id;
             GetPrimaryKey(item, out id);
