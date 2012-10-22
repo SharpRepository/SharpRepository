@@ -49,26 +49,62 @@ namespace SharpRepository.CouchDbRepository.Linq
             return Execute<object>(expression);
         }
 
-         public IEnumerable<T> ExecuteEnumerable<T>(Expression expression)
-         {
-             string url, postData;
+//         public IEnumerable<T> ExecuteEnumerable<T>(Expression expression)
+//         {
+//             string url, postData;
+//
+//             Translate(expression, out url, out postData);
+//
+//             //             if (String.IsNullOrEmpty(postData))
+//             //                 return (TResult)_client.GetAllDocuments();
+//
+//             var json = CouchDbRequest.Execute(url, "POST", postData, "application/json");
+//
+//             // get the rows property and deserialize that
+//             var res = JObject.Parse(json);
+//             var rows = res["rows"];
+//
+//             return rows.Select(row => row["value"].ToObject<T>()).ToList();
+//         }
 
-             Translate(expression, out url, out postData);
-
-             //             if (String.IsNullOrEmpty(postData))
-             //                 return (TResult)_client.GetAllDocuments();
-
-             var json = CouchDbRequest.Execute(url, "POST", postData, "application/json");
-
-             // get the rows property and deserialize that
-             var res = JObject.Parse(json);
-             var rows = res["rows"];
-
-             return rows.Select(row => row["value"].ToObject<T>()).ToList();
-         }
-
-        public TResult Execute<TResult>(Expression expression)
+        public TResult Execute<TResult>(Expression expression) 
         {
+            string url, postData;
+
+            Translate(expression, out url, out postData);
+
+            var isSingle = true;
+            var type = typeof (TResult);
+            
+            if (type.GetGenericArguments().Any())
+            {
+                type = typeof(TResult).GetGenericArguments()[0];
+                isSingle = false;
+            }
+            
+            var json = CouchDbRequest.Execute(url, "POST", postData, "application/json");
+
+            // get the rows property and deserialize that
+            var res = JObject.Parse(json);
+            var rows = res["rows"];
+
+            var jsonSerializer = new JsonSerializer();
+            var list = rows.Select(row =>
+                                   {
+                                       using (var reader = new JTokenReader(row["value"]))
+                                           return jsonSerializer.Deserialize(reader, type);
+                                       
+                                   }).ToList();
+
+            if (isSingle)
+                return (TResult)Convert.ChangeType(list.FirstOrDefault(), type);
+
+            return (TResult)Convert.ChangeType(list, type);
+//            return null;
+
+//            return (TResult) list;
+
+            var i = list.Count;
             throw new NotImplementedException();
         }
 

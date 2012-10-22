@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace SharpRepository.CouchDbRepository.Linq
 {
@@ -28,6 +29,10 @@ namespace SharpRepository.CouchDbRepository.Linq
 
             if (_take.HasValue)
                 querystring += "limit=" + _take.Value + "&";
+            else if (_isFirst)
+            {
+                querystring += "limit=1&";
+            }
 
             if (_isDescending)
                 querystring += "descending=true&";
@@ -123,7 +128,7 @@ namespace SharpRepository.CouchDbRepository.Linq
             var prop = op.Body as MemberExpression;
 
             _orderBy = prop.Member.Name;
-            _isDescending = true;
+            _isDescending = isDescending;
         }
 
         private void SetWhereQuery(MethodCallExpression m)
@@ -135,7 +140,28 @@ namespace SharpRepository.CouchDbRepository.Linq
             var unExpr = arg as UnaryExpression;
             var op = unExpr.Operand as LambdaExpression;
 
-            AppendFilter(CreateOperand(op.Body));
+            // not sure if this will end up working, but trying to parse the string representation of the predicate and just manipulate with replace and regex replaces to get the JS syntax
+
+            _result = op.ToString()
+                .Replace(" OrElse ", " || ")
+               .Replace(" Or ", " || ")
+               .Replace(" AndAlso ", " && ")
+               .Replace(" And ", " && ")
+               .Replace("\"", "'")
+               .Replace(".ToUpper(", ".toUpperCase(")
+               .Replace(".ToLower(", ".toLowerCase(")
+               ;
+               
+            _result = Regex.Replace(_result, @"\.StartsWith\('([A-Za-z0-9_]*)'\)", ".indexOf('$1') == 0");
+            _result = Regex.Replace(_result, @"p\.([A-Za-z0-9_]*)\.EndsWith\('([A-Za-z0-9_]*)'\)", "p.$1.indexOf('$2', p.$1.length - '$2'.length) != -1");
+            _result = Regex.Replace(_result, @"\.Contains\('([A-Za-z0-9_]*)'\)", ".indexOf('$1') != -1");
+
+            _result = _result
+                .Replace("p.", "doc.")
+                .Replace("p => ", "")
+                ;
+
+            //AppendFilter(CreateOperand(op.Body));
         }
 
         private void AppendFilter(string param)

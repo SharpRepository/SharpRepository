@@ -44,7 +44,6 @@
     <Compile Include="CouchDbRepositoryBase.cs" />
     <Compile Include="CouchDbRepositoryManager.cs" />
     <Compile Include="CouchDbRequest.cs" />
-    <Compile Include="Linq\CouchDbJsonResultConverter.cs" />
     <Compile Include="Linq\ExpressionVisitor.cs" />
     <Compile Include="Linq\CouchDbExpressionVisitor.cs" />
     <Compile Include="Linq\CouchDbQueryProvider.cs" />

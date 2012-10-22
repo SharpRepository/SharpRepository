@@ -56,7 +56,7 @@ namespace SharpRepository.CouchDbRepository.Linq
 
         public IEnumerator<T> GetEnumerator()
         {
-            var execute = _provider.ExecuteEnumerable<T>(Expression);
+            var execute = _provider.Execute<IEnumerable<T>>(Expression);
             return execute.GetEnumerator();
         }
 
