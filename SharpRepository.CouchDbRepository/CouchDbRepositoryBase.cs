@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using SharpRepository.CouchDbRepository.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.FetchStrategies;
 
@@ -9,6 +10,9 @@ namespace SharpRepository.CouchDbRepository
     {
         protected CouchDbClient<T> Client;
         private readonly string _serverUrl;
+
+        private readonly CouchDbQueryProvider _provider;
+        private readonly IQueryable<T> _baseQuery;
 
         internal CouchDbRepositoryBase()
             : this("127.0.0.1", 5984)
@@ -36,13 +40,15 @@ namespace SharpRepository.CouchDbRepository
             {
                 CouchDbManager.CreateDatabase(_serverUrl, database);
             }
+
+            _provider = new CouchDbQueryProvider(_serverUrl, database);
+            _baseQuery = _provider.CreateQuery<T>();
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            // TODO: this is terrible and ridiculously non-performant, change to be able to convert and use the Hammock fluent syntax or convert to JS map/reduce that CouchDb uses
-
-            return Client.GetAllDocuments().AsQueryable();
+            return _baseQuery;
+            //return Client.GetAllDocuments().AsQueryable();
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in 

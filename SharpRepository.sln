@@ -50,6 +50,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.NHibernateR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Divan", "..\Divan\src\Divan.csproj", "{37AC0B66-5340-4B81-BC62-3EE80233A011}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trivial", "..\Divan\samples\Trivial\Trivial.csproj", "{CDCC7924-F227-46DC-B2E6-2BBE06B84AF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +128,14 @@ Global
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37AC0B66-5340-4B81-BC62-3EE80233A011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37AC0B66-5340-4B81-BC62-3EE80233A011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37AC0B66-5340-4B81-BC62-3EE80233A011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37AC0B66-5340-4B81-BC62-3EE80233A011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDCC7924-F227-46DC-B2E6-2BBE06B84AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDCC7924-F227-46DC-B2E6-2BBE06B84AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDCC7924-F227-46DC-B2E6-2BBE06B84AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDCC7924-F227-46DC-B2E6-2BBE06B84AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

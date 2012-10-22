@@ -39,6 +39,21 @@ namespace SharpRepository.CouchDbRepository
             _database = database;
         }
 
+        public string Server
+        {
+            get { return _server; }
+        }
+
+        public string Database
+        {
+            get { return _database; }
+        }
+
+        public string DatabaseUrl
+        {
+            get { return _server + "/" + _database; }
+        }
+
         /// <summary>
         /// Get the document count for the given database.
         /// </summary>
@@ -57,35 +72,25 @@ namespace SharpRepository.CouchDbRepository
         /// <summary>
         /// Get information on all the documents in the given database.
         /// </summary>
-        /// <returns>An array of DocInfo instances</returns>
+        /// <returns>An array of entitiy instances</returns>
         public IList<T> GetAllDocuments()
         {
-            // terribly inefficient way of doing this
-            //  get all document ids and then do a query for each one
-            var result = CouchDbRequest.Execute(_server + "/" + _database + "/_all_docs", "GET");
+            var json = ExecTempView(_server + "/" + _database + "/_temp_view", "function (doc) {emit(doc._id, doc);}", null);
 
-            var res = JObject.Parse(result);
+            var res = JObject.Parse(json);
             var rows = res["rows"];
-            var list = rows.ToObject<IList<IDictionary<string, object>>>();
 
-            return list.Select(item => item["id"].ToString()).Select(GetDocument).ToList();
+            return rows.Select(row => row["value"].ToObject<T>()).ToList();
+        }
 
-            //var map = "function(doc) { emit(doc.id, doc); }";
-            //var result = ExecTempView(map, null);
-            //// can get total_rows also if needed for pagination at some point
-            //var obj = JObject.Parse(result);
-            //var rows = obj["rows"];
-            //var list = rows.ToObject<IList<IDictionary<string, object>>>();
+        public string ExecTempView(string url, string map, string reduce)
+        {
+            var viewdef = "{ \"map\":\"" + map + "\"";
+            if (reduce != null)
+                viewdef += ",\"reduce\":\"" + reduce + "\"";
+            viewdef += "}";
 
-            //var items = new List<T>();
-
-            //foreach (var item in list)
-            //{
-            //    // this is not working
-            //    items.Add(item["value"] as T);
-            //}
-
-            //return items;
+            return CouchDbRequest.Execute(url, "POST", viewdef, "application/json");
         }
 
         /// <summary>
@@ -94,8 +99,10 @@ namespace SharpRepository.CouchDbRepository
         /// <param name="map">The javascript map function</param>
         /// <param name="reduce">The javascript reduce function or
         /// null if not required</param>
+        /// <param name="startkey">The startkey or null not to use</param>
+        /// <param name="endkey">The endkey or null not to use</param>
         /// <returns>The result (JSON format)</returns>
-        public string ExecTempView(string map, string reduce)
+        public string ExecTempView(string map, string reduce ,string startkey,string endkey)
         {
             // Generate the JSON view definition from the supplied
             // map and optional reduce functions...
@@ -105,6 +112,15 @@ namespace SharpRepository.CouchDbRepository
             viewdef += "}";
 
             var url = _server + "/" + _database + "/_temp_view";
+            if(startkey!=null)
+            {
+                    url+="?startkey=" + Uri.EscapeDataString(startkey);
+            }
+            if(endkey!=null)
+            {
+                    if(startkey==null) url+="?"; else url+="&";
+                    url+="endkey=" + Uri.EscapeDataString(endkey);
+            }
 
             return CouchDbRequest.Execute(url, "POST", viewdef, "application/json");
         }
