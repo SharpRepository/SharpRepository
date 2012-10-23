@@ -47,12 +47,6 @@
     <Compile Include="CouchDbRepositoryBase.cs" />
     <Compile Include="CouchDbRepositoryManager.cs" />
     <Compile Include="CouchDbRequest.cs" />
-    <Compile Include="Linq\ExpressionVisitor.cs" />
-    <Compile Include="Linq\CouchDbExpressionVisitor.cs" />
-    <Compile Include="Linq\CouchDbQueryProvider.cs" />
-    <Compile Include="Linq\Query.cs" />
-    <Compile Include="Linq\QueryProvider.cs" />
-    <Compile Include="Linq\TypeSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CouchDbClient.cs" />
     <Compile Include="ReLinq\CouchDbQuery.cs" />
@@ -62,8 +56,6 @@
     <Compile Include="ReLinq\QueryGeneration\CommandData.cs" />
     <Compile Include="ReLinq\QueryGeneration\CouchDbApiGeneratorExpressionTreeVisitor.cs" />
     <Compile Include="ReLinq\QueryGeneration\CouchDbApiGeneratorQueryModelVisitor.cs" />
-    <Compile Include="ReLinq\QueryGeneration\NamedParameter.cs" />
-    <Compile Include="ReLinq\QueryGeneration\ParameterAggregator.cs" />
     <Compile Include="ReLinq\QueryGeneration\QueryPartsAggregator.cs" />
   </ItemGroup>
   <ItemGroup>

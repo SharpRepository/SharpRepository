@@ -21,6 +21,7 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
         public int? Take { get; set; }
         public int? Skip { get; set; }
         public bool OrderByIsDescending { get; set; }
+        public bool ReturnCount = false;
 
         public void AddFromPart(IQuerySource querySource)
         {
@@ -60,11 +61,9 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
             return stringBuilder.ToString();
         }
 
-        private string GetEntityName(IQuerySource querySource)
-        {
-            // TODO: implement this
-            return "TODO: GetEntityName Implemenation";
-            //return NHibernateUtil.Entity(querySource.ItemType).Name;
-        }
+//        private string GetEntityName(IQuerySource querySource)
+//        {
+//            //return NHibernateUtil.Entity(querySource.ItemType).Name;
+//        }
     }
 }

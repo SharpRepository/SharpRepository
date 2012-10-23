@@ -18,7 +18,6 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 
         // Instead of generating an HQL string, we could also use a NHibernate ASTFactory to generate IASTNodes.
         private readonly QueryPartsAggregator _queryParts = new QueryPartsAggregator();
-        private readonly ParameterAggregator _parameterAggregator = new ParameterAggregator();
 
         public CommandData GetCouchDbApiCommand()
         {
@@ -41,12 +40,50 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
                 return;
             }
 
+            if (resultOperator is CountResultOperator || resultOperator is LongCountResultOperator)
+            {
+                _queryParts.ReturnCount = true;
+                return;
+            }
+
+            if (resultOperator is TakeResultOperator)
+            {
+                var exp = ((TakeResultOperator)resultOperator).Count;
+
+                if (exp.NodeType == ExpressionType.Constant)
+                {
+                    _queryParts.Take = (int)((ConstantExpression)exp).Value;
+                }
+                else
+                {
+                    throw new NotSupportedException("Currently not supporting methods or variables in the Skip or Take clause.");
+                }
+
+                return;
+            }
+
+            if (resultOperator is SkipResultOperator)
+            {
+                var exp = ((SkipResultOperator) resultOperator).Count;
+
+                if (exp.NodeType == ExpressionType.Constant)
+                {
+                    _queryParts.Skip = (int)((ConstantExpression)exp).Value;
+                }
+                else
+                {
+                    throw new NotSupportedException("Currently not supporting methods or variables in the Skip or Take clause.");
+                }
+                
+                return;
+            }
+
             // TODO: implement count by returning the total_rows value in the json returned from the query
 //            if (resultOperator is CountResultOperator)
 //                _queryParts.SelectPart = string.Format("cast(count({0}) as int)", _queryParts.SelectPart);
 //            else
-            throw new NotSupportedException("No aggregates are supported in the select statement");
-                throw new NotSupportedException("Only Count() result operator is showcased in this sample. Adding Sum, Min, Max is left to the reader.");
+            //throw new NotSupportedException("No aggregates are supported in the select statement");
+//                throw new NotSupportedException("Only Count() result operator is showcased in this sample. Adding Sum, Min, Max is left to the reader.");
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
@@ -109,7 +146,7 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 
         private string GetCouchDbApiExpression(Expression expression)
         {
-            return CouchDbApiGeneratorExpressionTreeVisitor.GetCouchDbApiExpression(expression, _parameterAggregator);
+            return CouchDbApiGeneratorExpressionTreeVisitor.GetCouchDbApiExpression(expression);
         }
     }
 }

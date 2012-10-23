@@ -9,19 +9,19 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 {
     public class CouchDbApiGeneratorExpressionTreeVisitor : ThrowingExpressionTreeVisitor
     {
-        public static string GetCouchDbApiExpression (Expression linqExpression, ParameterAggregator parameterAggregator)
+        public static string GetCouchDbApiExpression (Expression linqExpression)
         {
-          var visitor = new CouchDbApiGeneratorExpressionTreeVisitor (parameterAggregator);
+          var visitor = new CouchDbApiGeneratorExpressionTreeVisitor ();
           visitor.VisitExpression (linqExpression);
           return visitor.GetCouchDbApiExpression();
         }
 
         private readonly StringBuilder _expression = new StringBuilder ();
-        private readonly ParameterAggregator _parameterAggregator;
+//        private readonly ParameterAggregator _parameterAggregator;
 
-        private CouchDbApiGeneratorExpressionTreeVisitor(ParameterAggregator parameterAggregator)
+        private CouchDbApiGeneratorExpressionTreeVisitor()
         {
-          _parameterAggregator = parameterAggregator;
+//          _parameterAggregator = parameterAggregator;
         }
 
         public string GetCouchDbApiExpression()
@@ -38,52 +38,72 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 
         protected override Expression VisitBinaryExpression (BinaryExpression expression)
         {
-          _expression.Append ("(");
+            _expression.Append ("(");
 
-          VisitExpression (expression.Left);
+            VisitExpression (expression.Left);
 
-          // In production code, handle this via lookup tables.
-          switch (expression.NodeType)
-          {
-            case ExpressionType.Equal:
-              _expression.Append (" == ");
-              break;
+            // In production code, handle this via lookup tables.
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Equal:
+                    _expression.Append (" == ");
+                    break;
 
-            case ExpressionType.AndAlso:
-            case ExpressionType.And:
-              _expression.Append (" && ");
-              break;
+                case ExpressionType.NotEqual:
+                    _expression.Append (" != ");
+                    break;
+
+                case ExpressionType.GreaterThan:
+                    _expression.Append (" > ");
+                    break;
+
+                case ExpressionType.GreaterThanOrEqual:
+                    _expression.Append (" >= ");
+                    break;
+
+                case ExpressionType.LessThan:
+                    _expression.Append (" < ");
+                    break;
+
+                case ExpressionType.LessThanOrEqual:
+                    _expression.Append (" <= ");
+                    break;
+
+                case ExpressionType.AndAlso:
+                case ExpressionType.And:
+                    _expression.Append (" && ");
+                    break;
         
-            case ExpressionType.OrElse:
-            case ExpressionType.Or:
-              _expression.Append (" || ");
-              break;
+                case ExpressionType.OrElse:
+                case ExpressionType.Or:
+                    _expression.Append (" || ");
+                    break;
 
-            case ExpressionType.Add:
-              _expression.Append (" + ");
-              break;
+                case ExpressionType.Add:
+                    _expression.Append (" + ");
+                    break;
 
-            case ExpressionType.Subtract:
-              _expression.Append (" - ");
-              break;
+                case ExpressionType.Subtract:
+                    _expression.Append (" - ");
+                    break;
 
-            case ExpressionType.Multiply:
-              _expression.Append (" * ");
-              break;
+                case ExpressionType.Multiply:
+                    _expression.Append (" * ");
+                    break;
 
-            case ExpressionType.Divide:
-              _expression.Append (" / ");
-              break;
+                case ExpressionType.Divide:
+                    _expression.Append (" / ");
+                    break;
 
-            default:
-              base.VisitBinaryExpression (expression);
-              break;
-          }
+                default:
+                    base.VisitBinaryExpression (expression);
+                    break;
+            }
 
-          VisitExpression (expression.Right);
-          _expression.Append (")");
+            VisitExpression (expression.Right);
+            _expression.Append (")");
 
-          return expression;
+            return expression;
         }
 
         protected override Expression VisitMemberExpression (MemberExpression expression)
@@ -95,11 +115,8 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
         }
 
         protected override Expression VisitConstantExpression (ConstantExpression expression)
-        {
-          //var namedParameter = _parameterAggregator.AddParameter (expression.Value);
-            
+        {           
             // check to see if we don't need the quotes
-            var value = expression.Value;
             var quotes = "'";
             if (
                 expression.Type == typeof(Int32)
