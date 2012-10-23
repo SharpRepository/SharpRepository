@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using SharpRepository.CouchDbRepository.Linq;
+using SharpRepository.CouchDbRepository.ReLinq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.FetchStrategies;
 
@@ -11,7 +12,7 @@ namespace SharpRepository.CouchDbRepository
         protected CouchDbClient<T> Client;
         private readonly string _serverUrl;
 
-        private readonly CouchDbQueryProvider _provider;
+        //private readonly CouchDbQueryProvider _provider;
         private readonly IQueryable<T> _baseQuery;
 
         internal CouchDbRepositoryBase()
@@ -41,8 +42,8 @@ namespace SharpRepository.CouchDbRepository
                 CouchDbManager.CreateDatabase(_serverUrl, database);
             }
 
-            _provider = new CouchDbQueryProvider(_serverUrl, database);
-            _baseQuery = _provider.CreateQuery<T>();
+            //_provider = new CouchDbQueryProvider(_serverUrl, database);
+            _baseQuery = CouchDbQueryFactory.Queryable<T>(_serverUrl, database);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)

@@ -99,7 +99,13 @@ namespace SharpRepository.CouchDbRepository.Linq
             if (isSingle)
                 return (TResult)Convert.ChangeType(list.FirstOrDefault(), type);
 
-            return (TResult)Convert.ChangeType(list, type);
+
+//            var result = Activator.CreateInstance<TResult>();
+//            var tmp = result.ToString();
+
+            
+            // throws System.InvalidCastException : Object must implement IConvertible.
+            return (TResult)Convert.ChangeType(list, typeof(TResult));
 //            return null;
 
 //            return (TResult) list;

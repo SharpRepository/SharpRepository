@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Remotion.Linq">
+      <HintPath>..\packages\Remotion.Linq.1.13.171\lib\net35\Remotion.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -52,6 +55,16 @@
     <Compile Include="Linq\TypeSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CouchDbClient.cs" />
+    <Compile Include="ReLinq\CouchDbQuery.cs" />
+    <Compile Include="ReLinq\CouchDbQueryable.cs" />
+    <Compile Include="ReLinq\CouchDbQueryExecutor.cs" />
+    <Compile Include="ReLinq\CouchDbQueryFactory.cs" />
+    <Compile Include="ReLinq\QueryGeneration\CommandData.cs" />
+    <Compile Include="ReLinq\QueryGeneration\CouchDbApiGeneratorExpressionTreeVisitor.cs" />
+    <Compile Include="ReLinq\QueryGeneration\CouchDbApiGeneratorQueryModelVisitor.cs" />
+    <Compile Include="ReLinq\QueryGeneration\NamedParameter.cs" />
+    <Compile Include="ReLinq\QueryGeneration\ParameterAggregator.cs" />
+    <Compile Include="ReLinq\QueryGeneration\QueryPartsAggregator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">

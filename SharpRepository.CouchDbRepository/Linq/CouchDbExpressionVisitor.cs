@@ -8,7 +8,7 @@ namespace SharpRepository.CouchDbRepository.Linq
     {
         private bool _isCount;
         private string _filter = string.Empty;
-        private string _orderBy = "_id";
+        private string _orderBy;
         private int? _skip;
         private int? _take;
         private bool _isFirst = false;
@@ -30,12 +30,13 @@ namespace SharpRepository.CouchDbRepository.Linq
             if (_take.HasValue)
                 querystring += "limit=" + _take.Value + "&";
             else if (_isFirst)
-            {
                 querystring += "limit=1&";
-            }
 
             if (_isDescending)
                 querystring += "descending=true&";
+
+            if (String.IsNullOrEmpty(_orderBy))
+                _orderBy = "_id";
 
             postData = "{ \"map\":\"function (doc) {if (" + _result + ") emit(doc." + _orderBy + ", doc);}\"}";
 
@@ -52,6 +53,8 @@ namespace SharpRepository.CouchDbRepository.Linq
 
                 case "OrderBy":
                 case "OrderByDescending":
+                case "ThenBy": // at this point these won't work, they will be ignored if sort by is set, maybe there is away to sort by multiple using an array as the key but not sure
+                case "ThenByDescending":
                     SetOrderBy(m, m.Method.Name.Contains("Descending"));
                     break;
 
@@ -114,10 +117,15 @@ namespace SharpRepository.CouchDbRepository.Linq
             {
                 _take = (int)((ConstantExpression)arg).Value;
             }
+
+            // TODO: handle variable expression
         }
 
         private void SetOrderBy(MethodCallExpression m, bool isDescending)
         {
+            if (!String.IsNullOrEmpty(_orderBy))
+                return; // ignore calls to ThenBy and ThenByDescending at this point
+
             if (m.Arguments.Count == 1)
                 return;
 
@@ -143,18 +151,35 @@ namespace SharpRepository.CouchDbRepository.Linq
             // not sure if this will end up working, but trying to parse the string representation of the predicate and just manipulate with replace and regex replaces to get the JS syntax
 
             _result = op.ToString()
+               
+                // Or syntax
                 .Replace(" OrElse ", " || ")
                .Replace(" Or ", " || ")
+
+               // And syntax
                .Replace(" AndAlso ", " && ")
                .Replace(" And ", " && ")
+
+               // change quotes from " to '
                .Replace("\"", "'")
+
+               // changing case methods
                .Replace(".ToUpper(", ".toUpperCase(")
                .Replace(".ToLower(", ".toLowerCase(")
                ;
                
+            // StartsWith
             _result = Regex.Replace(_result, @"\.StartsWith\('([A-Za-z0-9_]*)'\)", ".indexOf('$1') == 0");
+
+            // EndsWith
             _result = Regex.Replace(_result, @"p\.([A-Za-z0-9_]*)\.EndsWith\('([A-Za-z0-9_]*)'\)", "p.$1.indexOf('$2', p.$1.length - '$2'.length) != -1");
+
+            // Contains
             _result = Regex.Replace(_result, @"\.Contains\('([A-Za-z0-9_]*)'\)", ".indexOf('$1') != -1");
+
+            // Length
+            _result = Regex.Replace(_result, @"p\.([A-Za-z0-9_]*)\.Length", "p.$1.length");
+
 
             _result = _result
                 .Replace("p.", "doc.")
