@@ -72,6 +72,7 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
+            // TODO: change to GetAllQuery which should be IQueryable<> so that the selector is done on the server side instead of inmemory with the resulting objects
             return GetAll(queryOptions)
                 .AsQueryable()
                 .Select(selector);

@@ -17,11 +17,9 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
         }
 
         private readonly StringBuilder _expression = new StringBuilder ();
-//        private readonly ParameterAggregator _parameterAggregator;
 
         private CouchDbApiGeneratorExpressionTreeVisitor()
         {
-//          _parameterAggregator = parameterAggregator;
         }
 
         public string GetCouchDbApiExpression()
@@ -133,6 +131,13 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                 _expression.AppendFormat("{1}{0}{1}", expression.Value, quotes);
 
           return expression;
+        }
+
+        protected override Expression VisitNewExpression(NewExpression expression)
+        {
+            return expression;
+
+            return base.VisitNewExpression(expression);
         }
 
         protected override Expression VisitMethodCallExpression (MethodCallExpression expression)

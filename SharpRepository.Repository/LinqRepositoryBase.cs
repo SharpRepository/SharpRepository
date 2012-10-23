@@ -42,8 +42,10 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
+       // TODO: change to IQueryable<T> so that we can use it from the calls with a selector like GetAll(x => x.Name), right now it is bringing back the entire object and then doing the Select using Linq to Objects
         protected override IEnumerable<T> GetAllQuery()
         {
+//            return BaseQuery();  // we should be doing this so that it can stay a query and not pull into memory for the GetAllQuery with the selector param to use as well
             return BaseQuery().ToList();
         }
 
@@ -57,6 +59,7 @@ namespace SharpRepository.Repository
             return queryOptions.Apply(query).ToList();
         }
 
+        // TODO: change to IQueryable<T> so that we can use it from the calls with a selector like GetAll(x => x.Name), right now it is bringing back the entire object and then doing the Select using Linq to Objects
         protected override IEnumerable<T> FindAllQuery(ISpecification<T> criteria)
         {
             var query = BaseQuery(criteria.FetchStrategy);

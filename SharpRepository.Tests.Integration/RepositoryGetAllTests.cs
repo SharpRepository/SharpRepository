@@ -56,7 +56,34 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(c => c.Name);
-            result.Count().ShouldEqual(5);
+
+            // changed from .Count() to this to actually get the results and not just the Count of the query which won't necessarily use the selector at all
+            var total = 0;
+            foreach (var item in result)
+            {
+                total++;
+            }
+            total.ShouldEqual(5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void GetAll_With_Anonymous_Selector_Should_Return_Every_Item(IRepository<Contact, string> repository)
+        {
+            for (int i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i };
+                repository.Add(contact);
+            }
+
+            var result = repository.GetAll(c => new { c.Name, c.ContactTypeId});
+
+            // changed from .Count() to this to actually get the results and not just the Count of the query which won't necessarily use the selector at all and might do it all server side
+            var total = 0;
+            foreach (var item in result)
+            {
+                total++;
+            }
+            total.ShouldEqual(5);
         }
 
         [ExecuteForAllRepositories]

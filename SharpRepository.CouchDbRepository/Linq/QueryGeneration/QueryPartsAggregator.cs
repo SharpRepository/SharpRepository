@@ -56,7 +56,12 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             stringBuilder.AppendFormat("emit({0}, ", !String.IsNullOrEmpty(OrderBy) ? OrderBy : "doc._id");
 
             // TODO: use the SelectParts to only return the properties that are needed by emitting {Name: "Jeff", Title: "Awesome"}
-            stringBuilder.Append("doc);}\"}");
+
+            var select = "doc"; // return the entire thing by default
+            if (!String.IsNullOrEmpty(SelectPart))
+                select = SelectPart;
+
+            stringBuilder.Append(select + ");}\"}");
 
             return stringBuilder.ToString();
         }
