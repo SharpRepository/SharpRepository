@@ -5,7 +5,7 @@ using Remotion.Linq;
 using Remotion.Linq.Clauses;
 using Remotion.Linq.Clauses.ResultOperators;
 
-namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
+namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 {
     public class CouchDbApiGeneratorQueryModelVisitor : QueryModelVisitorBase
     {

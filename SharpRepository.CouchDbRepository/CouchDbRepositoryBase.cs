@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SharpRepository.CouchDbRepository.ReLinq;
+using SharpRepository.CouchDbRepository.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.FetchStrategies;
 

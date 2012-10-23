@@ -4,7 +4,7 @@ using System.Text;
 using Remotion.Linq.Clauses;
 using Remotion.Linq.Utilities;
 
-namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
+namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 {
     public class QueryPartsAggregator
     {

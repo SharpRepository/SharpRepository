@@ -5,7 +5,7 @@ using Remotion.Linq.Clauses.ExpressionTreeVisitors;
 using Remotion.Linq.Clauses.Expressions;
 using Remotion.Linq.Parsing;
 
-namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
+namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 {
     public class CouchDbApiGeneratorExpressionTreeVisitor : ThrowingExpressionTreeVisitor
     {

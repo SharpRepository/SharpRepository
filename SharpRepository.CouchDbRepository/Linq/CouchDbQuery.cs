@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using SharpRepository.CouchDbRepository.ReLinq.QueryGeneration;
+using SharpRepository.CouchDbRepository.Linq.QueryGeneration;
 
-namespace SharpRepository.CouchDbRepository.ReLinq
+namespace SharpRepository.CouchDbRepository.Linq
 {
     public class CouchDbQuery
     {

@@ -1,4 +1,4 @@
-﻿namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
+﻿namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 {
     public class CommandData
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Remotion.Linq;
-using SharpRepository.CouchDbRepository.ReLinq.QueryGeneration;
+using SharpRepository.CouchDbRepository.Linq.QueryGeneration;
 
-namespace SharpRepository.CouchDbRepository.ReLinq
+namespace SharpRepository.CouchDbRepository.Linq
 {
     // Called by re-linq when a query is to be executed.
     public class CouchDbQueryExecutor : IQueryExecutor
