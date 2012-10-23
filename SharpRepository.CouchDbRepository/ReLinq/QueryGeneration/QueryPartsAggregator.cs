@@ -12,16 +12,15 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
         {
             FromParts = new List<string>();
             WhereParts = new List<string>();
-            OrderByParts = new List<string>();
         }
 
         public string SelectPart { get; set; }
         private List<string> FromParts { get; set; }
         private List<string> WhereParts { get; set; }
-        private List<string> OrderByParts { get; set; }
+        private string OrderBy { get; set; }
         public int? Take { get; set; }
         public int? Skip { get; set; }
-        public bool IsDescending { get; set; }
+        public bool OrderByIsDescending { get; set; }
 
         public void AddFromPart(IQuerySource querySource)
         {
@@ -33,9 +32,10 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
             WhereParts.Add(string.Format(formatString, args));
         }
 
-        public void AddOrderByPart(IEnumerable<string> orderings)
+        public void AddOrderByPart(string orderBy, bool isDescending)
         {
-            OrderByParts.Insert(0, SeparatedStringBuilder.Build(", ", orderings));
+            OrderBy = orderBy;
+            OrderByIsDescending = isDescending;
         }
 
         public string BuildCouchDbApiPostData()
@@ -52,7 +52,7 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
                 stringBuilder.AppendFormat("if ({0}) ", SeparatedStringBuilder.Build(" && ", WhereParts));
             }
 
-            stringBuilder.AppendFormat("emit(doc.{0}, ", OrderByParts.Count > 0 ? OrderByParts[0] : "_id");
+            stringBuilder.AppendFormat("emit({0}, ", !String.IsNullOrEmpty(OrderBy) ? OrderBy : "doc._id");
 
             // TODO: use the SelectParts to only return the properties that are needed by emitting {Name: "Jeff", Title: "Awesome"}
             stringBuilder.Append("doc);}\"}");

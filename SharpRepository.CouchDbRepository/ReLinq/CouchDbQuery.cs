@@ -10,7 +10,7 @@ namespace SharpRepository.CouchDbRepository.ReLinq
     {
         private readonly string _url;
         private readonly string _databaseName;
-        private QueryPartsAggregator _queryParts;
+        private readonly QueryPartsAggregator _queryParts;
 
         public CouchDbQuery(string url, string databaseName, QueryPartsAggregator queryParts)
         {
@@ -28,7 +28,7 @@ namespace SharpRepository.CouchDbRepository.ReLinq
             //            else if (_isFirst)
             //                querystring += "limit=1&";
 
-            if (_queryParts.IsDescending)
+            if (_queryParts.OrderByIsDescending)
                 querystring += "descending=true&";
 
             var fullUrl = _url + "/" + _databaseName + "/_temp_view?" + querystring;

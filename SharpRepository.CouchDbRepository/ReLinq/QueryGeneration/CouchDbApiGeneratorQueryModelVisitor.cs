@@ -74,7 +74,10 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 
         public override void VisitOrderByClause(OrderByClause orderByClause, QueryModel queryModel, int index)
         {
-            _queryParts.AddOrderByPart(orderByClause.Orderings.Select(o => GetCouchDbApiExpression(o.Expression)));
+            if (orderByClause.Orderings.Any())
+            {
+                _queryParts.AddOrderByPart(GetCouchDbApiExpression(orderByClause.Orderings[0].Expression), orderByClause.Orderings[0].OrderingDirection == OrderingDirection.Desc);
+            }
 
             base.VisitOrderByClause(orderByClause, queryModel, index);
         }

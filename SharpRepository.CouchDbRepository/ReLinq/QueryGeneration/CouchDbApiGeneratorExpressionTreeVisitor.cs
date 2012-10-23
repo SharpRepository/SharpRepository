@@ -124,35 +124,32 @@ namespace SharpRepository.CouchDbRepository.ReLinq.QueryGeneration
 
             if (expression.Method.Name == "Contains")
             {
-                _expression.Append ("(doc.");
                 VisitExpression (expression.Object);
-                _expression.Append (".indexOf('");
+                _expression.Append (".indexOf(");
                 VisitExpression (expression.Arguments[0]);
-                _expression.Append ("') != -1)");
+                _expression.Append (") != -1");
                 return expression;
             }
 
             if (expression.Method.Name == "StartsWith")
             {
-                _expression.Append("(doc.");
                 VisitExpression(expression.Object);
-                _expression.Append(".indexOf('");
+                _expression.Append(".indexOf(");
                 VisitExpression(expression.Arguments[0]);
-                _expression.Append("') == 0)");
+                _expression.Append(") == 0");
                 return expression;
             }
 
             if (expression.Method.Name == "EndsWith")
             {
-                _expression.Append("(doc.");
                 VisitExpression(expression.Object);
-                _expression.Append(".indexOf('");
+                _expression.Append(".indexOf(");
                 VisitExpression(expression.Arguments[0]);
-                _expression.Append("', ");
+                _expression.Append(", ");
                 VisitExpression(expression.Object);
                 _expression.Append(".length - '");
                 VisitExpression(expression.Arguments[0]);
-                _expression.Append("'.length) != -1)");
+                _expression.Append("'.length) != -1");
                 return expression;
             }
 
