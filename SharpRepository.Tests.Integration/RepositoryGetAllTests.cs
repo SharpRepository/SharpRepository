@@ -75,12 +75,12 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var result = repository.GetAll(c => new { c.Name, c.ContactTypeId});
+            var results = repository.GetAll(c => new {c.Name, c.Title});
 
-            // changed from .Count() to this to actually get the results and not just the Count of the query which won't necessarily use the selector at all and might do it all server side
             var total = 0;
-            foreach (var item in result)
+            foreach (var result in results)
             {
+                result.Name.ShouldStartWith("Test User");
                 total++;
             }
             total.ShouldEqual(5);

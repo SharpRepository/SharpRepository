@@ -42,31 +42,28 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-       // TODO: change to IQueryable<T> so that we can use it from the calls with a selector like GetAll(x => x.Name), right now it is bringing back the entire object and then doing the Select using Linq to Objects
-        protected override IEnumerable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery()
         {
-//            return BaseQuery();  // we should be doing this so that it can stay a query and not pull into memory for the GetAllQuery with the selector param to use as well
-            return BaseQuery().ToList();
+            return BaseQuery();
         }
 
-        protected override IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
         {
             if (queryOptions == null)
                 return GetAllQuery();
 
             var query = BaseQuery();
 
-            return queryOptions.Apply(query).ToList();
+            return queryOptions.Apply(query);
         }
 
-        // TODO: change to IQueryable<T> so that we can use it from the calls with a selector like GetAll(x => x.Name), right now it is bringing back the entire object and then doing the Select using Linq to Objects
-        protected override IEnumerable<T> FindAllQuery(ISpecification<T> criteria)
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria)
         {
             var query = BaseQuery(criteria.FetchStrategy);
-            return criteria.SatisfyingEntitiesFrom(query).ToList();
+            return criteria.SatisfyingEntitiesFrom(query);
         }
 
-        protected override IEnumerable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
             if (queryOptions == null)
                 return FindAllQuery(criteria);
@@ -75,7 +72,7 @@ namespace SharpRepository.Repository
             
             query = criteria.SatisfyingEntitiesFrom(query);
 
-            return queryOptions.Apply(query).ToList();
+            return queryOptions.Apply(query);
         }
 
         public override IEnumerator<T> GetEnumerator()

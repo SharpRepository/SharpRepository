@@ -52,8 +52,8 @@ namespace SharpRepository.Repository
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IEnumerable<T> GetAllQuery();
-        protected abstract IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery();
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
 
         public IEnumerable<T> GetAll()
         {
@@ -72,10 +72,9 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            // TODO: change to GetAllQuery which should be IQueryable<> so that the selector is done on the server side instead of inmemory with the resulting objects
-            return GetAll(queryOptions)
-                .AsQueryable()
-                .Select(selector);
+            return GetAllQuery(queryOptions)
+                .Select(selector)
+                .ToList();
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -106,8 +105,8 @@ namespace SharpRepository.Repository
         }
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria);
-        protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria);
+        protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
 
         public IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
@@ -124,7 +123,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return FindAll(criteria, queryOptions).AsQueryable().Select(selector).ToList();
+            return FindAllQuery(criteria, queryOptions).Select(selector).ToList();
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
