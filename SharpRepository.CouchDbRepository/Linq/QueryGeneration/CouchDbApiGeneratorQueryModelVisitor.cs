@@ -78,13 +78,6 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                 return;
             }
 
-            // TODO: implement count by returning the total_rows value in the json returned from the query
-//            if (resultOperator is CountResultOperator)
-//                _queryParts.SelectPart = string.Format("cast(count({0}) as int)", _queryParts.SelectPart);
-//            else
-            //throw new NotSupportedException("No aggregates are supported in the select statement");
-//                throw new NotSupportedException("Only Count() result operator is showcased in this sample. Adding Sum, Min, Max is left to the reader.");
-
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
 
@@ -121,8 +114,6 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, int index)
         {
-            // HQL joins work differently, need to simulate using a cross join with a where condition
-
             _queryParts.AddFromPart(joinClause);
             _queryParts.AddWherePart(
                 "({0} = {1})",

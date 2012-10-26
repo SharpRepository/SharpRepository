@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 using Remotion.Linq.Clauses.ExpressionTreeVisitors;
@@ -107,7 +108,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
         protected override Expression VisitMemberExpression (MemberExpression expression)
         {
           VisitExpression (expression.Expression);
-          _expression.AppendFormat (".{0}", expression.Member.Name);
+            _expression.AppendFormat(".{0}", expression.Member.Name);
 
           return expression;
         }
@@ -135,6 +136,29 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 
         protected override Expression VisitNewExpression(NewExpression expression)
         {
+            // for new { c.Name, c.Title, c.TItle.Length }
+
+            // expression.Members has all the property names of the anonymous type
+            //  e.g. String Name, String Title, Int32 Length
+
+            // expression.Arguments has the expressions for getting the value, so these need to be run through the Visit stuff to get their 
+            //  e.g. [10001].Name, [10001].Title, [10001].Title.Length
+
+            _expression.Append("{");
+
+            var i = 0;
+            foreach (var arg in expression.Arguments)
+            {
+                if (i != 0)
+                    _expression.Append(",");
+
+                _expression.AppendFormat("{0}: ", expression.Members[i].Name);
+                VisitExpression(arg);
+                i++;
+            }
+            _expression.Append("}");
+
+
             return expression;
 
             return base.VisitNewExpression(expression);

@@ -75,6 +75,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
+//            var results = repository.GetAll(c => new {c.Name, c.Title, c.Title.Length}); // doesn't work yet for CouchDb
             var results = repository.GetAll(c => new {c.Name, c.Title});
 
             var total = 0;

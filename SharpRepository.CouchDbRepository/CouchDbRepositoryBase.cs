@@ -10,6 +10,7 @@ namespace SharpRepository.CouchDbRepository
     {
         protected CouchDbClient<T> Client;
         private readonly string _serverUrl;
+        private readonly string _database;
 
         //private readonly CouchDbQueryProvider _provider;
         private readonly IQueryable<T> _baseQuery;
@@ -30,24 +31,21 @@ namespace SharpRepository.CouchDbRepository
             {
                 database = typeof (T).Name;
             }
-            database = database.ToLower(); // CouchDb requires lowercase  database names
+            _database = database.ToLower(); // CouchDb requires lowercase  database names
 
             _serverUrl = String.Format("http://{0}:{1}", host, port);
 
-            Client = new CouchDbClient<T>(_serverUrl, database);
+            Client = new CouchDbClient<T>(_serverUrl, _database);
 
-            if (!CouchDbManager.HasDatabase(_serverUrl, database))
+            if (!CouchDbManager.HasDatabase(_serverUrl, _database))
             {
-                CouchDbManager.CreateDatabase(_serverUrl, database);
+                CouchDbManager.CreateDatabase(_serverUrl, _database);
             }
-
-            //_provider = new CouchDbQueryProvider(_serverUrl, database);
-            _baseQuery = CouchDbQueryFactory.Queryable<T>(_serverUrl, database);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return _baseQuery;
+            return CouchDbQueryFactory.Queryable<T>(_serverUrl, _database);
             //return Client.GetAllDocuments().AsQueryable();
         }
 
