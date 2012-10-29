@@ -40,7 +40,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            IEnumerable<Contact> result = repository.GetAll(queryOptions).ToList();
+            var result = repository.GetAll(queryOptions).ToList();
             result.Count().ShouldEqual(pageSize);
             queryOptions.TotalItems.ShouldEqual(totalItems);
             result.First().Name.ShouldEqual("Test User 3");
@@ -55,15 +55,8 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var result = repository.GetAll(c => c.Name);
-
-            // changed from .Count() to this to actually get the results and not just the Count of the query which won't necessarily use the selector at all
-            var total = 0;
-            foreach (var item in result)
-            {
-                total++;
-            }
-            total.ShouldEqual(5);
+            var result = repository.GetAll(c => c.Name).ToList();
+            result.Count().ShouldEqual(5);
         }
 
         [ExecuteForAllRepositories]
@@ -76,15 +69,8 @@ namespace SharpRepository.Tests.Integration
             }
 
 //            var results = repository.GetAll(c => new {c.Name, c.Title, c.Title.Length}); // doesn't work yet for CouchDb
-            var results = repository.GetAll(c => new {c.Name, c.Title});
-
-            var total = 0;
-            foreach (var result in results)
-            {
-                result.Name.ShouldStartWith("Test User");
-                total++;
-            }
-            total.ShouldEqual(5);
+            var results = repository.GetAll(c => new {c.Name, c.Title}).ToList();
+            results.Count().ShouldEqual(5);
         }
 
         [ExecuteForAllRepositories]
