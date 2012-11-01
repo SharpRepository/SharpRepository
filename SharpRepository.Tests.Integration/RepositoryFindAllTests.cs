@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -180,6 +181,60 @@ namespace SharpRepository.Tests.Integration
             result.Count().ShouldEqual(1);
             queryOptions.TotalItems.ShouldEqual(3);
             result.First().Name.ShouldEqual("Test User 1");
+        }
+
+        [ExecuteForAllRepositories]
+        public void FindAll_Should_Match_On_Boolean(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 10; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i , IsActive = i % 2 == 0};
+                repository.Add(contact);
+            }
+
+            var results = repository.FindAll(x => x.IsActive);
+            results.Count().ShouldEqual(5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void FindAll_Should_Match_On_DateTime(IRepository<Contact, string> repository)
+        {
+            var startDate = new DateTime(2012, 1, 1);
+            for (var i = 1; i <= 10; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i , CreatedDate = startDate.AddMonths(i-1)};
+                repository.Add(contact);
+            }
+
+            var results = repository.FindAll(x => x.CreatedDate < startDate.AddMonths(5));
+            results.Count().ShouldEqual(5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void FindAll_Should_Match_On_Any(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 10; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, EmailAddresses = new List<EmailAddress>() { new EmailAddress {Label = i % 2 == 0 ? "Home" : "Work"}}};
+                repository.Add(contact);
+            }
+
+            // need to implement VisitSubQueryMethod
+            var results = repository.FindAll(x => x.EmailAddresses.Any(m => m.Label == "Home"));
+            results.Count().ShouldEqual(5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void FindAll_Should_Match_On_StartsWith(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 10; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, Title = (i % 2 == 0 ? "One " : "Two ") + i };
+                repository.Add(contact);
+            }
+
+            var results = repository.FindAll(x => x.Title.StartsWith("One"));
+            results.Count().ShouldEqual(5);
         }
     }
 }

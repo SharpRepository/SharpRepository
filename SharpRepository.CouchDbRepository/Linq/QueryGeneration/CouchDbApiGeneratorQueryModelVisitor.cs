@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Remotion.Linq;
 using Remotion.Linq.Clauses;
+using Remotion.Linq.Clauses.Expressions;
 using Remotion.Linq.Clauses.ResultOperators;
 
 namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
@@ -86,11 +87,28 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             _queryParts.AddFromPart(fromClause);
 
             base.VisitMainFromClause(fromClause, queryModel);
+
+            if (fromClause.FromExpression == null)
+                return;
+
+            var subQueryExpression = fromClause.FromExpression as SubQueryExpression;
+            if (subQueryExpression == null)
+                return;
+
+            VisitQueryModel(subQueryExpression.QueryModel);
+
+
         }
 
         public override void VisitSelectClause(SelectClause selectClause, QueryModel queryModel)
         {
-            _queryParts.SelectPart = GetCouchDbApiExpression(selectClause.Selector);
+            // The select part gets set from the outside in, so the first time it's set is what the final result should be
+            //  so if it is already set we should ignore the next time it's trying to be set
+
+            if (String.IsNullOrEmpty(_queryParts.SelectPart))
+            {
+                _queryParts.SelectPart = GetCouchDbApiExpression(selectClause.Selector);    
+            }
 
             base.VisitSelectClause(selectClause, queryModel);
         }

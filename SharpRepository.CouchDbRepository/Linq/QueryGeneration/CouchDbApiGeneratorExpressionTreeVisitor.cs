@@ -117,6 +117,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
         {           
             // check to see if we don't need the quotes
             var quotes = "'";
+            var value = expression.Value.ToString();
             if (
                 expression.Type == typeof(Int32)
                 || expression.Type == typeof(Int16)
@@ -128,8 +129,13 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             {
                 quotes = "";
             }
+            else if (expression.Type == typeof(DateTime))
+            {
+                quotes = "";
+                value = String.Format("new Date('{0}')", value);
+            }
 
-                _expression.AppendFormat("{1}{0}{1}", expression.Value, quotes);
+             _expression.AppendFormat("{1}{0}{1}", value, quotes);
 
           return expression;
         }
