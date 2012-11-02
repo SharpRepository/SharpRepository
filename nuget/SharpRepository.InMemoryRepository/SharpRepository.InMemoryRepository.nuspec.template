@@ -13,5 +13,8 @@
     <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags>SharpRepository Repository InMemory</tags>
+	<dependencies>
+      <dependency id="SharpRepository.Repository" version="1.0.0.1" />
+    </dependencies>
   </metadata>
 </package>
