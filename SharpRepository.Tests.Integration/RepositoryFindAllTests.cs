@@ -205,8 +205,8 @@ namespace SharpRepository.Tests.Integration
                 var contact = new Contact { Name = "Test User " + i , CreatedDate = startDate.AddMonths(i-1)};
                 repository.Add(contact);
             }
-
-            var results = repository.FindAll(x => x.CreatedDate < startDate.AddMonths(5));
+            var dateCheck = startDate.AddMonths(5);
+            var results = repository.FindAll(x => x.CreatedDate < dateCheck);
             results.Count().ShouldEqual(5);
         }
 

@@ -14,7 +14,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
         public string Title { get; set; }
         public int ContactTypeId { get; set; } // for partitioning on 
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
         public bool IsActive { get; set; }
 

@@ -39,7 +39,20 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
         {
             _expression.Append ("(");
 
+            // since the date field is just stored as text via json within CouchDb, to do equality checks against a date field you must do it by doing:
+            //  new Date(doc.DateField) == new Date('1/1/2012')
+            var isLeftDateMember = (expression.Left.NodeType == ExpressionType.MemberAccess && (expression.Left.Type == typeof(DateTime) || expression.Left.Type == typeof(DateTime?)));
+            if (isLeftDateMember)
+            {
+                _expression.Append("new Date(");
+            }
+
             VisitExpression (expression.Left);
+
+            if (isLeftDateMember)
+            {
+                _expression.Append(")");
+            }
 
             // In production code, handle this via lookup tables.
             switch (expression.NodeType)
@@ -99,7 +112,19 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                     break;
             }
 
+            var isRightDateMember = (expression.Right.NodeType == ExpressionType.MemberAccess && (expression.Right.Type == typeof(DateTime) || expression.Right.Type == typeof(DateTime?)));
+            if (isRightDateMember)
+            {
+                _expression.Append("new Date(");
+            }
+
             VisitExpression (expression.Right);
+
+            if (isRightDateMember)
+            {
+                _expression.Append(")");
+            }
+
             _expression.Append (")");
 
             return expression;
@@ -107,7 +132,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 
         protected override Expression VisitMemberExpression (MemberExpression expression)
         {
-          VisitExpression (expression.Expression);
+            VisitExpression (expression.Expression);
             _expression.AppendFormat(".{0}", expression.Member.Name);
 
           return expression;
@@ -129,7 +154,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             {
                 quotes = "";
             }
-            else if (expression.Type == typeof(DateTime))
+            else if (expression.Type == typeof(DateTime) || expression.Type == typeof(DateTime?))
             {
                 quotes = "";
                 value = String.Format("new Date('{0}')", value);
