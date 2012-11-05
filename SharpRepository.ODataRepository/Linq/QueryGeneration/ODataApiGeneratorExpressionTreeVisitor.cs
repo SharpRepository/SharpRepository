@@ -30,7 +30,7 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
 
         protected override Expression VisitQuerySourceReferenceExpression (QuerySourceReferenceExpression expression)
         {
-            _expression.Append("doc"); // not sure if this will always be static like this, need to check for joins
+            //_expression.Append("doc"); // not sure if this will always be static like this, need to check for joins
             //_expression.Append (expression.ReferencedQuerySource.ItemName);
             return expression;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Remotion.Linq.Utilities;
 using SharpRepository.ODataRepository.Linq.QueryGeneration;
@@ -30,7 +31,7 @@ namespace SharpRepository.ODataRepository.Linq
                 querystring += "/$count";
             }
 
-            querystring += "?";
+            querystring += "?$format=json&";
 
             if (_queryParts.Take.HasValue)
                 querystring += "$top=" + _queryParts.Take.Value + "&";
@@ -66,10 +67,10 @@ namespace SharpRepository.ODataRepository.Linq
             }
 
             // get the rows property and deserialize that
-            res = JObject.Parse(json);
-            var rows = res["rows"];
+            var jobject = JsonConvert.DeserializeObject(json) as JObject;
+            var rows = jobject["d"];
 
-            var items = rows.Select(row => row["value"].ToObject<T>());
+            var items = rows.Select(row => row.ToObject<T>());
 
             return items;
         }

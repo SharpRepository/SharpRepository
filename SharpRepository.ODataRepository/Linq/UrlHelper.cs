@@ -8,8 +8,9 @@ namespace SharpRepository.ODataRepository.Linq
         public static string Get(string requestUrl)
         {
             //Console.WriteLine("requesting " + reuqestUrl);
-            var request = WebRequest.Create(requestUrl);
+            var request = (HttpWebRequest)WebRequest.Create(requestUrl);
             request.ContentType = "application/json";
+            request.Accept = "application/json";
 
             string responseFromServer;
             using (var response = request.GetResponse())

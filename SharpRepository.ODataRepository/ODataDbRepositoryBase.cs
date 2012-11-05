@@ -17,13 +17,18 @@ namespace SharpRepository.ODataRepository
         //private readonly IQueryable<T> _baseQuery;
 
         internal ODataRepositoryBase(string url, string collectionName = null)
-         {
+        {
+            _serverUrl = url;
              _typeName = typeof(T).Name;
 
              if (String.IsNullOrEmpty(collectionName))
              {
                  // generate based on the type name
-                 collectionName = _typeName + "s"; // TODO: do we need to take into account Person to People, or things like that
+                 _database = _typeName + "s"; // TODO: do we need to take into account Person to People, or things like that
+             }
+             else
+             {
+                 _database = collectionName;
              }
          }
 
