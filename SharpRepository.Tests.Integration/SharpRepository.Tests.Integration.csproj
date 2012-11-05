@@ -129,6 +129,7 @@
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
+    <Compile Include="Spikes\ODataSpikes.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
@@ -170,6 +171,10 @@
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
       <Project>{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}</Project>
       <Name>SharpRepository.MongoDbRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.ODataRepository\SharpRepository.ODataRepository.csproj">
+      <Project>{9fb288b8-500b-49e8-a46c-42a9d81fe1ea}</Project>
+      <Name>SharpRepository.ODataRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj">
       <Project>{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}</Project>
