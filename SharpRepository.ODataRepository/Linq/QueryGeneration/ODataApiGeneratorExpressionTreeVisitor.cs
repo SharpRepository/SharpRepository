@@ -117,7 +117,7 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
         protected override Expression VisitMemberExpression (MemberExpression expression)
         {
             VisitExpression (expression.Expression);
-            _expression.AppendFormat(".{0}", expression.Member.Name);
+            _expression.AppendFormat("{0}", expression.Member.Name);
 
           return expression;
         }
