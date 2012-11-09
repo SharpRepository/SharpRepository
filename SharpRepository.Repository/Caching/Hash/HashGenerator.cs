@@ -34,6 +34,7 @@ namespace SharpRepository.Repository.Caching.Hash
             _expression = expression;
         }
 
+        // special thanks to Pete Montgomery's post here: http://petemontgomery.wordpress.com/2008/08/07/caching-the-results-of-linq-queries/
         public string GetHash()
         {
             if (_expression == null)
