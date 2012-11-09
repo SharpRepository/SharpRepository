@@ -369,10 +369,10 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + ":" + queryOptions ?? "null"));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + queryOptions ?? "null"));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
         }
 
         private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
@@ -380,10 +380,10 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + ":" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
         }
 
         private int GetGeneration()

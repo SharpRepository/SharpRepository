@@ -39,6 +39,10 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Caching\Hash\HashGenerator.cs" />
+    <Compile Include="Caching\Hash\Evaluator.cs" />
+    <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />
+    <Compile Include="Caching\Hash\Utility.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyBase.cs" />
     <Compile Include="Caching\NoCachingStrategyBase.cs" />
     <Compile Include="Caching\StandardCachingStrategyBase.cs" />

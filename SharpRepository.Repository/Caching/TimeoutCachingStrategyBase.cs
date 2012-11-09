@@ -129,12 +129,12 @@ namespace SharpRepository.Repository.Caching
 
         private string FindAllCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "FindAll", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "FindAll", Md5Helper.CalculateMd5(criteria + "::" + queryOptions));
         }
 
         private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "Find", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "Find", Md5Helper.CalculateMd5(criteria + "::" + queryOptions));
         }
     }
 }
