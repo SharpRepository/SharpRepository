@@ -130,7 +130,7 @@
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
-    <Compile Include="Spikes\StandardCachingSpike.cs" />
+    <Compile Include="Spikes\StandardCachingSpikes.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
     <Compile Include="RepositoryAddTests.cs" />
