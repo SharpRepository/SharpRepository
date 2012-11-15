@@ -27,6 +27,19 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
+        public void FindAll_Should_Return_All_Items_Which_Satisfy_Predicate(IRepository<Contact, string> repository)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i };
+                repository.Add(contact);
+            }
+
+            var result = repository.FindAll(p => p.Name == "Test User 1"); // Note: Raven doesn't like p.Name.Equals("...");
+            result.Count().ShouldEqual(1);
+        }
+
+        [ExecuteForAllRepositories]
         public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
