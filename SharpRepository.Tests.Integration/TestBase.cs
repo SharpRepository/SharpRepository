@@ -1,4 +1,3 @@
-using MongoDB.Driver;
 using NUnit.Framework;
 using Rhino.Mocks;
 

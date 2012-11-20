@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
+using SharpRepository.InMemoryRepository;
+using SharpRepository.Repository;
 
 namespace SharpRepository.Tests.Configuration
 {
@@ -33,9 +32,9 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void InMemoryConfigurationNoParameters()
         {
-            var repos = Repository.Repository.GetInstance<Contact, int>();
+            var repos = RepositoryFactory.GetInstance<Contact, string>();
 
-            if (!(repos is InMemoryRepository.InMemoryRepository<Contact, int>))
+            if (!(repos is InMemoryRepository<Contact, string>))
             {
                 throw new Exception("Not InMemoryRepository");
             }

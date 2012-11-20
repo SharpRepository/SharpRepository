@@ -45,21 +45,26 @@ namespace SharpRepository.MongoDbRepository
             _database = _server.GetDatabase(DatabaseName);
         }
 
+        private MongoCollection<T> BaseCollection()
+        {
+            return _database.GetCollection<T>(TypeName);
+        }
+
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return _database.GetCollection<T>(TypeName).AsQueryable();
+            return BaseCollection().AsQueryable();
         }
 
         protected override T GetQuery(TKey key)
         {
             return IsValidKey(key)
-                       ? _database.GetCollection<T>(TypeName).FindOne(Query.EQ("_id", new ObjectId(key.ToString())))
+                       ? BaseCollection().FindOne(Query.EQ("_id", new ObjectId(key.ToString())))
                        : default(T);
         }
 
         protected override void AddItem(T entity)
         {
-            _database.GetCollection<T>(TypeName).Insert(entity);
+            BaseCollection().Insert(entity);
         }
 
         protected override void DeleteItem(T entity)
@@ -69,13 +74,13 @@ namespace SharpRepository.MongoDbRepository
 
             if (IsValidKey(pkValue))
             {
-                _database.GetCollection<T>(TypeName).Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
+                BaseCollection().Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
             }
         }
 
         protected override void UpdateItem(T entity)
         {
-            _database.GetCollection<T>(TypeName).Save(entity);
+            BaseCollection().Save(entity);
         }
 
         protected override void SaveChanges()

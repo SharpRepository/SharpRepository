@@ -2,9 +2,9 @@
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 
-namespace SharpRepository.InMemoryRepository.Configuration
+namespace SharpRepository.InMemoryRepository
 {
-    public class InMemoryRepositorySection : ConfigurationSection, IRepositoryElement
+    public class Config : ConfigurationSection, IRepositoryElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
