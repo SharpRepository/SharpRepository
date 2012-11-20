@@ -14,6 +14,8 @@ namespace SharpRepository.Repository.Configuration
 
         public static IRepository<T, TKey> GetDefaultInstance<T, TKey>(RepositoriesSectionGroup repositoriesSection) where T : class, new()
         {
+            // I thought repositoriesSection.Sections was just ones that the user added to their configuration but it is all that are defined at the top section and sectionGroups part
+
             // see if there is a default repository section
             var defaultSection = repositoriesSection.Sections["default"];
 

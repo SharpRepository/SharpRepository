@@ -51,11 +51,13 @@
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\DefaultSection.cs" />
     <Compile Include="Configuration\FastActivator.cs" />
-    <Compile Include="Configuration\RepositoriesSection.cs" />
-    <Compile Include="Configuration\RepositoryElement.cs" />
-    <Compile Include="Configuration\RepositoryElementCollection.cs" />
+    <Compile Include="Configuration\ICachingStrategyElement.cs" />
+    <Compile Include="Configuration\RepositoriesSectionGroup.cs" />
+    <Compile Include="Configuration\IRepositoryElement.cs" />
     <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />
     <Compile Include="Configuration\SharpRepositorySectionGroup.cs" />
+    <Compile Include="Configuration\StandardCachingStrategySection.cs" />
+    <Compile Include="Configuration\TimeoutCachingStrategySection.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
