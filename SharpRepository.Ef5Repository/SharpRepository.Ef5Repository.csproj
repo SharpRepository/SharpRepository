@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +50,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Configuration\Ef5RepositorySection.cs" />
     <Compile Include="Ef5Repository.cs" />
     <Compile Include="Ef5RepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

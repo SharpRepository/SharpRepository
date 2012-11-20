@@ -32,12 +32,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Configuration\InMemoryRepositorySection.cs" />
     <Compile Include="InMemoryRepository.cs" />
     <Compile Include="InMemoryRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
