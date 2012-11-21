@@ -1,4 +1,4 @@
-﻿using System;
+﻿using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository.Configuration
 {
@@ -6,5 +6,7 @@ namespace SharpRepository.Repository.Configuration
     {
         string Name { get; set; }
         string CachingProvider { get; set; }
+
+        ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class;
     }
 }

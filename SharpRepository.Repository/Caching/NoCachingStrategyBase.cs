@@ -73,5 +73,7 @@ namespace SharpRepository.Repository.Caching
         {
 
         }
+
+        public ICachingProvider CachingProvider { get; set; }
     }
 }

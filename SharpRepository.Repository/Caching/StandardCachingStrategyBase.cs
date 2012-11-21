@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Runtime.Caching;
 using SharpRepository.Repository.Helpers;
@@ -17,7 +16,8 @@ namespace SharpRepository.Repository.Caching
 {
     public abstract class StandardCachingStrategyBase<T, TKey, TPartition> : ICachingStrategy<T, TKey> where T : class
     {
-        public ICachingProvider CachingProvider { get; set; }
+        private ICachingProvider _cachingProvider;
+
         public string CachePrefix { get; set; }
         public bool WriteThroughCachingEnabled { get; set; }
         public bool GenerationalCachingEnabled { get; set; }
@@ -39,6 +39,12 @@ namespace SharpRepository.Repository.Caching
             Partition = null;
 
             _typeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
+        }
+
+        public ICachingProvider CachingProvider
+        {
+            get { return _cachingProvider; }
+            set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
         }
 
         public bool TryGetResult(TKey key, out T result)

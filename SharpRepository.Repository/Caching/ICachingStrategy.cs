@@ -22,5 +22,7 @@ namespace SharpRepository.Repository.Caching
         void Update(TKey key, T result);
         void Delete(TKey key, T result);
         void Save();
+
+        ICachingProvider CachingProvider { get; set; }
     }
 }

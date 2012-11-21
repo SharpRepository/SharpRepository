@@ -51,7 +51,9 @@
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Configuration\DefaultSection.cs" />
     <Compile Include="Configuration\FastActivator.cs" />
+    <Compile Include="Configuration\ICachingProviderElement.cs" />
     <Compile Include="Configuration\ICachingStrategyElement.cs" />
+    <Compile Include="Configuration\InMemoryCachingProviderSection.cs" />
     <Compile Include="Configuration\RepositoriesSectionGroup.cs" />
     <Compile Include="Configuration\IRepositoryElement.cs" />
     <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />

@@ -9,7 +9,8 @@ namespace SharpRepository.Repository.Caching
 {
     public abstract class TimeoutCachingStrategyBase<T, TKey> : ICachingStrategy<T, TKey> where T : class
     {
-        public ICachingProvider CachingProvider { get; set; }
+        private ICachingProvider _cachingProvider;
+        
         public string CachePrefix { get; set; }
         public int TimeoutInSeconds { get; set;  }
 
@@ -17,11 +18,17 @@ namespace SharpRepository.Repository.Caching
 
         internal TimeoutCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
         {
-            CachingProvider = cachingProvider ?? new InMemoryCachingProvider();
+            CachingProvider = cachingProvider;
             CachePrefix = "#Repo";
             TimeoutInSeconds = timeoutInSeconds;
 
             _typeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
+        }
+
+        public ICachingProvider CachingProvider
+        {
+            get { return _cachingProvider; }
+            set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
         }
 
         public bool TryGetResult(TKey key, out T result)

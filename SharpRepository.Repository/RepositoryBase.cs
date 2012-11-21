@@ -15,7 +15,7 @@ namespace SharpRepository.Repository
     public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey> where T : class
     {
         // the caching strategy used
-        private readonly ICachingStrategy<T, TKey> _cachingStrategy;
+        private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
         private readonly QueryManager<T, TKey> _queryManager;
@@ -48,6 +48,12 @@ namespace SharpRepository.Repository
             _typeName = typeof (T).Name;
             _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
         }
+
+        public ICachingStrategy<T, TKey> CachingStrategy 
+        {
+            get { return _cachingStrategy; } 
+            set { _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>(); }
+        } 
 
         public abstract IQueryable<T> AsQueryable();
 

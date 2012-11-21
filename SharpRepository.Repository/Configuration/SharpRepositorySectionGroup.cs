@@ -16,9 +16,15 @@ namespace SharpRepository.Repository.Configuration
             get { return SectionGroups["cachingStrategies"]; }
         }
 
+        [ConfigurationProperty("cachingProviders")]
+        public ConfigurationSectionGroup CachingProviders
+        {
+            get { return SectionGroups["cachingProviders"]; }
+        }
+
         public IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new()
         {
-            return ConfigurationHelper.GetDefaultInstance<T, TKey>(Repositories);
+            return ConfigurationHelper.GetDefaultInstance<T, TKey>(this);
         }
     }
 }

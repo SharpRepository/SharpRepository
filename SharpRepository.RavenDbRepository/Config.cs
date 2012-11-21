@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using Raven.Client.Document;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 
@@ -13,6 +12,13 @@ namespace SharpRepository.RavenDbRepository
         {
             get { return (string)base["name"]; }
             set { base["name"] = value; }
+        }
+
+        [ConfigurationProperty("cachingStrategy")]
+        public string CachingStrategy
+        {
+            get { return (string)base["cachingStrategy"]; }
+            set { base["cachingStrategy"] = value; }
         }
 
         [ConfigurationProperty("url")]

@@ -39,6 +39,18 @@
     <Reference Include="Rhino.Mocks">
       <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\packages\ServiceStack.Common.3.9.28\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\packages\ServiceStack.Common.3.9.28\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\packages\ServiceStack.Redis.3.9.29\lib\net35\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\packages\ServiceStack.Text.3.9.28\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="Should">
       <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
     </Reference>
@@ -90,6 +102,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj">
+      <Project>{1174f5b3-d3be-453d-bd9f-d54eefb0adfe}</Project>
+      <Name>SharpRepository.Caching.Redis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Ef5Repository\SharpRepository.Ef5Repository.csproj">
       <Project>{7acc7e0f-2eb9-45e1-8841-a00a40bcf0b5}</Project>
       <Name>SharpRepository.Ef5Repository</Name>

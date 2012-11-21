@@ -16,6 +16,13 @@ namespace SharpRepository.EfRepository
             set { base["name"] = value; }
         }
 
+        [ConfigurationProperty("cachingStrategy")]
+        public string CachingStrategy
+        {
+            get { return (string)base["cachingStrategy"]; }
+            set { base["cachingStrategy"] = value; }
+        }
+
         [ConfigurationProperty("connectionString", IsRequired = true)]
         public string ConnectionString
         {
