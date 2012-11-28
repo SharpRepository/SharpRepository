@@ -5,6 +5,21 @@ namespace SharpRepository.Repository
 {
     public static class RepositoryFactory
     {
+        public static IRepository<T, int> GetInstance<T>(string repositoryName = null) where T : class, new()
+        {
+            return GetInstance<T, int>(repositoryName);
+        }
+
+        public static IRepository<T, int> GetInstance<T>(string configSection, string repositoryName) where T : class, new()
+        {
+            return GetInstance<T, int>(configSection, repositoryName);
+        }
+
+        public static IRepository<T, int> GetInstance<T>(SharpRepositorySection configuration, string repositoryName) where T : class, new()
+        {
+            return GetInstance<T, int>(configuration, repositoryName);
+        }
+
         public static IRepository<T, TKey> GetInstance<T, TKey>(string repositoryName = null) where T : class, new()
         {
             return GetInstance<T, TKey>("sharpRepository", repositoryName);
