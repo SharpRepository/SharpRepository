@@ -45,6 +45,7 @@
     <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />
     <Compile Include="Caching\Hash\Utility.cs" />
     <Compile Include="Caching\InMemoryConfigCachingProviderFactory.cs" />
+    <Compile Include="Caching\NoCachingConfigCachingStrategyFactory.cs" />
     <Compile Include="Caching\StandardConfigCachingStrategyFactory.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyBase.cs" />
     <Compile Include="Caching\NoCachingStrategyBase.cs" />

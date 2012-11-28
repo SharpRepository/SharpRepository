@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using NUnit.Framework;
+using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
@@ -72,6 +73,24 @@ namespace SharpRepository.Tests.Configuration
             if (!(repos is InMemoryRepository<Contact, string>))
             {
                 throw new Exception("Not EfRepository");
+            }
+        }
+
+        [Test]
+        public void LoadRepositoryDefaultStrategyAndOverrideNone()
+        {
+            var repos = RepositoryFactory.GetInstance<Contact, string>();
+
+            if (!(repos.CachingStrategy is StandardCachingStrategy<Contact, string>))
+            {
+                throw new Exception("Not standard caching default");
+            }
+
+            repos = RepositoryFactory.GetInstance<Contact, string>("inMemoryNoCaching");
+
+            if (!(repos.CachingStrategy is NoCachingStrategy<Contact, string>))
+            {
+                throw new Exception("Not the override of default for no caching");
             }
         }
     }
