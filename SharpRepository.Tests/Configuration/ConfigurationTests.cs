@@ -52,5 +52,27 @@ namespace SharpRepository.Tests.Configuration
             }
 
         }
+
+        [Test]
+        public void LoadConfigurationRepositoryBySectionName()
+        {
+            var repos = RepositoryFactory.GetInstance<Contact, string>("sharpRepository2", null);
+
+            if (!(repos is EfRepository<Contact, string>))
+            {
+                throw new Exception("Not EfRepository");
+            }
+        }
+
+        [Test]
+        public void LoadConfigurationRepositoryBySectionAndRepositoryName()
+        {
+            var repos = RepositoryFactory.GetInstance<Contact, string>("sharpRepository2", "inMem");
+
+            if (!(repos is InMemoryRepository<Contact, string>))
+            {
+                throw new Exception("Not EfRepository");
+            }
+        }
     }
 }
