@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
+using SharpRepository.EfRepository;
 using SharpRepository.Repository;
 
 namespace SharpRepository.Tests.Configuration
@@ -24,7 +25,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void LoadConfiguration()
         {          
-            var section = (SharpRepositorySectionGroup)_config.GetSectionGroup("sharpRepository");
+            var section = (SharpRepositorySection)_config.GetSection("sharpRepository");
             if (section == null)
                 throw new ConfigurationErrorsException("Section  is not found.");
         }
@@ -40,6 +41,16 @@ namespace SharpRepository.Tests.Configuration
             }
 
         }
+        [Test]
+        public void LoadConfigurationRepositoryByName()
+        {
+            var repos = RepositoryFactory.GetInstance<Contact, string>("efRepos");
 
+            if (!(repos is EfRepository<Contact, string>))
+            {
+                throw new Exception("Not EfRepository");
+            }
+
+        }
     }
 }

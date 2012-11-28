@@ -50,7 +50,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="Config.cs" />
+    <Compile Include="Ef5ConfigRepositoryFactory.cs" />
     <Compile Include="Ef5Repository.cs" />
     <Compile Include="Ef5RepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

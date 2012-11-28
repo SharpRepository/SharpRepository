@@ -44,22 +44,26 @@
     <Compile Include="Caching\Hash\Evaluator.cs" />
     <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />
     <Compile Include="Caching\Hash\Utility.cs" />
+    <Compile Include="Caching\InMemoryConfigCachingProviderFactory.cs" />
+    <Compile Include="Caching\StandardConfigCachingStrategyFactory.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyBase.cs" />
     <Compile Include="Caching\NoCachingStrategyBase.cs" />
     <Compile Include="Caching\StandardCachingStrategyBase.cs" />
+    <Compile Include="Caching\TimeoutConfigCachingStrategyFactory.cs" />
     <Compile Include="CompositeRepository.cs" />
+    <Compile Include="Configuration\CachingProviderCollection.cs" />
+    <Compile Include="Configuration\CachingProviderElement.cs" />
+    <Compile Include="Configuration\CachingStrategyCollection.cs" />
+    <Compile Include="Configuration\CachingStrategyElement.cs" />
+    <Compile Include="Configuration\ConfigCachingProviderFactory.cs" />
+    <Compile Include="Configuration\ConfigCachingStrategyFactory.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
-    <Compile Include="Configuration\DefaultSection.cs" />
     <Compile Include="Configuration\FastActivator.cs" />
-    <Compile Include="Configuration\ICachingProviderElement.cs" />
-    <Compile Include="Configuration\ICachingStrategyElement.cs" />
-    <Compile Include="Configuration\InMemoryCachingProviderSection.cs" />
+    <Compile Include="Configuration\ConfigRepositoryFactory.cs" />
+    <Compile Include="Configuration\RepositoriesCollection.cs" />
     <Compile Include="Configuration\RepositoriesSectionGroup.cs" />
-    <Compile Include="Configuration\IRepositoryElement.cs" />
-    <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />
-    <Compile Include="Configuration\SharpRepositorySectionGroup.cs" />
-    <Compile Include="Configuration\StandardCachingStrategySection.cs" />
-    <Compile Include="Configuration\TimeoutCachingStrategySection.cs" />
+    <Compile Include="Configuration\RepositoryElement.cs" />
+    <Compile Include="Configuration\SharpRepositorySection.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
