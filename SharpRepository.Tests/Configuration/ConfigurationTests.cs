@@ -15,22 +15,6 @@ namespace SharpRepository.Tests.Configuration
     [TestFixture]
     public class ConfigurationTests
     {
-        private System.Configuration.Configuration _config;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        }
-
-        [Test]
-        public void LoadConfiguration()
-        {          
-            var section = (SharpRepositorySection)_config.GetSection("sharpRepository");
-            if (section == null)
-                throw new ConfigurationErrorsException("Section  is not found.");
-        }
-
         [Test]
         public void InMemoryConfigurationNoParameters()
         {
