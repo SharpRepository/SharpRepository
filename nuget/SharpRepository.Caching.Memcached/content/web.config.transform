@@ -1,0 +1,9 @@
+<configuration>
+
+  <sharpRepository>
+    <cachingProviders>
+      <cachingProvider name="memCachedProvider" sectionName="memcached" factory="SharpRepository.Caching.Memcached.MemCachedConfigCachingProviderFactory, SharpRepository.Caching.Memcached" />
+    </cachingProviders>
+  </sharpRepository>
+
+</configuration>
