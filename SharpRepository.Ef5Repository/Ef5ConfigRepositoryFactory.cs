@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.Entity;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
@@ -17,7 +18,7 @@ namespace SharpRepository.Ef5Repository
             // check for required parameters
             if (String.IsNullOrEmpty(RepositoryElement["connectionString"]))
             {
-                throw new ArgumentException("connectionString parameter is required for the Ef5Repository in the configuration file");
+                throw new ConfigurationErrorsException("The connectionString attribute is required in order to use the Ef5Repository via the configuration file.");
             }
 
             Type dbContextType = null;

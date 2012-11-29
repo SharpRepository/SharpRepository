@@ -18,7 +18,7 @@ namespace SharpRepository.Repository
         private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        private readonly QueryManager<T, TKey> _queryManager;
+        private QueryManager<T, TKey> _queryManager;
 
         // just the type name, used to find the primary key if it is [TypeName]Id
         private readonly string _typeName;
@@ -44,15 +44,18 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
-            _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
             _typeName = typeof (T).Name;
-            _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
         }
 
         public ICachingStrategy<T, TKey> CachingStrategy 
         {
             get { return _cachingStrategy; } 
-            set { _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>(); }
+            set
+            {
+                _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
+                _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
+            }
         } 
 
         public abstract IQueryable<T> AsQueryable();

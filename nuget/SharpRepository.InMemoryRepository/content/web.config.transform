@@ -1,0 +1,5 @@
+<sharpRepository>
+  <repositories>
+     <repository name="inMemory" factory="SharpRepository.InMemoryRepository.InMemoryConfigRepositoryFactory, SharpRepository.InMemoryRepository" />
+  </repositories>
+</sharpRepository>

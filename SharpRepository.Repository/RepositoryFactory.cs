@@ -37,8 +37,7 @@ namespace SharpRepository.Repository
 
         private static SharpRepositorySection GetConfiguration(string sectionName)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var section = config.GetSection(sectionName) as SharpRepositorySection;
+            var section = ConfigurationManager.GetSection(sectionName) as SharpRepositorySection;
             if (section == null)
                 throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
 
