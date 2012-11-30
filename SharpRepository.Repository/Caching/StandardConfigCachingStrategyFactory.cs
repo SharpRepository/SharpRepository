@@ -5,8 +5,8 @@ namespace SharpRepository.Repository.Caching
 {
     public class StandardConfigCachingStrategyFactory : ConfigCachingStrategyFactory
     {
-        public StandardConfigCachingStrategyFactory(CachingStrategyElement element) 
-            : base(element)
+        public StandardConfigCachingStrategyFactory(ICachingStrategyConfiguration config)
+            : base(config)
         {
         }
 
@@ -15,12 +15,12 @@ namespace SharpRepository.Repository.Caching
             var strategy = new StandardCachingStrategy<T, TKey>();
 
             bool enabled;
-            if (Boolean.TryParse(CachingStrategyElement["generational"], out enabled))
+            if (Boolean.TryParse(CachingStrategyConfiguration["generational"], out enabled))
             {
                 strategy.GenerationalCachingEnabled = enabled;
             }
 
-            if (Boolean.TryParse(CachingStrategyElement["writeThrough"], out enabled))
+            if (Boolean.TryParse(CachingStrategyConfiguration["writeThrough"], out enabled))
             {
                 strategy.WriteThroughCachingEnabled = enabled;
             }

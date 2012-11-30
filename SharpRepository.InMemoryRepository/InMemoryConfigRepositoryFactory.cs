@@ -5,7 +5,8 @@ namespace SharpRepository.InMemoryRepository
 {
     public class InMemoryConfigRepositoryFactory : ConfigRepositoryFactory
     {
-        public InMemoryConfigRepositoryFactory(RepositoryElement repositoryElement) : base(repositoryElement)
+        public InMemoryConfigRepositoryFactory(IRepositoryConfiguration config)
+            : base(config)
         {
         }
 

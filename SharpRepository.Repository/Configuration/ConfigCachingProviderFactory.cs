@@ -9,11 +9,11 @@ namespace SharpRepository.Repository.Configuration
 
     public abstract class ConfigCachingProviderFactory : IConfigCachingProviderFactory
     {
-        protected CachingProviderElement CachingProviderElement;
+        protected ICachingProviderConfiguration CachingProviderConfiguration;
 
-        protected ConfigCachingProviderFactory(CachingProviderElement element)
+        protected ConfigCachingProviderFactory(ICachingProviderConfiguration config)
         {
-            CachingProviderElement = element;
+            CachingProviderConfiguration = config;
         }
 
         public abstract ICachingProvider GetInstance();

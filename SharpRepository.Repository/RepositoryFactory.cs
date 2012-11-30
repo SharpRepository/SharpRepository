@@ -15,7 +15,7 @@ namespace SharpRepository.Repository
             return GetInstance<T, int>(configSection, repositoryName);
         }
 
-        public static IRepository<T, int> GetInstance<T>(SharpRepositorySection configuration, string repositoryName) where T : class, new()
+        public static IRepository<T, int> GetInstance<T>(ISharpRepositoryConfiguration configuration, string repositoryName=null) where T : class, new()
         {
             return GetInstance<T, int>(configuration, repositoryName);
         }
@@ -30,7 +30,7 @@ namespace SharpRepository.Repository
             return GetInstance<T, TKey>(GetConfiguration(configSection), repositoryName);
         }
 
-        public static IRepository<T, TKey> GetInstance<T, TKey>(SharpRepositorySection configuration, string repositoryName) where T : class, new()
+        public static IRepository<T, TKey> GetInstance<T, TKey>(ISharpRepositoryConfiguration configuration, string repositoryName=null) where T : class, new()
         {
             return configuration.GetInstance<T, TKey>(repositoryName);
         }

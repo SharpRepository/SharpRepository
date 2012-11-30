@@ -8,11 +8,11 @@ namespace SharpRepository.Repository.Configuration
 
     public abstract class ConfigRepositoryFactory : IConfigRepositoryFactory
     {
-        protected RepositoryElement RepositoryElement;
+        protected IRepositoryConfiguration RepositoryConfiguration;
 
-        protected ConfigRepositoryFactory(RepositoryElement repositoryElement)
+        protected ConfigRepositoryFactory(IRepositoryConfiguration config)
         {
-            RepositoryElement = repositoryElement;
+            RepositoryConfiguration = config;
         }
 
         public abstract IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new();

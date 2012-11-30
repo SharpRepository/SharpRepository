@@ -9,11 +9,11 @@ namespace SharpRepository.Repository.Configuration
 
     public abstract class ConfigCachingStrategyFactory : IConfigCachingStrategyFactory
     {
-        protected CachingStrategyElement CachingStrategyElement;
+        protected ICachingStrategyConfiguration CachingStrategyConfiguration;
 
-        protected ConfigCachingStrategyFactory(CachingStrategyElement element)
+        protected ConfigCachingStrategyFactory(ICachingStrategyConfiguration config)
         {
-            CachingStrategyElement = element;
+            CachingStrategyConfiguration = config;
         }
 
         public abstract ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class;

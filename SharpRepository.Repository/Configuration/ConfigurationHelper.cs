@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository.Configuration
 {
@@ -14,35 +13,35 @@ namespace SharpRepository.Repository.Configuration
                 throw new System.Configuration.ConfigurationErrorsException("The type " + type.AssemblyQualifiedName + " must implement " + interfaceType.AssemblyQualifiedName);
         }
 
-        public static IRepository<T, TKey> GetInstance<T, TKey>(SharpRepositorySection configuration, string repositoryName) where T : class, new()
+        public static IRepository<T, TKey> GetInstance<T, TKey>(ISharpRepositoryConfiguration configuration, string repositoryName) where T : class, new()
         {
             // get the repositories collection
             var repositories = configuration.Repositories;
 
-            if (repositories == null | repositories.Count == 0)
+            if (repositories == null || repositories.Count == 0)
             {
                 throw new Exception("There are no repositories configured");
             }
 
             if (String.IsNullOrEmpty(repositoryName))
             {
-                repositoryName = repositories.Default;
+                repositoryName = configuration.DefaultRepository;
             }
 
-            var repositoryElement = repositories.Cast<RepositoryElement>().FirstOrDefault(r => r.Name == repositoryName);
+            var repositoryConfiguration = repositories.FirstOrDefault(r => r.Name == repositoryName);
 
             // if this is null and they provided an actual repository name then throw an error, else just pick the first one
-            if (repositoryElement == null)
+            if (repositoryConfiguration == null)
             {
                 if (!String.IsNullOrEmpty(repositoryName))
                 {
                     throw new Exception(String.Format("There is no repository configured with the name '{0}'", repositoryName));
                 }
 
-                repositoryElement = repositories.Cast<RepositoryElement>().First();
+                repositoryConfiguration = repositories.First();
             }
 
-            var repository = repositoryElement.GetInstance<T, TKey>();
+            var repository = repositoryConfiguration.GetInstance<T, TKey>();
 
             if (repository == null)
                 return null;
@@ -54,10 +53,10 @@ namespace SharpRepository.Repository.Configuration
             //  1st check to see if this particular repository has a strategy declared
             //      if so, find it and use it
             //      if not, check for a default delcaration to use
-            var strategyName = repositoryElement.CachingStrategy;
+            var strategyName = repositoryConfiguration.CachingStrategy;
             if (String.IsNullOrEmpty(strategyName) && strategies != null)
             {
-                strategyName = strategies.Default;
+                strategyName = configuration.DefaultCachingStrategy;
             }
 
             // no caching strategy so do it without one
@@ -66,13 +65,13 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var strategyElement = strategies.Cast<CachingStrategyElement>().FirstOrDefault(s => s.Name == strategyName);
-            if (strategyElement == null)
+            var strategyConfiguration = strategies.FirstOrDefault(s => s.Name == strategyName);
+            if (strategyConfiguration == null)
             {
                 return repository;
             }
 
-            var cachingStrategy = strategyElement.GetInstance<T, TKey>();
+            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey>();
 
             if (cachingStrategy == null)
             {
@@ -83,18 +82,18 @@ namespace SharpRepository.Repository.Configuration
             //  2nd check to see if this particular repository has a provider declared
             //      if so, find it and use it with this strategy
             //      if not, check for a default declaration to use
-            var providerName = repositoryElement.CachingProvider;
+            var providerName = repositoryConfiguration.CachingProvider;
             if (String.IsNullOrEmpty(providerName) && providers != null)
             {
-                providerName = providers.Default;
+                providerName = configuration.DefaultCachingProvider;
             }
 
             if (!String.IsNullOrEmpty(providerName) || providers == null)
             {
-                var providerElement = providers.Cast<CachingProviderElement>().FirstOrDefault(s => s.Name == providerName);  
-                if (providerElement != null)
+                var providerConfiguration = providers.FirstOrDefault(s => s.Name == providerName);
+                if (providerConfiguration != null)
                 {
-                    cachingStrategy.CachingProvider = providerElement.GetInstance();
+                    cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
                 }
             }
 

@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MemCachedCachingProvider.cs" />
+    <Compile Include="MemCachedCachingProviderConfiguration.cs" />
     <Compile Include="MemCachedConfigCachingProviderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

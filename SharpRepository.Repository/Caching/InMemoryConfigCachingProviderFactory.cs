@@ -4,8 +4,8 @@ namespace SharpRepository.Repository.Caching
 {
     public class InMemoryConfigCachingProviderFactory : ConfigCachingProviderFactory
     {
-        public InMemoryConfigCachingProviderFactory(CachingProviderElement element) 
-            : base(element) 
+        public InMemoryConfigCachingProviderFactory(ICachingProviderConfiguration config)
+            : base(config) 
         {
         }
 

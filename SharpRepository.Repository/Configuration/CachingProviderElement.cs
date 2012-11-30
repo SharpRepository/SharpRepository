@@ -6,14 +6,15 @@ using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository.Configuration
 {
-    public class CachingProviderElement : ConfigurationElement
+    public class CachingProviderElement : ConfigurationElement, ICachingProviderConfiguration
     {
-        private readonly Dictionary<string, string> _attributes = new Dictionary<string, string>();
+        private IDictionary<string, string> _attributes = new Dictionary<string, string>();
 
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name
         {
             get { return (string) base["name"]; }
+            set { base["name"] = value; }
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace SharpRepository.Repository.Configuration
 
         public ICachingProvider GetInstance()
         {
-            // load up the factory if it exists and use it, if not then load up the type directly
+            // load up the factory if it exists and use it
             var factory = (IConfigCachingProviderFactory)Activator.CreateInstance(Factory, this);
 
             return factory.GetInstance();
@@ -55,6 +56,30 @@ namespace SharpRepository.Repository.Configuration
             _attributes[name] = value;
 
             return true;
+        }
+
+        string ICachingProviderConfiguration.Name
+        {
+            get { return this.Name; }
+            set { this.Name = value; }
+        }
+
+        Type ICachingProviderConfiguration.Factory
+        {
+            get { return this.Factory; }
+            set { this.Factory = value; }
+        }
+
+        IDictionary<string, string> ICachingProviderConfiguration.Attributes
+        {
+            get { return _attributes; }
+            set { _attributes = value; }
+        }
+
+
+        ICachingProvider ICachingProviderConfiguration.GetInstance()
+        {
+            return this.GetInstance();
         }
     }
 }

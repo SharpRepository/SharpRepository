@@ -4,8 +4,8 @@ namespace SharpRepository.Repository.Caching
 {
     public class NoCachingConfigCachingStrategyFactory : ConfigCachingStrategyFactory
     {
-        public NoCachingConfigCachingStrategyFactory(CachingStrategyElement element)
-            : base(element)
+        public NoCachingConfigCachingStrategyFactory(ICachingStrategyConfiguration config)
+            : base(config)
         {
         }
 

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="RedisCachingProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RedisCachingProviderConfiguration.cs" />
     <Compile Include="RedisConfigCachingProviderFactory.cs" />
   </ItemGroup>
   <ItemGroup>

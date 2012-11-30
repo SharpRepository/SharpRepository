@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace SharpRepository.Repository.Configuration
 {
@@ -23,6 +25,12 @@ namespace SharpRepository.Repository.Configuration
         public string Default
         {
             get { return (string) base["default"]; }
+            set { base["default"] = value; }
+        }
+
+        public IList<IRepositoryConfiguration> ToRepositoryConfigurationList()
+        {
+            return this.Cast<RepositoryElement>().Cast<IRepositoryConfiguration>().ToList();
         }
     }
 }

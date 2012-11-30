@@ -128,7 +128,6 @@
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
-    <Compile Include="Spikes\ConfigurationSpikes.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />

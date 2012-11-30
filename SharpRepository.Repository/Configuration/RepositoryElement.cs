@@ -5,17 +5,15 @@ using System.Configuration;
 
 namespace SharpRepository.Repository.Configuration
 {
-    public class RepositoryElement : ConfigurationElement
+    public class RepositoryElement : ConfigurationElement, IRepositoryConfiguration
     {
-        private readonly Dictionary<string, string> _attributes = new Dictionary<string, string>();
+        private IDictionary<string, string> _attributes = new Dictionary<string, string>();
 
         [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
         public string Name
         {
-            get
-            {
-                return (string)base["name"];
-            }
+            get { return (string)base["name"]; }
+            set { base["name"] = value; }
         }
 
         /// <summary>
@@ -36,24 +34,20 @@ namespace SharpRepository.Repository.Configuration
         [ConfigurationProperty("cachingStrategy", IsRequired = false)]
         public string CachingStrategy
         {
-            get
-            {
-                return (string)base["cachingStrategy"];
-            }
+            get { return (string)base["cachingStrategy"]; }
+            set { base["cachingStrategy"] = value; }
         }
 
         [ConfigurationProperty("cachingProvider", IsRequired = false)]
         public string CachingProvider
         {
-            get
-            {
-                return (string)base["cachingProvider"];
-            }
+            get { return (string)base["cachingProvider"]; }
+            set { base["cachingProvider"] = value; }
         }
 
         public IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new()
         {
-            // load up the factory if it exists and use it, if not then load up the type directly
+            // load up the factory if it exists and use it
             var factory = (IConfigRepositoryFactory) Activator.CreateInstance(Factory, this);
 
             return factory.GetInstance<T, TKey>();
@@ -76,5 +70,45 @@ namespace SharpRepository.Repository.Configuration
 
             return true;
         }
+
+        #region IRepositoryConfiguration
+
+        string IRepositoryConfiguration.Name
+        {
+            get { return this.Name; }
+            set { this.Name = value; }
+        }
+
+        Type IRepositoryConfiguration.Factory
+        {
+            get { return this.Factory; }
+            set { this.Factory = value; }
+        }
+
+        string IRepositoryConfiguration.CachingStrategy
+        {
+            get { return this.CachingStrategy; }
+            set { this.CachingStrategy = value; }
+        }
+
+        string IRepositoryConfiguration.CachingProvider
+        {
+            get { return this.CachingProvider; }
+            set { this.CachingProvider = value; }
+        }
+
+        IDictionary<string, string> IRepositoryConfiguration.Attributes
+        {
+            get { return _attributes; }
+            set { _attributes = value; }
+        }
+
+        IRepository<T, TKey> IRepositoryConfiguration.GetInstance<T, TKey>()
+        {
+            return this.GetInstance<T, TKey>();
+        }
+
+    #endregion
+
     }
 }

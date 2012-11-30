@@ -6,8 +6,8 @@ namespace SharpRepository.Caching.Redis
 {
     public class RedisConfigCachingProviderFactory : ConfigCachingProviderFactory
     {
-        public RedisConfigCachingProviderFactory(CachingProviderElement element)
-            : base(element)
+        public RedisConfigCachingProviderFactory(ICachingProviderConfiguration config)
+            : base(config)
         {
         }
 
@@ -16,24 +16,24 @@ namespace SharpRepository.Caching.Redis
             int port;
 
             // this seems like a dumb way to do this :)
-            if (!String.IsNullOrEmpty(CachingProviderElement["password"]))
+            if (!String.IsNullOrEmpty(CachingProviderConfiguration["password"]))
             {
-                if (!Int32.TryParse(CachingProviderElement["port"], out port))
+                if (!Int32.TryParse(CachingProviderConfiguration["port"], out port))
                 {
                     throw new ArgumentException("port");
                 }
 
-                return new RedisCachingProvider(CachingProviderElement["host"], port, CachingProviderElement["password"]);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"], port, CachingProviderConfiguration["password"]);
             }
 
-            if (Int32.TryParse(CachingProviderElement["port"], out port))
+            if (Int32.TryParse(CachingProviderConfiguration["port"], out port))
             {
-                return new RedisCachingProvider(CachingProviderElement["host"], port);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"], port);
             }
 
-            if (!String.IsNullOrEmpty(CachingProviderElement["host"]))
+            if (!String.IsNullOrEmpty(CachingProviderConfiguration["host"]))
             {
-                return new RedisCachingProvider(CachingProviderElement["host"]);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"]);
             }
 
             return new RedisCachingProvider();
