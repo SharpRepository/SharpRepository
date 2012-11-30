@@ -15,8 +15,8 @@ namespace SharpRepository.Ef5Repository
         }
 
         public Ef5RepositoryConfiguration(string name, string connectionStringOrName, Type dbContextType, string cachingStrategy=null, string cachingProvider=null)
+            : base(name)
         {
-            Name = name;
             ConnectionStringOrName = connectionStringOrName;
             DbContextType = dbContextType;
             CachingStrategy = cachingStrategy;

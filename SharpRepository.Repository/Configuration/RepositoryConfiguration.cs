@@ -10,6 +10,12 @@ namespace SharpRepository.Repository.Configuration
             Attributes = new Dictionary<string, string>();
         }
 
+        public RepositoryConfiguration(string name)
+        {
+            Name = name;
+            Attributes = new Dictionary<string, string>();
+        }
+
         public string Name { get; set; }
 
         private Type _factory;

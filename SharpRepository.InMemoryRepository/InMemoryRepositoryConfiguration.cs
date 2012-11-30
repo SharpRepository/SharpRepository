@@ -5,8 +5,8 @@ namespace SharpRepository.InMemoryRepository
     public class InMemoryRepositoryConfiguration : RepositoryConfiguration
     {
         public InMemoryRepositoryConfiguration(string name, string cachingStrategy=null, string cachingProvider=null)
+            : base(name)
         {
-            Name = name;
             CachingStrategy = cachingStrategy;
             CachingProvider = cachingProvider;
             Factory = typeof(InMemoryConfigRepositoryFactory);
