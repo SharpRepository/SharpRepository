@@ -43,8 +43,6 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="EfRepositoryConfiguration.cs" />
-    <Compile Include="EfConfigRepositoryFactory.cs" />
     <Compile Include="EfRepository.cs" />
     <Compile Include="EfRepositoryBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

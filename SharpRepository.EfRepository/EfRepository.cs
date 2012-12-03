@@ -9,6 +9,7 @@ namespace SharpRepository.EfRepository
     /// </summary>
     /// <typeparam name="T">The Entity type</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
+    [Obsolete("Please upgrade to EF5 in order to use SharpRepository and Entity Framework")]
     public class EfRepository<T, TKey> : EfRepositoryBase<T, TKey> where T : class, new()
     {
         /// <summary>

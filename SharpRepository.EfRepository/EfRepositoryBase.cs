@@ -8,6 +8,7 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.EfRepository
 {
+    [Obsolete("Please upgrade to EF5 in order to use SharpRepository and Entity Framework")]
     public class EfRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         protected IDbSet<T> DbSet { get; private set; }
