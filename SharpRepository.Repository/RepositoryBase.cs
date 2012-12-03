@@ -27,6 +27,11 @@ namespace SharpRepository.Repository
             get { return _typeName; }
         }
         
+        public bool CacheUsed
+        {
+            get { return _queryManager.CacheUsed; }
+        }
+
         public IBatch<T> BeginBatch()
         {
             // Return the privately scoped batch via the publicly available interface. 

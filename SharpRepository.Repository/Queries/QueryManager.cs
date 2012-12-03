@@ -18,17 +18,22 @@ namespace SharpRepository.Repository.Queries
 
         public QueryManager(ICachingStrategy<T, TKey> cachingStrategy)
         {
+            CacheUsed = false;
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
         }
+
+        public bool CacheUsed { get; private set; }
 
         public T ExecuteGet(Func<T> query, TKey key)
         {
             T result;
             if (_cachingStrategy.TryGetResult(key, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
             _cachingStrategy.SaveGetResult(key, result);
@@ -41,9 +46,11 @@ namespace SharpRepository.Repository.Queries
             IEnumerable<T> result;
             if (_cachingStrategy.TryGetAllResult(queryOptions, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
             _cachingStrategy.SaveGetAllResult(queryOptions, result);
@@ -56,9 +63,11 @@ namespace SharpRepository.Repository.Queries
             IEnumerable<T> result;
             if (_cachingStrategy.TryFindAllResult(criteria, queryOptions, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
             _cachingStrategy.SaveFindAllResult(criteria, queryOptions, result);
@@ -71,9 +80,11 @@ namespace SharpRepository.Repository.Queries
             T result;
             if (_cachingStrategy.TryFindResult(criteria, queryOptions, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
             _cachingStrategy.SaveFindResult(criteria, queryOptions, result);

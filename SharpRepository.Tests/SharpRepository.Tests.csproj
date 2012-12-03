@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Batch\BatchTests.cs" />
     <Compile Include="Caching\HashGeneratorTests.cs" />
+    <Compile Include="Caching\QueryManagerTests.cs" />
     <Compile Include="Caching\StandardCachingWithPartitionStrategyTests.cs" />
     <Compile Include="Caching\StandardCachingStrategyTests.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />

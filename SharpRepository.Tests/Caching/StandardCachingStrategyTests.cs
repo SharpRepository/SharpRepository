@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Runtime.Caching;
 using NUnit.Framework;
-using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -14,7 +13,6 @@ namespace SharpRepository.Tests.Caching
     [TestFixture]
     public class StandardCachingStrategyTests : TestBase
     {
-        protected IRepository<Contact, int> Repository;
         protected ICachingStrategy<Contact, int> CachingStrategy;
             
         [SetUp]
@@ -33,7 +31,7 @@ namespace SharpRepository.Tests.Caching
         [TearDown]
         public void Teardown()
         {
-            //Repository = null;
+
         }
 
         [Test]
