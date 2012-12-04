@@ -39,6 +39,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="IAmInInMemoryRepository.cs" />
     <Compile Include="InMemoryConfigRepositoryFactory.cs" />
     <Compile Include="InMemoryRepository.cs" />
     <Compile Include="InMemoryRepositoryBase.cs" />

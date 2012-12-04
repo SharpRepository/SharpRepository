@@ -42,6 +42,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="IAmInRavenDbRepository.cs" />
     <Compile Include="RavenDbConfigRepositoryFactory.cs" />
     <Compile Include="RavenDbRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
