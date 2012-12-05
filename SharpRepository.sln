@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Win
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching Providers", "Caching Providers", "{FB7E3040-CA92-4B81-86E6-106E2FDD745E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ioc", "Ioc", "{7D84196E-1183-46E8-944F-C43B0627B931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.StructureMap", "SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj", "{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,10 @@ Global
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,5 +126,6 @@ Global
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE} = {FB7E3040-CA92-4B81-86E6-106E2FDD745E}
 		{F025C038-9F9A-4730-9A03-3E3E6101E249} = {FB7E3040-CA92-4B81-86E6-106E2FDD745E}
 		{06111314-669B-4E35-A0B9-AF67FA3F0FFD} = {FB7E3040-CA92-4B81-86E6-106E2FDD745E}
+		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812} = {7D84196E-1183-46E8-944F-C43B0627B931}
 	EndGlobalSection
 EndGlobal
