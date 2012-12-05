@@ -78,10 +78,7 @@ namespace SharpRepository.Repository
         private static string GetAttributeRepositoryName(Type entityType)
         {
             var attribute = entityType.GetOneAttribute<SharpRepositoryConfigurationAttribute>();
-            if (attribute == null)
-                return null;
-
-            return attribute.RepositoryName;
+            return attribute == null ? null : attribute.RepositoryName;
         }
     }
 }
