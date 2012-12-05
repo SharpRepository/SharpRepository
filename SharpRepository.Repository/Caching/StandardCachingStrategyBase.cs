@@ -47,62 +47,62 @@ namespace SharpRepository.Repository.Caching
             set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
         }
 
-        public bool TryGetResult(TKey key, out T result)
+        public bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
         {
-            result = default(T);
+            result = default(TResult);
 
-            return WriteThroughCachingEnabled && IsInCache(GetWriteThroughCacheKey(key), out result);
+            return WriteThroughCachingEnabled && IsInCache(GetWriteThroughCacheKey(key, selector), out result);
         }
 
-        public void SaveGetResult(TKey key, T result)
+        public void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
         {
             if (WriteThroughCachingEnabled)
-                SetCache(GetWriteThroughCacheKey(key), result);
+                SetCache(GetWriteThroughCacheKey(key, selector), result);
         }
 
-        public bool TryGetAllResult(IQueryOptions<T> queryOptions, out IEnumerable<T> result)
+        public bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
             result = null;
 
-            return GenerationalCachingEnabled && IsInCache(GetAllCacheKey(queryOptions), out result);
+            return GenerationalCachingEnabled && IsInCache(GetAllCacheKey(queryOptions, selector), out result);
         }
 
-        public void SaveGetAllResult(IQueryOptions<T> queryOptions, IEnumerable<T> result)
+        public void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
             if (GenerationalCachingEnabled)
-                SetCache(GetAllCacheKey(queryOptions), result);
+                SetCache(GetAllCacheKey(queryOptions, selector), result);
         }
 
-        public bool TryFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out IEnumerable<T> result)
+        public bool TryFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
             result = null;
 
-            return GenerationalCachingEnabled && IsInCache(FindAllCacheKey(criteria, queryOptions), out result);
+            return GenerationalCachingEnabled && IsInCache(FindAllCacheKey(criteria, queryOptions, selector), out result);
         }
 
-        public void SaveFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, IEnumerable<T> result)
+        public void SaveFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
             if (GenerationalCachingEnabled)
-                SetCache(FindAllCacheKey(criteria, queryOptions), result);
+                SetCache(FindAllCacheKey(criteria, queryOptions, selector), result);
         }
 
-        public bool TryFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T result)
+        public bool TryFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out TResult result)
         {
-            result = default(T);
+            result = default(TResult);
 
-            return GenerationalCachingEnabled && IsInCache(FindCacheKey(criteria, queryOptions), out result);
+            return GenerationalCachingEnabled && IsInCache(FindCacheKey(criteria, queryOptions, selector), out result);
         }
 
-        public void SaveFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, T result)
+        public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
         {
             if (GenerationalCachingEnabled)
-                SetCache(FindCacheKey(criteria, queryOptions), result);
+                SetCache(FindCacheKey(criteria, queryOptions, selector), result);
         }
 
         public void Add(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                SetCache(GetWriteThroughCacheKey(key), result);
+                SetCache(GetWriteThroughCacheKey<T>(key, null), result);
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);
@@ -112,7 +112,7 @@ namespace SharpRepository.Repository.Caching
         public void Update(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                SetCache(GetWriteThroughCacheKey(key), result);
+                SetCache(GetWriteThroughCacheKey<T>(key, null), result);
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);
@@ -121,7 +121,7 @@ namespace SharpRepository.Repository.Caching
         public void Delete(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                ClearCache(GetWriteThroughCacheKey(key));
+                ClearCache(GetWriteThroughCacheKey<T>(key, null));
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);
@@ -360,36 +360,36 @@ namespace SharpRepository.Repository.Caching
             }
         }
 
-        private string GetWriteThroughCacheKey(TKey key)
+        private string GetWriteThroughCacheKey<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, key);
+            return String.Format("{0}/{1}/{2}::{3}", CachePrefix, _typeFullName, key, (selector != null ? selector.ToString() : "null"));
         }
 
-        private string GetAllCacheKey(IQueryOptions<T> queryOptions)
+        private string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, GetGeneration(), Md5Helper.CalculateMd5("All:" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, GetGeneration(), Md5Helper.CalculateMd5("All::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
-        private string FindAllCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        private string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + queryOptions ?? "null"));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
-        private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        private string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, _typeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, _typeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
         private int GetGeneration()

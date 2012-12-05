@@ -77,7 +77,8 @@ namespace SharpRepository.Repository
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
             return _queryManager.ExecuteGetAll(
-                () => queryOptions == null ? GetAllQuery().ToList() : GetAllQuery(queryOptions).ToList(),
+                () => GetAllQuery(queryOptions).ToList(),
+                null,
                 queryOptions
                 );
         }
@@ -86,9 +87,11 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return GetAllQuery(queryOptions)
-                .Select(selector)
-                .ToList();
+            return _queryManager.ExecuteGetAll(
+                () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
+                selector,
+                queryOptions
+                );
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -102,6 +105,7 @@ namespace SharpRepository.Repository
         {
             return _queryManager.ExecuteGet(
                 () => GetQuery(key),
+                null,
                 key
                 );
         }
@@ -110,12 +114,19 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var result = Get(key);
-            if (result == null)
-                return default(TResult);
+            return _queryManager.ExecuteGet(
+                () =>
+                {
+                    var result = GetQuery(key);
+                    if (result == null)
+                        return default(TResult);
 
-            var results = new [] { result };
-            return results.AsQueryable().Select(selector).FirstOrDefault();
+                    var results = new[] { result };
+                    return results.AsQueryable().Select(selector).First();
+                },
+                selector,
+                key
+                );
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -127,8 +138,9 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
 
             return _queryManager.ExecuteFindAll(
-                () => queryOptions == null ? FindAllQuery(criteria).ToList() : FindAllQuery(criteria, queryOptions).ToList(),
+                () => FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
+                null,
                 queryOptions
                 );
         }
@@ -137,7 +149,12 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return FindAllQuery(criteria, queryOptions).Select(selector).ToList();
+            return _queryManager.ExecuteFindAll(
+                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                criteria,
+                selector,
+                queryOptions
+                );
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
@@ -164,8 +181,9 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
 
             return _queryManager.ExecuteFind(
-                () => queryOptions == null ? FindQuery(criteria) : FindQuery(criteria, queryOptions),
+                () => FindQuery(criteria, queryOptions),
                 criteria,
+                null,
                 null
                 );
         }
@@ -175,12 +193,20 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var result = Find(criteria, queryOptions);
-            if (result == null)
-                return default(TResult);
+            return _queryManager.ExecuteFind(
+                () =>
+                    {
+                        var result = FindQuery(criteria, queryOptions);
+                        if (result == null)
+                            return default(TResult);
 
-            var results = new [] { result};
-            return results.AsQueryable().Select(selector).First();
+                        var results = new[] { result };
+                        return results.AsQueryable().Select(selector).First();
+                    },
+                criteria,
+                selector,
+                null
+                );
         }
 
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)

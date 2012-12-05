@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -10,46 +12,46 @@ namespace SharpRepository.Repository.Caching
         {
         }
 
-        public bool TryGetResult(TKey key, out T result)
+        public bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
         {
-            result = default(T);
+            result = default(TResult);
             return false;
         }
 
-        public void SaveGetResult(TKey key, T result)
+        public void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
         {
 
         }
 
-        public bool TryGetAllResult(IQueryOptions<T> queryOptions, out IEnumerable<T> result)
+        public bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
-            result = default(IEnumerable<T>);
+            result = default(IEnumerable<TResult>);
             return false;
         }
 
-        public void SaveGetAllResult(IQueryOptions<T> queryOptions, IEnumerable<T> result)
+        public void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
 
         }
 
-        public bool TryFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out IEnumerable<T> result)
+        public bool TryFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
-            result = default(IEnumerable<T>);
+            result = default(IEnumerable<TResult>);
             return false;
         }
 
-        public void SaveFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, IEnumerable<T> result)
+        public void SaveFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
 
         }
 
-        public bool TryFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T result)
+        public bool TryFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out TResult result)
         {
-            result = default(T);
+            result = default(TResult);
             return false;
         }
 
-        public void SaveFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, T result)
+        public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
         {
 
         }
