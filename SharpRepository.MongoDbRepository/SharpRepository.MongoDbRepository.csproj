@@ -48,6 +48,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="IAmInMongoDbRepository.cs" />
     <Compile Include="MongoDbConfigRepositoryFactory.cs" />
     <Compile Include="MongoDbRepositoryConfiguration.cs" />
     <Compile Include="MongoDbRepositoryManager.cs" />

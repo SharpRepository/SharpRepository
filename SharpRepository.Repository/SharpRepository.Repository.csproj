@@ -76,10 +76,12 @@
     <Compile Include="Configuration\RepositoryConfiguration.cs" />
     <Compile Include="Configuration\RepositoryElement.cs" />
     <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />
+    <Compile Include="Configuration\SharpRepositoryConfigurationAttribute.cs" />
     <Compile Include="Configuration\SharpRepositorySection.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAmInRepository.cs" />
     <Compile Include="IRepositoryQueryable.cs" />
     <Compile Include="RepositoryFactory.cs" />
     <Compile Include="RepositoryBase.BatchItem.cs" />

@@ -25,7 +25,6 @@ namespace SharpRepository.Tests.Configuration
             {
                 throw new Exception("Not InMemoryRepository");
             }
-
         }
         [Test]
         public void LoadConfigurationRepositoryByName()
@@ -140,6 +139,17 @@ namespace SharpRepository.Tests.Configuration
             if (!(repos.CachingStrategy is StandardCachingStrategy<Contact, string>))
             {
                 throw new Exception("not StandardCachingStrategy");
+            }
+        }
+
+        [Test]
+        public void TestFactoryOverloadMethod()
+        {
+            var repos = RepositoryFactory.GetInstance(typeof (Contact), typeof (string));
+
+            if (!(repos is InMemoryRepository<Contact, string>))
+            {
+                throw new Exception("Not InMemoryRepository");
             }
         }
     }
