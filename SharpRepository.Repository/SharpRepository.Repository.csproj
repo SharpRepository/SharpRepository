@@ -82,6 +82,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IAmInRepository.cs" />
+    <Compile Include="ConfigurationBasedRepository.cs" />
     <Compile Include="IRepositoryQueryable.cs" />
     <Compile Include="RepositoryFactory.cs" />
     <Compile Include="RepositoryBase.BatchItem.cs" />
