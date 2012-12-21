@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpRepository.Repository.Configuration
 {
@@ -7,12 +8,80 @@ namespace SharpRepository.Repository.Configuration
     {
         public IList<IRepositoryConfiguration> Repositories { get; private set; }
         public string DefaultRepository { get; set; }
+        public bool HasRepository
+        {
+            get { return Repositories != null && Repositories.Any(); }
+        }
+
+        public IRepositoryConfiguration GetRepository(string repositoryName)
+        {
+            if (!HasRepository)
+                throw new Exception("There are no repositories configured.");
+
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                repositoryName = DefaultRepository;
+            }
+
+            // no default provided, so return the first
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                return Repositories.First();
+            }
+
+            var repositoryConfiguration = Repositories.FirstOrDefault(r => r.Name == repositoryName);
+
+            // if this is null and they provided an actual repository name then throw an error, else just pick the first one
+            if (repositoryConfiguration == null)
+            {
+                throw new Exception(String.Format("There is no repository configured with the name '{0}'", repositoryName));
+            }
+
+            return repositoryConfiguration;
+        }
 
         public IList<ICachingStrategyConfiguration> CachingStrategies { get; private set; }
         public string DefaultCachingStrategy { get; set; }
+        public bool HasCachingStrategies
+        {
+            get { return CachingStrategies != null && CachingStrategies.Any(); }
+        }
+
+        public ICachingStrategyConfiguration GetCachingStrategy(string strategyName)
+        {
+            if (!HasCachingStrategies) return null;
+
+            if (String.IsNullOrEmpty(strategyName))
+            {
+                strategyName = DefaultCachingStrategy;
+            }
+
+            return String.IsNullOrEmpty(strategyName) ? null : CachingStrategies.FirstOrDefault(s => s.Name == strategyName);
+        }
 
         public IList<ICachingProviderConfiguration> CachingProviders { get; private set; }
         public string DefaultCachingProvider { get; set; }
+        public bool HasCachingProviders
+        {
+            get { return CachingProviders != null && CachingProviders.Any(); }
+        }
+
+        public ICachingProviderConfiguration GetCachingProvider(string providerName)
+        {
+            if (!HasCachingProviders) return null;
+
+            // caching providers
+            //  2nd check to see if this particular repository has a provider declared
+            //      if so, find it and use it with this strategy
+            //      if not, check for a default declaration to use
+
+            if (String.IsNullOrEmpty(providerName))
+            {
+                providerName = DefaultCachingProvider;
+            }
+
+            return String.IsNullOrEmpty(providerName) ? null : CachingProviders.FirstOrDefault(s => s.Name == providerName);
+        }
 
         public SharpRepositoryConfiguration()
         {
