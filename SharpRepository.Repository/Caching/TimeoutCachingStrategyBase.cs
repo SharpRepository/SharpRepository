@@ -44,22 +44,32 @@ namespace SharpRepository.Repository.Caching
 
         public bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
-            return IsInCache(GetAllCacheKey(queryOptions, selector), out result);
+            var cacheKey = GetAllCacheKey(queryOptions, selector);
+            if (!IsInCache(cacheKey, out result))
+                return false;
+
+            // if there are no query options then we don't need to check for the cache for data to update them with
+            return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
         }
 
         public void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
-            SetCache(GetAllCacheKey(queryOptions, selector), result);
+            SetCache(GetAllCacheKey(queryOptions, selector), result, queryOptions);
         }
 
         public bool TryFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
-            return IsInCache(FindAllCacheKey(criteria, queryOptions, selector), out result);
+            var cacheKey = FindAllCacheKey(criteria, queryOptions, selector);
+            if (!IsInCache(cacheKey, out result))
+                return false;
+
+            // if there are no query options then we don't need to check for the cache for data to update them with
+            return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
         }
 
         public void SaveFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
-            SetCache(FindAllCacheKey(criteria, queryOptions, selector), result);
+            SetCache(FindAllCacheKey(criteria, queryOptions, selector), result, queryOptions);
         }
 
         public bool TryFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out TResult result)
@@ -70,6 +80,34 @@ namespace SharpRepository.Repository.Caching
         public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
         {
             SetCache(FindCacheKey(criteria, queryOptions, selector), result);
+        }
+
+        /// <summary>
+        ///  This will repopualte the PagingOptions.TotalItems from the value stored in cache.  This should only be called if the results were already found in cache.
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <param name="queryOptions"></param>
+        /// <returns>True if it is not a PagingOptions query or if it is and the TotalItems is stored in cache as well</returns>
+        private bool SetCachedQueryOptions(string cacheKey, IQueryOptions<T> queryOptions)
+        {
+            // TODO: see if there is a better way that doesn't rely on checking for PagingOptions specifically
+            //  originally was thinking doing a ref arg for queryOptions and setting it via cache but ran into an issue in QueryManager using a ref in a lamda expression
+
+            // we only need to do this for PagingOptions because it has a TotalItems property that we need
+            if (!(queryOptions is PagingOptions<T>))
+                return true;
+
+            int totalItems;
+            // there is a PagingOptions passed in so we want to make sure that both the results and the queryOptions are in cache
+            //      this is a safety in case the caching provider kicked one of them out
+            if (IsPagingTotalInCache(cacheKey, out totalItems))
+            {
+                ((PagingOptions<T>)queryOptions).TotalItems = totalItems;
+                return true;
+            }
+
+            // this was a PagingOptions query but the value wasn't in cache, so return false which will make the entire query be ran again so the results and TotalItems will get cached
+            return false;
         }
 
         public void Add(TKey key, T result)
@@ -113,11 +151,35 @@ namespace SharpRepository.Repository.Caching
             return false;
         }
 
-        private void SetCache<TCacheItem>(string cacheKey, TCacheItem result)
+        protected bool IsPagingTotalInCache(string cacheKey, out int totalItems)
+        {
+            totalItems = 0;
+            try
+            {
+                if (CachingProvider.Get(cacheKey + "=>pagingTotal", out totalItems))
+                {
+                    //Trace.WriteLine(String.Format("Got item from cache: {0} - {1}", cacheKey, typeof(TCacheItem).Name));
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                // don't let caching errors cause problems for the Repository
+            }
+
+            return false;
+        }
+
+        private void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
         {
             try
             {
                 CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
+
+                if (queryOptions is PagingOptions<T>)
+                {
+                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
+                }
             }
             catch (Exception)
             {
