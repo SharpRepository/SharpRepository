@@ -109,9 +109,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -128,6 +130,7 @@
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
+    <Compile Include="Spikes\Ef5CompoundKeySpikes.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
@@ -148,6 +151,7 @@
     <Compile Include="Helpers\RelativeDirectory.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\ContactInfo.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />

@@ -4,6 +4,14 @@ using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Ef5Repository
 {
+    public class Ef5Repository<T, TKey, TKey2> : Ef5CompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
+    {
+        public Ef5Repository(DbContext dbContext, ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
+            : base(dbContext, cachingStrategy)
+        {
+        }
+    }
+
     /// <summary>
     /// Entity Framework repository layer
     /// </summary>
