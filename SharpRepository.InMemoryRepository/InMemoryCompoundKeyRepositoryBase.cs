@@ -37,6 +37,7 @@ namespace SharpRepository.InMemoryRepository
 
         internal InMemoryCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
             : base(cachingStrategy) 
+
         {   
         }
 
@@ -123,52 +124,6 @@ namespace SharpRepository.InMemoryRepository
         public override void Dispose()
         {
             
-        }
-
-        private TKey GenerateFirstPrimaryKey()
-        {
-            if (typeof(TKey) == typeof(Guid))
-            {
-                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
-            }
-
-            if (typeof(TKey) == typeof(string))
-            {
-                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
-            }
-
-            if (typeof(TKey) == typeof(Int32))
-            {
-                var pkValue = _items.Keys.LastOrDefault();
-
-                var nextInt = Convert.ToInt32(pkValue) + 1;
-                return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
-            }
-
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
-        }
-
-        private TKey2 GenerateSecondPrimaryKey()
-        {
-            if (typeof(TKey2) == typeof(Guid))
-            {
-                return (TKey2)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
-            }
-
-            if (typeof(TKey2) == typeof(string))
-            {
-                return (TKey2)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
-            }
-
-            if (typeof(TKey2) == typeof(Int32))
-            {
-                var pkValue = _items.Keys.LastOrDefault();
-
-                var nextInt = Convert.ToInt32(pkValue) + 1;
-                return (TKey2)Convert.ChangeType(nextInt, typeof(TKey2));
-            }
-
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
         }
 
         public override string ToString()

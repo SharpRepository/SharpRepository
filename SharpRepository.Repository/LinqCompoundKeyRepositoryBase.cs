@@ -101,5 +101,35 @@ namespace SharpRepository.Repository
 
             return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
         }
+
+        protected TKey GenerateFirstPrimaryKey()
+        {
+            if (typeof(TKey) == typeof(Guid))
+            {
+                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
+            }
+
+            if (typeof(TKey) == typeof(string))
+            {
+                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
+            }
+
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
+        }
+
+        protected TKey2 GenerateSecondPrimaryKey()
+        {
+            if (typeof(TKey2) == typeof(Guid))
+            {
+                return (TKey2)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
+            }
+
+            if (typeof(TKey2) == typeof(string))
+            {
+                return (TKey2)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
+            }
+
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
+        }
     }
 }
