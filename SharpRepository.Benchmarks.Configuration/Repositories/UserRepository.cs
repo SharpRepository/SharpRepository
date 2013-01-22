@@ -4,10 +4,24 @@ using SharpRepository.Repository;
 
 namespace SharpRepository.Benchmarks.Configuration.Repositories
 {
-    public class UserFromConfigRepository : ConfigurationBasedRepository<User, int>, IRepository<User,int>
+    public interface IUserRepository : IRepository<User, int>
     {
+        User GetAdminUser();
     }
 
-    public class UserRepository : InMemoryRepository<User, int>, IRepository<User, int>
-    {}
+    public class UserFromConfigRepository : ConfigurationBasedRepository<User, int>, IUserRepository
+    {
+        public User GetAdminUser()
+        {
+            return Find(x => x.Email == "admin@admin.com");
+        }
+    }
+
+    public class UserRepository : InMemoryRepository<User, int>, IUserRepository
+    {
+        public User GetAdminUser()
+        {
+            return Find(x => x.Email == "admin@admin.com");
+        }
+    }
 }

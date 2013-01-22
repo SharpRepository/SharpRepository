@@ -40,6 +40,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\Hash\HashGenerator.cs" />
     <Compile Include="Caching\Hash\Evaluator.cs" />
     <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />

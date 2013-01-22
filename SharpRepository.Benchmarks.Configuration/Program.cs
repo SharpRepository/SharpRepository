@@ -23,6 +23,7 @@ namespace SharpRepository.Benchmarks.Configuration
     {
         static Program()
         {
+            // This loads the StructureMap registry
             Bootstrapper.Run();
         }
 
