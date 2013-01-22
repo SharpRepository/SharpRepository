@@ -14,6 +14,23 @@ namespace SharpRepository.InMemoryRepository
         {
             public TKey Key1 { get; set; }
             public TKey2 Key2 { get; set; }
+
+            public override int GetHashCode()
+            {
+                return Key1.GetHashCode() ^ Key2.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is CompoundKey)
+                {
+                    var compositeKey = (CompoundKey)obj;
+
+                    return Key1.Equals(compositeKey.Key1) && Key2.Equals(compositeKey.Key2);
+                }
+
+                return false;
+            }
         }
 
         private readonly ConcurrentDictionary<CompoundKey, T> _items = new ConcurrentDictionary<CompoundKey, T>();
