@@ -4,7 +4,8 @@
     /// Implements no caching within the repository.
     /// </summary>
     /// <typeparam name="T">The type of the repository entity.</typeparam>
-    /// <typeparam name="TKey">The type of the primary key.</typeparam>
+    /// <typeparam name="TKey">The type of the first part of the compound primary key.</typeparam>
+    /// <typeparam name="TKey2">The type of the second part of the compound primary key.</typeparam>
     public class NoCachingStrategy<T, TKey, TKey2> : NoCompoundKeyCachingStrategyBase<T, TKey, TKey2>
     {
 
