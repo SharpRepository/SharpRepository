@@ -78,5 +78,7 @@ namespace SharpRepository.Repository
         IBatch<T> BeginBatch();
 
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
+
+        bool CachingEnabled { get; set; }
     }
 }

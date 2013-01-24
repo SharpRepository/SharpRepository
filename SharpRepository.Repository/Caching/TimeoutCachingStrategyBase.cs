@@ -17,7 +17,6 @@ namespace SharpRepository.Repository.Caching
             TimeoutInSeconds = timeoutInSeconds;
         }
 
-
         public override void Add(TKey key, T result)
         {
             // nothing to do

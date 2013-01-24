@@ -20,15 +20,18 @@ namespace SharpRepository.Repository.Queries
         public QueryManager(ICachingStrategy<T, TKey> cachingStrategy)
         {
             CacheUsed = false;
+            CacheEnabled = true;
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
         }
 
         public bool CacheUsed { get; private set; }
 
+        public bool CacheEnabled { get; set; }
+
         public TResult ExecuteGet<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, TKey key)
         {
             TResult result;
-            if (_cachingStrategy.TryGetResult(key, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryGetResult(key, selector, out result))
             {
                 CacheUsed = true;
                 return result;
@@ -45,7 +48,7 @@ namespace SharpRepository.Repository.Queries
         public IEnumerable<TResult> ExecuteGetAll<TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
             IEnumerable<TResult> result;
-            if (_cachingStrategy.TryGetAllResult(queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryGetAllResult(queryOptions, selector, out result))
             {
                 CacheUsed = true;
                 return result;
@@ -62,7 +65,7 @@ namespace SharpRepository.Repository.Queries
         public IEnumerable<TResult> ExecuteFindAll<TResult>(Func<IEnumerable<TResult>> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
             IEnumerable<TResult> result;
-            if (_cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out result))
             {
                 CacheUsed = true;
                 return result;
@@ -79,7 +82,7 @@ namespace SharpRepository.Repository.Queries
         public TResult ExecuteFind<TResult>(Func<TResult> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
             TResult result;
-            if (_cachingStrategy.TryFindResult(criteria, queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryFindResult(criteria, queryOptions, selector, out result))
             {
                 CacheUsed = true;
                 return result;

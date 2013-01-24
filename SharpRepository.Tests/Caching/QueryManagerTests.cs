@@ -57,6 +57,19 @@ namespace SharpRepository.Tests.Caching
         }
 
         [Test]
+        public void ExecuteGet_Cache_Disabled_Should_Not_Use_Cache_After_First_Call()
+        {
+            // first time no cache yet
+            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.CacheUsed.ShouldBeFalse();
+
+            // second time the cache has been populated from the last call
+            QueryManager.CacheEnabled = false;
+            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.CacheUsed.ShouldBeFalse();
+        }
+
+        [Test]
         public void ExecuteGetAll_Should_Not_Use_Cache()
         {
             QueryManager.ExecuteGetAll(FakeGetAll, null, null);
@@ -73,6 +86,19 @@ namespace SharpRepository.Tests.Caching
             // second time it should be from cache
             QueryManager.ExecuteGetAll(FakeGetAll, null, null);
             QueryManager.CacheUsed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void ExecuteGetAll_Cache_Disabled_Should_Not_Use_Cache_After_First_Call()
+        {
+            // first time should not find anything
+            QueryManager.ExecuteGetAll(FakeGetAll, null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
+
+            // second time it should be from cache
+            QueryManager.CacheEnabled = false;
+            QueryManager.ExecuteGetAll(FakeGetAll, null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
         }
 
         [Test]
@@ -95,6 +121,19 @@ namespace SharpRepository.Tests.Caching
         }
 
         [Test]
+        public void ExecuteFindAll_Cache_Disabled_Should_Not_Use_Cache_After_First_Call()
+        {
+            // first time should not find anything
+            QueryManager.ExecuteFindAll(FakeGetAll, new Specification<Contact>(c => c.ContactId < 10), null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
+
+            // second time it should be from cache
+            QueryManager.CacheEnabled = false;
+            QueryManager.ExecuteFindAll(FakeGetAll, new Specification<Contact>(c => c.ContactId < 10), null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
+        }
+
+        [Test]
         public void ExecuteFind_Should_Not_Use_Cache()
         {
             QueryManager.ExecuteFind(FakeGet, new Specification<Contact>(c => c.ContactId < 10), null, null);
@@ -111,6 +150,19 @@ namespace SharpRepository.Tests.Caching
             // second time it should be from cache
             QueryManager.ExecuteFind(FakeGet, new Specification<Contact>(c => c.ContactId < 10), null, null);
             QueryManager.CacheUsed.ShouldBeTrue();
+        }
+
+        [Test]
+        public void ExecuteFind_Cache_Disabled_Should_Not_Use_Cache_After_First_Call()
+        {
+            // first time should not find anything
+            QueryManager.ExecuteFind(FakeGet, new Specification<Contact>(c => c.ContactId < 10), null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
+
+            // second time it should be from cache
+            QueryManager.CacheEnabled = false;
+            QueryManager.ExecuteFind(FakeGet, new Specification<Contact>(c => c.ContactId < 10), null, null);
+            QueryManager.CacheUsed.ShouldBeFalse();
         }
 
 
