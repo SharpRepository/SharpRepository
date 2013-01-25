@@ -6,6 +6,10 @@ using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
+    public interface IRepository<T> : IRepository<T, int> where T : class
+    {
+    }
+
     /// <summary>
     /// Repository that acesses <typeparamref name="T"/> entities and has a primary key of type <typeparamref name="TKey"/>
     /// </summary>

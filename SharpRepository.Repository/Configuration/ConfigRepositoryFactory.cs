@@ -4,6 +4,7 @@ namespace SharpRepository.Repository.Configuration
     public interface IConfigRepositoryFactory
     {
         IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new();
+        ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class, new();
     }
 
     public abstract class ConfigRepositoryFactory : IConfigRepositoryFactory
@@ -16,5 +17,6 @@ namespace SharpRepository.Repository.Configuration
         }
 
         public abstract IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new();
+        public abstract ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class, new();
     }
 }

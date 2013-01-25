@@ -69,10 +69,10 @@ namespace SharpRepository.Repository
         void Delete(IEnumerable<T> entities);
 
         /// <summary>
-        /// Deletes the specified entity by the primary key.
+        /// Deletes the specified entity by the compound primary key.
         /// </summary>
-        /// <param name="key">The first part of the primary key.</param>
-        /// <param name="key">The second part of the primary key.</param>
+        /// <param name="key">The first part of the compound primary key.</param>
+        /// <param name="key2">The second part of the compound primary key.</param>
         void Delete(TKey key, TKey2 key2);
 
         /// <summary>

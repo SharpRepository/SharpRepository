@@ -4,10 +4,10 @@ namespace SharpRepository.Tests.TestObjects
 {
     public class CompoundKeyItemInts
     {
-        [RepositoryPrimaryKey]
+        [RepositoryPrimaryKey(Order = 1)]
         public int SomeId { get; set; }
 
-        [RepositoryPrimaryKey]
+        [RepositoryPrimaryKey(Order = 2)]
         public int AnotherId { get; set; }
 
         public string Title { get; set; }

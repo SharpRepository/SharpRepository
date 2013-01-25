@@ -152,5 +152,16 @@ namespace SharpRepository.Tests.Configuration
                 throw new Exception("Not InMemoryRepository");
             }
         }
+
+        [Test]
+        public void TestFactoryOverloadMethodForCompoundKey()
+        {
+            var repos = RepositoryFactory.GetInstance(typeof (Contact), typeof (string), typeof(string));
+
+            if (!(repos is InMemoryRepository<Contact, string, string>))
+            {
+                throw new Exception("Not InMemoryRepository");
+            }
+        }
     }
 }

@@ -358,16 +358,8 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 2)
                 return false;
 
-            if (propInfo[0].GetValue(entity, null) is TKey && propInfo[1].GetValue(entity, null) is TKey2)
-            {
-                key = (TKey) propInfo[0].GetValue(entity, null);
-                key2 = (TKey2) propInfo[1].GetValue(entity, null);
-            }
-            else
-            {
-                key2 = (TKey2)propInfo[0].GetValue(entity, null);
-                key = (TKey)propInfo[1].GetValue(entity, null);
-            }
+            key = (TKey) propInfo[0].GetValue(entity, null);
+            key2 = (TKey2) propInfo[1].GetValue(entity, null);
            
            return true;
         }
@@ -380,16 +372,8 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 2)
                 return false;
 
-            if (propInfo[0].GetValue(entity, null) is TKey && propInfo[1].GetValue(entity, null) is TKey2)
-            {
-                propInfo[0].SetValue(entity, key, null);
-                propInfo[1].SetValue(entity, key2, null);
-            }
-            else
-            {
-                propInfo[0].SetValue(entity, key2, null);
-                propInfo[1].SetValue(entity, key, null);
-            }
+            propInfo[0].SetValue(entity, key, null);
+            propInfo[1].SetValue(entity, key2, null);
 
             return true;
         }
@@ -400,42 +384,18 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 2)
                 return null;
 
-            Expression<Func<T, bool>> lambda, lambda2;
-
-            if (propInfo[0].PropertyType == typeof(TKey) && propInfo[1].PropertyType == typeof(TKey2))
-            {
-                lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[0].Name, key));
-                lambda2 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[1].Name, key2));
-            }
-            else
-            {
-                lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[1].Name, key));
-                lambda2 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[0].Name, key2));
-            }
+            var lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[0].Name, key));
+            var lambda2 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[1].Name, key2));
 
             return new Specification<T>(lambda).And(lambda2);
         }
 
         protected PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
-            // checks for properties in this order that match TKey type
-            //  1) RepositoryPrimaryKeyAttribute
-            //  2) Id
-            //  3) [Type Name]Id
             var type = typeof(T);
-            var keyType = typeof(TKey);
-            var keyType2 = typeof (TKey2);
 
-            return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>() && (x.PropertyType == keyType || x.PropertyType == keyType2)).ToArray();
+            return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
-
-//        private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName, Type propertyType)
-//        {
-//            // make the property reflection lookup case insensitive
-//            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-//
-//            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
-//        }
 
         public abstract IEnumerator<T> GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator()

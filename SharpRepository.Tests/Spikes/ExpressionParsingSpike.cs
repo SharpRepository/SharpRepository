@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.TestObjects;

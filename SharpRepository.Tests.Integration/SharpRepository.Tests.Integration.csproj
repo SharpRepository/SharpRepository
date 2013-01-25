@@ -151,7 +151,7 @@
     <Compile Include="Helpers\RelativeDirectory.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestObjects\Contact.cs" />
-    <Compile Include="TestObjects\ContactInfo.cs" />
+    <Compile Include="TestObjects\User.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
