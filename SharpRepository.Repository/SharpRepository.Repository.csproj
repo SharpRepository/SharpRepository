@@ -42,6 +42,7 @@
     </Compile>
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\CompoundKeyCachingStrategyBase.cs" />
+    <Compile Include="Caching\StandardCachingStrategyWithPartition.cs" />
     <Compile Include="Caching\StandardCompoundKeyCachingStrategyBase.cs" />
     <Compile Include="Caching\TimeoutCompoundKeyCachingStrategyBase.cs" />
     <Compile Include="Caching\NoCompoundKeyCachingStrategyBase.cs" />
