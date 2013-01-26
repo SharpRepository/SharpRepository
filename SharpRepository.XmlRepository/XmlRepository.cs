@@ -1,4 +1,5 @@
 ﻿using System;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.XmlRepository
@@ -25,7 +26,7 @@ namespace SharpRepository.XmlRepository
     /// XML Repository layer
     /// </summary>
     /// <typeparam name="T">The object type that is stored as XML.</typeparam>
-    public class XmlRepository<T> : XmlRepositoryBase<T, int> where T : class, new()
+    public class XmlRepository<T> : XmlRepositoryBase<T, int>, IRepository<T> where T : class, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRepository&lt;T&gt;"/> class.

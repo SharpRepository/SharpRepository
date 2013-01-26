@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Configuration;
 using NUnit.Framework;
 using SharpRepository.Ef5Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
-using SharpRepository.Ef5Repository;
 using SharpRepository.Repository;
 
 namespace SharpRepository.Tests.Configuration
@@ -17,6 +15,17 @@ namespace SharpRepository.Tests.Configuration
     public class ConfigurationTests
     {
         [Test]
+        public void InMemoryConfigurationNoParametersNoKeyTypes()
+        {
+            var repos = RepositoryFactory.GetInstance<Contact>();
+
+            if (!(repos is InMemoryRepository<Contact, int>))
+            {
+                throw new Exception("Not InMemoryRepository");
+            }
+        }
+
+        [Test]
         public void InMemoryConfigurationNoParameters()
         {
             var repos = RepositoryFactory.GetInstance<Contact, string>();
@@ -26,6 +35,7 @@ namespace SharpRepository.Tests.Configuration
                 throw new Exception("Not InMemoryRepository");
             }
         }
+
         [Test]
         public void LoadConfigurationRepositoryByName()
         {

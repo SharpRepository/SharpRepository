@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Ef5Repository
@@ -26,7 +27,7 @@ namespace SharpRepository.Ef5Repository
     /// Entity Framework repository layer
     /// </summary>
     /// <typeparam name="T">The Entity type</typeparam>
-    public class Ef5Repository<T> : Ef5RepositoryBase<T, int> where T : class, new()
+    public class Ef5Repository<T> : Ef5RepositoryBase<T, int>, IRepository<T> where T : class, new()
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Ef5Repository&lt;T&gt;"/> class.

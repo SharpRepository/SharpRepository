@@ -11,11 +11,22 @@ namespace SharpRepository.Ioc.StructureMap
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
+            initialization.For(typeof(IRepository<>))
+                                 .Use(context =>
+                                 {
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+                                     var entityType = genericArgs[0];
+
+                                     return RepositoryFactory.GetInstance(entityType, repositoryName);
+                                 }
+                );
+
             return initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
-                                     var entityType = context.BuildStack.Current.RequestedType.GetGenericArguments()[0];
-                                     var keyType = context.BuildStack.Current.RequestedType.GetGenericArguments()[1];
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+                                     var entityType = genericArgs[0];
+                                     var keyType = genericArgs[1];
 
                                      return RepositoryFactory.GetInstance(entityType, keyType, repositoryName);
                                  }
@@ -26,11 +37,22 @@ namespace SharpRepository.Ioc.StructureMap
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
+            initialization.For(typeof(IRepository<>))
+                                 .Use(context =>
+                                 {
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+                                     var entityType = genericArgs[0];
+
+                                     return RepositoryFactory.GetInstance(entityType, configuration);
+                                 }
+                );
+
             return initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
-                                     var entityType = context.BuildStack.Current.RequestedType.GetGenericArguments()[0];
-                                     var keyType = context.BuildStack.Current.RequestedType.GetGenericArguments()[1];
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+                                     var entityType = genericArgs[0];
+                                     var keyType = genericArgs[1];
 
                                      return RepositoryFactory.GetInstance(entityType, keyType, configuration);
                                  }

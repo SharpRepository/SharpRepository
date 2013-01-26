@@ -37,6 +37,11 @@ namespace SharpRepository.Repository
             return GetInstance<T, TKey>("sharpRepository", repositoryName);
         }
 
+        public static object GetInstance(Type entityType, string repositoryName = null)
+        {
+            return GetInstance(entityType, typeof(int), repositoryName);
+        }
+
         public static object GetInstance(Type entityType, Type keyType, string repositoryName = null)
         {
             return GetInstance(entityType, keyType, "sharpRepository", repositoryName);
@@ -63,6 +68,11 @@ namespace SharpRepository.Repository
             return GetInstance<T, TKey>(GetConfiguration(configSection), repositoryName);
         }
 
+        public static object GetInstance(Type entityType, string configSection, string repositoryName)
+        {
+            return GetInstance(entityType, typeof(int), configSection, repositoryName);
+        }
+
         public static object GetInstance(Type entityType, Type keyType, string configSection, string repositoryName)
         {
             return GetInstance(entityType, keyType, GetConfiguration(configSection), repositoryName);
@@ -77,6 +87,12 @@ namespace SharpRepository.Repository
             }
 
             return configuration.GetInstance<T, TKey>(repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, ISharpRepositoryConfiguration configuration,
+                                         string repositoryName = null)
+        {
+            return GetInstance(entityType, typeof (int), configuration, repositoryName);
         }
 
         public static object GetInstance(Type entityType, Type keyType, ISharpRepositoryConfiguration configuration, string repositoryName = null)

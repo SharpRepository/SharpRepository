@@ -81,4 +81,12 @@ namespace SharpRepository.Repository
 
         bool CachingEnabled { get; set; }
     }
+
+    /// <summary>
+    /// Defaults to int as the Primary Key
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IRepository<T> : IRepository<T, int> where T : class
+    {
+    }
 }
