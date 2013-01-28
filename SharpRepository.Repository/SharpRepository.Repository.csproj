@@ -88,6 +88,7 @@
     <Compile Include="CompoundKeyRepositoryBase.cs" />
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
+    <Compile Include="IRepositoryBase.cs" />
     <Compile Include="LinqCompoundKeyRepositoryBase.cs" />
     <Compile Include="ICompoundKeyRepository.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
