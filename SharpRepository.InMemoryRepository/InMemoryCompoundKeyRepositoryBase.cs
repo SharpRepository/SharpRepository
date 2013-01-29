@@ -8,6 +8,105 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.InMemoryRepository
 {
+    public abstract class InMemoryCompoundKeyRepositoryBase<T> : LinqCompoundKeyRepositoryBase<T> where T : class, new()
+    {
+        private readonly ConcurrentDictionary<string, T> _items = new ConcurrentDictionary<string, T>();
+
+        internal InMemoryCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
+        }
+
+        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
+        {
+            return CloneDictionary(_items).AsQueryable();
+        }
+
+        protected override T GetQuery(params object[] keys)
+        {
+            T result;
+            _items.TryGetValue(String.Join("/", keys), out result);
+
+            return result;
+        }
+
+        private static IEnumerable<T> CloneDictionary(ConcurrentDictionary<string, T> list)
+        {
+            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
+            //  since we can't really put those constraints on T I'm going to do it via reflection
+
+            var type = typeof(T);
+            var properties = type.GetProperties();
+
+            var clonedList = new List<T>(list.Count);
+
+            foreach (var keyValuePair in list)
+            {
+                var newItem = new T();
+                foreach (var propInfo in properties)
+                {
+                    propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
+                }
+
+                clonedList.Add(newItem);
+            }
+
+            return clonedList;
+        }
+
+        protected override void AddItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            _items[String.Join("/", keys)] = entity;
+        }
+
+        protected override void DeleteItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            T tmp;
+            _items.TryRemove(String.Join("/", keys), out tmp);
+        }
+
+        protected override void UpdateItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            _items[String.Join("/", keys)] = entity;
+        }
+
+        protected override void SaveChanges()
+        {
+
+        }
+
+        public override void Dispose()
+        {
+
+        }
+
+        public override string ToString()
+        {
+            return "SharpRepository.InMemoryRepository";
+        }
+    }
+
     public abstract class InMemoryCompoundKeyRepositoryBase<T, TKey, TKey2> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
     {
         private struct CompoundKey

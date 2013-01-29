@@ -13,6 +13,114 @@ namespace SharpRepository.Repository.Queries
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TKey">The type of the key.</typeparam>
+    public class CompoundKeyQueryManager<T> where T : class
+    {
+        private readonly ICompoundKeyCachingStrategy<T> _cachingStrategy;
+
+        public CompoundKeyQueryManager(ICompoundKeyCachingStrategy<T> cachingStrategy)
+        {
+            CacheUsed = false;
+            _cachingStrategy = cachingStrategy ?? new NoCompoundKeyCachingStrategy<T>();
+        }
+
+        public bool CacheUsed { get; private set; }
+
+        public TResult ExecuteGet<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, object[] keys)
+        {
+            TResult result;
+            if (_cachingStrategy.TryGetResult(keys, selector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveGetResult(keys, selector, result);
+
+            return result;
+        }
+
+        public IEnumerable<TResult> ExecuteGetAll<TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            IEnumerable<TResult> result;
+            if (_cachingStrategy.TryGetAllResult(queryOptions, selector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveGetAllResult(queryOptions, selector, result);
+
+            return result;
+        }
+
+        public IEnumerable<TResult> ExecuteFindAll<TResult>(Func<IEnumerable<TResult>> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            IEnumerable<TResult> result;
+            if (_cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveFindAllResult(criteria, queryOptions, selector, result);
+
+            return result;
+        }
+
+        public TResult ExecuteFind<TResult>(Func<TResult> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            TResult result;
+            if (_cachingStrategy.TryFindResult(criteria, queryOptions, selector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveFindResult(criteria, queryOptions, selector, result);
+
+            return result;
+        }
+
+        public void OnSaveExecuted()
+        {
+            _cachingStrategy.Save();
+        }
+
+        public void OnItemDeleted(object[] keys, T item)
+        {
+            _cachingStrategy.Delete(keys, item);
+        }
+
+        public void OnItemAdded(object[] keys, T item)
+        {
+            _cachingStrategy.Add(keys, item);
+        }
+
+        public void OnItemUpdated(object[] keys, T item)
+        {
+            _cachingStrategy.Update(keys, item);
+        }
+    }
+
+    /// <summary>
+    /// The QueryManager is the middle man between the repository and the caching strategy.
+    /// It receives a query that should be run, checks the cache for valid results to return, and if none are found runs the query and caches the results according to the caching strategy.
+    /// It also notifies the caching strategy of CRUD operations in case the caching strategy needs to act as a result of a certain action.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TKey">The type of the key.</typeparam>
     public class CompoundKeyQueryManager<T, TKey, TKey2> where T : class
     {
         private readonly ICompoundKeyCachingStrategy<T, TKey, TKey2> _cachingStrategy;

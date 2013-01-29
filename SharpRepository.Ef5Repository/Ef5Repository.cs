@@ -12,6 +12,14 @@ namespace SharpRepository.Ef5Repository
         }
     }
 
+    public class Ef5CompoundKeyRepository<T> : Ef5CompoundKeyRepositoryBase<T> where T : class, new()
+    {
+        public Ef5CompoundKeyRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T> cachingStrategy = null)
+            : base(dbContext, cachingStrategy)
+        {
+        }
+    }
+
     /// <summary>
     /// Entity Framework repository layer
     /// </summary>

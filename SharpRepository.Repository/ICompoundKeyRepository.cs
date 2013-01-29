@@ -4,6 +4,33 @@ using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository
 {
+    public interface ICompoundKeyRepository<T> : IRepositoryBase<T>, IRepositoryQueryable<T> where T : class
+    {
+        /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="keys">Primary keys.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        T Get(params object[] keys);
+
+        /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key and maps it to the result of type <typeparamref name="TResult"/>.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="keys">Primary keys.</param>
+        /// <param name="selector">The mapping selector that returns the result type.</param>
+        /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
+        TResult Get<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
+
+        /// <summary>
+        /// Deletes the specified entity by the compound primary key.
+        /// </summary>
+        /// <param name="keys">Primary keys.</param>
+        void Delete(params object[] keys);
+
+        ICompoundKeyCachingStrategy<T> CachingStrategy { get; set; }
+    }
+
     /// <summary>
     /// Repository that acesses <typeparamref name="T"/> entities and has a primary key of type <typeparamref name="TKey"/>
     /// </summary>
