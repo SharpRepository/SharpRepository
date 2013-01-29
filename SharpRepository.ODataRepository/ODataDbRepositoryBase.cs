@@ -11,7 +11,7 @@ namespace SharpRepository.ODataRepository
         //protected ODataClient<T> Client;
         private readonly string _serverUrl;
         private readonly string _database;
-        private string _typeName;
+        private readonly string _typeName;
 
         //private readonly ODataQueryProvider _provider;
         //private readonly IQueryable<T> _baseQuery;

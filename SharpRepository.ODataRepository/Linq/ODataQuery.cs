@@ -25,6 +25,7 @@ namespace SharpRepository.ODataRepository.Linq
         {
             var querystring = String.Empty;
             var resultType = typeof (T);
+            var hasFilter = false;
 
             if (_queryParts.ReturnCount)
             {
@@ -52,6 +53,9 @@ namespace SharpRepository.ODataRepository.Linq
             var fullUrl = _url + "/" + _collectionName + querystring;
             var json = UrlHelper.Get(fullUrl);
 
+            // Netflix retuns a separate array inside d when a filter is used for some reason, so hard-coded check for now during tests
+            hasFilter = !querystring.EndsWith("$format=json&");
+
             //var json = ODataRequest.Execute(fullUrl, "POST", _queryParts.BuildODataApiPostData(), "application/json");
 
             JObject res;
@@ -69,6 +73,10 @@ namespace SharpRepository.ODataRepository.Linq
             // get the rows property and deserialize that
             var jobject = JsonConvert.DeserializeObject(json) as JObject;
             var rows = jobject["d"];
+            if (hasFilter)
+            {
+                rows = rows["results"];
+            }
 
             var items = rows.Select(row => row.ToObject<T>());
 

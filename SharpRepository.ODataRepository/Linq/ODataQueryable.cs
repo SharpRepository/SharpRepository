@@ -17,7 +17,7 @@ namespace SharpRepository.ODataRepository.Linq
     
         // This constructor is called by our users, create a new IQueryExecutor.
         public ODataQueryable (string url, string databaseName)
-            : base (QueryParser.CreateDefault(), CreateExecutor (url, databaseName))
+            : base (QueryParser.CreateDefault(), CreateExecutor(url, databaseName))
         {
         }
 

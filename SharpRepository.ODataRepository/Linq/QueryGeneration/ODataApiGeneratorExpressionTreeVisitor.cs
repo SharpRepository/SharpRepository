@@ -125,28 +125,28 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
         protected override Expression VisitConstantExpression (ConstantExpression expression)
         {           
             // check to see if we don't need the quotes
-//            var quotes = "'";
-//            var value = expression.Value.ToString();
-//            if (
-//                expression.Type == typeof(Int32)
-//                || expression.Type == typeof(Int16)
-//                || expression.Type == typeof(Int64)
-//                || expression.Type == typeof(Decimal)
-//                || expression.Type == typeof(Double)
-//                || expression.Type == typeof(Boolean)
-//                )
-//            {
-//                quotes = "";
-//            }
-//            else if (expression.Type == typeof(DateTime) || expression.Type == typeof(DateTime?))
-//            {
-//                quotes = "";
-//                value = String.Format("new Date('{0}')", value);
-//            }
-//
-//             _expression.AppendFormat("{1}{0}{1}", value, quotes);
+            var quotes = "'";
+            var value = expression.Value.ToString();
+            if (
+                expression.Type == typeof(Int32)
+                || expression.Type == typeof(Int16)
+                || expression.Type == typeof(Int64)
+                || expression.Type == typeof(Decimal)
+                || expression.Type == typeof(Double)
+                || expression.Type == typeof(Boolean)
+                )
+            {
+                quotes = "";
+            }
+            else if (expression.Type == typeof(DateTime) || expression.Type == typeof(DateTime?))
+            {
+                quotes = "";
+                value = String.Format("new Date('{0}')", value);
+            }
 
-            _expression.Append(expression.Value.ToString());
+             _expression.AppendFormat("{1}{0}{1}", value, quotes);
+
+            //_expression.Append(expression.Value.ToString());
 
           return expression;
         }
