@@ -41,6 +41,9 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="Caching\CachingStrategyBase.cs" />
+    <Compile Include="Caching\CompoundKeyCachingStrategyCommon.cs" />
+    <Compile Include="Caching\TimeoutCompoundKeyCachingStrategy.cs" />
+    <Compile Include="Caching\NoCompoundKeyCachingStrategy.cs" />
     <Compile Include="Caching\CompoundKeyCachingStrategyBase.cs" />
     <Compile Include="Caching\StandardCachingStrategyWithPartition.cs" />
     <Compile Include="Caching\StandardCompoundKeyCachingStrategyBase.cs" />
