@@ -41,4 +41,14 @@ namespace SharpRepository.Repository.Caching
         void Update(TKey key, TKey2 key2, T result);
         void Delete(TKey key, TKey2 key2, T result);
     }
+
+    public interface ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> : ICompoundKeyCachingStrategyBase<T>
+    {
+        bool TryGetResult<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector, out TResult result);
+        void SaveGetResult<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector, TResult result);
+
+        void Add(TKey key, TKey2 key2, TKey3 key3, T result);
+        void Update(TKey key, TKey2 key2, TKey3 key3, T result);
+        void Delete(TKey key, TKey2 key2, TKey3 key3, T result);
+    }
 }

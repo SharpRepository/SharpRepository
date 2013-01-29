@@ -195,35 +195,99 @@ namespace SharpRepository.Repository
 
             return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
         }
+    }
 
-        protected TKey GenerateFirstPrimaryKey()
-        {
-            if (typeof(TKey) == typeof(Guid))
-            {
-                return (TKey)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
-            }
-
-            if (typeof(TKey) == typeof(string))
-            {
-                return (TKey)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
-            }
-
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
+    // TODO: everything is the same as LinqRepositoryBase except the caching strategy and the GetQuery
+    public abstract class LinqCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> : CompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> where T : class
+    {
+        protected LinqCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
+            : base(cachingStrategy)
+        {   
         }
 
-        protected TKey2 GenerateSecondPrimaryKey()
+        public override IQueryable<T> AsQueryable()
         {
-            if (typeof(TKey2) == typeof(Guid))
+            return BaseQuery();
+        }
+
+        protected abstract IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null);
+
+        protected override T GetQuery(TKey key, TKey2 key2, TKey3 key3)
+        {
+            return FindQuery(ByPrimaryKeySpecification(key, key2, key3));
+        }
+
+        protected override T FindQuery(ISpecification<T> criteria)
+        {
+            return criteria.SatisfyingEntityFrom(BaseQuery());
+        }
+
+        protected override T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        {
+            if (queryOptions == null)
+                return FindQuery(criteria);
+
+            var query = queryOptions.Apply(BaseQuery());
+
+            return criteria.SatisfyingEntityFrom(query);
+        }
+
+        protected override IQueryable<T> GetAllQuery()
+        {
+            return BaseQuery();
+        }
+
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        {
+            if (queryOptions == null)
+                return GetAllQuery();
+
+            var query = BaseQuery();
+
+            return queryOptions.Apply(query);
+        }
+
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria)
+        {
+            var query = BaseQuery(criteria.FetchStrategy);
+            return criteria.SatisfyingEntitiesFrom(query);
+        }
+
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        {
+            if (queryOptions == null)
+                return FindAllQuery(criteria);
+
+            var query = BaseQuery(criteria.FetchStrategy);
+            
+            query = criteria.SatisfyingEntitiesFrom(query);
+
+            return queryOptions.Apply(query);
+        }
+
+        public override IEnumerator<T> GetEnumerator()
+        {
+            return BaseQuery().GetEnumerator();
+		}
+		
+        public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        {
+            var innerQuery = innerRepository.AsQueryable();
+            var outerQuery = BaseQuery();
+
+            var innerType = innerRepository.GetType();
+            var outerType = GetType();
+
+            // if these are 2 different Repository types then let's bring down each query into memory so that they can be joined
+            // if they are the same type then they will use the native IQueryable and take advantage of the back-end side join if possible
+            if (innerType.Name != outerType.Name)
             {
-                return (TKey2)Convert.ChangeType(Guid.NewGuid(), typeof(TKey));
+                innerQuery = innerQuery.ToList().AsQueryable();
+                outerQuery = outerQuery.ToList().AsQueryable();
+                return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
             }
 
-            if (typeof(TKey2) == typeof(string))
-            {
-                return (TKey2)Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof(TKey));
-            }
-
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
+            return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
         }
     }
 }
