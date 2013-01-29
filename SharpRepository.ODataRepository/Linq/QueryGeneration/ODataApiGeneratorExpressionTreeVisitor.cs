@@ -87,7 +87,7 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
                     break;
 
                 case ExpressionType.Subtract:
-                    _expression.Append (" aub ");
+                    _expression.Append (" sub ");
                     break;
 
                 case ExpressionType.Multiply:
@@ -116,8 +116,18 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
 
         protected override Expression VisitMemberExpression (MemberExpression expression)
         {
-            VisitExpression (expression.Expression);
-            _expression.AppendFormat("{0}", expression.Member.Name);
+            // this seems sort of hacky
+            //  it is not recognizing Length as a method but as a Member, so let's specifically deal with it here I guess
+            if (expression.Member.Name == "Length")
+            {
+                var parts = ((MemberExpression)expression.Expression).Member.Name.Split('.');
+                _expression.AppendFormat("length({0})", parts[parts.Length-1]);
+            }
+            else
+            {
+                VisitExpression(expression.Expression);
+                _expression.AppendFormat("{0}", expression.Member.Name);    
+            }
 
           return expression;
         }
@@ -178,7 +188,7 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
 
             return expression;
 
-            return base.VisitNewExpression(expression);
+            //return base.VisitNewExpression(expression);
         }
 
         protected override Expression VisitMethodCallExpression (MethodCallExpression expression)
@@ -187,45 +197,46 @@ namespace SharpRepository.ODataRepository.Linq.QueryGeneration
 
             if (expression.Method.Name == "Contains")
             {
-                _expression.Append(String.Format("substringof('{1}',{0}) eq true", 
-                        VisitExpression(expression.Object),
-                        VisitExpression(expression.Arguments[0])));
+                _expression.Append("substringof(");
+                VisitExpression(expression.Arguments[0]);
+                _expression.Append(",");
+                VisitExpression(expression.Object);
+                _expression.Append(") eq true");
                 return expression;
             }
 
             if (expression.Method.Name == "StartsWith")
             {
-                _expression.Append(String.Format("startswith({0},'{1}') eq true",
-                        VisitExpression(expression.Object),
-                        VisitExpression(expression.Arguments[0])));
+                _expression.Append("startswith(");
+                VisitExpression(expression.Object);
+                _expression.Append(",");
+                VisitExpression(expression.Arguments[0]);
+                _expression.Append(") eq true");
                 return expression;
             }
 
             if (expression.Method.Name == "EndsWith")
             {
-                _expression.Append(String.Format("endswith({0},'{1}') eq true",
-                        VisitExpression(expression.Object),
-                        VisitExpression(expression.Arguments[0])));
-                return expression;
-            }
-
-            if (expression.Method.Name == "Length")
-            {
-                _expression.Append(String.Format("length({0})",
-                                                 VisitExpression(expression.Object)));
+                _expression.Append("endswith(");
+                VisitExpression(expression.Object);
+                _expression.Append(",");
+                VisitExpression(expression.Arguments[0]);
+                _expression.Append(") eq true");
                 return expression;
             }
 
             if (expression.Method.Name == "ToLower")
             {
-                _expression.Append(String.Format("tolower({0})",
-                                                 VisitExpression(expression.Object)));
+                _expression.Append("tolower(");
+                VisitExpression(expression.Object);
+                _expression.Append(")");
                 return expression;
             }
-            if (expression.Method.Name == "ToUper")
+            if (expression.Method.Name == "ToUpper")
             {
-                _expression.Append(String.Format("touper({0})",
-                                                 VisitExpression(expression.Object)));
+                _expression.Append("toupper(");
+                VisitExpression(expression.Object);
+                _expression.Append(")");
                 return expression;
             }
 
