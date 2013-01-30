@@ -8,12 +8,12 @@ namespace SharpRepository.Tests.Integration.TestObjects
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ContactId { get; set; }
-        public string Name { get; set; }
-        public string Title { get; set; }
-        public int ContactTypeId { get; set; } // for partitioning on 
+        public virtual string ContactId { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string Title { get; set; }
+        public virtual int ContactTypeId { get; set; } // for partitioning on 
 
-        public List<EmailAddress> EmailAddresses { get; set; }
-        public List<PhoneNumber> PhoneNumbers { get; set; }
+        public virtual List<EmailAddress> EmailAddresses { get; set; }
+        public virtual List<PhoneNumber> PhoneNumbers { get; set; }
     }
 }

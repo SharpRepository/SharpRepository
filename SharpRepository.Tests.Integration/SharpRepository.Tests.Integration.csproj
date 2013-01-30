@@ -123,6 +123,12 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.1.0.84.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\packages\System.Data.SQLite.1.0.84.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -133,12 +139,12 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Data\NHibernateDataDirectoryFactory.cs" />
     <Compile Include="Data\DataDirectoryHelper.cs" />
     <Compile Include="Data\Db4oDataDirectoryFactory.cs" />
     <Compile Include="Data\EfDataDirectoryFactory.cs" />
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
-    <Compile Include="Data\NHibernate\NHibernatePersistenceModel.cs" />
-    <Compile Include="Data\NHibernate\ContactMapping.cs" />
+    <Compile Include="Data\NHibernateContactMapping.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
@@ -208,7 +214,16 @@
   <ItemGroup>
     <Folder Include="Data\Db4o\" />
     <Folder Include="Data\Ef\" />
+    <Folder Include="Data\NHibernate\" />
     <Folder Include="Data\Xml\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

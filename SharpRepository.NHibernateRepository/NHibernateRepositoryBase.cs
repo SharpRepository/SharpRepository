@@ -12,10 +12,12 @@ namespace SharpRepository.NHibernateRepository
     public class NHibernateRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         protected ISession Session { get; private set; }
+        private readonly bool _ownSession = false;
 
         internal NHibernateRepositoryBase(ISessionFactory sessionFactory, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
             Initialize(sessionFactory.OpenSession());
+            _ownSession = true;
         }
 
         internal NHibernateRepositoryBase(ISession session, ICachingStrategy<T, TKey> cachingStrategy = null)
@@ -31,6 +33,7 @@ namespace SharpRepository.NHibernateRepository
 
         protected override void AddItem(T entity)
         {
+            // TODO: check to see if this should be here, NHibernate has the ability to generate the key for you
             if (typeof(TKey) == typeof(Guid) || typeof(TKey) == typeof(string))
             {
                 TKey id;
@@ -42,7 +45,13 @@ namespace SharpRepository.NHibernateRepository
             }
 
             // TODO: Do we need to wrap these each in a transaction (session.BeginTransaction() and trans.Committ())?
-
+//            using (var tx = Session.BeginTransaction())
+//            {
+//                Session.Save(entity);
+//
+//                // if you pass validation:
+//                tx.Commit();
+//            }
             Session.Save(entity);
         }
 
@@ -59,11 +68,12 @@ namespace SharpRepository.NHibernateRepository
         protected override void SaveChanges()
         {
             // TODO: is anything needed here
+            Session.Flush();
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy)
         {
-            var query = Session.Linq<T>();
+            var query = Session.Query<T>();
             return query;
             //return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.(path));
         }
@@ -100,8 +110,13 @@ namespace SharpRepository.NHibernateRepository
             if (!disposing) return;
             if (Session == null) return;
 
-            Session.Dispose();
-            Session = null;
+            // only close out the session if we created it from the SessionFactory
+            if (_ownSession)
+            {
+                Session.Close();
+                Session.Dispose();
+                Session = null;
+            }
         }
 
         private static TKey GeneratePrimaryKey()
