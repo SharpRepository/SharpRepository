@@ -16,6 +16,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
                                                                      RepositoryTypes.MongoDb, 
                                                                      RepositoryTypes.InMemory, 
                                                                      RepositoryTypes.Ef5, 
+                                                                     RepositoryTypes.NHibernate
                                                                  }); }
         }
 

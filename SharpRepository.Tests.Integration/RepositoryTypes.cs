@@ -7,6 +7,7 @@ namespace SharpRepository.Tests.Integration
         Ef5,
         RavenDb,
         Dbo4,
-        MongoDb
+        MongoDb,
+        NHibernate
     }
 }
