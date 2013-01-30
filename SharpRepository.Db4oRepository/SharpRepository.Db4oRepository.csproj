@@ -38,13 +38,16 @@
       <HintPath>..\packages\db4o-devel.8.1.184.15492\lib\net40\Db4objects.Db4o.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Db4oConfigRepositoryFactory.cs" />
+    <Compile Include="Db4oRepositoryConfiguration.cs" />
+    <Compile Include="IAmInDb4oRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Db4ORepository.cs" />
     <Compile Include="Db4ORepositoryBase.cs" />

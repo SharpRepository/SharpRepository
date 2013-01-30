@@ -1,0 +1,18 @@
+<configuration>
+  <configSections>
+    <section name="sharpRepository" type="SharpRepository.Repository.Configuration.SharpRepositorySection, SharpRepository.Repository"/>
+  </configSections>
+
+<sharpRepository>
+  <repositories>
+  </repositories>
+  <cachingProviders>
+  </cachingProviders>
+  <cachingStrategies>
+	<cachingStrategy name="standardCachingStrategy" generational="true" writeThrough="true" factory="SharpRepository.Repository.Caching.StandardConfigCachingStrategyFactory, SharpRepository.Repository" />
+	<cachingStrategy name="timeoutCachingStrategy" timeout="300" factory="SharpRepository.Repository.Caching.TimeoutConfigCachingStrategyFactory, SharpRepository.Repository" />
+	<cachingStrategy name="noCaching" factory="SharpRepository.Repository.Caching.NoCachingConfigCachingStrategyFactory, SharpRepository.Repository"/>
+  </cachingStrategies>
+</sharpRepository>
+
+</configuration>  

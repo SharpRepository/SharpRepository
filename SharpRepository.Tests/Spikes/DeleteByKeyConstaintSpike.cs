@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using SharpRepository.EfRepository;
+using SharpRepository.Ef5Repository;
 using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.XmlRepository;

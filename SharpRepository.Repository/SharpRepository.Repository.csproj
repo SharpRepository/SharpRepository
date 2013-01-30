@@ -31,18 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Enyim.Caching">
-      <HintPath>..\packages\EnyimMemcached.2.11\lib\net35\Enyim.Caching.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationServer.Caching.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\ServerAppFabric.Client.1.0.2912\lib\Microsoft.ApplicationServer.Caching.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
@@ -50,14 +40,52 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="Caching\CachingStrategyBase.cs" />
+    <Compile Include="Caching\Hash\HashGenerator.cs" />
+    <Compile Include="Caching\Hash\Evaluator.cs" />
+    <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />
+    <Compile Include="Caching\Hash\Utility.cs" />
+    <Compile Include="Caching\InMemoryCachingProviderConfiguration.cs" />
+    <Compile Include="Caching\InMemoryConfigCachingProviderFactory.cs" />
+    <Compile Include="Caching\NoCachingConfigCachingStrategyFactory.cs" />
+    <Compile Include="Caching\NoCachingStrategyConfiguration.cs" />
+    <Compile Include="Caching\StandardCachingStrategyConfiguration.cs" />
+    <Compile Include="Caching\StandardConfigCachingStrategyFactory.cs" />
     <Compile Include="Caching\TimeoutCachingStrategyBase.cs" />
     <Compile Include="Caching\NoCachingStrategyBase.cs" />
     <Compile Include="Caching\StandardCachingStrategyBase.cs" />
+    <Compile Include="Caching\TimeoutCachingStrategyConfiguration.cs" />
+    <Compile Include="Caching\TimeoutConfigCachingStrategyFactory.cs" />
     <Compile Include="CompositeRepository.cs" />
+    <Compile Include="Configuration\CachingProviderCollection.cs" />
+    <Compile Include="Configuration\CachingProviderConfiguration.cs" />
+    <Compile Include="Configuration\CachingProviderElement.cs" />
+    <Compile Include="Configuration\CachingStrategyCollection.cs" />
+    <Compile Include="Configuration\CachingStrategyConfiguration.cs" />
+    <Compile Include="Configuration\CachingStrategyElement.cs" />
+    <Compile Include="Configuration\ConfigCachingProviderFactory.cs" />
+    <Compile Include="Configuration\ConfigCachingStrategyFactory.cs" />
+    <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Configuration\FastActivator.cs" />
+    <Compile Include="Configuration\ConfigRepositoryFactory.cs" />
+    <Compile Include="Configuration\ICachingProviderConfiguration.cs" />
+    <Compile Include="Configuration\ICachingStrategyConfiguration.cs" />
+    <Compile Include="Configuration\IRepositoryConfiguration.cs" />
+    <Compile Include="Configuration\ISharpRepositoryConfiguration.cs" />
+    <Compile Include="Configuration\RepositoriesCollection.cs" />
+    <Compile Include="Configuration\RepositoriesSectionGroup.cs" />
+    <Compile Include="Configuration\RepositoryConfiguration.cs" />
+    <Compile Include="Configuration\RepositoryElement.cs" />
+    <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />
+    <Compile Include="Configuration\SharpRepositoryConfigurationAttribute.cs" />
+    <Compile Include="Configuration\SharpRepositorySection.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IAmInRepository.cs" />
+    <Compile Include="ConfigurationBasedRepository.cs" />
     <Compile Include="IRepositoryQueryable.cs" />
+    <Compile Include="RepositoryFactory.cs" />
     <Compile Include="RepositoryBase.BatchItem.cs" />
     <Compile Include="Specifications\AndAlsoSpecification.cs" />
     <Compile Include="Specifications\OrElseSpecification.cs" />
@@ -66,7 +94,6 @@
     <Compile Include="Transactions\BatchAction.cs" />
     <Compile Include="RepositoryBase.Batch.cs" />
     <Compile Include="Caching\StandardCachingStrategy.cs" />
-    <Compile Include="Caching\AppFabricCachingProvider.cs" />
     <Compile Include="Caching\ICachingStrategy.cs" />
     <Compile Include="Caching\InMemoryCachingProvider.cs" />
     <Compile Include="Caching\ICachingProvider.cs" />
@@ -81,7 +108,6 @@
     <Compile Include="FetchStrategies\IFetchStrategy.cs" />
     <Compile Include="Helpers\Md5Helper.cs" />
     <Compile Include="IRepository.cs" />
-    <Compile Include="Caching\MemcachedCachingProvider.cs" />
     <Compile Include="LinqRepositoryBase.cs" />
     <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

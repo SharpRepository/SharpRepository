@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using SharpRepository.Repository;
@@ -9,7 +10,7 @@ namespace SharpRepository.InMemoryRepository
 {
     public abstract class InMemoryRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private readonly IList<T> _items = new List<T>();
+        private readonly ConcurrentDictionary<TKey, T> _items = new ConcurrentDictionary<TKey, T>();
 
         internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {   
@@ -17,15 +18,18 @@ namespace SharpRepository.InMemoryRepository
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return CloneList(_items).AsQueryable();
+            return CloneDictionary(_items).AsQueryable();
         }
         
         protected override T GetQuery(TKey key)
         {
-            return BaseQuery().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+            T result;
+            _items.TryGetValue(key, out result);
+
+            return result;
         }
-        
-        private static IEnumerable<T> CloneList(IList<T> list)
+
+        private static IEnumerable<T> CloneDictionary(ConcurrentDictionary<TKey, T> list)
         {
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
@@ -35,12 +39,12 @@ namespace SharpRepository.InMemoryRepository
 
             var clonedList = new List<T>(list.Count);
 
-            foreach (T item in list)
+            foreach (var keyValuePair in list)
             {
                 var newItem = new T();
                 foreach (var propInfo in properties)
                 {
-                    propInfo.SetValue(newItem, propInfo.GetValue(item, null), null);
+                    propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
                 }
 
                 clonedList.Add(newItem);
@@ -53,13 +57,13 @@ namespace SharpRepository.InMemoryRepository
         {
             TKey id;
 
-            if (GetPrimaryKey(entity, out id) && object.Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
             }
 
-            _items.Add(entity);
+            _items[id] = entity;
         }
 
         protected override void DeleteItem(T entity)
@@ -67,11 +71,8 @@ namespace SharpRepository.InMemoryRepository
             TKey pkValue;
             GetPrimaryKey(entity, out pkValue);
 
-            var index = _items.ToList().FindIndex(x => MatchOnPrimaryKey(x, pkValue));
-            if (index >= 0)
-            {
-                _items.RemoveAt(index);
-            }
+            T tmp;
+            _items.TryRemove(pkValue, out tmp);
         }
 
         protected override void UpdateItem(T entity)
@@ -79,25 +80,8 @@ namespace SharpRepository.InMemoryRepository
             TKey pkValue;
             GetPrimaryKey(entity, out pkValue);
 
-            var index = _items.ToList().FindIndex(x => MatchOnPrimaryKey(x, pkValue));            
-            if (index >= 0)
-            {
-                _items[index] = entity;
-            }           
+            _items[pkValue] = entity;     
         }
-
-        // need to match on primary key instead of using Equals() since the objects are not the same and are a cloned copy
-        private bool MatchOnPrimaryKey(T item, TKey keyValue)
-        {
-            TKey value;
-            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
-        }
-
-        //protected override IEnumerable<T> GetAllQuery()
-        //{
-        //    var results = base.GetAllQuery();
-        //    return results;
-        //}
 
         protected override void SaveChanges()
         {
@@ -123,10 +107,7 @@ namespace SharpRepository.InMemoryRepository
 
             if (typeof(TKey) == typeof(Int32))
             {
-                TKey pkValue;
-
-                var last = _items.LastOrDefault() ?? new T();
-                GetPrimaryKey(last, out pkValue);
+                var pkValue = _items.Keys.LastOrDefault();
 
                 var nextInt = Convert.ToInt32(pkValue) + 1;
                 return (TKey)Convert.ChangeType(nextInt, typeof(TKey));

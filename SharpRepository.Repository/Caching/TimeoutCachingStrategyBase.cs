@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.Caching;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
@@ -7,109 +7,47 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository.Caching
 {
-    public abstract class TimeoutCachingStrategyBase<T, TKey> : ICachingStrategy<T, TKey> where T : class
+    public abstract class TimeoutCachingStrategyBase<T, TKey> : CachingStrategyBase<T, TKey> where T : class
     {
-        public ICachingProvider CachingProvider { get; set; }
-        public string CachePrefix { get; set; }
         public int TimeoutInSeconds { get; set;  }
 
-        private readonly string _typeFullName;
-
         internal TimeoutCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+            : base(cachingProvider)
         {
-            CachingProvider = cachingProvider ?? new InMemoryCachingProvider();
-            CachePrefix = "#Repo";
             TimeoutInSeconds = timeoutInSeconds;
-
-            _typeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
         }
 
-        public bool TryGetResult(TKey key, out T result)
-        {
-            return IsInCache(GetWriteThroughCacheKey(key), out result);
-        }
-
-        public void SaveGetResult(TKey key, T result)
-        {
-            SetCache(GetWriteThroughCacheKey(key), result);
-        }
-
-        public bool TryGetAllResult(IQueryOptions<T> queryOptions, out IEnumerable<T> result)
-        {
-            return IsInCache(GetAllCacheKey(queryOptions), out result);
-        }
-
-        public void SaveGetAllResult(IQueryOptions<T> queryOptions, IEnumerable<T> result)
-        {
-            SetCache(GetAllCacheKey(queryOptions), result);
-        }
-
-        public bool TryFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out IEnumerable<T> result)
-        {
-            return IsInCache(FindAllCacheKey(criteria, queryOptions), out result);
-        }
-
-        public void SaveFindAllResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, IEnumerable<T> result)
-        {
-            SetCache(FindAllCacheKey(criteria, queryOptions), result);
-        }
-
-        public bool TryFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T result)
-        {
-            return IsInCache(FindCacheKey(criteria, queryOptions), out result);
-        }
-
-        public void SaveFindResult(ISpecification<T> criteria, IQueryOptions<T> queryOptions, T result)
-        {
-            SetCache(FindCacheKey(criteria, queryOptions), result);
-        }
-
-        public void Add(TKey key, T result)
+        public override void Add(TKey key, T result)
         {
             // nothing to do
         }
 
-        public void Update(TKey key, T result)
+        public override void Update(TKey key, T result)
         {
             // nothing to do
         }
 
-        public void Delete(TKey key, T result)
+        public override void Delete(TKey key, T result)
         {
             // nothing to do
         }
 
-        public void Save()
+        public override void Save()
         {
             // nothing to do
         }
 
         // helpers
-
-        private bool IsInCache<TCacheItem>(string cacheKey, out TCacheItem result)
-        {
-            result = default(TCacheItem);
-
-            try
-            {
-                if (CachingProvider.Get(cacheKey, out result))
-                {
-                    return true;
-                }
-            }
-            catch (Exception)
-            {
-                // don't let caching errors cause problems for the Repository
-            }
-
-            return false;
-        }
-
-        private void SetCache<TCacheItem>(string cacheKey, TCacheItem result)
+        protected new void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
         {
             try
             {
                 CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
+
+                if (queryOptions is PagingOptions<T>)
+                {
+                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
+                }
             }
             catch (Exception)
             {
@@ -117,24 +55,19 @@ namespace SharpRepository.Repository.Caching
             }
         }
 
-        private string GetWriteThroughCacheKey(TKey key)
+        protected override string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, key);
+            return String.Format("{0}/{1}/{2}", CachePrefix, TypeFullName, Md5Helper.CalculateMd5("All::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
-        private string GetAllCacheKey(IQueryOptions<T> queryOptions)
+        protected override string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}", CachePrefix, _typeFullName, Md5Helper.CalculateMd5("All:" + queryOptions));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, TypeFullName, "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
-        private string FindAllCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        protected override string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "FindAll", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
-        }
-
-        private string FindCacheKey(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
-        {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, _typeFullName, "Find", Md5Helper.CalculateMd5(criteria + ":" + queryOptions));
+            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, TypeFullName, "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
     }
 }

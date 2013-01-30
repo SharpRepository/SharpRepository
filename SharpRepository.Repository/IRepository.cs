@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
@@ -10,7 +11,7 @@ namespace SharpRepository.Repository
     /// </summary>
     /// <typeparam name="T">The entity type that the repository acts on.</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
-    public interface IRepository<T, in TKey> : IRepositoryQueryable<T> where T : class
+    public interface IRepository<T, TKey> : IRepositoryQueryable<T> where T : class
     {
         /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
@@ -75,5 +76,17 @@ namespace SharpRepository.Repository
         /// </summary>
         /// <returns></returns>
         IBatch<T> BeginBatch();
+
+        ICachingStrategy<T, TKey> CachingStrategy { get; set; }
+
+        bool CachingEnabled { get; set; }
+    }
+
+    /// <summary>
+    /// Defaults to int as the Primary Key
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IRepository<T> : IRepository<T, int> where T : class
+    {
     }
 }

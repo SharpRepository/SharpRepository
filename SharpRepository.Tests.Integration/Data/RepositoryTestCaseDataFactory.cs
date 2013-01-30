@@ -8,7 +8,7 @@ using Raven.Client.Embedded;
 using SharpRepository.Db4oRepository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
-using SharpRepository.EfRepository;
+using SharpRepository.Ef5Repository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
@@ -31,12 +31,12 @@ namespace SharpRepository.Tests.Integration.Data
                     new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Ef))
+            if (includeTypes.Contains(RepositoryTypes.Ef5))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return
-                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+                    new TestCaseData(new Ef5Repository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
             if (includeTypes.Contains(RepositoryTypes.Dbo4))

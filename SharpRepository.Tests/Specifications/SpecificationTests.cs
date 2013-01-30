@@ -50,5 +50,30 @@ namespace SharpRepository.Tests.Specifications
             contact = new Contact() { ContactId = 2, Name = "nottest" };
             spec.IsSatisfiedBy(contact).ShouldBeFalse();
         }
+
+        [Test]
+        public void Specification_Predicate_May_Be_Updated_In_Constructor()
+        {
+            var spec = new ContactByNameMatchSpec("tes");
+                
+            var contact = new Contact() { ContactId = 1, Name = "tess" };
+            spec.IsSatisfiedBy(contact).ShouldBeTrue();
+
+            contact = new Contact() { ContactId = 2, Name = "test" };
+            spec.IsSatisfiedBy(contact).ShouldBeTrue();
+
+            contact = new Contact() { ContactId = 1, Name = "ben" };
+            spec.IsSatisfiedBy(contact).ShouldBeFalse();
+        }
     }
+
+    public class ContactByNameMatchSpec : Specification<Contact>
+    {
+        public ContactByNameMatchSpec(string name)
+            : base(null)
+        {
+            Predicate = p => p.Name.Contains(name);
+        }
+    }
+
 }

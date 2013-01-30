@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using NUnit.Framework;
-using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -15,7 +13,6 @@ namespace SharpRepository.Tests.Caching
     [TestFixture]
     public class StandardCachingWithPartitionStrategyTests : TestBase
     {
-        protected IRepository<Contact, int> Repository;
         protected ICachingStrategy<Contact, int> CachingStrategy;
             
         [SetUp]
@@ -41,7 +38,7 @@ namespace SharpRepository.Tests.Caching
         public void TryGetResult_First_Call_Should_Return_False()
         {
             Contact result;
-            CachingStrategy.TryGetResult(1, out result).ShouldEqual(false);
+            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(false);
             result.ShouldEqual(null);
         }
 
@@ -51,8 +48,8 @@ namespace SharpRepository.Tests.Caching
             Contact result;
             var contact = new Contact() {ContactId = 1, Name = "Test User"};
 
-            CachingStrategy.SaveGetResult(1, contact);
-            CachingStrategy.TryGetResult(1, out result).ShouldEqual(true);
+            CachingStrategy.SaveGetResult(1, null, contact);
+            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(true);
 
             result.ContactId.ShouldEqual(contact.ContactId);
             result.Name.ShouldEqual(contact.Name);
@@ -66,15 +63,15 @@ namespace SharpRepository.Tests.Caching
             Contact result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
 
-            CachingStrategy.SaveGetResult(1, contact);
-            CachingStrategy.TryGetResult(1, out result).ShouldEqual(false);
+            CachingStrategy.SaveGetResult(1, null, contact);
+            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(false);
         }
 
         [Test]
         public void TryGetAllResult_First_Call_Should_Return_False()
         {
             IEnumerable<Contact> result;
-            CachingStrategy.TryGetAllResult(null, out result).ShouldEqual(false);
+            CachingStrategy.TryGetAllResult(null, null, out result).ShouldEqual(false);
             result.ShouldEqual(null);
         }
 
@@ -84,8 +81,8 @@ namespace SharpRepository.Tests.Caching
             IEnumerable<Contact> result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
 
-            CachingStrategy.SaveGetAllResult(null, new [] { contact });
-            CachingStrategy.TryGetAllResult(null, out result).ShouldEqual(true);
+            CachingStrategy.SaveGetAllResult(null, null, new[] { contact });
+            CachingStrategy.TryGetAllResult(null, null, out result).ShouldEqual(true);
 
             result.Count().ShouldEqual(1);
         }
@@ -98,8 +95,8 @@ namespace SharpRepository.Tests.Caching
             IEnumerable<Contact> result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
 
-            CachingStrategy.SaveGetAllResult(null, new[] { contact });
-            CachingStrategy.TryGetAllResult(null, out result).ShouldEqual(false);
+            CachingStrategy.SaveGetAllResult(null, null, new[] { contact });
+            CachingStrategy.TryGetAllResult(null, null, out result).ShouldEqual(false);
         }
 
         [Test]
@@ -108,8 +105,8 @@ namespace SharpRepository.Tests.Caching
             IEnumerable<Contact> result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
 
-            CachingStrategy.SaveGetAllResult(new SortingOptions<Contact>("Name"), new[] { contact });
-            CachingStrategy.TryGetAllResult(null, out result).ShouldEqual(false);
+            CachingStrategy.SaveGetAllResult(new SortingOptions<Contact>("Name"), null, new[] { contact });
+            CachingStrategy.TryGetAllResult(null, null, out result).ShouldEqual(false);
         }
 
         [Test]
@@ -119,8 +116,8 @@ namespace SharpRepository.Tests.Caching
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
             var sorting = new SortingOptions<Contact>("Name");
 
-            CachingStrategy.SaveGetAllResult(sorting, new[] { contact });
-            CachingStrategy.TryGetAllResult(sorting, out result).ShouldEqual(true);
+            CachingStrategy.SaveGetAllResult(sorting, null, new[] { contact });
+            CachingStrategy.TryGetAllResult(sorting, null, out result).ShouldEqual(true);
 
             result.Count().ShouldEqual(1);
         }
@@ -132,7 +129,7 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = null;
 
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(false);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(false);
             result.ShouldEqual(null);
         }
 
@@ -144,13 +141,13 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = null;
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, new[] { contact });
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, new[] { contact });
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
             result.Count().ShouldEqual(1);
 
             queryOptions = new SortingOptions<Contact>("Name");
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, new[] { contact });
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, new[] { contact });
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
             result.Count().ShouldEqual(1);
         }
 
@@ -162,12 +159,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name");
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, new[] { contact });
-            CachingStrategy.TryFindAllResult(specification, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, new[] { contact });
+            CachingStrategy.TryFindAllResult(specification, null, null, out result).ShouldEqual(false);
 
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, new[] { contact });
-            CachingStrategy.TryFindAllResult(specification, new SortingOptions<Contact>("Name", true), out result).ShouldEqual(false);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, new[] { contact });
+            CachingStrategy.TryFindAllResult(specification, new SortingOptions<Contact>("Name", true), null, out result).ShouldEqual(false);
         }
 
         [Test]
@@ -178,8 +175,8 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name");
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, new[] { contact });
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, new[] { contact });
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             result.Count().ShouldEqual(1);
         }
@@ -191,7 +188,7 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = null;
 
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(false);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(false);
             result.ShouldEqual(null);
         }
 
@@ -203,12 +200,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = null;
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact );
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             queryOptions = new SortingOptions<Contact>("Name");
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact );
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -219,12 +216,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name");
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact );
-            CachingStrategy.TryFindResult(specification, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, null, null, out result).ShouldEqual(false);
 
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact );
-            CachingStrategy.TryFindResult(specification, new SortingOptions<Contact>("Name", true), out result).ShouldEqual(false);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, new SortingOptions<Contact>("Name", true), null, out result).ShouldEqual(false);
         }
 
         [Test]
@@ -235,8 +232,8 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name");
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact );
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         // Now Parition specific ones
@@ -249,16 +246,16 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() {ContactId = 2, Name = "Test User 2", ContactTypeId = 1};
             CachingStrategy.Add(2, contact2);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -269,12 +266,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Add(2, contact2);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -285,17 +282,17 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             contact.Name = "Test User - EDITED";
             CachingStrategy.Update(1, contact);
 
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -306,12 +303,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Update(2, contact2);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -322,16 +319,16 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             CachingStrategy.Delete(1, contact);
 
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -342,12 +339,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindResult(specification, queryOptions, contact);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindResult(specification, queryOptions, null, contact);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Delete(2, contact2);
-            CachingStrategy.TryFindResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
 
@@ -359,16 +356,16 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 1 };
             CachingStrategy.Add(2, contact2);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -379,12 +376,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Add(2, contact2);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -395,17 +392,17 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             contacts[0].Name = "Test User - EDITED";
             CachingStrategy.Update(1, contacts[0]);
 
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -416,12 +413,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Update(2, contact2);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -432,16 +429,16 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             CachingStrategy.Delete(1, contacts[0]);
 
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(false);
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
 
             // after saving the new results in the next generation then it should find it
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
 
         [Test]
@@ -452,12 +449,12 @@ namespace SharpRepository.Tests.Caching
             var specification = new Specification<Contact>(x => x.ContactTypeId == 1);
             IQueryOptions<Contact> queryOptions = new SortingOptions<Contact>("Name", true);
 
-            CachingStrategy.SaveFindAllResult(specification, queryOptions, contacts);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.SaveFindAllResult(specification, queryOptions, null, contacts);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
 
             var contact2 = new Contact() { ContactId = 2, Name = "Test User 2", ContactTypeId = 2 };
             CachingStrategy.Delete(2, contact2);
-            CachingStrategy.TryFindAllResult(specification, queryOptions, out result).ShouldEqual(true);
+            CachingStrategy.TryFindAllResult(specification, queryOptions, null, out result).ShouldEqual(true);
         }
     }
 }

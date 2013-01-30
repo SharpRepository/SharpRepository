@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
 
@@ -18,65 +19,79 @@ namespace SharpRepository.Repository.Queries
 
         public QueryManager(ICachingStrategy<T, TKey> cachingStrategy)
         {
+            CacheUsed = false;
+            CacheEnabled = true;
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
         }
 
-        public T ExecuteGet(Func<T> query, TKey key)
+        public bool CacheUsed { get; private set; }
+
+        public bool CacheEnabled { get; set; }
+
+        public TResult ExecuteGet<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, TKey key)
         {
-            T result;
-            if (_cachingStrategy.TryGetResult(key, out result))
+            TResult result;
+            if (CacheEnabled && _cachingStrategy.TryGetResult(key, selector, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveGetResult(key, result);
+            _cachingStrategy.SaveGetResult(key, selector, result);
 
             return result;
         }
 
-        public IEnumerable<T> ExecuteGetAll(Func<IEnumerable<T>> query, IQueryOptions<T> queryOptions)
+        public IEnumerable<TResult> ExecuteGetAll<TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
-            IEnumerable<T> result;
-            if (_cachingStrategy.TryGetAllResult(queryOptions, out result))
+            IEnumerable<TResult> result;
+            if (CacheEnabled && _cachingStrategy.TryGetAllResult(queryOptions, selector, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveGetAllResult(queryOptions, result);
+            _cachingStrategy.SaveGetAllResult(queryOptions, selector, result);
 
             return result;
         }
 
-        public IEnumerable<T> ExecuteFindAll(Func<IEnumerable<T>> query, ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        public IEnumerable<TResult> ExecuteFindAll<TResult>(Func<IEnumerable<TResult>> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
-            IEnumerable<T> result;
-            if (_cachingStrategy.TryFindAllResult(criteria, queryOptions, out result))
+            IEnumerable<TResult> result;
+            if (CacheEnabled && _cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveFindAllResult(criteria, queryOptions, result);
+            _cachingStrategy.SaveFindAllResult(criteria, queryOptions, selector, result);
 
             return result;
         }
 
-        public T ExecuteFind(Func<T> query, ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        public TResult ExecuteFind<TResult>(Func<TResult> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
-            T result;
-            if (_cachingStrategy.TryFindResult(criteria, queryOptions, out result))
+            TResult result;
+            if (CacheEnabled && _cachingStrategy.TryFindResult(criteria, queryOptions, selector, out result))
             {
+                CacheUsed = true;
                 return result;
             }
 
+            CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveFindResult(criteria, queryOptions, result);
+            _cachingStrategy.SaveFindResult(criteria, queryOptions, selector, result);
 
             return result;
         }

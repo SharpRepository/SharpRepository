@@ -42,28 +42,28 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-        protected override IEnumerable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery()
         {
-            return BaseQuery().ToList();
+            return BaseQuery();
         }
 
-        protected override IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
         {
             if (queryOptions == null)
                 return GetAllQuery();
 
             var query = BaseQuery();
 
-            return queryOptions.Apply(query).ToList();
+            return queryOptions.Apply(query);
         }
 
-        protected override IEnumerable<T> FindAllQuery(ISpecification<T> criteria)
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria)
         {
             var query = BaseQuery(criteria.FetchStrategy);
-            return criteria.SatisfyingEntitiesFrom(query).ToList();
+            return criteria.SatisfyingEntitiesFrom(query);
         }
 
-        protected override IEnumerable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
             if (queryOptions == null)
                 return FindAllQuery(criteria);
@@ -72,7 +72,7 @@ namespace SharpRepository.Repository
             
             query = criteria.SatisfyingEntitiesFrom(query);
 
-            return queryOptions.Apply(query).ToList();
+            return queryOptions.Apply(query);
         }
 
         public override IEnumerator<T> GetEnumerator()
@@ -86,7 +86,7 @@ namespace SharpRepository.Repository
             var outerQuery = BaseQuery();
 
             var innerType = innerRepository.GetType();
-            var outerType = this.GetType();
+            var outerType = GetType();
 
             // if these are 2 different Repository types then let's bring down each query into memory so that they can be joined
             // if they are the same type then they will use the native IQueryable and take advantage of the back-end side join if possible

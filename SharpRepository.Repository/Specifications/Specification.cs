@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Caching.Hash;
 using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.Repository.Specifications
@@ -31,7 +32,7 @@ namespace SharpRepository.Repository.Specifications
 
         #region ISpecification<T> Members
 
-        public Expression<Func<T, bool>> Predicate { get; internal set; }
+        public Expression<Func<T, bool>> Predicate { get; set; }
 
         public T SatisfyingEntityFrom(IQueryable<T> query)
         {
@@ -126,7 +127,7 @@ namespace SharpRepository.Repository.Specifications
             return String.Format("Specification Type: {0}\nEntity Type: {1}\nPredicate: {2}\nFetchStrategy Type: {3}",
                                  GetType().Name,
                                  (typeof (T)).Name,
-                                 Predicate,
+                                 HashGenerator.FromPredicate(Predicate),
                                  FetchStrategy.GetType().Name
                 );
         }

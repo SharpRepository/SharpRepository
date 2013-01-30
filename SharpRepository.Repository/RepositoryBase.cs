@@ -15,10 +15,10 @@ namespace SharpRepository.Repository
     public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey> where T : class
     {
         // the caching strategy used
-        private readonly ICachingStrategy<T, TKey> _cachingStrategy;
+        private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        private readonly QueryManager<T, TKey> _queryManager;
+        private QueryManager<T, TKey> _queryManager;
 
         // just the type name, used to find the primary key if it is [TypeName]Id
         private readonly string _typeName;
@@ -27,6 +27,11 @@ namespace SharpRepository.Repository
             get { return _typeName; }
         }
         
+        public bool CacheUsed
+        {
+            get { return _queryManager.CacheUsed; }
+        }
+
         public IBatch<T> BeginBatch()
         {
             // Return the privately scoped batch via the publicly available interface. 
@@ -44,16 +49,34 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
-            _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
             _typeName = typeof (T).Name;
-            _queryManager = new QueryManager<T, TKey>(_cachingStrategy);
+        }
+
+        public ICachingStrategy<T, TKey> CachingStrategy 
+        {
+            get { return _cachingStrategy; } 
+            set
+            {
+                _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
+
+                // make sure we keep the curent caching enabled status
+                var cachingEnabled = _queryManager == null || _queryManager.CacheEnabled;
+                _queryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+            }
+        } 
+
+        public bool CachingEnabled
+        {
+            get { return _queryManager.CacheEnabled; }
+            set { _queryManager.CacheEnabled = value; }
         }
 
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IEnumerable<T> GetAllQuery();
-        protected abstract IEnumerable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery();
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
 
         public IEnumerable<T> GetAll()
         {
@@ -63,7 +86,8 @@ namespace SharpRepository.Repository
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
             return _queryManager.ExecuteGetAll(
-                () => queryOptions == null ? GetAllQuery().ToList() : GetAllQuery(queryOptions).ToList(),
+                () => GetAllQuery(queryOptions).ToList(),
+                null,
                 queryOptions
                 );
         }
@@ -72,9 +96,11 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return GetAll(queryOptions)
-                .AsQueryable()
-                .Select(selector);
+            return _queryManager.ExecuteGetAll(
+                () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
+                selector,
+                queryOptions
+                );
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -88,6 +114,7 @@ namespace SharpRepository.Repository
         {
             return _queryManager.ExecuteGet(
                 () => GetQuery(key),
+                null,
                 key
                 );
         }
@@ -96,25 +123,33 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var result = Get(key);
-            if (result == null)
-                return default(TResult);
+            return _queryManager.ExecuteGet(
+                () =>
+                {
+                    var result = GetQuery(key);
+                    if (result == null)
+                        return default(TResult);
 
-            var results = new [] { result };
-            return results.AsQueryable().Select(selector).FirstOrDefault();
+                    var results = new[] { result };
+                    return results.AsQueryable().Select(selector).First();
+                },
+                selector,
+                key
+                );
         }
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria);
-        protected abstract IEnumerable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria);
+        protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
 
         public IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
             return _queryManager.ExecuteFindAll(
-                () => queryOptions == null ? FindAllQuery(criteria).ToList() : FindAllQuery(criteria, queryOptions).ToList(),
+                () => FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
+                null,
                 queryOptions
                 );
         }
@@ -123,7 +158,12 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return FindAll(criteria, queryOptions).AsQueryable().Select(selector).ToList();
+            return _queryManager.ExecuteFindAll(
+                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                criteria,
+                selector,
+                queryOptions
+                );
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
@@ -150,8 +190,9 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
 
             return _queryManager.ExecuteFind(
-                () => queryOptions == null ? FindQuery(criteria) : FindQuery(criteria, queryOptions),
+                () => FindQuery(criteria, queryOptions),
                 criteria,
+                null,
                 null
                 );
         }
@@ -161,12 +202,20 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var result = Find(criteria, queryOptions);
-            if (result == null)
-                return default(TResult);
+            return _queryManager.ExecuteFind(
+                () =>
+                    {
+                        var result = FindQuery(criteria, queryOptions);
+                        if (result == null)
+                            return default(TResult);
 
-            var results = new [] { result};
-            return results.AsQueryable().Select(selector).First();
+                        var results = new[] { result };
+                        return results.AsQueryable().Select(selector).First();
+                    },
+                criteria,
+                selector,
+                null
+                );
         }
 
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)

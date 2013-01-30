@@ -60,6 +60,27 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
+        public void GetAll_With_Anonymous_Selector_Should_Return_Every_Item(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i };
+                repository.Add(contact);
+            }
+
+            var results = repository.GetAll(c => new {c.Name, c.Title});
+
+            var total = 0;
+            foreach (var result in results)
+            {
+                result.Name.ShouldStartWith("Test User");
+                total++;
+            }
+
+            total.ShouldEqual(5);
+        }
+
+        [ExecuteForAllRepositories]
         public void GetAll_With_Selector_Should_Return_Every_Items_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;
