@@ -98,22 +98,26 @@ namespace SharpRepository.Repository.Queries
 
         public void OnSaveExecuted()
         {
-            _cachingStrategy.Save();
+            if (CacheEnabled)
+                _cachingStrategy.Save();
         }
 
         public void OnItemDeleted(TKey key, T item)
         {
-            _cachingStrategy.Delete(key, item);
+            if (CacheEnabled)
+                _cachingStrategy.Delete(key, item);
         }
 
         public void OnItemAdded(TKey key, T item)
         {
-            _cachingStrategy.Add(key, item);
+            if (CacheEnabled)
+                _cachingStrategy.Add(key, item);
         }
 
         public void OnItemUpdated(TKey key, T item)
         {
-            _cachingStrategy.Update(key, item);
+            if (CacheEnabled)
+                _cachingStrategy.Update(key, item);
         }
     }
 }
