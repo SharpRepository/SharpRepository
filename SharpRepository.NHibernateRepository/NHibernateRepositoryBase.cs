@@ -49,7 +49,6 @@ namespace SharpRepository.NHibernateRepository
 //            {
 //                Session.Save(entity);
 //
-//                // if you pass validation:
 //                tx.Commit();
 //            }
             Session.Save(entity);
@@ -84,21 +83,6 @@ namespace SharpRepository.NHibernateRepository
             return Session.Get<T>(key);
         }
 
-        // TODO: use logic like this to override GetPrimaryKey
-        //  below is using the older EF stuff and it doesn't translate exactly
-        //private EntityKey GetEntityKey(object keyValue)
-        //{
-        //    var entitySetName = GetEntityName();
-        //    var keyPropertyName = _dbSet.EntitySet.ElementType.KeyMembers[0].ToString();
-        //    return new EntityKey(entitySetName, new[] { new EntityKeyMember(keyPropertyName, keyValue) });
-
-        //}
-
-        //private string GetEntityName()
-        //{
-        //    return string.Format("{0}.{1}", Context.DefaultContainerName, QueryBase.EntitySet.Name);
-        //}
-
         public override void Dispose()
         {
             Dispose(true);
@@ -131,7 +115,7 @@ namespace SharpRepository.NHibernateRepository
                 return (TKey)Convert.ChangeType(Guid.NewGuid().ToString(), typeof(TKey));
             }
 
-            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID, Int32 and String.");
+            throw new InvalidOperationException("Primary key could not be generated. This only works for GUID and String.");
         }
     }
 }
