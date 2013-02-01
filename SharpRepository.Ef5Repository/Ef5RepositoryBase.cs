@@ -15,13 +15,19 @@ namespace SharpRepository.Ef5Repository
 
         internal Ef5RepositoryBase(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
-            Initialize(dbContext);
+            Initialize(dbContext, cachingStrategy != null);
         }
 
-        private void Initialize(DbContext dbContext)
+        private void Initialize(DbContext dbContext, bool hasCaching)
         {
             Context = dbContext;
             DbSet = Context.Set<T>();
+
+            // this could solve issue #50 where DynamicProxy objects mess up the cache
+//            if (hasCaching)
+//            {
+//                Context.Configuration.ProxyCreationEnabled = false;
+//            }
         }
 
         protected override void AddItem(T entity)
