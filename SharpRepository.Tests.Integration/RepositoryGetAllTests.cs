@@ -80,7 +80,10 @@ namespace SharpRepository.Tests.Integration
             total.ShouldEqual(5);
         }
 
-        [ExecuteForAllRepositories]
+        // For some unkown reason ReSharper (at least I believe it is ReSharper) is turning the string below red and saying it is an unrecognized symbol  when it is a single string, but offers to Split string and that makes the red highlight and error go away
+        //  even though it will compile and run when it is marked as a red error
+        [ExecuteForAllRepositoriesExcept("NHibnernate " + "Linq does not support Pagination with selector.  It throws an Unsupported exception when calling Select() on the IQueryable returned by calling query.Take().Skip()", 
+            RepositoryTypes.NHibernate)]
         public void GetAll_With_Selector_Should_Return_Every_Items_With_Paging(IRepository<Contact, string> repository)
         {
             const int resultingPage = 2;

@@ -383,7 +383,15 @@ namespace SharpRepository.Repository
         {
             var propInfo = GetPrimaryKeyPropertyInfo();
 
-            var lambda = Linq.DynamicExpression.ParseLambda<T,bool>(String.Format("{0} == {1}", propInfo.Name, key));
+            var quote = "\"";
+            var keyType = typeof (TKey);
+
+            if (keyType ==  typeof (int) || keyType == typeof (long) || keyType == typeof (double) || keyType == typeof (decimal) || keyType == typeof (short))
+            {
+                quote = "";
+            }
+
+            var lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {2}{1}{2}", propInfo.Name, key, quote));
 
             return new Specification<T>(lambda);
         }

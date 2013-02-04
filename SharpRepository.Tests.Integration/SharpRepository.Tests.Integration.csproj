@@ -152,6 +152,7 @@
     <Compile Include="Spikes\NHibernateSpikes.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
+    <Compile Include="TestAttributes\ExecuteForAllRepositoriesExceptAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
     <Compile Include="RepositoryAddTests.cs" />

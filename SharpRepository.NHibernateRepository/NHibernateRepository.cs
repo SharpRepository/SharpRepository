@@ -21,6 +21,17 @@ namespace SharpRepository.NHibernateRepository
         {
             if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref=" NHibernateRepository&lt;T, TKey&gt;"/> class.
+        /// </summary>
+        /// <param name="session">NHibernate session.</param>
+        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
+        public NHibernateRepository(ISession session, ICachingStrategy<T, TKey> cachingStrategy = null)
+            : base(session, cachingStrategy)
+        {
+            if (session == null) throw new ArgumentNullException("session");
+        }
     }
 
     /// <summary>
@@ -39,5 +50,20 @@ namespace SharpRepository.NHibernateRepository
         {
             if (sessionFactory == null) throw new ArgumentNullException("sessionFactory");
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref=" NHibernateRepository&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="session">The Nibernate Session.</param>
+        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
+        public NHibernateRepository(ISession session, ICachingStrategy<T, int> cachingStrategy = null)
+            : base(session, cachingStrategy)
+        {
+            if (session == null) throw new ArgumentNullException("session");
+        }
     }
+
+    // reference for compound key in HNibernate when we get there
+    // https://groups.google.com/forum/?fromgroups=#!topic/fluent-nhibernate/cyh4T0O3pPM
+    // http://stackoverflow.com/questions/2274969/using-nhibernates-isession-get-w-a-composite-key
 }

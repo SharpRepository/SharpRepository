@@ -11,11 +11,23 @@ namespace SharpRepository.NHibernateRepository
 {
     public class NHibernateRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        protected ISessionFactory SessionFactory { get; private set; }
+        protected ISessionFactory SessionFactory { get; private set;  }
+        protected ISession Session { get; private set; }
+        protected ITransaction Transaction { get; private set; }
+        private readonly bool _existingSession = false;
 
         internal NHibernateRepositoryBase(ISessionFactory sessionFactory, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
             SessionFactory = sessionFactory;
+            Session = SessionFactory.OpenSession();
+            Transaction = Session.BeginTransaction();
+        }
+
+        internal NHibernateRepositoryBase(ISession session, ICachingStrategy<T, TKey> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
+            Session = session;
+            _existingSession = true;
         }
 
         protected override void AddItem(T entity)
@@ -31,43 +43,28 @@ namespace SharpRepository.NHibernateRepository
                 }
             }
 
-            using (var session = SessionFactory.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
-                session.Save(entity);
-                transaction.Commit();
-            }
+            Session.Save(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            using (var session = SessionFactory.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
-                session.Delete(entity);
-                transaction.Commit();
-            }
+            Session.Delete(entity);
         }
 
         protected override void UpdateItem(T entity)
         {
-            using (var session = SessionFactory.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
-                session.Update(entity);
-                transaction.Commit();
-            }
+            Session.Update(entity);
         }
 
         protected override void SaveChanges()
         {
-            // TODO: is anything needed here
+            // TODO: is this the right thing to have here?  I think it is needed for the Batching to work properly
+            Transaction.Commit(); // errors out when you call Add twice with the same repository because the SaveChanges is called each time
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy)
         {
-            var session = SessionFactory.OpenSession();
-            var query = session.Query<T>();
+            var query = Session.Query<T>();
             return query;
             //return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.(path));
         }
@@ -75,10 +72,7 @@ namespace SharpRepository.NHibernateRepository
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.
         protected override T GetQuery(TKey key)
         {
-            using (var session = SessionFactory.OpenSession())
-            {
-                return session.Get<T>(key);
-            }
+            return Session.Get<T>(key);
         }
 
         public override void Dispose()
@@ -89,8 +83,25 @@ namespace SharpRepository.NHibernateRepository
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposing) return;
+            if (!disposing || _existingSession) return; // don't close out sessions that were passed in and managed by the client
 
+            if (Transaction != null && Transaction.IsActive)
+            {
+                if (!Transaction.WasCommitted && !Transaction.WasRolledBack)
+                {
+                    Transaction.Commit();
+                }
+                
+                Transaction.Dispose();
+                Transaction = null;
+            }
+
+            if (Session != null)
+            {
+                Session.Close();
+                Session.Dispose();
+                Session = null;
+            }
         }
 
         private static TKey GeneratePrimaryKey()
