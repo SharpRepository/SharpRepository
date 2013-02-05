@@ -38,6 +38,9 @@
   <ItemGroup>
     <Compile Include="CacheRepositoryBase.cs" />
     <Compile Include="CacheRepository.cs" />
+    <Compile Include="IAmInCacheRepository.cs" />
+    <Compile Include="CacheConfigRepositoryFactory.cs" />
+    <Compile Include="CacheRepositoryConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
