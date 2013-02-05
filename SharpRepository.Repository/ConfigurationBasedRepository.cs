@@ -170,5 +170,10 @@ namespace SharpRepository.Repository
             get { return Repository.CachingEnabled; }
             set { Repository.CachingEnabled = value; }
         }
+
+        public bool CacheUsed
+        {
+            get { return Repository.CacheUsed; }
+        }
     }
 }
