@@ -20,7 +20,7 @@ namespace SharpRepository.MongoDbRepository
 
         public static bool ServerIsRunning(string connectionString)
         {
-            return ServerIsRunning(MongoServer.Create(connectionString));
+            return ServerIsRunning(new MongoClient(connectionString).GetServer());
         }
 
         public static string DatabaseName(string connectionString)
@@ -30,8 +30,8 @@ namespace SharpRepository.MongoDbRepository
 
         public static void DropDatabase(string connectionString)
         {
-            MongoServer server = MongoServer.Create(connectionString);
-            string db = DatabaseName(connectionString);
+            var server = new MongoClient(connectionString).GetServer();
+            var db = DatabaseName(connectionString);
             server.DropDatabase(db);
         }
     }

@@ -25,7 +25,7 @@ namespace SharpRepository.MongoDbRepository
             : base(cachingStrategy)
         {
             _databaseName = MongoUrl.Create(connectionString).DatabaseName;
-            Initialize(MongoServer.Create(connectionString));
+            Initialize(new MongoClient(connectionString).GetServer());
         }
 
         internal MongoDbRepositoryBase(MongoServer mongoServer, ICachingStrategy<T, TKey> cachingStrategy = null)
@@ -41,7 +41,7 @@ namespace SharpRepository.MongoDbRepository
 
         private void Initialize(MongoServer mongoServer = null)
         {
-            _server = mongoServer ?? MongoServer.Create("mongodb://localhost");
+            _server = mongoServer ?? new MongoClient("mongodb://localhost").GetServer();
             _database = _server.GetDatabase(DatabaseName);
         }
 

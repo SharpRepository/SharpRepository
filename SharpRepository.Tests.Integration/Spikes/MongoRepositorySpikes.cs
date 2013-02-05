@@ -42,16 +42,16 @@ namespace SharpRepository.Tests.Integration.Spikes
             {
                 AssertIgnores.MongoServerIsNotRunning();
             }
-            
-            MongoServer server = MongoServer.Create(connectionString);
+
+            var server = new MongoClient(connectionString).GetServer();
             var databaseNames = server.GetDatabaseNames();
             foreach (var db in databaseNames)
             {
                 server.DropDatabase(db);    
             }
             
-            MongoDatabase database = server.GetDatabase("Order");
-            MongoCollection<Order> orders = database.GetCollection<Order>("Order");
+            var database = server.GetDatabase("Order");
+            var orders = database.GetCollection<Order>("Order");
             
             Console.WriteLine("* CREATE *");
 
