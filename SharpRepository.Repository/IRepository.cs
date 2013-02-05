@@ -80,6 +80,8 @@ namespace SharpRepository.Repository
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
 
         bool CachingEnabled { get; set; }
+
+        bool CacheUsed { get; }
     }
 
     /// <summary>
