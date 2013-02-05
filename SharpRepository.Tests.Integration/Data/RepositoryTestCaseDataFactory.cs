@@ -12,6 +12,8 @@ using SharpRepository.Ef5Repository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
+using SharpRepository.CacheRepository;
+
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -64,6 +66,11 @@ namespace SharpRepository.Tests.Integration.Data
                                             Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
                                         };
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
+            }
+
+            if (includeTypes.Contains(RepositoryTypes.Cache))
+            {
+                yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
             }
         }
     }
