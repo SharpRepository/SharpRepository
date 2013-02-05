@@ -51,6 +51,7 @@ namespace SharpRepository.Repository.Queries
         {
             return String.Format("PagingOptions<{0},{1}>\nPageSize: {2}\nPageNumber: {3}\nSort Expression: {4}\nIsDescending: {5}",
                 (typeof(T)).Name,
+                (typeof(TSortKey)).Name,
                 PageSize,
                 PageNumber,
                 SortExpression == null ? "null" : SortExpression.ToString(),
