@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
@@ -65,6 +66,19 @@ namespace SharpRepository.Tests.Integration
             
             var added = repository.GetAll();
             added.Count().ShouldEqual(3);
+        }
+
+        [ExecuteForAllRepositories]
+        public void Using_TransactionScope_WIth_No_Commit_Should_Not_Add(IRepository<Contact, string> repository)
+        {
+            using (var trans = new TransactionScope())
+            {
+                repository.Add(new Contact {Name = "Contact 1"});
+
+                //trans.Complete();
+            }
+
+            repository.GetAll().Count().ShouldEqual(0);
         }
     }
 }
