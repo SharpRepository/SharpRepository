@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
@@ -65,6 +65,34 @@ namespace SharpRepository.Tests.Integration
             
             var added = repository.GetAll();
             added.Count().ShouldEqual(3);
+        }
+
+        [ExecuteForRepositories(RepositoryTypes.Ef5)]
+        public void Using_TransactionScope_Without_Complete_Should_Not_Add(IRepository<Contact, string> repository)
+        {
+            repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
+
+            using (var trans = new TransactionScope())
+            {
+                repository.Add(new Contact {Name = "Contact 1"});
+            }
+
+            repository.GetAll().Count().ShouldEqual(0);
+        }
+
+        [ExecuteForRepositories(RepositoryTypes.Ef5)]
+        public void Using_TransactionScope_With_Complete_Should_Add(IRepository<Contact, string> repository)
+        {
+            repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
+
+            using (var trans = new TransactionScope())
+            {
+                repository.Add(new Contact { Name = "Contact 1" });
+
+                trans.Complete();
+            }
+
+            repository.GetAll().Count().ShouldEqual(1);
         }
     }
 }

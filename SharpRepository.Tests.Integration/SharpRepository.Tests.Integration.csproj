@@ -112,6 +112,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -134,6 +135,7 @@
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
+    <Compile Include="TestAttributes\ExecuteForAllRepositoriesExcept.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
     <Compile Include="RepositoryAddTests.cs" />
     <Compile Include="RepositoryDeleteTests.cs" />
