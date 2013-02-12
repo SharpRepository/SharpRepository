@@ -71,6 +71,7 @@ namespace SharpRepository.Tests.Integration
         [ExecuteForAllRepositories]
         public void Using_TransactionScope_WIth_No_Commit_Should_Not_Add(IRepository<Contact, string> repository)
         {
+            // ref: http://www.codeproject.com/Articles/31270/A-Transactional-Repository-Implementation-in-NET
             using (var trans = new TransactionScope())
             {
                 repository.Add(new Contact {Name = "Contact 1"});
