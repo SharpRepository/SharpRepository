@@ -11,25 +11,32 @@ namespace SharpRepository.Repository.Specifications
     /// <typeparam name="T"></typeparam>
     public abstract class CompositeSpecification<T> : ISpecification<T>
     {
-        protected readonly Specification<T> LeftSide;
-        protected readonly Specification<T> RightSide;
-
-        protected CompositeSpecification(Specification<T> leftSide, Specification<T> rightSide)
+        protected CompositeSpecification(Expression<Func<T, bool>> predicate)
         {
-            LeftSide = leftSide;
-            RightSide = rightSide;
             FetchStrategy = new GenericFetchStrategy<T>();
+            Predicate = predicate;
         }
 
         #region ISpecification<T> Members
 
-        public abstract Expression<Func<T, bool>> Predicate { get; }
+        public Expression<Func<T, bool>> Predicate { get; set; }
 
-        public abstract T SatisfyingEntityFrom(IQueryable<T> query);
+        public T SatisfyingEntityFrom(IQueryable<T> query)
+        {
+            return SatisfyingEntitiesFrom(query).FirstOrDefault();
+        }
 
-        public abstract IQueryable<T> SatisfyingEntitiesFrom(IQueryable<T> query);
+        public IQueryable<T> SatisfyingEntitiesFrom(IQueryable<T> query)
+        {
+            return Predicate == null ? query : query.Where(Predicate);
+        }
 
-        public abstract bool IsSatisfiedBy(T entity);
+        public bool IsSatisfiedBy(T entity)
+        {
+            if (Predicate == null) return true;
+
+            return new[] { entity }.AsQueryable().Any(Predicate);
+        }
 
         public IFetchStrategy<T> FetchStrategy { get; set; }
 

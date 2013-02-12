@@ -24,6 +24,11 @@ namespace SharpRepository.Repository.Specifications
     /// <typeparam name="T"></typeparam>
     public class Specification<T> : ISpecification<T>
     {
+        public Specification() : this(null)
+        {
+            // null Predicate means it matches everything
+        }
+
         public Specification(Expression<Func<T, bool>> predicate)
         {
             Predicate = predicate;
@@ -36,16 +41,18 @@ namespace SharpRepository.Repository.Specifications
 
         public T SatisfyingEntityFrom(IQueryable<T> query)
         {
-            return query.Where(Predicate).FirstOrDefault();
+            return SatisfyingEntitiesFrom(query).FirstOrDefault();
         }
 
         public IQueryable<T> SatisfyingEntitiesFrom(IQueryable<T> query)
         {
-            return query.Where(Predicate);
+            return Predicate == null ? query :  query.Where(Predicate);
         }
 
         public bool IsSatisfiedBy(T entity)
         {
+            if (Predicate == null) return true;
+
             return new[] {entity}.AsQueryable().Any(Predicate);
         }
 
@@ -53,67 +60,67 @@ namespace SharpRepository.Repository.Specifications
 
         #endregion
 
-        public Specification<T> And(Specification<T> specification)
+        public ISpecification<T> And(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.And(specification.Predicate));
         }
 
-        public Specification<T> And(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> And(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.And(predicate));
         }
 
-        public Specification<T> AndAlso(Specification<T> specification)
+        public ISpecification<T> AndAlso(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.AndAlso(specification.Predicate));
         }
 
-        public Specification<T> AndAlso(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> AndAlso(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.AndAlso(predicate));
         }
 
-        public Specification<T> Not()
+        public ISpecification<T> Not()
         {
             return new Specification<T>(Predicate.Not());
         }
 
-        public Specification<T> AndNot(Specification<T> specification)
+        public ISpecification<T> AndNot(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.AndNot(specification.Predicate));
         }
 
-        public Specification<T> AndNot(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> AndNot(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.AndNot(predicate));
         }
 
-        public Specification<T> OrNot(Specification<T> specification)
+        public ISpecification<T> OrNot(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.OrNot(specification.Predicate));
         }
 
-        public Specification<T> OrNot(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> OrNot(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.OrNot(predicate));
         }
 
-        public Specification<T> Or(Specification<T> specification)
+        public ISpecification<T> Or(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.Or(specification.Predicate));
         }
 
-        public Specification<T> Or(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> Or(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.Or(predicate));
         }
 
-        public Specification<T> OrElse(Specification<T> specification)
+        public ISpecification<T> OrElse(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.OrElse(specification.Predicate));
         }
 
-        public Specification<T> OrElse(Expression<Func<T, bool>> predicate)
+        public ISpecification<T> OrElse(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.OrElse(predicate));
         }
