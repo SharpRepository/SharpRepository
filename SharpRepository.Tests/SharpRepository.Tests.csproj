@@ -88,6 +88,7 @@
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
+    <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />
     <Compile Include="QueryOptions\PagingOptionsTests.cs" />
     <Compile Include="QueryOptions\SortingOptionsTests.cs" />
     <Compile Include="ReflectionExtensions.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
     <Compile Include="TestObjects\TestObjectEntities.cs" />

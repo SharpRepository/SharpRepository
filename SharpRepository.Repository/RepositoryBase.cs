@@ -397,7 +397,7 @@ namespace SharpRepository.Repository
             var type = typeof(T);
             var keyType = typeof(TKey);
 
-            return type.GetProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>() && x.GetType() == keyType)
+            return type.GetProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>() && x.PropertyType == keyType)
                    ?? GetPropertyCaseInsensitive(type, "Id", keyType)
                    ?? GetPropertyCaseInsensitive(type, _typeName + "Id", keyType);
         }
