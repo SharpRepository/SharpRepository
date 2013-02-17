@@ -41,6 +41,9 @@
     <Reference Include="Enyim.Caching">
       <HintPath>..\packages\EnyimMemcached.2.12\lib\net35\Enyim.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\SharpRepository.Tests.Integration\bin\Release\MongoDB.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -64,6 +67,7 @@
       <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
@@ -88,6 +92,8 @@
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
+    <Compile Include="PrimaryKey\Ef5PrimaryKeyTests.cs" />
+    <Compile Include="PrimaryKey\MongoDbPrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />
     <Compile Include="QueryOptions\PagingOptionsTests.cs" />
     <Compile Include="QueryOptions\SortingOptionsTests.cs" />
@@ -103,6 +109,7 @@
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
+    <Compile Include="TestObjects\PrimaryKeys\ObjectKeys.cs" />
     <Compile Include="TestObjects\TestObjectEntities.cs" />
     <Compile Include="Traits\ICanGetTraitTests.cs" />
     <Compile Include="Traits\ICanUpdateTraitTests.cs" />
@@ -132,6 +139,10 @@
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
+      <Project>{dc40febe-2e39-4cb8-ae11-dfe9f6865bd2}</Project>
+      <Name>SharpRepository.MongoDbRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
       <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
