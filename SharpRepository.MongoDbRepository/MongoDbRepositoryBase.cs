@@ -1,11 +1,14 @@
 using System.Linq;
+using System.Reflection;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
+using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.MongoDbRepository
 {
@@ -85,6 +88,16 @@ namespace SharpRepository.MongoDbRepository
 
         protected override void SaveChanges()
         {
+        }
+
+        protected override PropertyInfo GetPrimaryKeyPropertyInfo()
+        {
+            // checks for the MongoDb BsonIdAttribute and if not there no the normal checks
+            var type = typeof(T);
+            var keyType = typeof(TKey);
+
+            return type.GetProperties().FirstOrDefault(x => x.HasAttribute<BsonIdAttribute>() && x.PropertyType == keyType)
+                ?? base.GetPrimaryKeyPropertyInfo();
         }
 
         public override void Dispose()

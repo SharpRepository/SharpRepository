@@ -388,7 +388,7 @@ namespace SharpRepository.Repository
             return new Specification<T>(lambda);
         }
 
-        protected PropertyInfo GetPrimaryKeyPropertyInfo()
+        protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()
         {
             // checks for properties in this order that match TKey type
             //  1) RepositoryPrimaryKeyAttribute

@@ -1,10 +1,13 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
+using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.Ef5Repository
 {
@@ -70,6 +73,16 @@ namespace SharpRepository.Ef5Repository
         protected override T GetQuery(TKey key)
         {
             return DbSet.Find(key);
+        }
+
+        protected override PropertyInfo GetPrimaryKeyPropertyInfo()
+        {
+            // checks for the Code First KeyAttribute and if not there no the normal checks
+            var type = typeof(T);
+            var keyType = typeof(TKey);
+
+            return type.GetProperties().FirstOrDefault(x => x.HasAttribute<KeyAttribute>() && x.PropertyType == keyType)
+                ?? base.GetPrimaryKeyPropertyInfo();
         }
 
         public override void Dispose()
