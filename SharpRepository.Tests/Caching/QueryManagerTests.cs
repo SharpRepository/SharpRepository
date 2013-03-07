@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Caching;
 using NUnit.Framework;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -24,7 +25,7 @@ namespace SharpRepository.Tests.Caching
                 cache.Remove(item.Key);
             }
 
-            QueryManager = new QueryManager<Contact, int>(new StandardCachingStrategy<Contact, int>()
+            QueryManager = new QueryManager<Contact, int>(new FakeCacheItemConverter(),  new StandardCachingStrategy<Contact, int>()
                                                    {
                                                        CachePrefix =
                                                            "#RepoStandardCache"

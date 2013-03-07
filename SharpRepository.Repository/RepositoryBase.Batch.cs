@@ -4,7 +4,7 @@ using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
-    public abstract partial class RepositoryBase<T, TKey> 
+    public abstract partial class RepositoryBase<T, TKey> where T : class
     {
         private sealed class Batch : IBatch<T> 
         {

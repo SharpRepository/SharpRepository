@@ -12,7 +12,20 @@ using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
-    public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey> where T : class
+    public interface ICacheItemConverter
+    {
+        TCacheItem ConvertItem<TCacheItem>(TCacheItem item);
+    }
+
+    public class FakeCacheItemConverter : ICacheItemConverter
+    {
+        public TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
+        {
+            return item;
+        }
+    }
+
+    public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey>, ICacheItemConverter where T : class
     {
         // the caching strategy used
         private ICachingStrategy<T, TKey> _cachingStrategy;
@@ -62,7 +75,7 @@ namespace SharpRepository.Repository
 
                 // make sure we keep the curent caching enabled status
                 var cachingEnabled = _queryManager == null || _queryManager.CacheEnabled;
-                _queryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+                _queryManager = new QueryManager<T, TKey>(this, _cachingStrategy) {CacheEnabled = cachingEnabled};
             }
         } 
 
@@ -70,6 +83,11 @@ namespace SharpRepository.Repository
         {
             get { return _queryManager.CacheEnabled; }
             set { _queryManager.CacheEnabled = value; }
+        }
+
+        public virtual TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
+        {
+            return item;
         }
 
         public abstract IQueryable<T> AsQueryable();
@@ -106,7 +124,7 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key);
 
-        public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
+        public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector) 
             where TInner : class
             where TResult : class;
 

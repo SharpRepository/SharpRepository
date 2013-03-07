@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>ValueInjecter</id>
+    <version>2.3.3</version>
+    <title>ValueInjecter</title>
+    <authors>Valentin Plamadeala, Vadim Plamadeala</authors>
+    <owners>Valentin Plamadeala, Vadim Plamadeala</owners>
+    <projectUrl>http://valueinjecter.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ValueInjecter lets you define your own convention-based matching algorithms (ValueInjections) in order to match up (inject) source values to destination values. It is used for mapping Dto to Entity and back also for mapping IDataReader to objects, windows forms to object, basically anything. Also has support for flattening and unflattening.</description>
+    <summary>convention based mapper</summary>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>mapper convention aspect map</tags>
+    <references>
+      <reference file="Omu.ValueInjecter.dll" />
+      <reference file="Omu.ValueInjecter.Silverlight.dll" />
+    </references>
+  </metadata>
+</package>

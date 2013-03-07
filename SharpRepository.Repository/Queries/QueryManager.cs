@@ -15,12 +15,14 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="TKey">The type of the key.</typeparam>
     public class QueryManager<T, TKey> where T : class
     {
+        private readonly ICacheItemConverter _cacheItemConverter;
         private readonly ICachingStrategy<T, TKey> _cachingStrategy;
 
-        public QueryManager(ICachingStrategy<T, TKey> cachingStrategy)
+        public QueryManager(ICacheItemConverter cacheItemConverter, ICachingStrategy<T, TKey> cachingStrategy)
         {
             CacheUsed = false;
             CacheEnabled = true;
+            _cacheItemConverter = cacheItemConverter;
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
         }
 
@@ -40,7 +42,9 @@ namespace SharpRepository.Repository.Queries
             CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveGetResult(key, selector, result);
+            //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
+            //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
+            _cachingStrategy.SaveGetResult(key, selector, _cacheItemConverter.ConvertItem(result));
 
             return result;
         }
