@@ -47,8 +47,4 @@ namespace SharpRepository.Repository
     public interface IRepository<T> : IRepository<T, int> where T : class
     {
     }
-
-    public interface IRepository<T> : IRepository<T, int> where T : class
-    {
-    }
 }

@@ -20,12 +20,21 @@ namespace SharpRepository.Ioc.StructureMap
                                  }
                 );
 
-            return initialization.For(typeof(IRepository<,>))
+            initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
 
                                      return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
+                                 }
+                );
+
+            return initialization.For(typeof(ICompoundKeyRepository<,,>))
+                                .Use(context =>
+                                 {
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+
+                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], repositoryName);
                                  }
                 );
         }
@@ -43,13 +52,22 @@ namespace SharpRepository.Ioc.StructureMap
                                  }
                 );
 
-            return initialization.For(typeof(IRepository<,>))
+            initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
 
                                      return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
                                  }
+                );
+
+            return initialization.For(typeof(ICompoundKeyRepository<,,>))
+                                .Use(context =>
+                                {
+                                    var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+
+                                    return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
+                                }
                 );
         }
     }

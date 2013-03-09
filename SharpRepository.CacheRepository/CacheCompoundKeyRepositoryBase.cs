@@ -6,31 +6,224 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 
-namespace SharpRepository.InMemoryRepository
+namespace SharpRepository.CacheRepository
 {
-    public abstract class InMemoryCompoundKeyRepositoryBase<T> : LinqCompoundKeyRepositoryBase<T> where T : class, new()
+    public abstract class CacheCompoundKeyRepositoryBase<T> : LinqCompoundKeyRepositoryBase<T> where T : class, new()
     {
-        private readonly ConcurrentDictionary<string, T> _items = new ConcurrentDictionary<string, T>();
+        private readonly string _prefix;
+        private readonly ICachingProvider _cachingProvider;
 
-        internal InMemoryCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T> cachingStrategy = null)
+        internal CacheCompoundKeyRepositoryBase(string prefix, ICompoundKeyCachingStrategy<T> cachingStrategy = null)
+            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
+        {
+        }
+
+        internal CacheCompoundKeyRepositoryBase(string prefix, ICachingProvider cachingProvider, ICompoundKeyCachingStrategy<T> cachingStrategy = null)
             : base(cachingStrategy)
         {
+            _prefix = prefix;
+            _cachingProvider = cachingProvider;
+        }
+
+        private ConcurrentDictionary<string, T>  Items
+        {
+            get
+            {
+                ConcurrentDictionary<string, T> items = null;
+
+                if (!_cachingProvider.Exists(_prefix + ".CacheRepository.Items"))
+                {
+                    items = new ConcurrentDictionary<string, T>();
+                    _cachingProvider.Set(_prefix + ".CacheRepository.Items", items);
+                }
+                else
+                {
+                    if (!_cachingProvider.Get(_prefix + ".CacheRepository.Items", out items))
+                    {
+                        items = new ConcurrentDictionary<string, T>();
+                    }
+                }
+
+                return items;
+            }
+            set
+            {
+                _cachingProvider.Set(_prefix + ".CacheRepository.Items", value);
+            }
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return CloneDictionary(_items).AsQueryable();
+            return CloneDictionary(Items).AsQueryable();
         }
 
         protected override T GetQuery(params object[] keys)
         {
             T result;
-            _items.TryGetValue(String.Join("/", keys), out result);
+            Items.TryGetValue(String.Join("/", keys), out result);
 
             return result;
         }
 
         private static IEnumerable<T> CloneDictionary(ConcurrentDictionary<string, T> list)
+        {
+            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
+            //  since we can't really put those constraints on T I'm going to do it via reflection
+
+            var type = typeof (T);
+            var properties = type.GetProperties();
+
+            var clonedList = new List<T>(list.Count);
+
+            foreach (var keyValuePair in list)
+            {
+                var newItem = new T();
+                foreach (var propInfo in properties)
+                {
+                    propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
+                }
+
+                clonedList.Add(newItem);
+            }
+
+            return clonedList;
+        }
+
+        protected override void AddItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            Items[String.Join("/", keys)] = entity;
+        }
+
+        protected override void DeleteItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            T tmp;
+            Items.TryRemove(String.Join("/", keys), out tmp);
+        }
+
+        protected override void UpdateItem(T entity)
+        {
+            object[] keys;
+
+            if (!GetPrimaryKeys(entity, out keys))
+            {
+                throw new ArgumentException("Primary keys not set");
+            }
+
+            Items[String.Join("/", keys)] = entity;
+        }
+
+        protected override void SaveChanges()
+        {
+            
+        }
+
+        public override void Dispose()
+        {
+            
+        }
+
+        public override string ToString()
+        {
+            return "SharpRepository.InMemoryRepository";
+        }
+    }
+
+    public abstract class CacheCompoundKeyRepositoryBase<T, TKey, TKey2> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
+    {
+        private struct CompoundKey
+        {
+            public TKey Key1 { private get; set; }
+            public TKey2 Key2 { private get; set; }
+
+            public override int GetHashCode()
+            {
+                return Key1.GetHashCode() ^ Key2.GetHashCode();
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is CompoundKey)
+                {
+                    var compositeKey = (CompoundKey)obj;
+
+                    return Key1.Equals(compositeKey.Key1) && Key2.Equals(compositeKey.Key2);
+                }
+
+                return false;
+            }
+        }
+
+        private ConcurrentDictionary<CompoundKey, T> Items
+        {
+            get
+            {
+                ConcurrentDictionary<CompoundKey, T> items = null;
+
+                if (!_cachingProvider.Exists(_prefix + ".CacheRepository.Items"))
+                {
+                    items = new ConcurrentDictionary<CompoundKey, T>();
+                    _cachingProvider.Set(_prefix + ".CacheRepository.Items", items);
+                }
+                else
+                {
+                    if (!_cachingProvider.Get(_prefix + ".CacheRepository.Items", out items))
+                    {
+                        items = new ConcurrentDictionary<CompoundKey, T>();
+                    }
+                }
+
+                return items;
+            }
+            set
+            {
+                _cachingProvider.Set(_prefix + ".CacheRepository.Items", value);
+            }
+        }
+
+        private readonly string _prefix;
+        private readonly ICachingProvider _cachingProvider;
+
+        internal CacheCompoundKeyRepositoryBase(string prefix, ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
+            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
+        {
+        }
+
+        internal CacheCompoundKeyRepositoryBase(string prefix, ICachingProvider cachingProvider, ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
+            _prefix = prefix;
+            _cachingProvider = cachingProvider;
+        }
+
+        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
+        {
+            return CloneDictionary(Items).AsQueryable();
+        }
+
+        protected override T GetQuery(TKey key, TKey2 key2)
+        {
+            T result;
+            var compoundKey = new CompoundKey { Key1 = key, Key2 = key2 };
+            Items.TryGetValue(compoundKey, out result);
+
+            return result;
+        }
+
+        private static IEnumerable<T> CloneDictionary(ConcurrentDictionary<CompoundKey, T> list)
         {
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
@@ -56,136 +249,12 @@ namespace SharpRepository.InMemoryRepository
 
         protected override void AddItem(T entity)
         {
-            object[] keys;
-
-            if (!GetPrimaryKeys(entity, out keys))
-            {
-                throw new ArgumentException("Primary keys not set");
-            }
-
-            _items[String.Join("/", keys)] = entity;
-        }
-
-        protected override void DeleteItem(T entity)
-        {
-            object[] keys;
-
-            if (!GetPrimaryKeys(entity, out keys))
-            {
-                throw new ArgumentException("Primary keys not set");
-            }
-
-            T tmp;
-            _items.TryRemove(String.Join("/", keys), out tmp);
-        }
-
-        protected override void UpdateItem(T entity)
-        {
-            object[] keys;
-
-            if (!GetPrimaryKeys(entity, out keys))
-            {
-                throw new ArgumentException("Primary keys not set");
-            }
-
-            _items[String.Join("/", keys)] = entity;
-        }
-
-        protected override void SaveChanges()
-        {
-
-        }
-
-        public override void Dispose()
-        {
-
-        }
-
-        public override string ToString()
-        {
-            return "SharpRepository.InMemoryRepository";
-        }
-    }
-
-    public abstract class InMemoryCompoundKeyRepositoryBase<T, TKey, TKey2> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
-    {
-        private struct CompoundKey
-        {
-            public TKey Key1 { get; set; }
-            public TKey2 Key2 { get; set; }
-
-            public override int GetHashCode()
-            {
-                return Key1.GetHashCode() ^ Key2.GetHashCode();
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj is CompoundKey)
-                {
-                    var compositeKey = (CompoundKey)obj;
-
-                    return Key1.Equals(compositeKey.Key1) && Key2.Equals(compositeKey.Key2);
-                }
-
-                return false;
-            }
-        }
-
-        private readonly ConcurrentDictionary<CompoundKey, T> _items = new ConcurrentDictionary<CompoundKey, T>();
-
-        internal InMemoryCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
-            : base(cachingStrategy) 
-
-        {   
-        }
-
-        protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
-        {
-            return CloneDictionary(_items).AsQueryable();
-        }
-        
-        protected override T GetQuery(TKey key, TKey2 key2)
-        {
-            T result;
-            var compoundKey = new CompoundKey {Key1 = key, Key2 = key2};
-            _items.TryGetValue(compoundKey, out result);
-
-            return result;
-        }
-
-        private static IEnumerable<T> CloneDictionary(ConcurrentDictionary<CompoundKey, T> list)
-        {
-            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
-            //  since we can't really put those constraints on T I'm going to do it via reflection
-
-            var type = typeof (T);
-            var properties = type.GetProperties();
-
-            var clonedList = new List<T>(list.Count);
-
-            foreach (var keyValuePair in list)
-            {
-                var newItem = new T();
-                foreach (var propInfo in properties)
-                {
-                    propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
-                }
-
-                clonedList.Add(newItem);
-            }
-
-            return clonedList;
-        }
-
-        protected override void AddItem(T entity)
-        {
             TKey key;
             TKey2 key2;
             GetPrimaryKey(entity, out key, out key2);
 
             var compoundKey = new CompoundKey { Key1 = key, Key2 = key2 };
-            _items[compoundKey] = entity;
+            Items[compoundKey] = entity;
         }
 
         protected override void DeleteItem(T entity)
@@ -196,7 +265,7 @@ namespace SharpRepository.InMemoryRepository
 
             T tmp;
             var compoundKey = new CompoundKey { Key1 = key, Key2 = key2 };
-            _items.TryRemove(compoundKey, out tmp);
+            Items.TryRemove(compoundKey, out tmp);
         }
 
         protected override void UpdateItem(T entity)
@@ -206,17 +275,17 @@ namespace SharpRepository.InMemoryRepository
             GetPrimaryKey(entity, out key, out key2);
 
             var compoundKey = new CompoundKey { Key1 = key, Key2 = key2 };
-            _items[compoundKey] = entity;     
+            Items[compoundKey] = entity;
         }
 
         protected override void SaveChanges()
         {
-            
+
         }
 
         public override void Dispose()
         {
-            
+
         }
 
         public override string ToString()
@@ -229,9 +298,9 @@ namespace SharpRepository.InMemoryRepository
     {
         private struct CompoundKey
         {
-            public TKey Key1 { private get; set; }
-            public TKey2 Key2 { private get; set; }
-            public TKey3 Key3 { private get; set; }
+            public TKey Key1 { get; set; }
+            public TKey2 Key2 { get; set; }
+            public TKey3 Key3 { get; set; }
 
             public override int GetHashCode()
             {
@@ -254,20 +323,19 @@ namespace SharpRepository.InMemoryRepository
         private readonly ConcurrentDictionary<CompoundKey, T> _items = new ConcurrentDictionary<CompoundKey, T>();
 
         internal InMemoryCompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
-            : base(cachingStrategy) 
-
-        {   
+            : base(cachingStrategy)
+        {
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             return CloneDictionary(_items).AsQueryable();
         }
-        
+
         protected override T GetQuery(TKey key, TKey2 key2, TKey3 key3)
         {
             T result;
-            var compoundKey = new CompoundKey {Key1 = key, Key2 = key2, Key3 = key3};
+            var compoundKey = new CompoundKey { Key1 = key, Key2 = key2, Key3 = key3 };
             _items.TryGetValue(compoundKey, out result);
 
             return result;
@@ -278,7 +346,7 @@ namespace SharpRepository.InMemoryRepository
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
 
-            var type = typeof (T);
+            var type = typeof(T);
             var properties = type.GetProperties();
 
             var clonedList = new List<T>(list.Count);
@@ -329,17 +397,17 @@ namespace SharpRepository.InMemoryRepository
             GetPrimaryKey(entity, out key, out key2, out key3);
 
             var compoundKey = new CompoundKey { Key1 = key, Key2 = key2, Key3 = key3 };
-            _items[compoundKey] = entity;     
+            _items[compoundKey] = entity;
         }
 
         protected override void SaveChanges()
         {
-            
+
         }
 
         public override void Dispose()
         {
-            
+
         }
 
         public override string ToString()
