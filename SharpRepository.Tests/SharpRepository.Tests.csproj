@@ -92,6 +92,8 @@
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
+    <Compile Include="Ioc\DependencyResolverTests.cs" />
+    <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />
     <Compile Include="PrimaryKey\Ef5PrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\MongoDbPrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />

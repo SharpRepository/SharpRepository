@@ -84,6 +84,9 @@
     </Compile>
     <Compile Include="IAmInRepository.cs" />
     <Compile Include="ConfigurationBasedRepository.cs" />
+    <Compile Include="Ioc\BaseRepositoryDependencyResolver.cs" />
+    <Compile Include="Ioc\RepositoryDependencyResolver.cs" />
+    <Compile Include="Ioc\RepositoryDependencyResolverException.cs" />
     <Compile Include="IRepositoryQueryable.cs" />
     <Compile Include="RepositoryFactory.cs" />
     <Compile Include="RepositoryBase.BatchItem.cs" />
