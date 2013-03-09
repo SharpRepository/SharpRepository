@@ -143,6 +143,11 @@ namespace SharpRepository.Repository.Configuration
             return ConfigurationHelper.GetInstance<T, TKey>(this, repositoryName);
         }
 
+        public ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string repositoryName = null) where T : class, new()
+        {
+            return ConfigurationHelper.GetInstance<T, TKey, TKey2>(this, repositoryName);
+        }
+
         IList<IRepositoryConfiguration> ISharpRepositoryConfiguration.Repositories
         {
             get { return Repositories.ToRepositoryConfigurationList(); }

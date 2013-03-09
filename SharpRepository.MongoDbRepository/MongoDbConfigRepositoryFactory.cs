@@ -22,5 +22,10 @@ namespace SharpRepository.MongoDbRepository
 
             return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"]);
         }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

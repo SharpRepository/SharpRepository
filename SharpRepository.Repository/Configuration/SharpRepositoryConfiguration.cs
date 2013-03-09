@@ -138,10 +138,14 @@ namespace SharpRepository.Repository.Configuration
                                    });
         }
 
-
         public IRepository<T, TKey> GetInstance<T, TKey>(string repositoryName = null) where T : class, new()
         {
             return ConfigurationHelper.GetInstance<T, TKey>(this, repositoryName);
+        }
+
+        public ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string repositoryName = null) where T : class, new()
+        {
+            return ConfigurationHelper.GetInstance<T, TKey, TKey2>(this, repositoryName);
         }
     }
 }

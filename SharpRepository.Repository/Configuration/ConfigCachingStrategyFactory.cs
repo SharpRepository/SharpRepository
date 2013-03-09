@@ -5,6 +5,7 @@ namespace SharpRepository.Repository.Configuration
     public interface IConfigCachingStrategyFactory
     {
         ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class;
+        ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class;
     }
 
     public abstract class ConfigCachingStrategyFactory : IConfigCachingStrategyFactory
@@ -17,5 +18,6 @@ namespace SharpRepository.Repository.Configuration
         }
 
         public abstract ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class;
+        public abstract ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class;
     }
 }

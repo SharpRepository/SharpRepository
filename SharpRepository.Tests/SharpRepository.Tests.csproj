@@ -103,10 +103,13 @@
     <Compile Include="RelativePath.cs" />
     <Compile Include="Specifications\SpecificationTests.cs" />
     <Compile Include="Spikes\BatchSpike.cs" />
+    <Compile Include="Spikes\CompoundKeySpikes.cs" />
     <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
     <Compile Include="Spikes\ExpressionParsingSpike.cs" />
+    <Compile Include="Spikes\GenericClassInheritanceSpikes.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects\CompoundKeyItem.cs" />
     <Compile Include="TestObjects\Contact.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />

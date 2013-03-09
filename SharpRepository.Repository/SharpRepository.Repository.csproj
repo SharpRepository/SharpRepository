@@ -41,6 +41,16 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="Caching\CachingStrategyBase.cs" />
+    <Compile Include="Caching\StandardCompoundKeyCachingStrategy.cs" />
+    <Compile Include="Caching\CompoundKeyCachingStrategyCommon.cs" />
+    <Compile Include="Caching\TimeoutCompoundKeyCachingStrategy.cs" />
+    <Compile Include="Caching\NoCompoundKeyCachingStrategy.cs" />
+    <Compile Include="Caching\CompoundKeyCachingStrategyBase.cs" />
+    <Compile Include="Caching\StandardCachingStrategyWithPartition.cs" />
+    <Compile Include="Caching\StandardCompoundKeyCachingStrategyBase.cs" />
+    <Compile Include="Caching\TimeoutCompoundKeyCachingStrategyBase.cs" />
+    <Compile Include="Caching\NoCompoundKeyCachingStrategyBase.cs" />
+    <Compile Include="Caching\ICompoundKeyCachingStrategy.cs" />
     <Compile Include="Caching\Hash\HashGenerator.cs" />
     <Compile Include="Caching\Hash\Evaluator.cs" />
     <Compile Include="Caching\Hash\LocalCollectionExpander.cs" />
@@ -79,6 +89,12 @@
     <Compile Include="Configuration\SharpRepositoryConfiguration.cs" />
     <Compile Include="Configuration\SharpRepositoryConfigurationAttribute.cs" />
     <Compile Include="Configuration\SharpRepositorySection.cs" />
+    <Compile Include="CompoundKeyRepositoryBase.cs" />
+    <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
+    <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
+    <Compile Include="IRepositoryBase.cs" />
+    <Compile Include="LinqCompoundKeyRepositoryBase.cs" />
+    <Compile Include="ICompoundKeyRepository.cs" />
     <Compile Include="Helpers\CustomAttributeExtensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +104,7 @@
     <Compile Include="Ioc\RepositoryDependencyResolver.cs" />
     <Compile Include="Ioc\RepositoryDependencyResolverException.cs" />
     <Compile Include="IRepositoryQueryable.cs" />
+    <Compile Include="Queries\CompoundKeyQueryManager.cs" />
     <Compile Include="RepositoryFactory.cs" />
     <Compile Include="RepositoryBase.BatchItem.cs" />
     <Compile Include="Specifications\AndAlsoSpecification.cs" />

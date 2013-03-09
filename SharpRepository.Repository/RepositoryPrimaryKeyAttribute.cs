@@ -8,5 +8,6 @@ namespace SharpRepository.Repository
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class RepositoryPrimaryKeyAttribute : Attribute
     {
+        public int Order { get; set; }
     }
 }

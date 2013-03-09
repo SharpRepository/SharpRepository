@@ -18,4 +18,20 @@ namespace SharpRepository.InMemoryRepository
         {
         }
     }
+
+    public class InMemoryCompoundKeyRepository<T> : InMemoryCompoundKeyRepositoryBase<T> where T : class, new()
+    {
+        public InMemoryCompoundKeyRepository(ICompoundKeyCachingStrategy<T> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
+        }
+    }
+
+    public class InMemoryRepository<T, TKey, TKey2> : InMemoryCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
+    {
+        public InMemoryRepository(ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
+        }
+    }
 }

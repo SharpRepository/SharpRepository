@@ -48,5 +48,41 @@ namespace SharpRepository.Repository.Configuration
 
             return repository;
         }
+
+        public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(ISharpRepositoryConfiguration configuration, string repositoryName) where T : class, new()
+        {
+            if (!configuration.HasRepository)
+            {
+                throw new Exception("There are no repositories configured");
+            }
+
+            var repositoryConfiguration = configuration.GetRepository(repositoryName);
+            var repository = repositoryConfiguration.GetInstance<T, TKey, TKey2>();
+
+            if (repository == null)
+                return null;
+
+            var strategyConfiguration = configuration.GetCachingStrategy(repositoryConfiguration.CachingStrategy);
+            if (strategyConfiguration == null)
+            {
+                return repository;
+            }
+
+            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey, TKey2>();
+            if (cachingStrategy == null)
+            {
+                return repository;
+            }
+
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            if (providerConfiguration != null)
+            {
+                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
+            }
+
+            repository.CachingStrategy = cachingStrategy;
+
+            return repository;
+        }
     }
 }
