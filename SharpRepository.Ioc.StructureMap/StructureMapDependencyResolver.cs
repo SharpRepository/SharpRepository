@@ -22,12 +22,4 @@ namespace SharpRepository.Ioc.StructureMap
             return _container.GetInstance(type);
         }
     }
-
-    public class TestUsage
-    {
-        public TestUsage()
-        {
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapDependencyResolver(ObjectFactory.Container));
-        }
-    }
 }
