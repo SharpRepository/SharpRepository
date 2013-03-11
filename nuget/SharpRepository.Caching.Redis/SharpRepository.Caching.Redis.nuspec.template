@@ -17,4 +17,8 @@
       <dependency id="SharpRepository.Repository" version="1.1.2.2" />
     </dependencies>
   </metadata>
+  <files>
+	<file src="content\config.transform" target="content\app.config.transform"/>
+    <file src="content\config.transform" target="content\web.config.transform"/>
+  </files>
 </package>

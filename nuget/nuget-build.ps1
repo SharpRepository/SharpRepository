@@ -38,6 +38,7 @@ foreach($directory in $directories)
 		
 		# copy the nuspec file over to the main project directory because I only know how to create the nuget package from that diretory, but that's just me i think :)
 		Copy-Item $nuspec_path "..\$directory\$directory.nuspec"
+		Copy-Item ($directory.fullname + "\content\config.transform") "..\$directory\content\config.transform"
 		
 		# build the nuget package
 		#& "C\NuGet\nuget.exe pack ..\$directory\$directory.csproj -Prop Configuration=Release"
@@ -48,6 +49,7 @@ foreach($directory in $directories)
 		
 		# delete the nuspec file from the project directory
 		Remove-Item "..\$directory\$directory.nuspec"
+		Remove-Item "..\$directory\content\config.transform"
 		
 		# add the full path to the list of already processed directories, this is because the array for this loop has dups
 		$uniqueDirectories += $directory.fullname

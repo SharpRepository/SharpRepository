@@ -14,4 +14,8 @@
     <copyright>Copyright 2012</copyright>
     <tags>SharpRepository Repository</tags>
   </metadata>
+  <files>
+	<file src="content\config.transform" target="content\app.config.transform"/>
+    <file src="content\config.transform" target="content\web.config.transform"/>
+  </files>
 </package>
