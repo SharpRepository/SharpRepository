@@ -9,12 +9,12 @@
     <licenseUrl>https://github.com/SharpRepository/SharpRepository/blob/develop/license.txt</licenseUrl>
     <projectUrl>https://github.com/SharpRepository/SharpRepository</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDb and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, Memcache and standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.</description>
+    <description>SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDb and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.</description>
     <releaseNotes>Initial release</releaseNotes>
     <copyright>Copyright 2012</copyright>
     <tags>SharpRepository Repository EF5 EntityFramework</tags>
 	<dependencies>
-      <dependency id="SharpRepository.Repository" version="1.1.2.2" />
+      <dependency id="SharpRepository.Repository" version="1.2.0.0" />
     </dependencies>
   </metadata>
   <files>
