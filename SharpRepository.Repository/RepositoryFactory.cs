@@ -8,6 +8,8 @@ namespace SharpRepository.Repository
 {
     public static class RepositoryFactory
     {
+        private const string DefaultConfigSection = "sharpRepository";
+
         public static IRepository<T, int> GetInstance<T>(string repositoryName = null) where T : class, new()
         {
             return GetInstance<T, int>(repositoryName);
@@ -25,7 +27,7 @@ namespace SharpRepository.Repository
 
         public static IRepository<T, TKey> GetInstance<T, TKey>(string repositoryName = null) where T : class, new()
         {
-            return GetInstance<T, TKey>("sharpRepository", repositoryName);
+            return GetInstance<T, TKey>(DefaultConfigSection, repositoryName);
         }
 
         public static object GetInstance(Type entityType, string repositoryName = null)
@@ -35,7 +37,7 @@ namespace SharpRepository.Repository
 
         public static object GetInstance(Type entityType, Type keyType, string repositoryName = null)
         {
-            return GetInstance(entityType, keyType, "sharpRepository", repositoryName);
+            return GetInstance(entityType, keyType, DefaultConfigSection, repositoryName);
         }
 
         public static IRepository<T, TKey> GetInstance<T, TKey>(string configSection, string repositoryName) where T : class, new()
@@ -87,12 +89,12 @@ namespace SharpRepository.Repository
 
         public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string repositoryName = null) where T : class, new()
         {
-            return GetInstance<T, TKey, TKey2>("sharpRepository", repositoryName);
+            return GetInstance<T, TKey, TKey2>(DefaultConfigSection, repositoryName);
         }
 
         public static object GetInstance(Type entityType, Type keyType, Type key2Type, string repositoryName = null)
         {
-            return GetInstance(entityType, keyType, key2Type, "sharpRepository", repositoryName);
+            return GetInstance(entityType, keyType, key2Type, DefaultConfigSection, repositoryName);
         }
 
         public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string configSection, string repositoryName) where T : class, new()
