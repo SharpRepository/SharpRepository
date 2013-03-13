@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
@@ -11,7 +9,7 @@ namespace SharpRepository.Repository
     /// </summary>
     /// <typeparam name="T">The entity type that the repository acts on.</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
-    public interface IRepository<T, TKey> : IRepositoryQueryable<T> where T : class
+    public interface IRepository<T, TKey> : IRepositoryBase<T> , IRepositoryQueryable<T> where T : class
     {
         /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
@@ -30,52 +28,10 @@ namespace SharpRepository.Repository
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
 
         /// <summary>
-        /// Adds the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Add(T entity);
-
-        /// <summary>
-        /// Adds the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Add(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Updates the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Update(T entity);
-
-        /// <summary>
-        /// Updates the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Update(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Deletes the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Delete(T entity);
-
-        /// <summary>
-        /// Deletes the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Delete(IEnumerable<T> entities);
-
-        /// <summary>
         /// Deletes the specified entity by the primary key.
         /// </summary>
         /// <param name="key">The primary key.</param>
         void Delete(TKey key);
-
-        /// <summary>
-        /// Begins a batch mode process.  This allows multiple operations against the repository with the ability to commit or rollback.
-        /// </summary>
-        /// <returns></returns>
-        IBatch<T> BeginBatch();
 
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
 

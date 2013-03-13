@@ -20,7 +20,19 @@ namespace SharpRepository.Repository.Caching
                 throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
             }
 
-           return new TimeoutCachingStrategy<T, TKey>(timeout);
+            return new TimeoutCachingStrategy<T, TKey>(timeout);
+        }
+
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        {
+            int timeout;
+            if (!Int32.TryParse(CachingStrategyConfiguration["timeout"], out timeout))
+            {
+
+                throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
+            }
+
+            return new TimeoutCachingStrategy<T, TKey, TKey2>(timeout);
         }
     }
 }

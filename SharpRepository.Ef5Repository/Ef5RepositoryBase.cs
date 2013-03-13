@@ -70,6 +70,7 @@ namespace SharpRepository.Ef5Repository
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.
+        //  this also provides the EF5 first level caching out of the box
         protected override T GetQuery(TKey key)
         {
             return DbSet.Find(key);
@@ -77,7 +78,7 @@ namespace SharpRepository.Ef5Repository
 
         protected override PropertyInfo GetPrimaryKeyPropertyInfo()
         {
-            // checks for the Code First KeyAttribute and if not there no the normal checks
+            // checks for the Code First KeyAttribute and if not there do the normal checks
             var type = typeof(T);
             var keyType = typeof(TKey);
 

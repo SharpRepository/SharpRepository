@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 
@@ -24,6 +21,11 @@ namespace SharpRepository.MongoDbRepository
             }
 
             return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"]);
+        }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        {
+            throw new NotImplementedException();
         }
     }
 }

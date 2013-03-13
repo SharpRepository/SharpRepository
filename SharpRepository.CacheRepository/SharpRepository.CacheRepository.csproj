@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="CacheRepositoryBase.cs" />
     <Compile Include="CacheRepository.cs" />
+    <Compile Include="CacheCompoundKeyRepositoryBase.cs" />
     <Compile Include="IAmInCacheRepository.cs" />
     <Compile Include="CacheConfigRepositoryFactory.cs" />
     <Compile Include="CacheRepositoryConfiguration.cs" />

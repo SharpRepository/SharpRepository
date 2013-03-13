@@ -60,67 +60,67 @@ namespace SharpRepository.Repository.Specifications
 
         #endregion
 
-        public ISpecification<T> And(ISpecification<T> specification)
+        public Specification<T> And(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.And(specification.Predicate));
         }
 
-        public ISpecification<T> And(Expression<Func<T, bool>> predicate)
+        public Specification<T> And(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.And(predicate));
         }
 
-        public ISpecification<T> AndAlso(ISpecification<T> specification)
+        public Specification<T> AndAlso(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.AndAlso(specification.Predicate));
         }
 
-        public ISpecification<T> AndAlso(Expression<Func<T, bool>> predicate)
+        public Specification<T> AndAlso(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.AndAlso(predicate));
         }
 
-        public ISpecification<T> Not()
+        public Specification<T> Not()
         {
             return new Specification<T>(Predicate.Not());
         }
 
-        public ISpecification<T> AndNot(ISpecification<T> specification)
+        public Specification<T> AndNot(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.AndNot(specification.Predicate));
         }
 
-        public ISpecification<T> AndNot(Expression<Func<T, bool>> predicate)
+        public Specification<T> AndNot(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.AndNot(predicate));
         }
 
-        public ISpecification<T> OrNot(ISpecification<T> specification)
+        public Specification<T> OrNot(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.OrNot(specification.Predicate));
         }
 
-        public ISpecification<T> OrNot(Expression<Func<T, bool>> predicate)
+        public Specification<T> OrNot(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.OrNot(predicate));
         }
 
-        public ISpecification<T> Or(ISpecification<T> specification)
+        public Specification<T> Or(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.Or(specification.Predicate));
         }
 
-        public ISpecification<T> Or(Expression<Func<T, bool>> predicate)
+        public Specification<T> Or(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.Or(predicate));
         }
 
-        public ISpecification<T> OrElse(ISpecification<T> specification)
+        public Specification<T> OrElse(ISpecification<T> specification)
         {
             return new Specification<T>(Predicate.OrElse(specification.Predicate));
         }
 
-        public ISpecification<T> OrElse(Expression<Func<T, bool>> predicate)
+        public Specification<T> OrElse(Expression<Func<T, bool>> predicate)
         {
             return new Specification<T>(Predicate.OrElse(predicate));
         }

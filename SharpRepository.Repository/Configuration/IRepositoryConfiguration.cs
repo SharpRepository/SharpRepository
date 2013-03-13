@@ -13,5 +13,6 @@ namespace SharpRepository.Repository.Configuration
         string this[string key] { get; }
 
         IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new();
+        ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class, new();
     }
 }

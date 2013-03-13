@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.TestObjects;
@@ -15,7 +16,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 0;
             var contact1 = new Contact { ContactId = 1, ContactTypeId = 1 };
             var contact2 = new Contact { ContactId = 1, ContactTypeId = 2 };
-            var cachingStrategy = new StandardCachingStrategy<Contact>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact>(c => c.ContactTypeId);
 
             cachingStrategy.TryPartitionValue(contact1, out contactId);
             contactId.ShouldEqual(1);
@@ -28,7 +29,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_Constant_On_Right_Should_Not_Match()
         {
             var spec = new Specification<Contact>(contact => contact.Name == "test");
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -41,7 +42,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_GreaterThan_Should_Not_Match()
         {
             var spec = new Specification<Contact>(contact => contact.ContactTypeId > 1);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -54,7 +55,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_NotEqual_Should_Not_Match()
         {
             var spec = new Specification<Contact>(contact => contact.ContactTypeId != 1);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -67,7 +68,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_Constant_On_Right_Should_Match()
         {
             var spec = new Specification<Contact>(contact => contact.ContactTypeId == 1);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -83,7 +84,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_Using_Equals_Method_On_Right_Should_Match()
         {
             var spec = new Specification<Contact>(contact => contact.ContactTypeId.Equals(1));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -100,7 +101,7 @@ namespace SharpRepository.Tests.Spikes
         {
             var contactTypeId = 1;
             var spec = new Specification<Contact>(contact => contact.ContactTypeId.Equals(contactTypeId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -116,7 +117,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_Using_Equals_Method_On_Left_Should_Match()
         {
             var spec = new Specification<Contact>(contact => 1.Equals(contact.ContactTypeId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -133,7 +134,7 @@ namespace SharpRepository.Tests.Spikes
         {
             var contactTypeId = 1;
             var spec = new Specification<Contact>(contact => contactTypeId.Equals(contact.ContactTypeId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -149,7 +150,7 @@ namespace SharpRepository.Tests.Spikes
         public void Single_Part_Predicate_Constant_On_Left_Should_Match()
         {
             var spec = new Specification<Contact>(contact => 1 == contact.ContactTypeId);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -164,7 +165,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 1;
 
             var spec = new Specification<Contact>(contact => contact.ContactTypeId == contactId);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -179,7 +180,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 1;
 
             var spec = new Specification<Contact>(contact => contactId == contact.ContactTypeId);
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -192,7 +193,7 @@ namespace SharpRepository.Tests.Spikes
         public void Two_Part_Predicate_Constant_On_Right_Should_Match()
         {
             var spec = new Specification<Contact>(contact => (contact.Name == "test" && contact.ContactTypeId == 1));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -205,7 +206,7 @@ namespace SharpRepository.Tests.Spikes
         public void Two_Part_Predicate_Constant_On_Left_Should_Match()
         {
             var spec = new Specification<Contact>(contact => (contact.Name == "test" && 1 == contact.ContactTypeId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -220,7 +221,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 1;
 
             var spec = new Specification<Contact>(contact => (contact.Name == "test" && contact.ContactTypeId == contactId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -235,7 +236,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 1;
 
             var spec = new Specification<Contact>(contact => (contact.Name == "test" && contactId == contact.ContactTypeId));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);
@@ -250,7 +251,7 @@ namespace SharpRepository.Tests.Spikes
             var contactId = 1;
 
             var spec = new Specification<Contact>(contact => (contact.ContactTypeId == 1 || contactId == 2));
-            var cachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId);
+            var cachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId);
 
             int value;
             var isMatch = cachingStrategy.TryPartitionValue(spec, out value);

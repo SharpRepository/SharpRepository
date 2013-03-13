@@ -92,6 +92,8 @@
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
+    <Compile Include="Ioc\DependencyResolverTests.cs" />
+    <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />
     <Compile Include="PrimaryKey\Ef5PrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\MongoDbPrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />
@@ -101,10 +103,13 @@
     <Compile Include="RelativePath.cs" />
     <Compile Include="Specifications\SpecificationTests.cs" />
     <Compile Include="Spikes\BatchSpike.cs" />
+    <Compile Include="Spikes\CompoundKeySpikes.cs" />
     <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
     <Compile Include="Spikes\ExpressionParsingSpike.cs" />
+    <Compile Include="Spikes\GenericClassInheritanceSpikes.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects\CompoundKeyItem.cs" />
     <Compile Include="TestObjects\Contact.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />

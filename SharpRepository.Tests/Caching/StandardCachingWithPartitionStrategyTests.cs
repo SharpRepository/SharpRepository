@@ -25,7 +25,7 @@ namespace SharpRepository.Tests.Caching
                 cache.Remove(item.Key);
             }
 
-            CachingStrategy = new StandardCachingStrategy<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
+            CachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
         }
 
         [TearDown]
@@ -58,7 +58,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void SaveGetResult_With_WriteThrough_Disabled_Should_Not_Set_Cache()
         {
-            ((StandardCachingStrategy<Contact, int, int>)CachingStrategy).WriteThroughCachingEnabled = false;
+            ((StandardCachingStrategyWithPartition<Contact, int, int>)CachingStrategy).WriteThroughCachingEnabled = false;
 
             Contact result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
@@ -90,7 +90,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void SaveGetAllResult_With_Generational_Disabled_Should_Not_Set_Cache()
         {
-            ((StandardCachingStrategy<Contact, int, int>)CachingStrategy).GenerationalCachingEnabled = false;
+            ((StandardCachingStrategyWithPartition<Contact, int, int>)CachingStrategy).GenerationalCachingEnabled = false;
 
             IEnumerable<Contact> result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };

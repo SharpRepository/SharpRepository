@@ -2,6 +2,7 @@
 //using System.Collections.Concurrent;
 //using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Helpers;
 
@@ -103,8 +104,70 @@ namespace SharpRepository.Repository
                 repositoryName = GetAttributeRepositoryName(entityType);
             }
 
-            var method = typeof(ISharpRepositoryConfiguration).GetMethod("GetInstance", new [] { typeof(string) });
+            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`2");
             var genericMethod = method.MakeGenericMethod(entityType, keyType);
+            return genericMethod.Invoke(configuration, new object[] { repositoryName });
+        }
+
+        // compound key methods
+
+        public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string repositoryName = null) where T : class, new()
+        {
+            return GetInstance<T, TKey, TKey2>("sharpRepository", repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type, string repositoryName = null)
+        {
+            return GetInstance(entityType, keyType, key2Type, "sharpRepository", repositoryName);
+        }
+
+        public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string configSection, string repositoryName) where T : class, new()
+        {
+            //            ISharpRepositoryConfiguration configuration;
+            //            var key = String.Format("{0}::{1}::{2}", typeof (T).FullName, typeof (TKey).Name, configSection);
+            //            // first check cache
+            //            if (_cache.ContainsKey(key))
+            //            {
+            //                configuration = _cache[key];
+            //            }
+            //            else
+            //            {
+            //                configuration = GetConfiguration(configSection);
+            //                _cache[key] = configuration;
+            //            }
+
+            //            if (_configuration == null)
+            //                _configuration = GetConfiguration(configSection);
+
+            return GetInstance<T, TKey, TKey2>(GetConfiguration(configSection), repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type, string configSection, string repositoryName)
+        {
+            return GetInstance(entityType, keyType, key2Type, GetConfiguration(configSection), repositoryName);
+        }
+
+        public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(ISharpRepositoryConfiguration configuration, string repositoryName = null) where T : class, new()
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(typeof(T));
+            }
+
+            return configuration.GetInstance<T, TKey, TKey2>(repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type,ISharpRepositoryConfiguration configuration, string repositoryName = null)
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(entityType);
+            }
+
+            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "ICompoundKeyRepository`3");
+            var genericMethod = method.MakeGenericMethod(entityType, keyType, key2Type);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
 

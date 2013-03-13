@@ -54,6 +54,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Benchmarks.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.CacheRepository", "SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj", "{42E07863-9017-4B56-9D20-1EA35AF1F501}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Ninject", "SharpRepository.Ioc.Ninject\SharpRepository.Ioc.Ninject.csproj", "{549F87CC-3B00-4B45-94C9-517422556F8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Windsor", "SharpRepository.Ioc.Windsor\SharpRepository.Ioc.Windsor.csproj", "{792FCCD7-8509-4477-9672-10C178D690F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Autofac", "SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj", "{14E6AF4A-B613-418F-B046-D84074963C0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Unity", "SharpRepository.Ioc.Unity\SharpRepository.Ioc.Unity.csproj", "{D0218585-6696-4E3D-832F-E596E2903337}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +136,22 @@ Global
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549F87CC-3B00-4B45-94C9-517422556F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549F87CC-3B00-4B45-94C9-517422556F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549F87CC-3B00-4B45-94C9-517422556F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549F87CC-3B00-4B45-94C9-517422556F8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{792FCCD7-8509-4477-9672-10C178D690F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{792FCCD7-8509-4477-9672-10C178D690F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{792FCCD7-8509-4477-9672-10C178D690F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{792FCCD7-8509-4477-9672-10C178D690F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14E6AF4A-B613-418F-B046-D84074963C0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14E6AF4A-B613-418F-B046-D84074963C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14E6AF4A-B613-418F-B046-D84074963C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14E6AF4A-B613-418F-B046-D84074963C0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0218585-6696-4E3D-832F-E596E2903337}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0218585-6696-4E3D-832F-E596E2903337}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0218585-6696-4E3D-832F-E596E2903337}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0218585-6696-4E3D-832F-E596E2903337}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -141,6 +165,13 @@ Global
 		{F025C038-9F9A-4730-9A03-3E3E6101E249} = {FB7E3040-CA92-4B81-86E6-106E2FDD745E}
 		{06111314-669B-4E35-A0B9-AF67FA3F0FFD} = {FB7E3040-CA92-4B81-86E6-106E2FDD745E}
 		{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{549F87CC-3B00-4B45-94C9-517422556F8A} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{792FCCD7-8509-4477-9672-10C178D690F1} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{14E6AF4A-B613-418F-B046-D84074963C0F} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{D0218585-6696-4E3D-832F-E596E2903337} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{4C4F3977-7327-4BBF-90ED-0C61172A48D4} = {9E5BA6B3-50AA-4482-A526-F35F132304B2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
 	EndGlobalSection
 EndGlobal

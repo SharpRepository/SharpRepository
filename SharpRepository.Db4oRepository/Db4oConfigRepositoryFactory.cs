@@ -22,5 +22,10 @@ namespace SharpRepository.Db4oRepository
 
             return new Db4oRepository<T, TKey>(RepositoryConfiguration["directory"]);
         }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

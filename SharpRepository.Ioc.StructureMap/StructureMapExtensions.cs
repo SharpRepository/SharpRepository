@@ -15,20 +15,26 @@ namespace SharpRepository.Ioc.StructureMap
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-                                     var entityType = genericArgs[0];
 
-                                     return RepositoryFactory.GetInstance(entityType, repositoryName);
+                                     return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
                                  }
                 );
 
-            return initialization.For(typeof(IRepository<,>))
+            initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-                                     var entityType = genericArgs[0];
-                                     var keyType = genericArgs[1];
 
-                                     return RepositoryFactory.GetInstance(entityType, keyType, repositoryName);
+                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
+                                 }
+                );
+
+            return initialization.For(typeof(ICompoundKeyRepository<,,>))
+                                .Use(context =>
+                                 {
+                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+
+                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], repositoryName);
                                  }
                 );
         }
@@ -41,21 +47,27 @@ namespace SharpRepository.Ioc.StructureMap
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-                                     var entityType = genericArgs[0];
 
-                                     return RepositoryFactory.GetInstance(entityType, configuration);
+                                     return RepositoryFactory.GetInstance(genericArgs[0], configuration);
                                  }
                 );
 
-            return initialization.For(typeof(IRepository<,>))
+            initialization.For(typeof(IRepository<,>))
                                  .Use(context =>
                                  {
                                      var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-                                     var entityType = genericArgs[0];
-                                     var keyType = genericArgs[1];
 
-                                     return RepositoryFactory.GetInstance(entityType, keyType, configuration);
+                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
                                  }
+                );
+
+            return initialization.For(typeof(ICompoundKeyRepository<,,>))
+                                .Use(context =>
+                                {
+                                    var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+
+                                    return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
+                                }
                 );
         }
     }
