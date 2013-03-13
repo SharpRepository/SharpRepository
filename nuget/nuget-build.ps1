@@ -38,7 +38,18 @@ foreach($directory in $directories)
 		
 		# copy the nuspec file over to the main project directory because I only know how to create the nuget package from that diretory, but that's just me i think :)
 		Copy-Item $nuspec_path "..\$directory\$directory.nuspec"
-		Copy-Item ($directory.fullname + "\content\config.transform") "..\$directory\content\config.transform"
+		
+		# see if there is a config transformation file
+		if (Test-Path ($directory.fullname + "\content\config.transform"))
+		{
+			Copy-Item ($directory.fullname + "\content\config.transform") "..\$directory\content\config.transform"
+		}
+		
+		# see if there is a Install.ps1 to deal with
+		if (Test-Path ($directory.fullname + "\tools\Install.ps1"))
+		{
+			Copy-Item ($directory.fullname + "\tools\Install.ps1") "..\$directory\tools\Install.ps1"
+		}
 		
 		# build the nuget package
 		#& "C\NuGet\nuget.exe pack ..\$directory\$directory.csproj -Prop Configuration=Release"
@@ -47,9 +58,18 @@ foreach($directory in $directories)
 		# move the nuget package back to the nuget directories
 		Move-Item "$cur_directory\$directory.$new_version.nupkg" "$dir_fullname\$directory.$new_version.nupkg"
 		
-		# delete the nuspec file from the project directory
+		# delete the files that we copied over to have the paths be picked up automatically for packaging
 		Remove-Item "..\$directory\$directory.nuspec"
-		Remove-Item "..\$directory\content\config.transform"
+
+		if (Test-Path "..\$directory\content\config.transform")
+		{
+			Remove-Item "..\$directory\content\config.transform"
+		}
+		
+		if (Test-Path "..\$directory\tools\Install.ps1")
+		{
+			Remove-Item "..\$directory\tools\Install.ps1"
+		}
 		
 		# add the full path to the list of already processed directories, this is because the array for this loop has dups
 		$uniqueDirectories += $directory.fullname
