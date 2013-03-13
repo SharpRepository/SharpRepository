@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace SharpRepository.Repository.Caching.Hash
 {
@@ -71,7 +70,7 @@ namespace SharpRepository.Repository.Caching.Hash
         {
             public Printer(IEnumerable collection)
             {
-                this.AddRange(collection.Cast<T>());
+                AddRange(collection.Cast<T>());
             }
 
             public override string ToString()

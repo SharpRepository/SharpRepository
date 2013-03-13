@@ -1,6 +1,4 @@
 ﻿using System;
-//using System.Collections.Concurrent;
-//using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using SharpRepository.Repository.Configuration;
@@ -10,14 +8,6 @@ namespace SharpRepository.Repository
 {
     public static class RepositoryFactory
     {
-//        private static readonly IDictionary<string, ISharpRepositoryConfiguration> _cache;
-//        private static ISharpRepositoryConfiguration _configuration = null;
-//
-//        static RepositoryFactory()
-//        {
-//            _cache = new ConcurrentDictionary<string, ISharpRepositoryConfiguration>();
-//        }
-
         public static IRepository<T, int> GetInstance<T>(string repositoryName = null) where T : class, new()
         {
             return GetInstance<T, int>(repositoryName);
@@ -50,22 +40,6 @@ namespace SharpRepository.Repository
 
         public static IRepository<T, TKey> GetInstance<T, TKey>(string configSection, string repositoryName) where T : class, new()
         {
-//            ISharpRepositoryConfiguration configuration;
-//            var key = String.Format("{0}::{1}::{2}", typeof (T).FullName, typeof (TKey).Name, configSection);
-//            // first check cache
-//            if (_cache.ContainsKey(key))
-//            {
-//                configuration = _cache[key];
-//            }
-//            else
-//            {
-//                configuration = GetConfiguration(configSection);
-//                _cache[key] = configuration;
-//            }
-
-//            if (_configuration == null)
-//                _configuration = GetConfiguration(configSection);
-
             return GetInstance<T, TKey>(GetConfiguration(configSection), repositoryName);
         }
 
@@ -123,22 +97,6 @@ namespace SharpRepository.Repository
 
         public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string configSection, string repositoryName) where T : class, new()
         {
-            //            ISharpRepositoryConfiguration configuration;
-            //            var key = String.Format("{0}::{1}::{2}", typeof (T).FullName, typeof (TKey).Name, configSection);
-            //            // first check cache
-            //            if (_cache.ContainsKey(key))
-            //            {
-            //                configuration = _cache[key];
-            //            }
-            //            else
-            //            {
-            //                configuration = GetConfiguration(configSection);
-            //                _cache[key] = configuration;
-            //            }
-
-            //            if (_configuration == null)
-            //                _configuration = GetConfiguration(configSection);
-
             return GetInstance<T, TKey, TKey2>(GetConfiguration(configSection), repositoryName);
         }
 
