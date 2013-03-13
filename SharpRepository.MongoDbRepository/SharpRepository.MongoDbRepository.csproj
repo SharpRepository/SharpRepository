@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly.cs">
-      <Link>CommonAssembly.cs</Link>
+      <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="IAmInMongoDbRepository.cs" />
     <Compile Include="MongoDbConfigRepositoryFactory.cs" />

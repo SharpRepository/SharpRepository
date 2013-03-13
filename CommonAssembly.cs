@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("SharpRepository")]
 [assembly: AssemblyProduct("SharpRepository")]
-[assembly: AssemblyCopyright("Copyright © SharpRepository 2012")]
+[assembly: AssemblyCopyright("Copyright © SharpRepository 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -17,15 +17,15 @@ using System.Runtime.InteropServices;
 // and in the AssemblyRef table of any assembly that references it. 
 // Take care when changing the AssemblyVersion as it may impact referencing 
 // assemblies.
-[assembly: AssemblyVersion("1.1")]
+[assembly: AssemblyVersion("1.2")]
 
 // The AssemblyFileVersion is intended to uniquely identify a build of the individual assembly
 // Ideally we would have the build server update this value. This version number is stored 
 // in the Win32 version resource and can be seen when viewing the Windows Explorer property 
 // pages for the assembly. The CLR does not care about nor examine the AssemblyFileVersion.
-[assembly: AssemblyFileVersion("1.1.2.1")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 // The AssemblyInformationalVersion is intended to represent the version of your entire product.
 // The CLR does not care about nor examine the AssemblyInformationalVersion. You will find this
 // value represented as the assembly's product version in Windows Explorer.
-[assembly: AssemblyInformationalVersion("1.1.2.1")]
+[assembly: AssemblyInformationalVersion("1.2.0.0")]

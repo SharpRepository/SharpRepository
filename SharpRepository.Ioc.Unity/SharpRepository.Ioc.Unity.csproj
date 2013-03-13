@@ -43,8 +43,11 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnityDependencyResolver.cs" />
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnityDependencyResolver.cs" />
     <Compile Include="UnityExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
