@@ -56,7 +56,7 @@ foreach($directory in $directories)
 		Invoke-Expression "& `"nuget.exe`" pack ..\$directory\$directory.csproj -Prop Configuration=Release"
 		
 		# move the nuget package back to the nuget directories
-		Move-Item "$cur_directory\$directory.$new_version.nupkg" "$dir_fullname\$directory.$new_version.nupkg"
+		Move-Item "$cur_directory\$directory.$new_version.nupkg" "$dir_fullname\$directory.$new_version.nupkg" -force
 		
 		# delete the files that we copied over to have the paths be picked up automatically for packaging
 		Remove-Item "..\$directory\$directory.nuspec"
