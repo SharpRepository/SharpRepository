@@ -154,7 +154,7 @@ namespace SharpRepository.CacheRepository
 
         public override string ToString()
         {
-            return "SharpRepository.InMemoryRepository";
+            return "SharpRepository.CacheRepository";
         }
     }
 }
