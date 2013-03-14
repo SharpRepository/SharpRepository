@@ -1,8 +1,14 @@
 # Install.ps1
 param($installPath, $toolsPath, $package, $project)
 
+# Settings
+$parentPath = "configuration/sharpRepository/cachingProviders"
+$keyPath = "cachingProvider[@name='redisProvider']"
+
 Function Clean-Dups-In-Config-File ($localPath, $parentNodePath, $nodePath)
 {
+	$xml = New-Object xml
+
 	# load config as XML
 	$xml.Load($localPath)
 
@@ -26,30 +32,15 @@ Function Clean-Dups-In-Config-File ($localPath, $parentNodePath, $nodePath)
 		# save the config file
 		$xml.Save($localPath)
 	}
-
 }
 
-$xml = New-Object xml
-
-# find the Web.config file if there is one
-$config = $project.ProjectItems | where {$_.Name -eq "Web.config" }
-if ($config -ne $null) 
+# find the Web.config/App.config file if there is one
+$items = $project.ProjectItems | where {$_.Name -eq "Web.config" -or $_.Name -eq "App.config" }
+Foreach ($item in $items)
 {
 	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
+	$localPath = $item.Properties | where {$_.Name -eq "LocalPath"}
 	
 	# clean duplicate entries
-	Clean-Dups-In-Config-File $localPath.Value "configuration/sharpRepository/cachingProviders" "cachingProvider[@name='redisProvider']"
+	Clean-Dups-In-Config-File $localPath.Value $parentPath $keyPath
 }
-
-# find the App.config file if there is one
-$config = $project.ProjectItems | where {$_.Name -eq "App.config" }
-if ($config -ne $null) 
-{
-	# find its path on the file system
-	$localPath = $config.Properties | where {$_.Name -eq "LocalPath"}
-	
-	# clean duplicate entries
-	Clean-Dups-In-Config-File $localPath.Value "configuration/sharpRepository/cachingProviders" "cachingProvider[@name='redisProvider']"
-}
-
