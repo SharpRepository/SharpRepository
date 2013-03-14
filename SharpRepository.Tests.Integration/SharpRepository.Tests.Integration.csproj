@@ -125,7 +125,16 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="CompoundKeyRepositoryAddTests.cs" />
+    <Compile Include="CompoundKeyRepositoryDeleteTests.cs" />
+    <Compile Include="CompoundKeyRepositoryFindAllTests.cs" />
+    <Compile Include="CompoundKeyRepositoryFindTests.cs" />
+    <Compile Include="CompoundKeyRepositoryGetAllTests.cs" />
+    <Compile Include="CompoundKeyRepositoryGetTests.cs" />
+    <Compile Include="CompoundKeyRepositoryJoinTests.cs" />
+    <Compile Include="CompoundKeyRepositoryUpdateTests.cs" />
     <Compile Include="Data\CachePrefixFactory.cs" />
+    <Compile Include="Data\CompoundKeyRepositoryTestCaseDataFactory.cs" />
     <Compile Include="Data\DataDirectoryHelper.cs" />
     <Compile Include="Data\Db4oDataDirectoryFactory.cs" />
     <Compile Include="Data\EfDataDirectoryFactory.cs" />
@@ -137,6 +146,9 @@
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
+    <Compile Include="TestAttributes\ExecuteForCompoundKeyRepositoriesAttribute.cs" />
+    <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesAttribute.cs" />
+    <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesExcept.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesExcept.cs" />
     <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
