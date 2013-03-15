@@ -44,7 +44,8 @@ namespace SharpRepository.Repository.Queries
 
             //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
             //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
-            _cachingStrategy.SaveGetResult(key, selector, _cacheItemConverter.ConvertItem(result));
+            var item = _cacheItemConverter.ConvertItem(result);
+            _cachingStrategy.SaveGetResult(key, selector, item);
 
             return result;
         }

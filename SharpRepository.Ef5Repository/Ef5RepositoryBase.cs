@@ -12,38 +12,6 @@ using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.Ef5Repository
 {
-    public class DynamicProxyCloneInjection : LoopValueInjection
-    {
-        protected override void Inject(object source, object target)
-        {
-            base.Inject(source, target);
-        }
-
-        protected override object SetValue(object v)
-        {
-            if (v == null)
-                return null;
-
-            var type = v.GetType();
-            var typeName = type.FullName;
-
-            if (typeName.StartsWith("System.Data.Entity.DynamicProxies"))
-            {
-                var baseType = type.BaseType;
-                if (baseType != null)
-                {
-                    // what happens if we make this NULL, will it get it back later after being pulled out of cache?
-                    //return null;
-
-                    // circular reference: need to be able to detect that in the custom CloneIInjection class
-                    return Activator.CreateInstance(baseType).InjectFrom(v);
-                }
-            }
-
-            return base.SetValue(v);
-        }
-    }
-
     public class Ef5RepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         protected IDbSet<T> DbSet { get; private set; }
@@ -82,14 +50,7 @@ namespace SharpRepository.Ef5Repository
         protected override void UpdateItem(T entity)
         {
             // mark this entity as modified, in case it is not currently attached to this context
-            try
-            {
-                Context.Entry(entity).State = EntityState.Modified;
-            }
-            catch (Exception)
-            {
-                // don't let this throw everything off
-            }
+             Context.Entry(entity).State = EntityState.Modified;
         }
 
         protected override void SaveChanges()
@@ -105,18 +66,15 @@ namespace SharpRepository.Ef5Repository
 
         public override TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
         {
-            return item;
-
-            if (item.GetType() == typeof(TCacheItem))
+            if (item.GetType().FullName.StartsWith("System.Data.Entity.DynamicProxies"))
             {
-                return item;
+                // this is a dynamic proxy so let's get rid of it and load up the real original POCO class
+                // using Activator.CreateInstance instead of new TCacheItem() so that I don't need the to mark TCacheItem as new() 
+                //  when marked as new() it won't allow me to use anonymous types in the selector param of FindAll or other methods
+                return (TCacheItem)Activator.CreateInstance<TCacheItem>().InjectFrom<DynamicProxyCloneInjection>(item); // can't use as because otherwise we would need a "where TCacheItem : class" which would mean we couldn't do a selector that returns an int or a string    
             }
 
-            // this is a dynamic proxy so let's get rid of the 
-
-            // using Activator.CreateInstance instead of new TCacheItem() so that I don't need the to mark TCacheItem as new() 
-            //  when marked as new() it won't allow me to use anonymous types in the selector param of FindAll or other methods
-            return (TCacheItem)Activator.CreateInstance<TCacheItem>().InjectFrom < DynamicProxyCloneInjection>(item); // can't use as because otherwise we would need a "where TCacheItem : class" which would mean we couldn't do a selector that returns an int or a string
+            return item;
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.
