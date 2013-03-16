@@ -15,14 +15,14 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="TKey">The type of the key.</typeparam>
     public class QueryManager<T, TKey> where T : class
     {
-        private readonly ICacheItemConverter _cacheItemConverter;
+        private readonly ICacheItemCleaner _cacheItemCleaner;
         private readonly ICachingStrategy<T, TKey> _cachingStrategy;
 
-        public QueryManager(ICacheItemConverter cacheItemConverter, ICachingStrategy<T, TKey> cachingStrategy)
+        public QueryManager(ICacheItemCleaner cacheItemCleaner, ICachingStrategy<T, TKey> cachingStrategy)
         {
             CacheUsed = false;
             CacheEnabled = true;
-            _cacheItemConverter = cacheItemConverter;
+            _cacheItemCleaner = cacheItemCleaner;
             _cachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
         }
 
@@ -44,8 +44,16 @@ namespace SharpRepository.Repository.Queries
 
             //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
             //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
-            var item = _cacheItemConverter.ConvertItem(result);
-            _cachingStrategy.SaveGetResult(key, selector, item);
+            try
+            {
+                var item = _cacheItemCleaner.CleanItem(result);
+                _cachingStrategy.SaveGetResult(key, selector, item);
+            }
+            catch (Exception)
+            {
+                // ignore this
+                //  this means that the clean up didn't go well, so don't cache it and next time it will be pulled from DB again
+            }
 
             return result;
         }
@@ -62,7 +70,18 @@ namespace SharpRepository.Repository.Queries
             CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveGetAllResult(queryOptions, selector, result);
+            //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
+            //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
+            try
+            {
+                var items = _cacheItemCleaner.CleanItems(result);
+                _cachingStrategy.SaveGetAllResult(queryOptions, selector, items);
+            }
+            catch (Exception)
+            {
+                // ignore this
+                //  this means that the clean up didn't go well, so don't cache it and next time it will be pulled from DB again
+            }
 
             return result;
         }
@@ -79,7 +98,18 @@ namespace SharpRepository.Repository.Queries
             CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveFindAllResult(criteria, queryOptions, selector, result);
+            //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
+            //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
+            try
+            {
+                var items = _cacheItemCleaner.CleanItems(result);
+                _cachingStrategy.SaveFindAllResult(criteria, queryOptions, selector, items);
+            }
+            catch (Exception)
+            {
+                // ignore this
+                //  this means that the clean up didn't go well, so don't cache it and next time it will be pulled from DB again
+            }
 
             return result;
         }
@@ -96,7 +126,18 @@ namespace SharpRepository.Repository.Queries
             CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveFindResult(criteria, queryOptions, selector, result);
+            //  the cache item converter is basically for EF5, it returns a DynamicProxy for lazy loading purposes
+            //  this will go into cache fine but after getting an object from cache, it will error out if you try to update it because it's attached to an old DBContext
+            try
+            {
+                var item = _cacheItemCleaner.CleanItem(result);
+                _cachingStrategy.SaveFindResult(criteria, queryOptions, selector, item);
+            }
+            catch (Exception)
+            {
+                // ignore this
+                //  this means that the clean up didn't go well, so don't cache it and next time it will be pulled from DB again
+            }
 
             return result;
         }

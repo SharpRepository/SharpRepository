@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Caching;
 using NUnit.Framework;
-using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -13,6 +12,19 @@ namespace SharpRepository.Tests.Caching
     [TestFixture]
     public class QueryManagerTests : TestBase
     {
+        public class FakeCacheItemCleaner : ICacheItemCleaner
+        {
+            public TCacheItem CleanItem<TCacheItem>(TCacheItem item)
+            {
+                return item;
+            }
+
+            public IEnumerable<TCacheItem> CleanItems<TCacheItem>(IEnumerable<TCacheItem> items)
+            {
+                return items;
+            }
+        }
+
         protected QueryManager<Contact, int> QueryManager;
 
         [SetUp]
@@ -25,7 +37,7 @@ namespace SharpRepository.Tests.Caching
                 cache.Remove(item.Key);
             }
 
-            QueryManager = new QueryManager<Contact, int>(new FakeCacheItemConverter(),  new StandardCachingStrategy<Contact, int>()
+            QueryManager = new QueryManager<Contact, int>(new FakeCacheItemCleaner(),  new StandardCachingStrategy<Contact, int>()
                                                    {
                                                        CachePrefix =
                                                            "#RepoStandardCache"

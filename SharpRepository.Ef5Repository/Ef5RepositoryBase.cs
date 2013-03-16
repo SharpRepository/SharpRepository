@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
@@ -64,17 +65,30 @@ namespace SharpRepository.Ef5Repository
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
         }
 
-        public override TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
+        public override TCacheItem CleanItem<TCacheItem>(TCacheItem item)
         {
-            if (item.GetType().FullName.StartsWith("System.Data.Entity.DynamicProxies"))
+            if (item.GetType().Namespace == "System.Data.Entity.DynamicProxies")
             {
                 // this is a dynamic proxy so let's get rid of it and load up the real original POCO class
                 // using Activator.CreateInstance instead of new TCacheItem() so that I don't need the to mark TCacheItem as new() 
                 //  when marked as new() it won't allow me to use anonymous types in the selector param of FindAll or other methods
-                return (TCacheItem)Activator.CreateInstance<TCacheItem>().InjectFrom<DynamicProxyCloneInjection>(item); // can't use as because otherwise we would need a "where TCacheItem : class" which would mean we couldn't do a selector that returns an int or a string    
+
+                // TODO: pass in the max depth based on configuration
+                return (TCacheItem)Activator.CreateInstance<TCacheItem>().InjectFrom(new DynamicProxyCloneInjection(), item); // can't use as because otherwise we would need a "where TCacheItem : class" which would mean we couldn't do a selector that returns an int or a string    
             }
 
-            return item;
+            return base.CleanItem(item);
+        }
+
+        // TODO; make integration tests to test this logic
+        public override IEnumerable<TCacheItem> CleanItems<TCacheItem>(IEnumerable<TCacheItem> items)
+        {
+            if (items.GetType().GetGenericArguments()[0].Namespace == "System.Data.Entity.DynamicProxies")
+            {
+                return items.Select(item => (TCacheItem) Activator.CreateInstance<TCacheItem>().InjectFrom(new DynamicProxyCloneInjection(), item)).ToList();
+            }
+
+            return base.CleanItems(items);
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.

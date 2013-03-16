@@ -12,20 +12,7 @@ using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
-    public interface ICacheItemConverter
-    {
-        TCacheItem ConvertItem<TCacheItem>(TCacheItem item);
-    }
-
-    public class FakeCacheItemConverter : ICacheItemConverter
-    {
-        public TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
-        {
-            return item;
-        }
-    }
-
-    public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey>, ICacheItemConverter where T : class
+    public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey>, ICacheItemCleaner where T : class
     {
         // the caching strategy used
         private ICachingStrategy<T, TKey> _cachingStrategy;
@@ -85,9 +72,14 @@ namespace SharpRepository.Repository
             set { _queryManager.CacheEnabled = value; }
         }
 
-        public virtual TCacheItem ConvertItem<TCacheItem>(TCacheItem item)
+        public virtual TCacheItem CleanItem<TCacheItem>(TCacheItem item)
         {
             return item;
+        }
+
+        public virtual IEnumerable<TCacheItem> CleanItems<TCacheItem>(IEnumerable<TCacheItem> items)
+        {
+            return items;
         }
 
         public abstract IQueryable<T> AsQueryable();
