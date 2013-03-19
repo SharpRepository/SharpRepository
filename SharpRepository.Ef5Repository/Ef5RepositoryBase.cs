@@ -50,17 +50,28 @@ namespace SharpRepository.Ef5Repository
 
         protected override void UpdateItem(T entity)
         {
-            // mark this entity as modified, in case it is not currently attached to this context
-            try
+            var entry = Context.Entry<T>(entity);
+
+            if (entry.State == EntityState.Detached)
             {
-                Context.Entry(entity).State = EntityState.Modified;
+                TKey key;
+                if (GetPrimaryKey(entity, out key))
+                {
+                    // check to see if this item is already attached
+                    //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
+                    //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
+                    var attachedEntity = Context.Set<T>().Find(key);
+                    if (attachedEntity != null)
+                    {
+                        Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+
+                        return;
+                    }
+                }
             }
-            catch (InvalidOperationException ex)
-            {
-                // ignore the "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key" error
-                //  it is already being tracked so not need to deal with it further
-            }
-             
+
+            // default
+            entry.State = EntityState.Modified;
         }
 
         protected override void SaveChanges()
