@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Omu.ValueInjecter;
 
 namespace SharpRepository.Ef5Repository
@@ -8,6 +10,8 @@ namespace SharpRepository.Ef5Repository
     //  maybe we have a default max and allow it to be changed via config files
     public class DynamicProxyCloneInjection : LoopValueInjection
     {
+        private const string DynamicProxyNamespace = "System.Data.Entity.DynamicProxies";
+
         // here we store the DyamicProxy classes that we've seen already going down the tree
         //  that way we can check to see if we've already visited this object and if so it's a circular reference so we can ignore the 2nd time we see it
         private readonly HashSet<object> _foundProxies;
@@ -48,7 +52,7 @@ namespace SharpRepository.Ef5Repository
                 return null;
 
             var type = v.GetType();
-            if (type.Namespace == "System.Data.Entity.DynamicProxies")
+            if (type.Namespace == DynamicProxyNamespace)
             {
                 var baseType = type.BaseType;
                 if (baseType != null)
@@ -56,6 +60,23 @@ namespace SharpRepository.Ef5Repository
                     // let's clean up this property because it's to a DynamicProxy class as well
                     return Activator.CreateInstance(baseType).InjectFrom(new DynamicProxyCloneInjection(_maxDepth, _foundProxies, _currentDepth), v);
                 }
+            }
+
+            // let's check for a collection of DynamicProxies, if so we need to clean it up
+            if (type.Name == "HashSet`1")
+            {
+                var genericType = type.GetGenericArguments()[0];
+                var cleanHashSet = Activator.CreateInstance(type);
+                var addMethod = type.GetMethod("Add");
+
+                foreach (var item in (IEnumerable)v)
+                {
+                    var tmp = Activator.CreateInstance(genericType).InjectFrom(new DynamicProxyCloneInjection(_maxDepth, _foundProxies, _currentDepth), item);
+                    addMethod.Invoke(cleanHashSet, new object[] {tmp});
+                    //cleanHashSet.Add(tmp);
+                }
+
+                return cleanHashSet;
             }
 
             return base.SetValue(v);

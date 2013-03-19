@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SharpRepositoryTestModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="SharpRepositoryTestModelStoreContainer">
+          <EntitySet Name="MainItem" EntityType="SharpRepositoryTestModel.Store.MainItem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SomeObject" EntityType="SharpRepositoryTestModel.Store.SomeObject" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SomeType" EntityType="SharpRepositoryTestModel.Store.SomeType" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_MainItem_SomeType" Association="SharpRepositoryTestModel.Store.FK_MainItem_SomeType">
+            <End Role="SomeType" EntitySet="SomeType" />
+            <End Role="MainItem" EntitySet="MainItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SomeObject_SomeType" Association="SharpRepositoryTestModel.Store.FK_SomeObject_SomeType">
+            <End Role="SomeType" EntitySet="SomeType" />
+            <End Role="SomeObject" EntitySet="SomeObject" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="MainItem">
+          <Key>
+            <PropertyRef Name="MainItemId" />
+          </Key>
+          <Property Name="MainItemId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="SomeTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SomeObject">
+          <Key>
+            <PropertyRef Name="SomeObjectId" />
+          </Key>
+          <Property Name="SomeObjectId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SomeTypeId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SomeType">
+          <Key>
+            <PropertyRef Name="SomeTypeId" />
+          </Key>
+          <Property Name="SomeTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_MainItem_SomeType">
+          <End Role="SomeType" Type="SharpRepositoryTestModel.Store.SomeType" Multiplicity="1" />
+          <End Role="MainItem" Type="SharpRepositoryTestModel.Store.MainItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SomeType">
+              <PropertyRef Name="SomeTypeId" />
+            </Principal>
+            <Dependent Role="MainItem">
+              <PropertyRef Name="SomeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SomeObject_SomeType">
+          <End Role="SomeType" Type="SharpRepositoryTestModel.Store.SomeType" Multiplicity="1" />
+          <End Role="SomeObject" Type="SharpRepositoryTestModel.Store.SomeObject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SomeType">
+              <PropertyRef Name="SomeTypeId" />
+            </Principal>
+            <Dependent Role="SomeObject">
+              <PropertyRef Name="SomeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SharpRepositoryTestModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="SharpRepositoryTestEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MainItems" EntityType="SharpRepositoryTestModel.MainItem" />
+          <EntitySet Name="SomeObjects" EntityType="SharpRepositoryTestModel.SomeObject" />
+          <EntitySet Name="SomeTypes" EntityType="SharpRepositoryTestModel.SomeType" />
+          <AssociationSet Name="FK_MainItem_SomeType" Association="SharpRepositoryTestModel.FK_MainItem_SomeType">
+            <End Role="SomeType" EntitySet="SomeTypes" />
+            <End Role="MainItem" EntitySet="MainItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SomeObject_SomeType" Association="SharpRepositoryTestModel.FK_SomeObject_SomeType">
+            <End Role="SomeType" EntitySet="SomeTypes" />
+            <End Role="SomeObject" EntitySet="SomeObjects" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="MainItem">
+          <Key>
+            <PropertyRef Name="MainItemId" />
+          </Key>
+          <Property Name="MainItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="SomeTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SomeType" Relationship="SharpRepositoryTestModel.FK_MainItem_SomeType" FromRole="MainItem" ToRole="SomeType" />
+        </EntityType>
+        <EntityType Name="SomeObject">
+          <Key>
+            <PropertyRef Name="SomeObjectId" />
+          </Key>
+          <Property Name="SomeObjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SomeTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="SomeType" Relationship="SharpRepositoryTestModel.FK_SomeObject_SomeType" FromRole="SomeObject" ToRole="SomeType" />
+        </EntityType>
+        <EntityType Name="SomeType">
+          <Key>
+            <PropertyRef Name="SomeTypeId" />
+          </Key>
+          <Property Name="SomeTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="MainItems" Relationship="SharpRepositoryTestModel.FK_MainItem_SomeType" FromRole="SomeType" ToRole="MainItem" />
+          <NavigationProperty Name="SomeObjects" Relationship="SharpRepositoryTestModel.FK_SomeObject_SomeType" FromRole="SomeType" ToRole="SomeObject" />
+        </EntityType>
+        <Association Name="FK_MainItem_SomeType">
+          <End Role="SomeType" Type="SharpRepositoryTestModel.SomeType" Multiplicity="1" />
+          <End Role="MainItem" Type="SharpRepositoryTestModel.MainItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SomeType">
+              <PropertyRef Name="SomeTypeId" />
+            </Principal>
+            <Dependent Role="MainItem">
+              <PropertyRef Name="SomeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SomeObject_SomeType">
+          <End Role="SomeType" Type="SharpRepositoryTestModel.SomeType" Multiplicity="1" />
+          <End Role="SomeObject" Type="SharpRepositoryTestModel.SomeObject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SomeType">
+              <PropertyRef Name="SomeTypeId" />
+            </Principal>
+            <Dependent Role="SomeObject">
+              <PropertyRef Name="SomeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SharpRepositoryTestModelStoreContainer" CdmEntityContainer="SharpRepositoryTestEntities">
+          <EntitySetMapping Name="MainItems">
+            <EntityTypeMapping TypeName="SharpRepositoryTestModel.MainItem">
+              <MappingFragment StoreEntitySet="MainItem">
+                <ScalarProperty Name="MainItemId" ColumnName="MainItemId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SomeTypeId" ColumnName="SomeTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SomeObjects">
+            <EntityTypeMapping TypeName="SharpRepositoryTestModel.SomeObject">
+              <MappingFragment StoreEntitySet="SomeObject">
+                <ScalarProperty Name="SomeObjectId" ColumnName="SomeObjectId" />
+                <ScalarProperty Name="SomeTypeId" ColumnName="SomeTypeId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SomeTypes">
+            <EntityTypeMapping TypeName="SharpRepositoryTestModel.SomeType">
+              <MappingFragment StoreEntitySet="SomeType">
+                <ScalarProperty Name="SomeTypeId" ColumnName="SomeTypeId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

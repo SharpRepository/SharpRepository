@@ -37,9 +37,8 @@
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=4.3.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharpRepository.Ef5Repository\bin\Release\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Esent.Interop">
       <HintPath>..\packages\RavenDB-Embedded.1.0.888\lib\net40\Esent.Interop.dll</HintPath>
@@ -113,6 +112,8 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -129,10 +130,35 @@
     <Compile Include="Data\Db4oDataDirectoryFactory.cs" />
     <Compile Include="Data\EfDataDirectoryFactory.cs" />
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
+    <Compile Include="DynamicProxyObjects\DynamicProxyTestEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DynamicProxyTestEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicProxyObjects\DynamicProxyTestEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DynamicProxyTestEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicProxyObjects\DynamicProxyTestEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DynamicProxyTestEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicProxyObjects\MainItem.cs">
+      <DependentUpon>DynamicProxyTestEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicProxyObjects\SomeObject.cs">
+      <DependentUpon>DynamicProxyTestEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicProxyObjects\SomeType.cs">
+      <DependentUpon>DynamicProxyTestEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
+    <Compile Include="Spikes\ProxyIssueSpike.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
     <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
@@ -158,6 +184,23 @@
     <Compile Include="TestObjects\TestObjectEntities.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="DynamicProxyObjects\DynamicProxyTestEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DynamicProxyTestEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DynamicProxyObjects\DynamicProxyTestEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DynamicProxyTestEntities.edmx</DependentUpon>
+      <LastGenOutput>DynamicProxyTestEntities.Context.cs</LastGenOutput>
+    </None>
+    <None Include="DynamicProxyObjects\DynamicProxyTestEntities.edmx.diagram">
+      <DependentUpon>DynamicProxyTestEntities.edmx</DependentUpon>
+    </None>
+    <None Include="DynamicProxyObjects\DynamicProxyTestEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DynamicProxyTestEntities.edmx</DependentUpon>
+      <LastGenOutput>DynamicProxyTestEntities.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
     <None Include="App.config" />
   </ItemGroup>
@@ -199,6 +242,9 @@
     <Folder Include="Data\Db4o\" />
     <Folder Include="Data\Ef\" />
     <Folder Include="Data\Xml\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

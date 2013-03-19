@@ -10,6 +10,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
         }
 
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<ContactType> ContactTypes { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }
         public DbSet<EmailAddress> EmailAddresses { get; set; }
     }
