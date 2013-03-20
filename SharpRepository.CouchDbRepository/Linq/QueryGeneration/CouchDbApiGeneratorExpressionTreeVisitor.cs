@@ -35,6 +35,11 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             return expression;
         }
 
+        protected override Expression VisitSubQueryExpression(SubQueryExpression expression)
+        {
+            return base.VisitSubQueryExpression(expression);
+        }
+
         protected override Expression VisitBinaryExpression (BinaryExpression expression)
         {
             _expression.Append ("(");

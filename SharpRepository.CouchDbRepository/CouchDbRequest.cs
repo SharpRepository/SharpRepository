@@ -20,7 +20,7 @@ namespace SharpRepository.CouchDbRepository
 
             if (postdata != null)
             {
-                var bytes = UTF8Encoding.UTF8.GetBytes(postdata.ToString());
+                var bytes = Encoding.UTF8.GetBytes(postdata);
                 req.ContentLength = bytes.Length;
                 using (var ps = req.GetRequestStream())
                 {
