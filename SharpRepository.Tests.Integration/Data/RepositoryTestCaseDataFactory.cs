@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using SharpRepository.CouchDbRepository;
 using SharpRepository.Db4oRepository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
@@ -71,6 +72,19 @@ namespace SharpRepository.Tests.Integration.Data
             if (includeTypes.Contains(RepositoryTypes.Cache))
             {
                 yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
+            }
+
+            if (includeTypes.Contains(RepositoryTypes.CouchDb))
+            {
+                if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
+                {
+                    var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
+                    CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+                    CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+
+                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");
+                }
+
             }
         }
     }

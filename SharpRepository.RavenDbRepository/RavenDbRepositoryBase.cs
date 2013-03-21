@@ -44,6 +44,13 @@ namespace SharpRepository.RavenDbRepository
                 _documentStore.Conventions.FindIdentityProperty = p => p.Name == propInfo.Name;
             }
 
+            // when upgrading to the new RavenDb.Client the following error is thrown when using an int as the PK
+            //  System.InvalidOperationException : Attempt to query by id only is blocked, you should use call session.Load("RavenTestIntKeys/1"); instead of session.Query().Where(x=>x.Id == "RavenTestIntKeys/1");
+            //      You can turn this error off by specifying documentStore.Conventions.AllowQueriesOnId = true;, but that is not recommend and provided for backward compatibility reasons only.
+            //  So for now we will follow that advice and turn on the old convention
+            // TODO: look at using a new way of doing the GetQuery to not have this issue when the PK is an int
+            _documentStore.Conventions.AllowQueriesOnId = true;
+
             _session = _documentStore.OpenSession();
         }
 

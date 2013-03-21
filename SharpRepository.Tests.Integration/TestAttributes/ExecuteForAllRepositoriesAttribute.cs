@@ -10,13 +10,14 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get { return RepositoryTestCaseDataFactory.Build(new[]
                                                                  {
-                                                                     RepositoryTypes.Dbo4, 
+//                                                                     RepositoryTypes.Dbo4, 
                                                                      RepositoryTypes.RavenDb, 
-                                                                     RepositoryTypes.Xml,
-                                                                     RepositoryTypes.MongoDb, 
-                                                                     RepositoryTypes.InMemory, 
-                                                                     RepositoryTypes.Ef5, 
-                                                                     RepositoryTypes.Cache, 
+//                                                                     RepositoryTypes.Xml,
+//                                                                     RepositoryTypes.MongoDb, 
+//                                                                     RepositoryTypes.InMemory, 
+//                                                                     RepositoryTypes.Ef5, 
+//                                                                     RepositoryTypes.Cache, 
+                                                                     RepositoryTypes.CouchDb
                                                                  }); }
         }
 
