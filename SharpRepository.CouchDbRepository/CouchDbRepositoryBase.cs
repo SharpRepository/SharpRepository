@@ -49,7 +49,7 @@ namespace SharpRepository.CouchDbRepository
             //return Client.GetAllDocuments().AsQueryable();
         }
 
-        // we override the implementation fro LinqBaseRepository becausee this is built in 
+        // we override the implementation of LinqBaseRepository because this is built in 
         protected override T GetQuery(string key)
         {
             var item = Client.GetDocument(key);

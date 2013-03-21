@@ -10,15 +10,15 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get
             {
-                return RepositoryTestCaseDataFactory.Build(_includeTypes);
+                return RepositoryTestCaseDataFactory.Build(_includeType);
             }
         }
 
-        private static RepositoryTypes[] _includeTypes;
+        private static RepositoryType[] _includeType;
                 
-        public ExecuteForRepositoriesAttribute(params RepositoryTypes[] repositoryTypes) : this()
+        public ExecuteForRepositoriesAttribute(params RepositoryType[] repositoryType) : this()
         {
-            _includeTypes = repositoryTypes;
+            _includeType = repositoryType;
         }
 
         public ExecuteForRepositoriesAttribute() : base(typeof(ExecuteForRepositoriesAttribute), "ForRepositoriesTestCaseData")

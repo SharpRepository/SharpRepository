@@ -27,6 +27,7 @@ namespace SharpRepository.CouchDbRepository.Linq
             var skip = 0;
             int? take = null;
 
+            // TODO: look into if it's possible to do how they suggest for CouchDB where to do pagination when it requests 5 items for the first page you actually get 6 so you have the 6th key and when you are on page 2, then you use startkey with the 6th key and get 5 more from there
             if (_queryParts.Skip.HasValue)
             {
                 skip = _queryParts.Skip.Value;
@@ -34,15 +35,14 @@ namespace SharpRepository.CouchDbRepository.Linq
 
             if (_queryParts.Take.HasValue)
             {
-                // since CouchDb doesn't have a skip param, we need to take all the skipped values as well and then ignore them in the results
-                //  so if Skip is 2 and Take is 3, then we actually need to take 5 results and skip the first 2 when we get the results
-                // TODO: look into if it's possible to do how they suggest for CouchDB where to do pagination when it requests 5 items for the first page you actually get 6 so you have the 6th key and when you are on page 2, then you use startkey with the 6th key and get 5 more from there
-
-                take = skip + _queryParts.Take.Value;
+                take = _queryParts.Take.Value;
             }
 
             if (take.HasValue)
                 querystring += "limit=" + take.Value + "&";
+
+            if (skip != 0)
+                querystring += "skip=" + skip + "&";
 
             if (_queryParts.OrderByIsDescending)
                 querystring += "descending=true&";
@@ -67,9 +67,7 @@ namespace SharpRepository.CouchDbRepository.Linq
             res = JObject.Parse(json);
             var rows = res["rows"];
 
-            var items = rows.Select(row => row["value"].ToObject<T>());
-
-            return items.Skip(skip);
+            return rows.Select(row => row["value"].ToObject<T>());
         }
     }
 }

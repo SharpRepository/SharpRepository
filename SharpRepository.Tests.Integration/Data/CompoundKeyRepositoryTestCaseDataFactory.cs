@@ -13,21 +13,21 @@ namespace SharpRepository.Tests.Integration.Data
 {
     public class CompoundKeyRepositoryTestCaseDataFactory
     {
-        public static IEnumerable<TestCaseData> Build(RepositoryTypes[] includeTypes)
+        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType)
         {
-            if (includeTypes.Contains(RepositoryTypes.InMemory))
+            if (includeType.Contains(RepositoryType.InMemory))
             {
                 yield return new TestCaseData(new InMemoryRepository<User, string, int>()).SetName("InMemoryRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Ef5))
+            if (includeType.Contains(RepositoryType.Ef5))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return new TestCaseData(new Ef5Repository<User, string, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Cache))
+            if (includeType.Contains(RepositoryType.Cache))
             {
                 yield return new TestCaseData(new CacheRepository<User, string, int>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
             }

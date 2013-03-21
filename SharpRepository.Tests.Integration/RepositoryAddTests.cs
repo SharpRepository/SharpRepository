@@ -67,7 +67,7 @@ namespace SharpRepository.Tests.Integration
             added.Count().ShouldEqual(3);
         }
 
-        [ExecuteForRepositories(RepositoryTypes.Ef5)]
+        [ExecuteForRepositories(RepositoryType.Ef5)]
         public void Using_TransactionScope_Without_Complete_Should_Not_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
@@ -80,7 +80,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldEqual(0);
         }
 
-        [ExecuteForRepositories(RepositoryTypes.Ef5)]
+        [ExecuteForRepositories(RepositoryType.Ef5)]
         public void Using_TransactionScope_With_Complete_Should_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error

@@ -8,17 +8,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
     {
         private static IEnumerable<TestCaseData> ForAllRepositoriesTestCaseData
         {
-            get { return RepositoryTestCaseDataFactory.Build(new[]
-                                                                 {
-//                                                                     RepositoryTypes.Dbo4, 
-                                                                     RepositoryTypes.RavenDb, 
-//                                                                     RepositoryTypes.Xml,
-//                                                                     RepositoryTypes.MongoDb, 
-//                                                                     RepositoryTypes.InMemory, 
-//                                                                     RepositoryTypes.Ef5, 
-//                                                                     RepositoryTypes.Cache, 
-                                                                     RepositoryTypes.CouchDb
-                                                                 }); }
+            get { return RepositoryTestCaseDataFactory.Build(RepositoryTypes.All); }
         }
 
         public ExecuteForAllRepositoriesAttribute() : base(typeof(ExecuteForAllRepositoriesAttribute), "ForAllRepositoriesTestCaseData")

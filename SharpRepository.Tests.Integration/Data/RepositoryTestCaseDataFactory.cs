@@ -20,21 +20,21 @@ namespace SharpRepository.Tests.Integration.Data
 {
     public class RepositoryTestCaseDataFactory
     {
-        public static IEnumerable<TestCaseData> Build(RepositoryTypes[] includeTypes)
+        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType)
         {
-            if (includeTypes.Contains(RepositoryTypes.InMemory))
+            if (includeType.Contains(RepositoryType.InMemory))
             {
                 yield return new TestCaseData(new InMemoryRepository<Contact, string>()).SetName("InMemoryRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Xml))
+            if (includeType.Contains(RepositoryType.Xml))
             {
                 var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
                 yield return
                     new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Ef5))
+            if (includeType.Contains(RepositoryType.Ef5))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
@@ -42,13 +42,13 @@ namespace SharpRepository.Tests.Integration.Data
                     new TestCaseData(new Ef5Repository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Dbo4))
+            if (includeType.Contains(RepositoryType.Dbo4))
             {
                 var dbPath = Db4oDataDirectoryFactory.Build("Contact");
                 yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.MongoDb))
+            if (includeType.Contains(RepositoryType.MongoDb))
             {
                 string connectionString = MongoDbConnectionStringFactory.Build("Contact");
            
@@ -59,7 +59,7 @@ namespace SharpRepository.Tests.Integration.Data
                 }
             }
 
-            if (includeTypes.Contains(RepositoryTypes.RavenDb))
+            if (includeType.Contains(RepositoryType.RavenDb))
             {
                 var documentStore = new EmbeddableDocumentStore
                                         {
@@ -69,12 +69,12 @@ namespace SharpRepository.Tests.Integration.Data
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.Cache))
+            if (includeType.Contains(RepositoryType.Cache))
             {
                 yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
             }
 
-            if (includeTypes.Contains(RepositoryTypes.CouchDb))
+            if (includeType.Contains(RepositoryType.CouchDb))
             {
                 if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
                 {

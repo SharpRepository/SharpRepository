@@ -60,7 +60,7 @@ namespace SharpRepository.Tests.Integration
             result.First().Username.ShouldEqual("Test User 3");
         }
 
-        //[ExecuteForRepositories(RepositoryTypes.Xml,RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        //[ExecuteForRepositories(RepositoryType.Xml,RepositoryType.InMemory, RepositoryType.Ef)]
         [ExecuteForAllCompoundKeyRepositories]
         public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging_MagicString(ICompoundKeyRepository<User, string, int> repository)
         {

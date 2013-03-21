@@ -1,6 +1,6 @@
 namespace SharpRepository.Tests.Integration
 {
-    public enum RepositoryTypes
+    public enum RepositoryType
     {
         Xml,
         InMemory,

@@ -10,12 +10,8 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get
             {
-                return CompoundKeyRepositoryTestCaseDataFactory.Build(new[]
-                                                                 {
-                                                                     RepositoryTypes.InMemory, 
-                                                                     RepositoryTypes.Ef5, 
-                                                                     RepositoryTypes.Cache, 
-                                                                 }); }
+                return CompoundKeyRepositoryTestCaseDataFactory.Build(RepositoryTypes.CompoundKey);
+            }
         }
 
         public ExecuteForAllCompoundKeyRepositoriesAttribute()

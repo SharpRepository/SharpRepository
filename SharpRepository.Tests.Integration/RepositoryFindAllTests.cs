@@ -62,7 +62,7 @@ namespace SharpRepository.Tests.Integration
             result.First().Name.ShouldEqual("Test User 3");
         }
 
-        //[ExecuteForRepositories(RepositoryTypes.Xml,RepositoryTypes.InMemory, RepositoryTypes.Ef)]
+        //[ExecuteForRepositories(RepositoryType.Xml,RepositoryType.InMemory, RepositoryType.Ef)]
         [ExecuteForAllRepositories]
         public void FindAll_Should_Return_All_Items_Which_Satisfy_Specification_With_Paging_MagicString(IRepository<Contact, string> repository)
         {

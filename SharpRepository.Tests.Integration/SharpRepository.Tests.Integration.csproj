@@ -114,6 +114,7 @@
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
+    <Compile Include="TestAttributes\AllRepositories.cs" />
     <Compile Include="TestAttributes\ExecuteForCompoundKeyRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesAttribute.cs" />
     <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesExcept.cs" />
@@ -127,7 +128,7 @@
     <Compile Include="RepositoryGetAllTests.cs" />
     <Compile Include="RepositoryGetTests.cs" />
     <Compile Include="Data\RepositoryTestCaseDataFactory.cs" />
-    <Compile Include="RepositoryTypes.cs" />
+    <Compile Include="RepositoryType.cs" />
     <Compile Include="RepositoryUpdateTests.cs" />
     <Compile Include="Data\XmlDataDirectoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
