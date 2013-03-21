@@ -69,7 +69,6 @@ namespace SharpRepository.CouchDbRepository.Linq
 
             var items = rows.Select(row => row["value"].ToObject<T>());
 
-            // TODO: do we need to check if we are skipping 2 and returning 3 but there are only 2 or 1 results in the list?
             return items.Skip(skip);
         }
     }
