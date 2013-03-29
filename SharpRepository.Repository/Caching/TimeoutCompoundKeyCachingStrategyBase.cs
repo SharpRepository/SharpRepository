@@ -11,8 +11,8 @@ namespace SharpRepository.Repository.Caching
     {
         public int TimeoutInSeconds { get; set; }
 
-        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
-            : base(cachingProvider)
+        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, int? maxResults, ICachingProvider cachingProvider = null)
+            : base(maxResults, cachingProvider)
         {
             TimeoutInSeconds = timeoutInSeconds;
         }
@@ -76,8 +76,8 @@ namespace SharpRepository.Repository.Caching
     {
         public int TimeoutInSeconds { get; set;  }
 
-        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
-            : base(cachingProvider)
+        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, int? maxResults, ICachingProvider cachingProvider = null)
+            : base(maxResults, cachingProvider)
         {
             TimeoutInSeconds = timeoutInSeconds;
         }
@@ -141,8 +141,8 @@ namespace SharpRepository.Repository.Caching
     {
         public int TimeoutInSeconds { get; set;  }
 
-        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
-            : base(cachingProvider)
+        internal TimeoutCompoundKeyCachingStrategyBase(int timeoutInSeconds, int? maxResults, ICachingProvider cachingProvider = null)
+            : base(maxResults, cachingProvider)
         {
             TimeoutInSeconds = timeoutInSeconds;
         }

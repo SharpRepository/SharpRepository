@@ -38,8 +38,29 @@ namespace SharpRepository.Ef5Repository
 
         protected override void UpdateItem(T entity)
         {
-            // mark this entity as modified, in case it is not currently attached to this context
-            Context.Entry(entity).State = EntityState.Modified;
+            var entry = Context.Entry<T>(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                object[] keys;
+
+                if (GetPrimaryKeys(entity, out keys))
+                {
+                    // check to see if this item is already attached
+                    //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
+                    //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
+                    var attachedEntity = Context.Set<T>().Find(keys);
+                    if (attachedEntity != null)
+                    {
+                        Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+
+                        return;
+                    }
+                }
+            }
+
+            // default
+            entry.State = EntityState.Modified;
         }
 
         protected override void SaveChanges()
@@ -104,8 +125,30 @@ namespace SharpRepository.Ef5Repository
 
         protected override void UpdateItem(T entity)
         {
-            // mark this entity as modified, in case it is not currently attached to this context
-            Context.Entry(entity).State = EntityState.Modified;
+            var entry = Context.Entry<T>(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                TKey key;
+                TKey2 key2;
+                
+                if (GetPrimaryKey(entity, out key, out key2))
+                {
+                    // check to see if this item is already attached
+                    //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
+                    //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
+                    var attachedEntity = Context.Set<T>().Find(key, key2);
+                    if (attachedEntity != null)
+                    {
+                        Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+
+                        return;
+                    }
+                }
+            }
+
+            // default
+            entry.State = EntityState.Modified;
         }
 
         protected override void SaveChanges()
@@ -170,8 +213,31 @@ namespace SharpRepository.Ef5Repository
 
         protected override void UpdateItem(T entity)
         {
-            // mark this entity as modified, in case it is not currently attached to this context
-            Context.Entry(entity).State = EntityState.Modified;
+            var entry = Context.Entry<T>(entity);
+
+            if (entry.State == EntityState.Detached)
+            {
+                TKey key;
+                TKey2 key2;
+                TKey3 key3;
+
+                if (GetPrimaryKey(entity, out key, out key2, out key3))
+                {
+                    // check to see if this item is already attached
+                    //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
+                    //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
+                    var attachedEntity = Context.Set<T>().Find(key, key2, key3);
+                    if (attachedEntity != null)
+                    {
+                        Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+
+                        return;
+                    }
+                }
+            }
+
+            // default
+            entry.State = EntityState.Modified;
         }
 
         protected override void SaveChanges()

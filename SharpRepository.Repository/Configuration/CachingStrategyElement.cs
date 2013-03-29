@@ -17,6 +17,13 @@ namespace SharpRepository.Repository.Configuration
             set { base["name"] = value; }
         }
 
+        [ConfigurationProperty("maxResults", IsRequired = false, IsKey = false)]
+        public int? MaxResults
+        {
+            get { return base["maxResults"] as int?; }
+            set { base["maxResults"] = value; }
+        }
+
         /// <summary>
         /// Gets or sets the type of the caching strategy factory.
         /// </summary>
@@ -70,6 +77,12 @@ namespace SharpRepository.Repository.Configuration
         {
             get { return this.Name;  }
             set { this.Name = value; }
+        }
+
+        int? ICachingStrategyConfiguration.MaxResults
+        {
+            get { return this.MaxResults; }
+            set { this.MaxResults = value; }
         }
 
         Type ICachingStrategyConfiguration.Factory

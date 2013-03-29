@@ -15,7 +15,7 @@ namespace SharpRepository.Repository.Caching
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         /// <param name="partition">The property that should be used for partitioning.</param>
         public StandardCachingStrategyWithPartition(ICachingProvider cachingProvider, Expression<Func<T, int>> partition)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = partition;
         }
@@ -43,7 +43,7 @@ namespace SharpRepository.Repository.Caching
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         /// <param name="partition">The property that should be used for partitioning.</param>
         public StandardCachingStrategyWithPartition(ICachingProvider cachingProvider, Expression<Func<T, int>> partition)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = partition;
         }
@@ -81,7 +81,7 @@ namespace SharpRepository.Repository.Caching
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         /// <param name="partition">The property that should be used for partitioning.</param>
         public StandardCachingStrategyWithPartition(ICachingProvider cachingProvider, Expression<Func<T, TPartition>> partition)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = partition;
         }
@@ -111,7 +111,7 @@ namespace SharpRepository.Repository.Caching
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         /// <param name="partition">The property that should be used for partitioning.</param>
         public StandardCachingStrategyWithPartition(ICachingProvider cachingProvider, Expression<Func<T, TPartition>> partition)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = partition;
         }

@@ -13,6 +13,8 @@ namespace SharpRepository.Repository.Configuration
 
         public string Name { get; set; }
 
+        public int? MaxResults { get; set; }
+
         private Type _factory;
         public Type Factory
         {

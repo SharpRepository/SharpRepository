@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Caching;
 using SharpRepository.Repository.Helpers;
@@ -21,12 +22,12 @@ namespace SharpRepository.Repository.Caching
         public Expression<Func<T, TPartition>> Partition { get; set; }
 
         internal StandardCompoundKeyCachingStrategyBase()
-            : this(new InMemoryCachingProvider())
+            : this(null, new InMemoryCachingProvider())
         {
         }
 
-        internal StandardCompoundKeyCachingStrategyBase(ICachingProvider cachingProvider)
-            : base(cachingProvider)
+        internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
+            : base(maxResults, cachingProvider)
         {
             WriteThroughCachingEnabled = true;
             GenerationalCachingEnabled = true;
@@ -37,8 +38,7 @@ namespace SharpRepository.Repository.Caching
         {
             result = default(TResult);
 
-            if (!WriteThroughCachingEnabled)
-                return false;
+            if (!WriteThroughCachingEnabled) return false;
 
             return base.TryGetResult(keys, selector, out result);
         }
@@ -62,6 +62,7 @@ namespace SharpRepository.Repository.Caching
         public override void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
             if (!GenerationalCachingEnabled) return;
+            if (MaxResults.HasValue && result.Count() > MaxResults.Value) return;
 
             base.SaveGetAllResult(queryOptions, selector, result);
         }
@@ -78,6 +79,7 @@ namespace SharpRepository.Repository.Caching
         public override void SaveFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
         {
             if (!GenerationalCachingEnabled) return;
+            if (MaxResults.HasValue && result.Count() > MaxResults.Value) return;
 
             base.SaveFindAllResult(criteria, queryOptions, selector, result);
         }
@@ -386,12 +388,12 @@ namespace SharpRepository.Repository.Caching
         public Expression<Func<T, TPartition>> Partition { get; set; }
 
         internal StandardCompoundKeyCachingStrategyBase()
-            : this(new InMemoryCachingProvider())
+            : this(null, new InMemoryCachingProvider())
         {
         }
 
-        internal StandardCompoundKeyCachingStrategyBase(ICachingProvider cachingProvider)
-            : base(cachingProvider)
+        internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
+            : base(maxResults, cachingProvider)
         {
             WriteThroughCachingEnabled = true;
             GenerationalCachingEnabled = true;
@@ -751,12 +753,12 @@ namespace SharpRepository.Repository.Caching
         public Expression<Func<T, TPartition>> Partition { get; set; }
 
         internal StandardCompoundKeyCachingStrategyBase()
-            : this(new InMemoryCachingProvider())
+            : this(null, new InMemoryCachingProvider())
         {
         }
 
-        internal StandardCompoundKeyCachingStrategyBase(ICachingProvider cachingProvider)
-            : base(cachingProvider)
+        internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
+            : base(maxResults, cachingProvider)
         {
             WriteThroughCachingEnabled = true;
             GenerationalCachingEnabled = true;

@@ -7,6 +7,7 @@ namespace SharpRepository.Repository.Configuration
     public interface ICachingStrategyConfiguration
     {
         string Name { get; set; }
+        int? MaxResults { get; set; }
         Type Factory { get; set; }
         IDictionary<string, string> Attributes { get; set; }
         ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class, new();

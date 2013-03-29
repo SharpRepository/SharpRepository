@@ -9,11 +9,17 @@ namespace SharpRepository.Repository.Caching
         }
 
         public StandardCachingStrategyConfiguration(string name, bool writeThroughCachingEnabled, bool generationalCachingEnabled)
+            : this(name, writeThroughCachingEnabled, generationalCachingEnabled, null)
+        {
+        }
+
+        public StandardCachingStrategyConfiguration(string name, bool writeThroughCachingEnabled, bool generationalCachingEnabled, int? maxResults)
         {
             Name = name;
             WriteThroughCachingEnabled = writeThroughCachingEnabled;
             GeneraltionalCachingEnabled = generationalCachingEnabled;
-            Factory = typeof (StandardConfigCachingStrategyFactory);
+            MaxResults = maxResults;
+            Factory = typeof(StandardConfigCachingStrategyFactory);
         }
 
         public bool WriteThroughCachingEnabled

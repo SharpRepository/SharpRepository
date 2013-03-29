@@ -23,7 +23,7 @@ namespace SharpRepository.Repository.Caching
         /// </summary>
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         public StandardCachingStrategy(ICachingProvider cachingProvider) 
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = null;
         }
@@ -49,7 +49,7 @@ namespace SharpRepository.Repository.Caching
         /// </summary>
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         public StandardCachingStrategy(ICachingProvider cachingProvider)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = null;
         }
@@ -77,7 +77,7 @@ namespace SharpRepository.Repository.Caching
         /// </summary>
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         public StandardCachingStrategy(ICachingProvider cachingProvider)
-            : base(cachingProvider)
+            : base(null, cachingProvider)
         {
             Partition = null;
         }

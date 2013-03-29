@@ -11,6 +11,7 @@ namespace SharpRepository.Repository.Caching
         private ICachingProvider _cachingProvider;
         public string CachePrefix { get; set; }
         protected string TypeFullName { get; set; }
+        public int? MaxResults { get; set; }
 
         public ICachingProvider CachingProvider
         {
@@ -20,10 +21,11 @@ namespace SharpRepository.Repository.Caching
 
         internal CompoundKeyCachingStrategyCommon() { }
 
-        internal CompoundKeyCachingStrategyCommon(ICachingProvider cachingProvider)
+        internal CompoundKeyCachingStrategyCommon(int? maxResults, ICachingProvider cachingProvider)
         {
             CachePrefix = "#Repo";
             CachingProvider = cachingProvider;
+            MaxResults = maxResults;
 
             TypeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
         }

@@ -11,8 +11,8 @@ namespace SharpRepository.Repository.Caching
     {
         public int TimeoutInSeconds { get; set;  }
 
-        internal TimeoutCachingStrategyBase(int timeoutInSeconds, ICachingProvider cachingProvider = null)
-            : base(cachingProvider)
+        internal TimeoutCachingStrategyBase(int timeoutInSeconds, int? maxResults, ICachingProvider cachingProvider = null)
+            : base(maxResults, cachingProvider)
         {
             TimeoutInSeconds = timeoutInSeconds;
         }
