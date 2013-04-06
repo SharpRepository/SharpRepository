@@ -50,23 +50,30 @@ namespace SharpRepository.Ef5Repository
         {
             var entry = Context.Entry<T>(entity);
 
-            if (entry.State == EntityState.Detached)
+            try
             {
-                TKey key;
-
-                if (GetPrimaryKey(entity, out key))
+                if (entry.State == EntityState.Detached)
                 {
-                    // check to see if this item is already attached
-                    //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
-                    //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
-                    var attachedEntity = Context.Set<T>().Find(key);
-                    if (attachedEntity != null)
-                    {
-                        Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+                    TKey key;
 
-                        return;
+                    if (GetPrimaryKey(entity, out key))
+                    {
+                        // check to see if this item is already attached
+                        //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
+                        //  specifically: "An object with the same key already exists in the ObjectStateManager. The ObjectStateManager cannot track multiple objects with the same key."
+                        var attachedEntity = Context.Set<T>().Find(key);
+                        if (attachedEntity != null)
+                        {
+                            Context.Entry(attachedEntity).CurrentValues.SetValues(entity);
+
+                            return;
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                // ignore and try the default behavior
             }
 
             // default
