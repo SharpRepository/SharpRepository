@@ -19,17 +19,19 @@ namespace SharpRepository.Repository.Caching
 
         public override void Add(TKey key, T result)
         {
-            // nothing to do
+            // update the cached item
+            SetCache(GetWriteThroughCacheKey<T>(key, null), result);
         }
 
         public override void Update(TKey key, T result)
         {
-            // nothing to do
+            // update the cached item
+            SetCache(GetWriteThroughCacheKey<T>(key, null), result);
         }
 
         public override void Delete(TKey key, T result)
         {
-            // nothing to do
+            ClearCache(GetWriteThroughCacheKey<T>(key, null));
         }
 
         public override void Save()
