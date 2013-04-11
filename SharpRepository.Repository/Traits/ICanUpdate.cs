@@ -11,7 +11,16 @@ namespace SharpRepository.Repository.Traits
     /// <typeparam name="T">Generic repository entity type</typeparam>
     public interface ICanUpdate<in T>
     {
+        /// <summary>
+        /// Updates the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         void Update(T entity);
+
+        /// <summary>
+        /// Updates the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
         void Update(IEnumerable<T> entities);
     }
 }

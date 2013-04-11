@@ -17,6 +17,11 @@ namespace SharpRepository.Repository.Traits
     {
         T Get(TKey key);
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+
+        bool Exists(TKey key);
+        bool TryGet(TKey key, out T entity);
+        bool TryGet<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult entity);
+
         IEnumerable<T> GetAll(IQueryOptions<T> queryOptions = null);
     }
 }

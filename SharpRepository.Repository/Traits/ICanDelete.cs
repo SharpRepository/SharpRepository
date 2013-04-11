@@ -12,8 +12,18 @@ namespace SharpRepository.Repository.Traits
     /// <typeparam name="TKey">Generic repository entity key type</typeparam>
     public interface ICanDelete<in T, in TKey>
     {
-        void Delete(T entity);
-        void Delete(IEnumerable<T> entities);
         void Delete(TKey key);
+
+        /// <summary>
+        /// Deletes the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        void Delete(T entity);
+
+        /// <summary>
+        /// Deletes the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        void Delete(IEnumerable<T> entities);
     }
 }

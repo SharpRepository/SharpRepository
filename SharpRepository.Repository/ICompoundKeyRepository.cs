@@ -22,6 +22,9 @@ namespace SharpRepository.Repository
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
 
+        bool Exists(params object[] keys);
+        bool TryGet(out T entity, params object[] keys);
+
         /// <summary>
         /// Deletes the specified entity by the compound primary key.
         /// </summary>
@@ -56,6 +59,11 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
+
+        bool Exists(TKey key, TKey2 key2);
+        bool TryGet(TKey key, TKey2 key2, out T entity);
+
+        bool TryGet<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector, out TResult entity);
 
         /// <summary>
         /// Deletes the specified entity by the compound primary key.
@@ -95,6 +103,11 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
+
+        bool Exists(TKey key, TKey2 key2, TKey3 key3);
+        bool TryGet(TKey key, TKey2 key2, TKey3 key3, out T entity);
+
+        bool TryGet<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector, out TResult entity);
 
         /// <summary>
         /// Deletes the specified entity by the compound primary key.

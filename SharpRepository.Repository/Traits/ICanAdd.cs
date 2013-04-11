@@ -11,7 +11,16 @@ namespace SharpRepository.Repository.Traits
     /// <typeparam name="T">Generic repository entity type</typeparam>
     public interface ICanAdd<in T>
     {
+        /// <summary>
+        /// Adds the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
         void Add(T entity);
+
+        /// <summary>
+        /// Adds the specified entities.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
         void Add(IEnumerable<T> entities);
     }
 }

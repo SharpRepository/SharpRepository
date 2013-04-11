@@ -79,6 +79,32 @@ namespace SharpRepository.Repository
             return Repository.Find(predicate, selector, queryOptions);
         }
 
+        public bool Exists(Expression<Func<T, bool>> predicate)
+        {
+            T entity;
+            return TryFind(predicate, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
+        {
+            return Repository.TryFind(predicate, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions, out T entity)
+        {
+            return Repository.TryFind(predicate, queryOptions, out entity);
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return Repository.TryFind(predicate, selector, out entity);
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            return Repository.TryFind(predicate, selector, queryOptions, out entity);
+        }
+
         public T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
             return Repository.Find(criteria, queryOptions);
@@ -87,6 +113,31 @@ namespace SharpRepository.Repository
         public TResult Find<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             return Repository.Find(criteria, selector, queryOptions);
+        }
+
+        public bool Exists(ISpecification<T> criteria)
+        {
+            return Repository.Exists(criteria);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, out T entity)
+        {
+            return Repository.TryFind(criteria, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T entity)
+        {
+            return Repository.TryFind(criteria, queryOptions, out entity);
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return Repository.TryFind(criteria, selector, out entity);
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            return Repository.TryFind(criteria, selector, queryOptions,  out entity);
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
@@ -117,6 +168,22 @@ namespace SharpRepository.Repository
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
             return Repository.Get(key, selector);
+        }
+
+        public bool Exists(TKey key)
+        {
+            T entity;
+            return TryGet(key, out entity);
+        }
+
+        public bool TryGet(TKey key, out T entity)
+        {
+            return Repository.TryGet(key, out entity);
+        }
+
+        public bool TryGet<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return Repository.TryGet(key, selector, out entity);
         }
 
         public void Add(T entity)

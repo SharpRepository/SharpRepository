@@ -78,5 +78,40 @@ namespace SharpRepository.Tests.Integration
             var result = repository.Get(string.Empty, 0, c => new { c.Age, c.Username });
             result.ShouldBeNull();
         }
+
+        [ExecuteForAllCompoundKeyRepositories]
+        public void TryGet_Should_Return_True_And_Item_If_Item_Exists(ICompoundKeyRepository<User, string, int> repository)
+        {
+            var item = new User { Username = "Test User", Age = 21 };
+            repository.Add(item);
+
+            User result;
+            repository.TryGet(item.Username, item.Age, out result).ShouldBeTrue();
+            result.Username.ShouldEqual(item.Username);
+            result.Age.ShouldEqual(item.Age);
+        }
+
+        [ExecuteForAllCompoundKeyRepositories]
+        public void TryGet_Should_Return_False_And_Null_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
+        {
+            User result;
+            repository.TryGet(string.Empty, 0, out result).ShouldBeFalse();
+            result.ShouldBeNull();
+        }
+
+        [ExecuteForAllCompoundKeyRepositories]
+        public void TryGet_Should_Return_True_If_Item_Exists(ICompoundKeyRepository<User, string, int> repository)
+        {
+            var item = new User { Username = "Test User", Age = 21 };
+            repository.Add(item);
+
+            repository.Exists(item.Username, item.Age).ShouldBeTrue();
+        }
+
+        [ExecuteForAllCompoundKeyRepositories]
+        public void TryGet_Should_Return_False_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
+        {
+            repository.Exists(string.Empty, 0).ShouldBeFalse();
+        }
     }
 }

@@ -123,6 +123,27 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(params object[] keys)
+        {
+            T entity;
+            return TryGet(out entity, keys);
+        }
+
+        public bool TryGet(out T entity, params object[] keys)
+        {
+            entity = default(T);
+
+            try
+            {
+                entity = Get(keys);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria);
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
@@ -203,6 +224,52 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(ISpecification<T> criteria)
+        {
+            T entity;
+            return TryFind(criteria, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, out T entity)
+        {
+            return TryFind(criteria, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(criteria, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(criteria, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(criteria, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
             if (predicate == null) throw new ArgumentNullException("predicate");
@@ -216,6 +283,52 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             return Find(new Specification<T>(predicate), selector, queryOptions);
+        }
+
+        public bool Exists(Expression<Func<T, bool>> predicate)
+        {
+            T entity;
+            return TryFind(predicate, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
+        {
+            return TryFind(predicate, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(predicate, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(predicate, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(predicate, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         // This is the actual implementation that the derived class needs to implement
@@ -519,6 +632,42 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(TKey key, TKey2 key2)
+        {
+            T entity;
+            return TryGet(key, key2, out entity);
+        }
+
+        public bool TryGet(TKey key, TKey2 key2, out T entity)
+        {
+            entity = default(T);
+
+            try
+            {
+                entity = Get(key, key2);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryGet<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Get(key, key2, selector);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria);
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
@@ -599,6 +748,52 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(ISpecification<T> criteria)
+        {
+            T entity;
+            return TryFind(criteria, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, out T entity)
+        {
+            return TryFind(criteria, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(criteria, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(criteria, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(criteria, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
             if (predicate == null) throw new ArgumentNullException("predicate");
@@ -612,6 +807,52 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             return Find(new Specification<T>(predicate), selector, queryOptions);
+        }
+
+        public bool Exists(Expression<Func<T, bool>> predicate)
+        {
+            T entity;
+            return TryFind(predicate, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
+        {
+            return TryFind(predicate, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(predicate, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(predicate, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(predicate, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         // This is the actual implementation that the derived class needs to implement
@@ -913,6 +1154,42 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(TKey key, TKey2 key2, TKey3 key3)
+        {
+            T entity;
+            return TryGet(key, key2, key3, out entity);
+        }
+
+        public bool TryGet(TKey key, TKey2 key2, TKey3 key3, out T entity)
+        {
+            entity = default(T);
+
+            try
+            {
+                entity = Get(key, key2, key3);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryGet<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Get(key, key2, key3, selector);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria);
         protected abstract IQueryable<T> FindAllQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
@@ -993,6 +1270,52 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public bool Exists(ISpecification<T> criteria)
+        {
+            T entity;
+            return TryFind(criteria, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, out T entity)
+        {
+            return TryFind(criteria, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(criteria, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(criteria, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(criteria, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
             if (predicate == null) throw new ArgumentNullException("predicate");
@@ -1006,6 +1329,52 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             return Find(new Specification<T>(predicate), selector, queryOptions);
+        }
+
+        public bool Exists(Expression<Func<T, bool>> predicate)
+        {
+            T entity;
+            return TryFind(predicate, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
+        {
+            return TryFind(predicate, (IQueryOptions<T>)null, out entity);
+        }
+
+        public bool TryFind(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions, out T entity)
+        {
+            entity = null;
+
+            try
+            {
+                entity = Find(predicate, queryOptions);
+                return entity != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, out TResult entity)
+        {
+            return TryFind(predicate, selector, null, out entity);
+        }
+
+        public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
+        {
+            entity = default(TResult);
+
+            try
+            {
+                entity = Find(predicate, selector, queryOptions);
+                return !entity.Equals(default(TResult));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         // This is the actual implementation that the derived class needs to implement

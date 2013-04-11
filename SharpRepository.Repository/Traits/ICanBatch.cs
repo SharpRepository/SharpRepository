@@ -11,6 +11,10 @@ namespace SharpRepository.Repository.Traits
     /// <typeparam name="T">Generic repository entity type</typeparam>
     public interface ICanBatch<T>
     {
+        /// <summary>
+        /// Begins a batch mode process.  This allows multiple operations against the repository with the ability to commit or rollback.
+        /// </summary>
+        /// <returns></returns>
         IBatch<T> BeginBatch();
     }
 }

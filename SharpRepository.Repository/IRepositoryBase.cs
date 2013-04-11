@@ -1,34 +1,11 @@
 ﻿using System.Collections.Generic;
-using SharpRepository.Repository.Transactions;
+using SharpRepository.Repository.Traits;
 
 namespace SharpRepository.Repository
 {
-    public interface IRepositoryBase<T> where T : class
+    // TODO: I want to use the ICanDelete<> trait so that they aren't defined in 2 places but I can't because the Delete(TKey) can't be in RepositoryBase because it can't be in the CompounDKyeRepository
+    public interface IRepositoryBase<T> : ICanAdd<T>, ICanUpdate<T>, ICanBatch<T> where T : class
     {
-        /// <summary>
-        /// Adds the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Add(T entity);
-
-        /// <summary>
-        /// Adds the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Add(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Updates the specified entity.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Update(T entity);
-
-        /// <summary>
-        /// Updates the specified entities.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        void Update(IEnumerable<T> entities);
-
         /// <summary>
         /// Deletes the specified entity.
         /// </summary>
@@ -40,11 +17,5 @@ namespace SharpRepository.Repository
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Delete(IEnumerable<T> entities);
-
-        /// <summary>
-        /// Begins a batch mode process.  This allows multiple operations against the repository with the ability to commit or rollback.
-        /// </summary>
-        /// <returns></returns>
-        IBatch<T> BeginBatch();
     }
 }
