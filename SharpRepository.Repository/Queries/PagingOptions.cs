@@ -11,8 +11,8 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
     public class PagingOptions<T, TSortKey> : SortingOptions<T, TSortKey>
     {
-        public int PageSize { get; internal set; }
-        public int PageNumber { get; internal set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
         public int Skip { get { return (PageNumber - 1) * PageSize; } }
         public int Take { get { return PageSize; } }
         public int TotalItems { get; internal set; }
@@ -66,8 +66,8 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="T">The entity type of the repository.</typeparam>
     public class PagingOptions<T> : SortingOptions<T>
     {
-        public int PageSize { get; internal set; }
-        public int PageNumber { get; internal set; }
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
         public int Skip { get { return (PageNumber - 1) * PageSize; } }
         public int Take { get { return PageSize; } }
         public int TotalItems { get; set; }

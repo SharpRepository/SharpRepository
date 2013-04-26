@@ -12,8 +12,8 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
     public class SortingOptions<T, TSortKey> : IQueryOptions<T>
     {
-        public Expression<Func<T, TSortKey>> SortExpression { get; internal set; }
-        public bool IsDescending { get; internal set; }
+        public Expression<Func<T, TSortKey>> SortExpression { get; set; }
+        public bool IsDescending { get; set; }
 
         public SortingOptions(Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
         {
@@ -59,8 +59,8 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="T">The entity type of the repository.</typeparam>
     public class SortingOptions<T> : IQueryOptions<T>
     {
-        public string SortProperty { get; internal set; }
-        public bool IsDescending { get; internal set; }
+        public string SortProperty { get; set; }
+        public bool IsDescending { get; set; }
 
         public SortingOptions(string sortProperty, bool isDescending = false)
         {
