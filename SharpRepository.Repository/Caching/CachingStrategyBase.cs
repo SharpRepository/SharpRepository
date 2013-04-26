@@ -34,52 +34,116 @@ namespace SharpRepository.Repository.Caching
 
        public virtual bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
        {
-           return IsInCache(GetWriteThroughCacheKey(key, selector), out result);
+           result = default(TResult);
+           try
+           {
+               return IsInCache(GetWriteThroughCacheKey(key, selector), out result);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
        }
 
        public virtual void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
        {
-           SetCache(GetWriteThroughCacheKey(key, selector), result);
+           try
+           {
+               SetCache(GetWriteThroughCacheKey(key, selector), result);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
        }
 
        public virtual bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
        {
-           var cacheKey = GetAllCacheKey(queryOptions, selector);
-           if (!IsInCache(cacheKey, out result))
-               return false;
+           result = null;
+           try
+           {
+               var cacheKey = GetAllCacheKey(queryOptions, selector);
+               if (!IsInCache(cacheKey, out result))
+                   return false;
 
-           // if there are no query options then we don't need to check for the cache for data to update them with
-           return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
+               // if there are no query options then we don't need to check for the cache for data to update them with
+               return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
        }
 
        public virtual void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
        {
-           SetCache(GetAllCacheKey(queryOptions, selector), result, queryOptions);
+           try
+           {
+                SetCache(GetAllCacheKey(queryOptions, selector), result, queryOptions);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
        }
 
        public virtual bool TryFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
        {
-           var cacheKey = FindAllCacheKey(criteria, queryOptions, selector);
-           if (!IsInCache(cacheKey, out result))
-               return false;
+           result = null;
+           try
+           {
+               var cacheKey = FindAllCacheKey(criteria, queryOptions, selector);
+               if (!IsInCache(cacheKey, out result))
+                   return false;
 
-           // if there are no query options then we don't need to check for the cache for data to update them with
-           return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
+               // if there are no query options then we don't need to check for the cache for data to update them with
+               return queryOptions == null || SetCachedQueryOptions(cacheKey, queryOptions);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
        }
 
        public virtual void SaveFindAllResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result)
        {
-           SetCache(FindAllCacheKey(criteria, queryOptions, selector), result, queryOptions);
+           try
+           {
+                SetCache(FindAllCacheKey(criteria, queryOptions, selector), result, queryOptions);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else;
+           }
        }
 
        public virtual bool TryFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out TResult result)
        {
-           return IsInCache(FindCacheKey(criteria, queryOptions, selector), out result);
+           result = default(TResult);
+           try
+           {
+               return IsInCache(FindCacheKey(criteria, queryOptions, selector), out result);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
        }
 
        public virtual void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
        {
-           SetCache(FindCacheKey(criteria, queryOptions, selector), result);
+           try
+           {
+               SetCache(FindCacheKey(criteria, queryOptions, selector), result);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
        }
 
        public abstract void Add(TKey key, T result);
