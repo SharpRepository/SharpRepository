@@ -25,7 +25,7 @@ namespace SharpRepository.Repository.FetchStrategies
 
         public IFetchStrategy<T> Include(Expression<Func<T, object>> path)
         {
-            _properties.Add(path.ToPropertyName());
+            _properties.Add(path.ToIncludeString());
             return this;
         }
 

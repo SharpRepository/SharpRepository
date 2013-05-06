@@ -95,8 +95,8 @@ namespace SharpRepository.Benchmarks.Configuration
                 sw.Stop();
                 Console.WriteLine("   {0} ms total -- {1} avg ms per\n", sw.Elapsed.TotalMilliseconds, sw.Elapsed.TotalMilliseconds / Convert.ToDouble(Max));
             }
-
-            Console.WriteLine("\nDone: press any key to quit");
+            
+            Console.WriteLine("\nDone: press enter to quit");
             Console.Read();
         }
 

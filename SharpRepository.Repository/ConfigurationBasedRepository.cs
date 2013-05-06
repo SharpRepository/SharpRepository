@@ -19,11 +19,18 @@ namespace SharpRepository.Repository
     {
         protected readonly IRepository<T, TKey> Repository;
 
-        // no need to new this up directly, should be used as the base class for a custom repository implementation
-        protected ConfigurationBasedRepository()
+        // protected constructors so user can't instantiate directly
+        // we have 2 constructors so you can use the defualt sharpRepository section or specify a config section
+        //  you can also provide the repository name from the config file instead of whatever the default is if needed
+        protected ConfigurationBasedRepository(string configSection, string repositoryName)
         {
-            // Load up the repository based on the configuration file
-            Repository = RepositoryFactory.GetInstance<T, TKey>();
+            Repository = RepositoryFactory.GetInstance<T, TKey>(configSection, repositoryName);
+        }
+
+        protected ConfigurationBasedRepository(string repositoryName = null)
+        {
+            // Load up the repository based on the default configuration file
+            Repository = RepositoryFactory.GetInstance<T, TKey>(repositoryName);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
