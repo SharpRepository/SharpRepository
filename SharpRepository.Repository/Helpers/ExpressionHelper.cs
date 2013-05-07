@@ -18,22 +18,20 @@ namespace SharpRepository.Repository.Helpers
                     CollectRelationalMembers(((LambdaExpression)exp).Body, members);
                     break;
                 case ExpressionType.MemberAccess:
-                    {
-                        var mexp = (MemberExpression)exp;
-                        CollectRelationalMembers(mexp.Expression, members);
-                        members.Add((PropertyInfo)mexp.Member);
-                    }
+                    var mexp = (MemberExpression)exp;
+                    CollectRelationalMembers(mexp.Expression, members);
+                    members.Add((PropertyInfo)mexp.Member);
+
                     break;
                 case ExpressionType.Call:
-                    {
-                        var cexp = (MethodCallExpression)exp;
+                    var cexp = (MethodCallExpression)exp;
 
-                        if (cexp.Method.IsStatic == false)
-                            throw new InvalidOperationException("Invalid type of expression.");
+                    if (cexp.Method.IsStatic == false)
+                        throw new InvalidOperationException("Invalid type of expression.");
 
-                        foreach (var arg in cexp.Arguments)
-                            CollectRelationalMembers(arg, members);
-                    }
+                    foreach (var arg in cexp.Arguments)
+                        CollectRelationalMembers(arg, members);
+
                     break;
                 case ExpressionType.Parameter:
                     return;
