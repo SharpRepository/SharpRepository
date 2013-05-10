@@ -146,33 +146,13 @@ namespace SharpRepository.Repository
 #if !NET40
         public async Task<T> GetAsync(TKey key)
         {
-            return await Task.Run(() => _queryManager.ExecuteGet(
-                    () => GetQuery(key),
-                    null,
-                    key
-                    )
-                );
+            return await Task.Run(() => Get(key));
         }
 
         public async Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
-            if (selector == null) throw new ArgumentNullException("selector");
-
-            return await Task.Run(() => _queryManager.ExecuteGet(
-                () =>
-                    {
-                        var result = GetQuery(key);
-                        if (result == null)
-                            return default(TResult);
-
-                        var results = new[] {result};
-                        return results.AsQueryable().Select(selector).First();
-                    },
-                selector,
-                key)
-            );
+            return await Task.Run(() => Get(key, selector));
         }
-
 #endif
 
         public bool Exists(TKey key)
