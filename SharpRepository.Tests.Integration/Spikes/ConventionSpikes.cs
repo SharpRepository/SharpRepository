@@ -10,6 +10,24 @@ namespace SharpRepository.Tests.Integration.Spikes
     public class ConventionSpikes
     {
         [Test]
+        public void Changed_Default_Suffix_To_Key_Should_Work()
+        {
+            var origSuffix = DefaultRepositoryConventions.PrimaryKeySuffix;
+
+            DefaultRepositoryConventions.PrimaryKeySuffix = "Key";
+            var repository = new InMemoryRepository<ConventionTestItem1>();
+
+            var item = new ConventionTestItem1() { Name = "Test1" };
+            repository.Add(item);
+
+            // The PK should have been found and updated so it's not zero anymore
+            item.ConventionTestItem1Key.ShouldNotEqual(0);
+
+            // reset convention to the default orig for the rest of the tests
+            DefaultRepositoryConventions.PrimaryKeySuffix = origSuffix;
+        }
+
+        [Test]
         public void Changed_Convention_To_Key_Should_Work()
         {
             var origConvention = DefaultRepositoryConventions.GetPrimaryKeyName;
@@ -17,10 +35,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             DefaultRepositoryConventions.GetPrimaryKeyName = type => type.Name + "Key";
             var repository = new InMemoryRepository<ConventionTestItem1>();
 
-            var testItem1 = new ConventionTestItem1() { Name = "Test1" };
-            repository.Add(testItem1);
+            var item = new ConventionTestItem1() { Name = "Test1" };
+            repository.Add(item);
 
-            testItem1.ConventionTestItem1Key.ShouldNotEqual(0);
+            // The PK should have been found and updated so it's not zero anymore
+            item.ConventionTestItem1Key.ShouldNotEqual(0);
 
             // reset convention to the default orig for the rest of the tests
             DefaultRepositoryConventions.GetPrimaryKeyName = origConvention;
@@ -32,10 +51,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new InMemoryRepository<ConventionTestItem2>();
             repository.Conventions.GetPrimaryKeyName = _ => "Key";
 
-            var testItem1 = new ConventionTestItem2() { Name = "Test1" };
-            repository.Add(testItem1);
+            var item = new ConventionTestItem2() { Name = "Test1" };
+            repository.Add(item);
 
-            testItem1.Key.ShouldNotEqual(0);
+            // The PK should have been found and updated so it's not zero anymore
+            item.Key.ShouldNotEqual(0);
         }
 
         [Test]
@@ -44,10 +64,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new InMemoryRepository<ConventionTestItem3>();
             repository.Conventions.GetPrimaryKeyName = _ =>  "SomeRandomPrimaryKeyProperty" ;
 
-            var testItem1 = new ConventionTestItem3() { Name = "Test1" };
-            repository.Add(testItem1);
+            var item = new ConventionTestItem3() { Name = "Test1" };
+            repository.Add(item);
 
-            testItem1.SomeRandomPrimaryKeyProperty.ShouldNotEqual(0);
+            // The PK should have been found and updated so it's not zero anymore
+            item.SomeRandomPrimaryKeyProperty.ShouldNotEqual(0);
         }
     }
 }

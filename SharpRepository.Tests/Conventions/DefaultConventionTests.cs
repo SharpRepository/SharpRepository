@@ -27,9 +27,29 @@ namespace SharpRepository.Tests.Conventions
         }
 
         [Test]
-        public void Default_PrimaryKeyNameChecks()
+        public void Default_PrimaryKeyName()
         {
             DefaultRepositoryConventions.GetPrimaryKeyName(typeof (Contact)).ShouldEqual("ContactId");
         }
+
+        [Test]
+        public void Change_PrimaryKeyName()
+        {
+            var orig = DefaultRepositoryConventions.GetPrimaryKeyName;
+
+            DefaultRepositoryConventions.GetPrimaryKeyName = type => "PK_" + type.Name + "_Id";
+
+            DefaultRepositoryConventions.GetPrimaryKeyName(typeof(TestConventionObject)).ShouldEqual("PK_TestConventionObject_Id");
+
+            DefaultRepositoryConventions.GetPrimaryKeyName = orig;
+        }
+
+        internal class TestConventionObject
+        {
+            public int PK_TestConventionObject_Id { get; set; }
+            public string Name { get; set; }
+        }
     }
+
+    
 }
