@@ -45,7 +45,7 @@ namespace SharpRepository.Repository.Caching
             {
                 CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
 
-                if (queryOptions is PagingOptions<T>)
+                if (queryOptions is IPagingOptions)
                 {
                     CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
                 }
@@ -110,7 +110,7 @@ namespace SharpRepository.Repository.Caching
             {
                 CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
 
-                if (queryOptions is PagingOptions<T>)
+                if (queryOptions is IPagingOptions)
                 {
                     CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
                 }
@@ -175,7 +175,7 @@ namespace SharpRepository.Repository.Caching
             {
                 CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
 
-                if (queryOptions is PagingOptions<T>)
+                if (queryOptions is IPagingOptions)
                 {
                     CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
                 }

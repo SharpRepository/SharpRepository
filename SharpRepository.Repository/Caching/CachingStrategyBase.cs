@@ -204,7 +204,7 @@ namespace SharpRepository.Repository.Caching
            //  originally was thinking doing a ref arg for queryOptions and setting it via cache but ran into an issue in QueryManager using a ref in a lamda expression
 
            // we only need to do this for PagingOptions because it has a TotalItems property that we need
-           if (!(queryOptions is PagingOptions<T>))
+           if (!(queryOptions is IPagingOptions))
                return true;
 
            int totalItems;
@@ -212,7 +212,7 @@ namespace SharpRepository.Repository.Caching
            //      this is a safety in case the caching provider kicked one of them out
            if (IsPagingTotalInCache(cacheKey, out totalItems))
            {
-               ((PagingOptions<T>)queryOptions).TotalItems = totalItems;
+               ((IPagingOptions)queryOptions).TotalItems = totalItems;
                return true;
            }
 
@@ -238,9 +238,9 @@ namespace SharpRepository.Repository.Caching
            {
                CachingProvider.Set(cacheKey, result);
 
-               if (queryOptions is PagingOptions<T>)
+               if (queryOptions is IPagingOptions)
                {
-                   CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems);
+                   CachingProvider.Set(cacheKey + "=>pagingTotal", ((IPagingOptions)queryOptions).TotalItems);
                }
                //Trace.WriteLine(String.Format("Write item to cache: {0} - {1}", cacheKey, typeof(TCacheItem).Name));
            }
