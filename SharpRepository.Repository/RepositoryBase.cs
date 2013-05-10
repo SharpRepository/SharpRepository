@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
@@ -141,6 +142,38 @@ namespace SharpRepository.Repository
                 key
                 );
         }
+
+#if !NET40
+        public async Task<T> GetAsync(TKey key)
+        {
+            return await Task.Run(() => _queryManager.ExecuteGet(
+                    () => GetQuery(key),
+                    null,
+                    key
+                    )
+                );
+        }
+
+        public async Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector)
+        {
+            if (selector == null) throw new ArgumentNullException("selector");
+
+            return await Task.Run(() => _queryManager.ExecuteGet(
+                () =>
+                    {
+                        var result = GetQuery(key);
+                        if (result == null)
+                            return default(TResult);
+
+                        var results = new[] {result};
+                        return results.AsQueryable().Select(selector).First();
+                    },
+                selector,
+                key)
+            );
+        }
+
+#endif
 
         public bool Exists(TKey key)
         {
