@@ -92,6 +92,7 @@
     <Compile Include="CompoundKeyRepositoryBase.cs" />
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
+    <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="RepositoryConventions.cs" />
     <Compile Include="DefaultRepositoryConventions.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />
