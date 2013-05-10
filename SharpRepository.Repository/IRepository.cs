@@ -33,19 +33,12 @@ namespace SharpRepository.Repository
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
 
-#if !NET40
-        Task<T> GetAsync(TKey key);
-
-        Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector);
-#endif
-
-
-            /// <summary>
-            /// Returns true if the specified entity of type <typeparamref name="T"/> from the repository by the primary key exists
-            /// </summary>
-            /// <param name="key">The primary key.</param>
-            /// <returns>True if the entity exists, false if it does not</returns>
-            bool Exists(TKey key);
+        /// <summary>
+        /// Returns true if the specified entity of type <typeparamref name="T"/> from the repository by the primary key exists
+        /// </summary>
+        /// <param name="key">The primary key.</param>
+        /// <returns>True if the entity exists, false if it does not</returns>
+        bool Exists(TKey key);
 
         /// <summary>
         /// Returns true if the specified entity of type <typeparamref name="T"/> from the repository by the primary key exists
@@ -75,6 +68,12 @@ namespace SharpRepository.Repository
         bool CachingEnabled { get; set; }
 
         bool CacheUsed { get; }
+
+#if !NET40
+        Task<T> GetAsync(TKey key);
+
+        Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+#endif
     }
 
     /// <summary>

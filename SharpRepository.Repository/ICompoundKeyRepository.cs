@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository
@@ -21,6 +22,12 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
+
+#if !NET40
+        Task<T> GetAsync(params object[] keys);
+
+        Task<TResult> GetAsync<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
+#endif
 
         bool Exists(params object[] keys);
         bool TryGet(out T entity, params object[] keys);
@@ -59,6 +66,12 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
+#endif
 
         bool Exists(TKey key, TKey2 key2);
         bool TryGet(TKey key, TKey2 key2, out T entity);
@@ -103,6 +116,12 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2, TKey3 key3);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
+#endif
 
         bool Exists(TKey key, TKey2 key2, TKey3 key3);
         bool TryGet(TKey key, TKey2 key2, TKey3 key3, out T entity);

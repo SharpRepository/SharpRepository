@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
@@ -511,6 +512,73 @@ namespace SharpRepository.Repository
         {
             return GetEnumerator();
         }
+
+#if !NET40
+        public async Task<T> GetAsync(params object[] keys)
+        {
+            return await Task.Run(() => Get(keys));
+        }
+
+        public async Task<TResult> GetAsync<TResult>(Expression<Func<T, TResult>> selector, params object[] keys)
+        {
+            return await Task.Run(() => Get(selector, keys));
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(IQueryOptions<T> queryOptions)
+        {
+            return await Task.Run(() => GetAll(queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => GetAll(selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+#endif
     }
 
     public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2> : ICompoundKeyRepository<T, TKey, TKey2> where T : class
@@ -1031,6 +1099,73 @@ namespace SharpRepository.Repository
         {
             return GetEnumerator();
         }
+
+#if !NET40
+        public async Task<T> GetAsync(TKey key, TKey2 key2)
+        {
+            return await Task.Run(() => Get(key, key2));
+        }
+
+        public async Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector)
+        {
+            return await Task.Run(() => Get(key, key2, selector));
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(IQueryOptions<T> queryOptions)
+        {
+            return await Task.Run(() => GetAll(queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => GetAll(selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+#endif
     }
 
     public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> : ICompoundKeyRepository<T, TKey, TKey2, TKey3> where T : class
@@ -1560,5 +1695,71 @@ namespace SharpRepository.Repository
         {
             return GetEnumerator();
         }
+#if !NET40
+        public async Task<T> GetAsync(TKey key, TKey2 key2, TKey3 key3)
+        {
+            return await Task.Run(() => Get(key, key2, key3));
+        }
+
+        public async Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector)
+        {
+            return await Task.Run(() => Get(key, key2, key3, selector));
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll());
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(IQueryOptions<T> queryOptions)
+        {
+            return await Task.Run(() => GetAll(queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => GetAll(selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, selector, queryOptions));
+        }
+
+        public async Task<T> FindAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, queryOptions));
+        }
+
+        public async Task<TResult> FindAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, selector, queryOptions));
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, queryOptions));
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+#endif
     }
 }

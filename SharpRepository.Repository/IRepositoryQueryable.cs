@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Traits;
 
@@ -36,5 +37,13 @@ namespace SharpRepository.Repository
         /// <param name="queryOptions">The query options to apply like paging or sorting.</param>
         /// <returns></returns>
         IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+
+#if !NET40
+        Task<IEnumerable<T>> GetAllAsync();
+
+        Task<IEnumerable<T>> GetAllAsync(IQueryOptions<T> queryOptions);
+
+        Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+#endif
     }
 }
