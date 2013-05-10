@@ -51,9 +51,7 @@ namespace SharpRepository.Repository.Specifications
 
         public bool IsSatisfiedBy(T entity)
         {
-            if (Predicate == null) return true;
-
-            return new[] {entity}.AsQueryable().Any(Predicate);
+            return Predicate == null || new[] {entity}.AsQueryable().Any(Predicate);
         }
 
         public IFetchStrategy<T> FetchStrategy { get; set; }

@@ -20,6 +20,9 @@ namespace SharpRepository.Repository
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
         private QueryManager<T, TKey> _queryManager;
 
+        // conventions
+        public IRepositoryConventions Conventions { get; set; }
+
         // just the type name, used to find the primary key if it is [TypeName]Id
         private readonly string _typeName;
         protected string TypeName
@@ -51,6 +54,7 @@ namespace SharpRepository.Repository
 
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
             _typeName = typeof (T).Name;
+            Conventions = new RepositoryConventions();
         }
 
         public ICachingStrategy<T, TKey> CachingStrategy 
@@ -516,6 +520,7 @@ namespace SharpRepository.Repository
             return new Specification<T>(lambda);
         }
 
+        // TODO: cache this call so it's done on the first loading only
         protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()
         {
             // checks for properties in this order that match TKey type
@@ -523,20 +528,25 @@ namespace SharpRepository.Repository
             //  2) Id
             //  3) [Type Name]Id
             var type = typeof(T);
-            var keyType = typeof(TKey);
+            var pkType = typeof (TKey);
 
-            return type.GetProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>() && x.PropertyType == keyType)
-                   ?? GetPropertyCaseInsensitive(type, "Id", keyType)
-                   ?? GetPropertyCaseInsensitive(type, _typeName + "Id", keyType);
+            var propertyName = Conventions.GetPrimaryKeyName(type);
+
+            if (String.IsNullOrEmpty(propertyName)) return null;
+
+            var propInfo = type.GetProperty(propertyName);
+
+
+            return propInfo == null || propInfo.PropertyType != pkType ? null : propInfo;
         }
 
-        private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName, Type propertyType)
-        {
-            // make the property reflection lookup case insensitive
-            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-
-            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
-        }
+//        private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName, Type propertyType)
+//        {
+//            // make the property reflection lookup case insensitive
+//            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+//
+//            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
+//        }
 
         public abstract IEnumerator<T> GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator()

@@ -70,9 +70,8 @@ namespace SharpRepository.Tests.Specifications
     public class ContactByNameMatchSpec : Specification<Contact>
     {
         public ContactByNameMatchSpec(string name)
-            : base(null)
+            : base(p => p.Name.Contains(name))
         {
-            Predicate = p => p.Name.Contains(name);
         }
     }
 

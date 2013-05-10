@@ -167,6 +167,12 @@ namespace SharpRepository.Repository
             return Repository.FindAll(criteria, selector, queryOptions);
         }
 
+        public IRepositoryConventions Conventions
+        {
+            get { return Repository.Conventions; }
+            set { Repository.Conventions = value;  }
+        }
+
         public T Get(TKey key)
         {
             return Repository.Get(key);

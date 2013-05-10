@@ -1,7 +1,6 @@
 using System;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.Traits;
 
 
 // TODO: I want to use the ICanGet<> trait so that they aren't defined in 2 places but I can't because the GetAll is in IRepositoryQueryable and not in here, but it needs to be in ICanGet
@@ -15,6 +14,8 @@ namespace SharpRepository.Repository
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
     public interface IRepository<T, TKey> : IRepositoryBase<T>, IRepositoryQueryable<T>  where T : class
     {
+        IRepositoryConventions Conventions { get; set; }
+
         /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
         /// </summary>

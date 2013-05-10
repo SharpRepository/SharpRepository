@@ -109,6 +109,7 @@
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
+    <Compile Include="Spikes\ConventionSpikes.cs" />
     <Compile Include="Spikes\Ef5CompoundKeySpikes.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Helpers\RelativeDirectory.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestObjects\Contact.cs" />
+    <Compile Include="TestObjects\ConventionTestItems.cs" />
     <Compile Include="TestObjects\User.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
