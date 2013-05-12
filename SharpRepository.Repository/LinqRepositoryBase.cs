@@ -11,8 +11,9 @@ namespace SharpRepository.Repository
 {
     public abstract class LinqRepositoryBase<T, TKey> : RepositoryBase<T, TKey> where T : class
     {
-        protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
-        {   
+        protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
+            : base(cachingStrategy)
+        {
         }
 
         public override IQueryable<T> AsQueryable()
@@ -29,7 +30,7 @@ namespace SharpRepository.Repository
 
         protected override T FindQuery(ISpecification<T> criteria)
         {
-            return criteria.SatisfyingEntityFrom(BaseQuery());
+            return criteria.SatisfyingEntityFrom(BaseQuery(criteria.FetchStrategy));
         }
 
         protected override T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
@@ -37,7 +38,7 @@ namespace SharpRepository.Repository
             if (queryOptions == null)
                 return FindQuery(criteria);
 
-            var query = queryOptions.Apply(BaseQuery());
+            var query = queryOptions.Apply(BaseQuery(criteria.FetchStrategy));
 
             return criteria.SatisfyingEntityFrom(query);
         }
@@ -69,7 +70,7 @@ namespace SharpRepository.Repository
                 return FindAllQuery(criteria);
 
             var query = BaseQuery(criteria.FetchStrategy);
-            
+
             query = criteria.SatisfyingEntitiesFrom(query);
 
             return queryOptions.Apply(query);
@@ -78,8 +79,8 @@ namespace SharpRepository.Repository
         public override IEnumerator<T> GetEnumerator()
         {
             return BaseQuery().GetEnumerator();
-		}
-		
+        }
+
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
             var innerQuery = innerRepository.AsQueryable();
