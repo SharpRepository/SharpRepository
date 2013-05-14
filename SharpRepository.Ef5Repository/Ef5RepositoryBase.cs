@@ -18,10 +18,10 @@ namespace SharpRepository.Ef5Repository
 
         internal Ef5RepositoryBase(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
-            Initialize(dbContext, cachingStrategy != null);
+            Initialize(dbContext);
         }
 
-        private void Initialize(DbContext dbContext, bool hasCaching)
+        private void Initialize(DbContext dbContext)
         {
             Context = dbContext;
             DbSet = Context.Set<T>();
