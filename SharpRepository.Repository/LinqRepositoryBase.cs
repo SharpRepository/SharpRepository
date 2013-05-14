@@ -29,7 +29,7 @@ namespace SharpRepository.Repository
 
         protected override T FindQuery(ISpecification<T> criteria)
         {
-            return criteria.SatisfyingEntityFrom(BaseQuery());
+            return criteria.SatisfyingEntityFrom(BaseQuery(criteria.FetchStrategy));
         }
 
         protected override T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
@@ -37,7 +37,7 @@ namespace SharpRepository.Repository
             if (queryOptions == null)
                 return FindQuery(criteria);
 
-            var query = queryOptions.Apply(BaseQuery());
+            var query = queryOptions.Apply(BaseQuery(criteria.FetchStrategy));
 
             return criteria.SatisfyingEntityFrom(query);
         }
