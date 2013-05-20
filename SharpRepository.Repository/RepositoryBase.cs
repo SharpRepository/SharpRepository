@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
@@ -40,6 +39,13 @@ namespace SharpRepository.Repository
             // Return the privately scoped batch via the publicly available interface. 
             // This ensures that a repository alone can initiate a new batch.
             return new Batch(this);
+        }
+
+        public IDisableCache DisableCaching()
+        {
+            // Return the privately scoped batch via the publicly available interface. 
+            // This ensures that a repository alone can initiate a new batch.
+            return new DisableCache(this);
         }
       
         private bool BatchMode { get; set; }
