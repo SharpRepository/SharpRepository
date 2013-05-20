@@ -47,9 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="Ef5CompoundKeyRepositoryBase.cs" />
     <Compile Include="Ef5ConfigRepositoryFactory.cs" />
     <Compile Include="Ef5Repository.cs" />

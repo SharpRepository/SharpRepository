@@ -43,9 +43,6 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="IAmInMongoDbRepository.cs" />
     <Compile Include="MongoDbConfigRepositoryFactory.cs" />
     <Compile Include="MongoDbRepositoryConfiguration.cs" />

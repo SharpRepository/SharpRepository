@@ -38,9 +38,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="NinjectDependencyResolver.cs" />
     <Compile Include="NinjectRepositoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -37,9 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="XmlConfigRepositoryFactory.cs" />
     <Compile Include="XmlRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

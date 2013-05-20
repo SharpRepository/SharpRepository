@@ -42,9 +42,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="Db4oConfigRepositoryFactory.cs" />
     <Compile Include="Db4oRepositoryConfiguration.cs" />
     <Compile Include="IAmInDb4oRepository.cs" />

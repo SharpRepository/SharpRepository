@@ -41,9 +41,6 @@
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="MemCachedCachingProvider.cs" />
     <Compile Include="MemCachedCachingProviderConfiguration.cs" />
     <Compile Include="MemCachedConfigCachingProviderFactory.cs" />

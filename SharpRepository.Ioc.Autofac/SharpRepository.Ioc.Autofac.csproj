@@ -41,9 +41,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
     <Compile Include="AutofacDependencyResolver.cs" />
     <Compile Include="AutofacExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
