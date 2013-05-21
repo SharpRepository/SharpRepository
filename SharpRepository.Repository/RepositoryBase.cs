@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
@@ -118,7 +117,6 @@ namespace SharpRepository.Repository
         {
             return _queryManager.ExecuteGet(
                 () => GetQuery(key),
-                null,
                 key
                 );
         }
@@ -127,19 +125,14 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteGet(
-                () =>
-                {
-                    var result = GetQuery(key);
-                    if (result == null)
-                        return default(TResult);
-
-                    var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
-                },
-                selector,
+            // get the full entity, possibly from cache
+            var result = _queryManager.ExecuteGet(
+                () => GetQuery(key),
                 key
                 );
+
+            // return the entity with the selector applied to it
+            return result == null ? default(TResult) : new[] { result }.AsQueryable().Select(selector).First();
         }
 
         public bool Exists(TKey key)

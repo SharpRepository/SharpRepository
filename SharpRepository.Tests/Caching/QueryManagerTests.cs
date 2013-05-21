@@ -40,7 +40,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteGet_Should_Not_Use_Cache()
         {
-            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.ExecuteGet(FakeGet, 1);
             QueryManager.CacheUsed.ShouldBeFalse();
         }
 
@@ -48,11 +48,11 @@ namespace SharpRepository.Tests.Caching
         public void ExecuteGet_Should_Use_Cache_After_First_Call()
         {
             // first time no cache yet
-            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.ExecuteGet(FakeGet, 1);
             QueryManager.CacheUsed.ShouldBeFalse();
 
             // second time the cache has been populated from the last call
-            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.ExecuteGet(FakeGet, 1);
             QueryManager.CacheUsed.ShouldBeTrue();
         }
 
@@ -60,12 +60,12 @@ namespace SharpRepository.Tests.Caching
         public void ExecuteGet_Cache_Disabled_Should_Not_Use_Cache_After_First_Call()
         {
             // first time no cache yet
-            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.ExecuteGet(FakeGet, 1);
             QueryManager.CacheUsed.ShouldBeFalse();
 
             // second time the cache has been populated from the last call
             QueryManager.CacheEnabled = false;
-            QueryManager.ExecuteGet(FakeGet, null, 1);
+            QueryManager.ExecuteGet(FakeGet, 1);
             QueryManager.CacheUsed.ShouldBeFalse();
         }
 

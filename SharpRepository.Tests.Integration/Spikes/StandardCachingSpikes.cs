@@ -87,5 +87,27 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.FindAll(x => x.ContactTypeId == 1 && x.ContactId == contactId)
                 .First().ContactId.ShouldEqual(contactId);
         }
+
+        [Test]
+        public void Get_With_Selector_Should_Not_Use_Cache_If_Entity_Updated()
+        {
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+
+            for (var i = 1; i < 3; i++)
+            {
+                repository.Add(new Contact { ContactId = i.ToString(), Name = "Contact " + i, ContactTypeId = 1 });
+            }
+
+            const string contactId = "1";
+
+            var contactName = repository.Get(contactId, c => c.Name);
+            contactName.ShouldEqual("Contact 1");
+
+            var contact = repository.Get(contactId);
+            contact.Name = "Contact 1 - EDITED";
+
+            contactName = repository.Get(contactId, c => c.Name);
+            contactName.ShouldEqual("Contact 1 - EDITED");
+        }
     }
 }

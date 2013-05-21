@@ -34,21 +34,21 @@ namespace SharpRepository.Repository.Caching
             Partition = null;
         }
 
-        public new bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
+        public override bool TryGetResult(TKey key,  out T result)
         {
-            result = default(TResult);
+            result = default(T);
 
             if (!WriteThroughCachingEnabled)
                 return false;
 
-            return base.TryGetResult(key, selector, out result);
+            return base.TryGetResult(key, out result);
         }
 
-        public override void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
+        public override void SaveGetResult(TKey key, T result)
         {
             if (!WriteThroughCachingEnabled) return;
 
-            base.SaveGetResult(key, selector, result);
+            base.SaveGetResult(key, result);
         }
 
         public override bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
@@ -103,7 +103,7 @@ namespace SharpRepository.Repository.Caching
         public override void Add(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                SetCache(GetWriteThroughCacheKey<T>(key, null), result);
+                SetCache(GetWriteThroughCacheKey(key), result);
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);
@@ -113,7 +113,7 @@ namespace SharpRepository.Repository.Caching
         public override void Update(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                SetCache(GetWriteThroughCacheKey<T>(key, null), result);
+                SetCache(GetWriteThroughCacheKey(key), result);
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);
@@ -122,7 +122,7 @@ namespace SharpRepository.Repository.Caching
         public override void Delete(TKey key, T result)
         {
             if (WriteThroughCachingEnabled)
-                ClearCache(GetWriteThroughCacheKey<T>(key, null));
+                ClearCache(GetWriteThroughCacheKey(key));
 
             if (GenerationalCachingEnabled)
                 CheckPartitionUpdate(result);

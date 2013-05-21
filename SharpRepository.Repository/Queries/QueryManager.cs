@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
@@ -28,10 +29,11 @@ namespace SharpRepository.Repository.Queries
 
         public bool CacheEnabled { get; set; }
 
-        public TResult ExecuteGet<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, TKey key)
+        public T ExecuteGet(Func<T> query, TKey key)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TryGetResult(key, selector, out result))
+            T result;
+
+            if (CacheEnabled && _cachingStrategy.TryGetResult(key, out result))
             {
                 CacheUsed = true;
                 return result;
@@ -40,7 +42,7 @@ namespace SharpRepository.Repository.Queries
             CacheUsed = false;
             result = query.Invoke();
 
-            _cachingStrategy.SaveGetResult(key, selector, result);
+            _cachingStrategy.SaveGetResult(key, result);
 
             return result;
         }

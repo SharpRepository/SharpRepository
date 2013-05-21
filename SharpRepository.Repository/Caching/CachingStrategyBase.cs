@@ -32,12 +32,12 @@ namespace SharpRepository.Repository.Caching
            set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
        }
 
-       public virtual bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
+       public virtual bool TryGetResult(TKey key,  out T result)
        {
-           result = default(TResult);
+           result = default(T);
            try
            {
-               return IsInCache(GetWriteThroughCacheKey(key, selector), out result);
+               return IsInCache(GetWriteThroughCacheKey(key), out result);
            }
            catch (Exception)
            {
@@ -46,11 +46,11 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       public virtual void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
+       public virtual void SaveGetResult(TKey key, T item)
        {
            try
            {
-               SetCache(GetWriteThroughCacheKey(key, selector), result);
+               SetCache(GetWriteThroughCacheKey(key), item);
            }
            catch (Exception)
            {
@@ -250,9 +250,9 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       protected string GetWriteThroughCacheKey<TResult>(TKey key, Expression<Func<T, TResult>> selector)
+       protected string GetWriteThroughCacheKey(TKey key)
        {
-           return String.Format("{0}/{1}/{2}::{3}", CachePrefix, TypeFullName, key, (selector != null ? selector.ToString() : "null"));
+           return String.Format("{0}/{1}/{2}", CachePrefix, TypeFullName, key);
        }
 
        protected abstract string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector);

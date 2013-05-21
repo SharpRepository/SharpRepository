@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Caching
         public void TryGetResult_First_Call_Should_Return_False()
         {
             Contact result;
-            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(false);
+            CachingStrategy.TryGetResult(1, out result).ShouldEqual(false);
             result.ShouldEqual(null);
         }
 
@@ -48,8 +48,8 @@ namespace SharpRepository.Tests.Caching
             Contact result;
             var contact = new Contact() {ContactId = 1, Name = "Test User"};
 
-            CachingStrategy.SaveGetResult(1, null, contact);
-            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(true);
+            CachingStrategy.SaveGetResult(1, contact);
+            CachingStrategy.TryGetResult(1, out result).ShouldEqual(true);
 
             result.ContactId.ShouldEqual(contact.ContactId);
             result.Name.ShouldEqual(contact.Name);
@@ -63,8 +63,8 @@ namespace SharpRepository.Tests.Caching
             Contact result;
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
 
-            CachingStrategy.SaveGetResult(1, null, contact);
-            CachingStrategy.TryGetResult(1, null, out result).ShouldEqual(false);
+            CachingStrategy.SaveGetResult(1, contact);
+            CachingStrategy.TryGetResult(1, out result).ShouldEqual(false);
         }
 
         [Test]

@@ -12,13 +12,13 @@ namespace SharpRepository.Repository.Caching
         {
         }
 
-        public bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
+        public bool TryGetResult(TKey key, out T result)
         {
-            result = default(TResult);
+            result = default(T);
             return false;
         }
 
-        public void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
+        public void SaveGetResult(TKey key, T result)
         {
 
         }
