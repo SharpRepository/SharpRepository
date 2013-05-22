@@ -85,6 +85,7 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="Batch\BatchTests.cs" />
+    <Compile Include="Caching\DisabledCacheTests.cs" />
     <Compile Include="Caching\HashGeneratorTests.cs" />
     <Compile Include="Caching\InMemoryCachingTests.cs" />
     <Compile Include="Caching\QueryManagerTests.cs" />

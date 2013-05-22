@@ -2,7 +2,7 @@
 
 namespace SharpRepository.Repository
 {
-    public interface IDisableCache : IDisposable
+    public interface IDisabledCache : IDisposable
     {
     }
 }

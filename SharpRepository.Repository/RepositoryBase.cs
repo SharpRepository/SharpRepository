@@ -41,11 +41,11 @@ namespace SharpRepository.Repository
             return new Batch(this);
         }
 
-        public IDisableCache DisableCaching()
+        public IDisabledCache DisableCaching()
         {
             // Return the privately scoped batch via the publicly available interface. 
             // This ensures that a repository alone can initiate a new batch.
-            return new DisableCache(this);
+            return new DisabledCache(this);
         }
       
         private bool BatchMode { get; set; }

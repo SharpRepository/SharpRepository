@@ -4,11 +4,11 @@ namespace SharpRepository.Repository
 {
     public abstract partial class RepositoryBase<T, TKey>
     {
-        private sealed class DisableCache : IDisableCache
+        private sealed class DisabledCache : IDisabledCache
         {
             private readonly RepositoryBase<T, TKey> _repository;
 
-            public DisableCache(RepositoryBase<T, TKey> repository)
+            public DisabledCache(RepositoryBase<T, TKey> repository)
             {
                 _repository = repository;
                 _repository.CachingEnabled = false;

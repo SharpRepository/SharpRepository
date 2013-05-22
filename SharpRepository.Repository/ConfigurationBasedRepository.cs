@@ -239,7 +239,7 @@ namespace SharpRepository.Repository
             return Repository.BeginBatch();
         }
 
-        public IDisableCache DisableCaching()
+        public IDisabledCache DisableCaching()
         {
             return Repository.DisableCaching();
         }

@@ -68,7 +68,7 @@ namespace SharpRepository.Repository
 
         bool CacheUsed { get; }
 
-        IDisableCache DisableCaching();
+        IDisabledCache DisableCaching();
     }
 
     /// <summary>
