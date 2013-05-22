@@ -140,10 +140,6 @@ namespace SharpRepository.Tests.Caching
             repos.Add(new Contact { Name = "Test2" });
 
             var item = repos.Get(1, x => x.Name);
-            repos.CacheUsed.ShouldBeFalse();
-            item.ShouldNotBeNull();
-
-            item = repos.Get(1, x => x.Name);
             repos.CacheUsed.ShouldBeTrue();
             item.ShouldNotBeNull();
         }

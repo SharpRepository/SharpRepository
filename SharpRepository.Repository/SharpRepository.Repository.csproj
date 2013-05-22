@@ -89,7 +89,7 @@
     <Compile Include="CompoundKeyRepositoryBase.cs" />
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
-    <Compile Include="DisableCache.cs" />
+    <Compile Include="DisabledCache.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="RepositoryConventions.cs" />
