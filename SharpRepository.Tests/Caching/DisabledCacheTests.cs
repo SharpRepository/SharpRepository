@@ -21,12 +21,6 @@ namespace SharpRepository.Tests.Caching
             }
         }
 
-        [TearDown]
-        public void Teardown()
-        {
-
-        }
-
         [Test]
         public void Using_DisableCaching_Should_Disable_Cache_Inside_Using_Block()
         {
