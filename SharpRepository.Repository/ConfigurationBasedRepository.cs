@@ -239,6 +239,11 @@ namespace SharpRepository.Repository
             return Repository.BeginBatch();
         }
 
+        public IDisableCache DisableCaching()
+        {
+            return Repository.DisableCaching();
+        }
+
         public ICachingStrategy<T, TKey> CachingStrategy
         {
             get { return Repository.CachingStrategy; }
