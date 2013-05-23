@@ -6,7 +6,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
@@ -619,6 +618,41 @@ namespace SharpRepository.Repository
         public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await Task.Run(() => Add(entity));
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Add(entities));
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Task.Run(() => Update(entity));
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Update(entities));
+        }
+
+        public async Task DeleteAsync(TKey key)
+        {
+            await Task.Run(() => Delete(key));
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => Delete(entity));
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Delete(entities));
         }
 #endif
     }

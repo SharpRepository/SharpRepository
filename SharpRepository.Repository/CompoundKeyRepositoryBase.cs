@@ -578,6 +578,41 @@ namespace SharpRepository.Repository
         {
             return await Task.Run(() => FindAll(criteria, selector, queryOptions));
         }
+
+        public async Task AddAsync(T entity)
+        {
+            await Task.Run(() => Add(entity));
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Add(entities));
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Task.Run(() => Update(entity));
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Update(entities));
+        }
+
+        public async Task DeleteAsync(params object[] keys)
+        {
+            await Task.Run(() => Delete(keys));
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => Delete(entity));
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Delete(entities));
+        }
 #endif
     }
 
@@ -1164,6 +1199,41 @@ namespace SharpRepository.Repository
         public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await Task.Run(() => Add(entity));
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Add(entities));
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Task.Run(() => Update(entity));
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Update(entities));
+        }
+
+        public async Task DeleteAsync(TKey key, TKey2 key2)
+        {
+            await Task.Run(() => Delete(key, key2));
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => Delete(entity));
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Delete(entities));
         }
 #endif
     }
@@ -1759,6 +1829,41 @@ namespace SharpRepository.Repository
         public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             return await Task.Run(() => FindAll(criteria, selector, queryOptions));
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await Task.Run(() => Add(entity));
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Add(entities));
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Task.Run(() => Update(entity));
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Update(entities));
+        }
+
+        public async Task DeleteAsync(TKey key, TKey2 key2, TKey3 key3)
+        {
+            await Task.Run(() => Delete(key, key2, key3));
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => Delete(entity));
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Delete(entities));
         }
 #endif
     }

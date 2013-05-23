@@ -23,12 +23,6 @@ namespace SharpRepository.Repository
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
 
-#if !NET40
-        Task<T> GetAsync(params object[] keys);
-
-        Task<TResult> GetAsync<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
-#endif
-
         bool Exists(params object[] keys);
         bool TryGet(out T entity, params object[] keys);
 
@@ -39,6 +33,14 @@ namespace SharpRepository.Repository
         void Delete(params object[] keys);
 
         ICompoundKeyCachingStrategy<T> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(params object[] keys);
+
+        Task<TResult> GetAsync<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
+
+        Task DeleteAsync(params object[] keys);
+#endif
     }
 
     /// <summary>
@@ -67,12 +69,6 @@ namespace SharpRepository.Repository
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
 
-#if !NET40
-        Task<T> GetAsync(TKey key, TKey2 key2);
-
-        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
-#endif
-
         bool Exists(TKey key, TKey2 key2);
         bool TryGet(TKey key, TKey2 key2, out T entity);
 
@@ -86,6 +82,14 @@ namespace SharpRepository.Repository
         void Delete(TKey key, TKey2 key2);
 
         ICompoundKeyCachingStrategy<T, TKey, TKey2> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
+
+        Task DeleteAsync(TKey key, TKey2 key2);
+#endif
     }
 
     /// <summary>
@@ -117,12 +121,6 @@ namespace SharpRepository.Repository
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
 
-#if !NET40
-        Task<T> GetAsync(TKey key, TKey2 key2, TKey3 key3);
-
-        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
-#endif
-
         bool Exists(TKey key, TKey2 key2, TKey3 key3);
         bool TryGet(TKey key, TKey2 key2, TKey3 key3, out T entity);
 
@@ -137,5 +135,13 @@ namespace SharpRepository.Repository
         void Delete(TKey key, TKey2 key2, TKey3 key3);
 
         ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2, TKey3 key3);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
+
+        Task DeleteAsync(TKey key, TKey2 key2, TKey3 key3);
+#endif
     }
 }

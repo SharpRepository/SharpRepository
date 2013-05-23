@@ -73,6 +73,8 @@ namespace SharpRepository.Repository
         Task<T> GetAsync(TKey key);
 
         Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+
+        Task DeleteAsync(TKey key);
 #endif
     }
 

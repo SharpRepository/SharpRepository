@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SharpRepository.Repository.Traits
 {
@@ -25,5 +26,13 @@ namespace SharpRepository.Repository.Traits
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Delete(IEnumerable<T> entities);
+
+#if !NET40
+        Task DeleteAsync(TKey key);
+        
+        Task DeleteAsync(T entity);
+
+        Task DeleteAsync(IEnumerable<T> entities);
+#endif
     }
 }

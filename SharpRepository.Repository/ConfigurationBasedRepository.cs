@@ -322,6 +322,41 @@ namespace SharpRepository.Repository
         {
             return await Repository.FindAllAsync(criteria, selector, queryOptions);
         }
+
+        public async Task AddAsync(T entity)
+        {
+            await Repository.AddAsync(entity);
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Repository.AddAsync(entities);
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Repository.UpdateAsync(entity);
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Repository.UpdateAsync(entities);
+        }
+
+        public async Task DeleteAsync(TKey key)
+        {
+            await Repository.DeleteAsync(key);
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Repository.DeleteAsync(entity);
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Repository.DeleteAsync(entities);
+        }
 #endif
     }
 }
