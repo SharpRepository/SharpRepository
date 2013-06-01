@@ -64,11 +64,26 @@ namespace SharpRepository.Repository
 
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
 
+        /// <summary>
+        /// Used to get or set whether the cache is currently enabled and being used
+        /// </summary>
         bool CachingEnabled { get; set; }
 
+        /// <summary>
+        /// Returns true if the cache was used on the very last query that was used (Get, Find, GetAll or FindAll)
+        /// </summary>
         bool CacheUsed { get; }
 
+        /// <summary>
+        /// Disables caching for all code within the using() block it is called in
+        /// </summary>
+        /// <returns></returns>
         IDisabledCache DisableCaching();
+
+        /// <summary>
+        /// Clears the cache for this particular repository.  All other repositories will still have their caches available. Use Repository.ClearAllCache() to clear the cache for every repository
+        /// </summary>
+        void ClearCache();
     }
 
     /// <summary>

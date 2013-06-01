@@ -19,6 +19,22 @@ namespace SharpRepository.Repository
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
         private QueryManager<T, TKey> _queryManager;
 
+        private readonly Type _entityType;
+
+        protected RepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
+        {
+            if (typeof(T) == typeof(TKey))
+            {
+                // this check is mainly because of the overloaded Delete methods Delete(T) and Delete(TKey), ambiguous reference if the generics are the same
+                throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
+            }
+
+            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            _entityType = typeof(T);
+            _typeName = _entityType.Name;
+            Conventions = new RepositoryConventions();
+        }
+
         // conventions
         public IRepositoryConventions Conventions { get; set; }
 
@@ -47,21 +63,13 @@ namespace SharpRepository.Repository
             // This ensures that a repository alone can initiate a new batch.
             return new DisabledCache(this);
         }
+
+        public void ClearCache()
+        {
+            CachingStrategy.ClearAll();
+        }
       
         private bool BatchMode { get; set; }
-
-        protected RepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
-        {
-            if (typeof(T) == typeof(TKey))
-            {
-                // this check is mainly because of the overloaded Delete methods Delete(T) and Delete(TKey), ambiguous reference if the generics are the same
-                throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
-            }
-
-            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
-            _typeName = typeof (T).Name;
-            Conventions = new RepositoryConventions();
-        }
 
         public ICachingStrategy<T, TKey> CachingStrategy 
         {

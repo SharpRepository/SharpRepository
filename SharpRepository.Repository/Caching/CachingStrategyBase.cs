@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Runtime.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -9,9 +10,10 @@ namespace SharpRepository.Repository.Caching
    public  abstract class CachingStrategyBase<T, TKey> : ICachingStrategy<T, TKey> where T : class
     {
        private ICachingProvider _cachingProvider;
-       public string CachePrefix { get; set; }
+       public string CachePrefix { private get; set; }
        protected string TypeFullName { get; set; }
        public int? MaxResults { get; set; }
+       private Type _entityType;
 
        internal CachingStrategyBase()
        {
@@ -23,13 +25,19 @@ namespace SharpRepository.Repository.Caching
            CachingProvider = cachingProvider;
            MaxResults = maxResults;
 
-           TypeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
+           _entityType = typeof (T);
+           TypeFullName = _entityType.FullName ?? _entityType.Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
        }
 
        public ICachingProvider CachingProvider
        {
            get { return _cachingProvider; }
            set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
+       }
+
+       public string FullCachePrefix
+       {
+           get { return CachePrefix + Cache.GlobalCachingPrefixCounter + "-" + GetCachingPrefixCounter(); }
        }
 
        public virtual bool TryGetResult(TKey key,  out T result)
@@ -218,6 +226,28 @@ namespace SharpRepository.Repository.Caching
 
            // this was a PagingOptions query but the value wasn't in cache, so return false which will make the entire query be ran again so the results and TotalItems will get cached
            return false;
+       }
+
+       public void ClearAll()
+       {
+           IncrementCachingPrefixCounter();
+       }
+
+       private int GetCachingPrefixCounter()
+       {
+            int counter;
+            return !CachingProvider.Get(GetCachingPrefixCounterKey(), out counter) ? 1 : counter;
+       }
+
+       private string GetCachingPrefixCounterKey()
+       {
+           // Note: it's important to use CachePrefix instead of FullCachePrefix otherwise it is tied to itself and won't be able to find it once the counter is incremented
+           return String.Format("{0}/{1}/CachingPrefixCounter", CachePrefix, TypeFullName);
+       }
+
+       private int IncrementCachingPrefixCounter()
+       {
+           return CachingProvider.Increment(GetCachingPrefixCounterKey(), 1, 1, CacheItemPriority.NotRemovable);
        }
 
        protected void ClearCache(string cacheKey)

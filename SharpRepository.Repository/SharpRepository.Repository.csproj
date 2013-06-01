@@ -92,6 +92,7 @@
     <Compile Include="DisabledCache.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
+    <Compile Include="Caching\Cache.cs" />
     <Compile Include="RepositoryConventions.cs" />
     <Compile Include="DefaultRepositoryConventions.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />

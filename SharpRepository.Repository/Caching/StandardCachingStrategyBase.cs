@@ -318,7 +318,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            return String.Format("{0}/{1}/{2}/{3}", CachePrefix, TypeFullName, GetGeneration(), Md5Helper.CalculateMd5("All::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, GetGeneration(), Md5Helper.CalculateMd5("All::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
         protected override string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
@@ -326,10 +326,10 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", FullCachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, TypeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
         protected override string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
@@ -337,10 +337,10 @@ namespace SharpRepository.Repository.Caching
             TPartition partition;
             if (TryPartitionValue(criteria, out partition))
             {
-                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", FullCachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
 
-            return String.Format("{0}/{1}/{2}/{3}/{4}", CachePrefix, TypeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
         private int GetGeneration()
@@ -353,14 +353,12 @@ namespace SharpRepository.Repository.Caching
 
         private int IncrementGeneration()
         {
-            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
-            
-            return generation;
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
         }
 
         private string GetGenerationKey()
         {
-            return String.Format("{0}/{1}/Generation", CachePrefix, TypeFullName);
+            return String.Format("{0}/{1}/Generation", FullCachePrefix, TypeFullName);
         }
 
         private int GetPartitionGeneration(TPartition partition)
@@ -378,7 +376,7 @@ namespace SharpRepository.Repository.Caching
 
         protected string GetPartitionGenerationKey(TPartition partition)
         {
-            return String.Format("{0}/{1}/p:{2}/Generation", CachePrefix, TypeFullName, partition);
+            return String.Format("{0}/{1}/p:{2}/Generation", FullCachePrefix, TypeFullName, partition);
         }
     }
 }
