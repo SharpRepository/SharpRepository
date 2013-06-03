@@ -19,6 +19,9 @@ namespace SharpRepository.Repository.Caching
 
         void Save();
 
+        string FullCachePrefix { get; }
+        void ClearAll();
+
         ICachingProvider CachingProvider { get; set; }
     }
 

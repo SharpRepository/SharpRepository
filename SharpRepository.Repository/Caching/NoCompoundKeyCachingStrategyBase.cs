@@ -76,6 +76,13 @@ namespace SharpRepository.Repository.Caching
 
         }
 
+        public string FullCachePrefix { get; private set; }
+
+        public void ClearAll()
+        {
+            
+        }
+
         public ICachingProvider CachingProvider { get; set; }
     }
 
@@ -147,6 +154,13 @@ namespace SharpRepository.Repository.Caching
         public void Save()
         {
 
+        }
+
+        public string FullCachePrefix { get; private set; }
+
+        public void ClearAll()
+        {
+            
         }
 
         public ICachingProvider CachingProvider { get; set; }

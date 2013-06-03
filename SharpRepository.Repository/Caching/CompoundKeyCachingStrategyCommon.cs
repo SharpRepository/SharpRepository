@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Runtime.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -28,6 +29,11 @@ namespace SharpRepository.Repository.Caching
             MaxResults = maxResults;
 
             TypeFullName = typeof(T).FullName ?? typeof(T).Name; // sometimes FullName returns null in certain derived type situations, so I added the check to use the Name property if FullName is null
+        }
+
+        public string FullCachePrefix
+        {
+            get { return CachePrefix + Cache.GlobalCachingPrefixCounter + "-" + GetCachingPrefixCounter(); }
         }
 
         public virtual bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
@@ -136,6 +142,28 @@ namespace SharpRepository.Repository.Caching
 
             // this was a PagingOptions query but the value wasn't in cache, so return false which will make the entire query be ran again so the results and TotalItems will get cached
             return false;
+        }
+
+        public void ClearAll()
+        {
+            IncrementCachingPrefixCounter();
+        }
+
+        private int GetCachingPrefixCounter()
+        {
+            int counter;
+            return !CachingProvider.Get(GetCachingPrefixCounterKey(), out counter) ? 1 : counter;
+        }
+
+        private string GetCachingPrefixCounterKey()
+        {
+            // Note: it's important to use CachePrefix instead of FullCachePrefix otherwise it is tied to itself and won't be able to find it once the counter is incremented
+            return String.Format("{0}/{1}/CachingPrefixCounter", CachePrefix, TypeFullName);
+        }
+
+        private int IncrementCachingPrefixCounter()
+        {
+            return CachingProvider.Increment(GetCachingPrefixCounterKey(), 1, 1, CacheItemPriority.NotRemovable);
         }
 
         protected void ClearCache(string cacheKey)

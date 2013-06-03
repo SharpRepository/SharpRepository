@@ -282,7 +282,7 @@ namespace SharpRepository.Repository.Caching
 
        protected string GetWriteThroughCacheKey(TKey key)
        {
-           return String.Format("{0}/{1}/{2}", CachePrefix, TypeFullName, key);
+           return String.Format("{0}/{1}/{2}", FullCachePrefix, TypeFullName, key);
        }
 
        protected abstract string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector);
