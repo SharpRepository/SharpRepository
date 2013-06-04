@@ -523,7 +523,14 @@ namespace SharpRepository.Repository
         {
             var propInfo = GetPrimaryKeyPropertyInfo();
 
-            var lambda = Linq.DynamicExpression.ParseLambda<T,bool>(String.Format("{0} == {1}", propInfo.Name, key));
+            var parameter = Expression.Parameter(typeof (T), "x");
+            var lambda = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo.Name), 
+                        Expression.Constant(key)
+                    ),
+                    parameter
+                );
 
             return new Specification<T>(lambda);
         }

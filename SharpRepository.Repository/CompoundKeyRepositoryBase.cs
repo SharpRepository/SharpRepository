@@ -488,9 +488,17 @@ namespace SharpRepository.Repository
                 return null;
 
             Specification<T> specification = null;
+            var parameter = Expression.Parameter(typeof(T), "x");
 
             var i = 0;
-            foreach (var lambda in keys.Select(key => Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[i].Name, key))))
+            foreach (var lambda in keys.Select(key => Expression.Lambda<Func<T, bool>>(
+                        Expression.Equal(
+                            Expression.PropertyOrField(parameter, propInfo[i].Name),
+                            Expression.Constant(key)
+                        ),
+                        parameter
+                    ))
+                )
             {
                 specification = specification == null ? new Specification<T>(lambda) : specification.And(lambda);
                 i++;
@@ -1013,8 +1021,21 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 2)
                 return null;
 
-            var lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[0].Name, key));
-            var lambda2 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[1].Name, key2));
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var lambda = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo[0].Name),
+                        Expression.Constant(key)
+                    ),
+                    parameter
+                );
+            var lambda2 = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo[1].Name),
+                        Expression.Constant(key2)
+                    ),
+                    parameter
+                );
 
             return new Specification<T>(lambda).And(lambda2);
         }
@@ -1541,9 +1562,28 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 3)
                 return null;
 
-            var lambda = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[0].Name, key));
-            var lambda2 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[1].Name, key2));
-            var lambda3 = Linq.DynamicExpression.ParseLambda<T, bool>(String.Format("{0} == {1}", propInfo[2].Name, key3));
+            var parameter = Expression.Parameter(typeof(T), "x");
+            var lambda = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo[0].Name),
+                        Expression.Constant(key)
+                    ),
+                    parameter
+                );
+            var lambda2 = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo[1].Name),
+                        Expression.Constant(key2)
+                    ),
+                    parameter
+                );
+            var lambda3 = Expression.Lambda<Func<T, bool>>(
+                    Expression.Equal(
+                        Expression.PropertyOrField(parameter, propInfo[2].Name),
+                        Expression.Constant(key3)
+                    ),
+                    parameter
+                );
 
             return new Specification<T>(lambda).And(lambda2).And(lambda3);
         }

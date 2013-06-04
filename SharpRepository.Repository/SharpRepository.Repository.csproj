@@ -91,6 +91,7 @@
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
     <Compile Include="IDisabledCache.cs" />
+    <Compile Include="Linq\LinqHelpers.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="Caching\Cache.cs" />
     <Compile Include="RepositoryConventions.cs" />
@@ -134,7 +135,6 @@
     <Compile Include="Helpers\Md5Helper.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="LinqRepositoryBase.cs" />
-    <Compile Include="Linq\Dynamic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\SortingOptions.cs" />
     <Compile Include="RepositoryBase.cs" />

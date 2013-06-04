@@ -75,14 +75,12 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Sorted results.</returns>
         public virtual IQueryable<T> Apply(IQueryable<T> query)
         {
-            if (!String.IsNullOrEmpty(SortProperty))
-            {
-                // TODO: do we need to deal with the case where the user passes in "Name desc", should we strip the desc out, or let it override the isDescending param, or not deal with it and blame it on the user?
-                var sortString = String.Format("{0}{1}", SortProperty, IsDescending ? " desc" : "");
-                query = query.OrderBy(sortString);
-            }
+            // TODO: do we need to deal with the case where the user passes in "Name desc", should we strip the desc out, or let it override the isDescending param, or not deal with it and blame it on the user?
 
-            return query;
+            if (String.IsNullOrEmpty(SortProperty))
+                return query;
+
+            return IsDescending ? query.OrderByDescendingProperty(SortProperty) : query.OrderByProperty(SortProperty);
         }
 
         /// <summary>
