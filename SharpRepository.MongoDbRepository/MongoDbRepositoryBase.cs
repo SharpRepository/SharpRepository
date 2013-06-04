@@ -61,7 +61,7 @@ namespace SharpRepository.MongoDbRepository
         protected override T GetQuery(TKey key)
         {
             return IsValidKey(key)
-                       ? BaseCollection().FindOne(Query.EQ("_id", new ObjectId(key.ToString())))
+                       ? BaseCollection().FindOneById(new ObjectId(key.ToString()))
                        : default(T);
         }
 
