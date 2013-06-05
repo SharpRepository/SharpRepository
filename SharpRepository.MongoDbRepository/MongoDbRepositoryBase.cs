@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Reflection;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
@@ -60,9 +62,11 @@ namespace SharpRepository.MongoDbRepository
 
         protected override T GetQuery(TKey key)
         {
+            var keyBsonType = ((RepresentationSerializationOptions)BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.SerializationOptions).Representation;
+
             return IsValidKey(key)
-                       ? BaseCollection().FindOneById(new ObjectId(key.ToString()))
-                       : default(T);
+                           ? BaseCollection().FindOneById(BsonTypeMapper.MapToBsonValue(key, keyBsonType))
+                           : default(T);
         }
 
         protected override void AddItem(T entity)
@@ -77,7 +81,9 @@ namespace SharpRepository.MongoDbRepository
 
             if (IsValidKey(pkValue))
             {
-                BaseCollection().Remove(Query.EQ("_id", new ObjectId(pkValue.ToString())));
+                var keyMemberMap = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap;
+                var keyBsonType = ((RepresentationSerializationOptions)keyMemberMap.SerializationOptions).Representation;
+                BaseCollection().Remove(Query.EQ(keyMemberMap.ElementName, BsonTypeMapper.MapToBsonValue(pkValue, keyBsonType)));
             }
         }
 
