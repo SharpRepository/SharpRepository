@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
 using Should;
 
@@ -42,6 +41,23 @@ namespace SharpRepository.Tests.Conventions
             DefaultRepositoryConventions.GetPrimaryKeyName(typeof(TestConventionObject)).ShouldEqual("PK_TestConventionObject_Id");
 
             DefaultRepositoryConventions.GetPrimaryKeyName = orig;
+        }
+
+        [Test]
+        public void Default_CachePrefix()
+        {
+            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>());
+            repos.CachingStrategy.FullCachePrefix.ShouldStartWith(DefaultRepositoryConventions.CachePrefix);
+        }
+
+        [Test]
+        public void Change_CachePrefix()
+        {
+            const string newPrefix = "TestPrefix123";
+            DefaultRepositoryConventions.CachePrefix = newPrefix;
+
+            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>());
+            repos.CachingStrategy.FullCachePrefix.ShouldStartWith(newPrefix);
         }
 
         internal class TestConventionObject

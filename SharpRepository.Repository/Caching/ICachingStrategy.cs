@@ -25,6 +25,7 @@ namespace SharpRepository.Repository.Caching
         void Delete(TKey key, T result);
         void Save();
 
+        string CachePrefix { set; }
         string FullCachePrefix { get; }
         void ClearAll();
 

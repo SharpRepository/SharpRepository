@@ -38,6 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\CachingStrategyBase.cs" />
+    <Compile Include="Caching\ICachePrefixManager.cs" />
+    <Compile Include="Caching\MultiServerCachePrefixManager.cs" />
+    <Compile Include="Caching\SingleServerCachePrefixManager.cs" />
     <Compile Include="Caching\StandardCompoundKeyCachingStrategy.cs" />
     <Compile Include="Caching\CompoundKeyCachingStrategyCommon.cs" />
     <Compile Include="Caching\TimeoutCompoundKeyCachingStrategy.cs" />

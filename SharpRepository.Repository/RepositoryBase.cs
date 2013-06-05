@@ -29,10 +29,13 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
+            Conventions = new RepositoryConventions();
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            CachingStrategy.CachePrefix = DefaultRepositoryConventions.CachePrefix;
+
             _entityType = typeof(T);
             _typeName = _entityType.Name;
-            Conventions = new RepositoryConventions();
+            
         }
 
         // conventions
