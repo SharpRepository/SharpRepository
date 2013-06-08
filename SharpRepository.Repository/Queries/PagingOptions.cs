@@ -49,13 +49,12 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return String.Format("PagingOptions<{0},{1}>\nPageSize: {2}\nPageNumber: {3}\nSort Expression: {4}\nIsDescending: {5}",
+            return String.Format("PagingOptions<{0},{1}>\nPageSize: {2}\nPageNumber: {3}\nSort: {4}",
                 (typeof(T)).Name,
                 (typeof(TSortKey)).Name,
                 PageSize,
                 PageNumber,
-                SortExpression == null ? "null" : SortExpression.ToString(),
-                IsDescending
+                base.ToString()
                 );
         }
     }
@@ -78,7 +77,6 @@ namespace SharpRepository.Repository.Queries
             PageSize = pageSize;
             PageNumber = pageNumber;
         }
-
 
         /// <summary>
         /// Applies paging to the specified query.
@@ -105,12 +103,11 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return String.Format("PagingOptions<{0}>\nPageSize: {1}\nPageNumber: {2}\nSort Property: {3}\nIsDescending: {4}",
+            return String.Format("PagingOptions<{0}>\nPageSize: {1}\nPageNumber: {2}\nSort: {3}",
                 (typeof(T)).Name,
                 PageSize,
                 PageNumber,
-                SortProperty,
-                IsDescending
+                base.ToString()
                 );
         }
     }
