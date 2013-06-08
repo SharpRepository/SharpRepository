@@ -487,7 +487,7 @@ namespace SharpRepository.Repository
             if (propInfo == null || keys == null || propInfo.Length != keys.Length)
                 return null;
 
-            Specification<T> specification = null;
+            ISpecification<T> specification = null;
             var parameter = Expression.Parameter(typeof(T), "x");
 
             var i = 0;
