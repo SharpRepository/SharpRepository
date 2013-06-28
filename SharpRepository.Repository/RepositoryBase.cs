@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Aspects;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -29,6 +30,7 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
+            Aspects = new RepositoryAspectCollection<T, TKey>();
             Conventions = new RepositoryConventions();
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
             CachingStrategy.CachePrefix = DefaultRepositoryConventions.CachePrefix;
@@ -36,7 +38,12 @@ namespace SharpRepository.Repository
             _entityType = typeof(T);
             _typeName = _entityType.Name;
             
+            // TODO: this is not working since currently i'm adding the aspects after this runs, so the collection is empty
+            Aspects.OnInitialize(this);
         }
+
+        // aspects
+        public RepositoryAspectCollection<T, TKey> Aspects { get; set; } 
 
         // conventions
         public IRepositoryConventions Conventions { get; set; }
@@ -383,7 +390,11 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
+            if (!Aspects.OnAddExecuting(entity)) return;
+
             ProcessAdd(entity, BatchMode);
+
+            Aspects.OnAddExecuted(entity);
         }
 
         // used from the Add method above and the Save below for the batch save
@@ -416,7 +427,11 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
+            if (!Aspects.OnDeleteExecuting(entity)) return;
+
             ProcessDelete(entity, BatchMode);
+
+            Aspects.OnDeleteExecuted(entity);
         }
 
         // used from the Delete method above and the Save below for the batch save
@@ -456,7 +471,11 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
+            if (!Aspects.OnUpdateExecuting(entity)) return;
+
             ProcessUpdate(entity, BatchMode);
+
+            Aspects.OnUpdateExecuted(entity);
         }
 
         // used from the Update method above and the Save below for the batch save
@@ -486,9 +505,13 @@ namespace SharpRepository.Repository
 
         private void Save()
         {
+            if (!Aspects.OnSaveExecuting()) return;
+
             SaveChanges();
             
             _queryManager.OnSaveExecuted(); 
+
+            Aspects.OnSaveExecuted();
         }
 
         
