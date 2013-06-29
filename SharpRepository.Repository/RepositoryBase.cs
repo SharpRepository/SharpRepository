@@ -31,7 +31,7 @@ namespace SharpRepository.Repository
 
             Conventions = new RepositoryConventions();
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
-            CachingStrategy.CachePrefix = DefaultRepositoryConventions.CachePrefix;
+            // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
 
             _entityType = typeof(T);
             _typeName = _entityType.Name;

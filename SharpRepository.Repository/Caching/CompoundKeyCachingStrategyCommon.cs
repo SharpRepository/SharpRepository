@@ -24,7 +24,7 @@ namespace SharpRepository.Repository.Caching
 
         internal CompoundKeyCachingStrategyCommon(int? maxResults, ICachingProvider cachingProvider)
         {
-            CachePrefix = "#Repo";
+            CachePrefix = DefaultRepositoryConventions.CachePrefix;
             CachingProvider = cachingProvider;
             MaxResults = maxResults;
 
