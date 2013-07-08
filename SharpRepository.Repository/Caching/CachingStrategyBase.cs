@@ -13,7 +13,7 @@ namespace SharpRepository.Repository.Caching
        public string CachePrefix { private get; set; }
        protected string TypeFullName { get; set; }
        public int? MaxResults { get; set; }
-       private Type _entityType;
+       private readonly Type _entityType;
 
        internal CachingStrategyBase()
        {
@@ -21,7 +21,7 @@ namespace SharpRepository.Repository.Caching
 
        internal CachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
        {
-           CachePrefix = "#Repo";
+           CachePrefix = DefaultRepositoryConventions.CachePrefix;
            CachingProvider = cachingProvider;
            MaxResults = maxResults;
 

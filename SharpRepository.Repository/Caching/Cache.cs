@@ -1,31 +1,30 @@
-﻿namespace SharpRepository.Repository.Caching
+﻿using System;
+
+namespace SharpRepository.Repository.Caching
 {
     public static class Cache
     {
-        // TODO: figure out how to do a global clear cache that clears for all repositories
+        public static ICachePrefixManager CachePrefixManager { get; set; }
 
-        // global counter used to clear all caches across all repositories
-        private static int _globalCachingPrefixCounter = 1;
         internal static int GlobalCachingPrefixCounter
         {
-            get { return _globalCachingPrefixCounter; }
+            get
+            {
+                return CachePrefixManager == null ? 1 : CachePrefixManager.Counter;
+            }
         }
 
-        private static readonly object LockObject = new object();
+        /// <summary>
+        /// This will clear out all SharpRepository related caching across all of the repositories.  You must configure the Cache.CachePrefixManager property based on if your code is on a single server or in a multiple server farm or cloud environment.
+        /// </summary>
+        public static void ClearAll()
+        {
+            if (CachePrefixManager == null)
+                throw new Exception("You must configure the Cache.CachePrefixManager in order to handle clearing the global cache.  You can use the SingleServerCachePrefixManager if you are on a single server, and the MultiServerCachePrefixManager if you are in the cloud or on multiple servers and use a caching provider like Memcached or Redis.");
 
-//        /// <summary>
-//        /// This will clear out all SharpRepository related caching across all of the repositories
-//        /// </summary>
-//        public static void ClearAll()
-//        {
-//            // this increments a static counter by 1
-//            //  the static counter is used for all of the cache keys as part of the prefix
-//            IncrementGlobalCachingPrefixCounter();
-//        }
-//
-//        internal static void IncrementGlobalCachingPrefixCounter()
-//        {
-//            Interlocked.Increment(ref _globalCachingPrefixCounter);
-//        }
+            // this increments a static counter by 1
+            //  the static counter is used for all of the cache keys as part of the prefix                                                                                                                                                                      
+            CachePrefixManager.IncrementCounter();
+        }
     }
 }

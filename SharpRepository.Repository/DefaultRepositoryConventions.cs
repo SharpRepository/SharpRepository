@@ -10,6 +10,8 @@ namespace SharpRepository.Repository
     {
         public static string PrimaryKeySuffix = "Id";
 
+        public static string CachePrefix = "#Repo";
+
         public static Func<Type, string> GetPrimaryKeyName = entityType =>
                                                                  {
                                                                      var propInfo = entityType.GetProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>());

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Linq;
@@ -12,14 +13,44 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
     public class SortingOptions<T, TSortKey> : IQueryOptions<T>
     {
-        public Expression<Func<T, TSortKey>> SortExpression { get; set; }
-        public bool IsDescending { get; set; }
+        private readonly Func<IQueryable<T>, IOrderedQueryable<T>> _primarySortAction;
+        private readonly IList<Func<IOrderedQueryable<T>, IOrderedQueryable<T>>> _sortActions = new List<Func<IOrderedQueryable<T>, IOrderedQueryable<T>>>();
+
+        // we need these fields because calling ToString on the Func's didn't include the details of the method being called so it was the same key for descending and ascending
+        private readonly string _primarySortToString;
+        private readonly IList<string> _sortActionsToString = new List<string>();
 
         public SortingOptions(Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
         {
-            SortExpression = sortExpression;
-            IsDescending = isDescending;
+            if (isDescending)
+            {
+                _primarySortAction = q => q.OrderByDescending(sortExpression);
+            }
+            else
+            {
+                _primarySortAction = q => q.OrderBy(sortExpression);
+            }
+
+            _primarySortToString = String.Format("{0}-{1}", sortExpression, isDescending);
         }
+
+        public void ThenSortBy<TNewSortKey>(Expression<Func<T, TNewSortKey>> sortExpression, bool isDescending = false)
+        {
+            Func<IOrderedQueryable<T>, IOrderedQueryable<T>> sortAction = null;
+
+            if (isDescending)
+            {
+                sortAction = q => q.ThenByDescending(sortExpression);
+            }
+            else
+            {
+                sortAction = q => q.ThenBy(sortExpression);
+            }
+
+            _sortActions.Add(sortAction);
+            _sortActionsToString.Add(String.Format("{0}-{1}", sortExpression, isDescending));
+        }
+
 
         /// <summary>
         /// Applies sorting to the specified query.
@@ -28,14 +59,14 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Sorted results.</returns>
         public virtual IQueryable<T> Apply(IQueryable<T> query)
         {
-            if (SortExpression != null)
+            IOrderedQueryable<T> sortedQuery = null;
+
+            if (_primarySortAction != null)
             {
-                query = IsDescending 
-                            ? query.OrderByDescending(SortExpression) 
-                            : query.OrderBy(SortExpression);
+                sortedQuery = _primarySortAction(query);
             }
-            
-            return query;
+
+            return _sortActions.Aggregate(sortedQuery, (current, sortAction) => sortAction(current));
         }
 
         /// <summary>
@@ -44,11 +75,11 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return String.Format("SortingOptions<{0},{1}>\nSort Expression: {2}\nIsDescending: {3}",
+            return String.Format("SortingOptions<{0},{1}>\nSort: {2}\nExtra: {3}",
                 (typeof(T)).Name,
                 (typeof(TSortKey)).Name,
-                SortExpression == null ? "null" : SortExpression.ToString(),
-                IsDescending
+                _primarySortToString ?? "null",
+                String.Join("-", _sortActionsToString)
                 );
         }
     }
@@ -59,13 +90,42 @@ namespace SharpRepository.Repository.Queries
     /// <typeparam name="T">The entity type of the repository.</typeparam>
     public class SortingOptions<T> : IQueryOptions<T>
     {
-        public string SortProperty { get; set; }
-        public bool IsDescending { get; set; }
+        private readonly Func<IQueryable<T>, IOrderedQueryable<T>> _primarySortAction;
+        private readonly IList<Func<IOrderedQueryable<T>, IOrderedQueryable<T>>> _sortActions = new List<Func<IOrderedQueryable<T>, IOrderedQueryable<T>>>();
+
+        // we need these fields because calling ToString on the Func's didn't include the details of the method being called so it was the same key for descending and ascending
+        private readonly string _primarySortToString;
+        private readonly IList<string> _sortActionsToString = new List<string>();
 
         public SortingOptions(string sortProperty, bool isDescending = false)
         {
-            SortProperty = sortProperty;
-            IsDescending = isDescending;
+            if (isDescending)
+            {
+                _primarySortAction = q => q.OrderByDescendingProperty(sortProperty);
+            }
+            else
+            {
+                _primarySortAction = q => q.OrderByProperty(sortProperty);
+            }
+
+            _primarySortToString = String.Format("{0}-{1}", sortProperty, isDescending);
+        }
+
+        public void ThenSortBy(string sortProperty, bool isDescending = false)
+        {
+            Func<IOrderedQueryable<T>, IOrderedQueryable<T>> sortAction = null;
+
+            if (isDescending)
+            {
+                sortAction = q => q.ThenByDescendingProperty(sortProperty);
+            }
+            else
+            {
+                sortAction = q => q.ThenByProperty(sortProperty);
+            }
+
+            _sortActions.Add(sortAction);
+            _sortActionsToString.Add(String.Format("{0}-{1}", sortProperty, isDescending));
         }
 
         /// <summary>
@@ -77,10 +137,14 @@ namespace SharpRepository.Repository.Queries
         {
             // TODO: do we need to deal with the case where the user passes in "Name desc", should we strip the desc out, or let it override the isDescending param, or not deal with it and blame it on the user?
 
-            if (String.IsNullOrEmpty(SortProperty))
-                return query;
+            IOrderedQueryable<T> sortedQuery = null;
 
-            return IsDescending ? query.OrderByDescendingProperty(SortProperty) : query.OrderByProperty(SortProperty);
+            if (_primarySortAction != null)
+            {
+                sortedQuery = _primarySortAction(query);
+            }
+
+            return _sortActions.Aggregate(sortedQuery, (current, sortAction) => sortAction(current));
         }
 
         /// <summary>
@@ -89,11 +153,12 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return String.Format("SortingOptions<{0}>\nSort Property: {1}\nIsDescending: {2}",
+            var val = String.Format("SortingOptions<{0}>\nSort: {1}\nExtra: {2}",
                 (typeof(T)).Name,
-                SortProperty,
-                IsDescending
+                _primarySortToString ?? "null",
+                String.Join("-", _sortActionsToString)
                 );
+            return val;
         }
     }
 }

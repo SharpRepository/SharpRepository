@@ -76,6 +76,8 @@ namespace SharpRepository.Repository.Caching
 
         }
 
+        public string CachePrefix { set; private get; }
+
         public string FullCachePrefix { get; private set; }
 
         public void ClearAll()

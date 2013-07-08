@@ -68,7 +68,7 @@ namespace SharpRepository.Repository.Caching
             return true;
         }
 
-        public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Default)
+        public int Increment(string key, int defaultValue, int incrementValue, CacheItemPriority priority = CacheItemPriority.Default)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -80,7 +80,7 @@ namespace SharpRepository.Repository.Caching
                     current = defaultValue;
                 }
 
-                var newValue = current + value;
+                var newValue = current + incrementValue;
                 Set(key, newValue, priority);
                 return newValue;
             }

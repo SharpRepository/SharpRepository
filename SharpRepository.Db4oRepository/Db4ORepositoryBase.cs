@@ -10,7 +10,7 @@ namespace SharpRepository.Db4oRepository
 {
     public class Db4oRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private IObjectContainer _container;
+        protected IObjectContainer Container;
 
         internal Db4oRepositoryBase(string storagePath, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
@@ -20,17 +20,17 @@ namespace SharpRepository.Db4oRepository
 
         private void Initialize(string storagePath)
         {
-            _container = Db4oEmbedded.OpenFile(Db4oEmbedded.NewConfiguration(), storagePath);
+            Container = Db4oEmbedded.OpenFile(Db4oEmbedded.NewConfiguration(), storagePath);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return _container.AsQueryable<T>();
+            return Container.AsQueryable<T>();
         }
 
         protected override T GetQuery(TKey key)
         {
-            return _container.AsQueryable<T>().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+            return Container.AsQueryable<T>().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
         }
 
         private bool MatchOnPrimaryKey(T item, TKey keyValue)
@@ -49,29 +49,29 @@ namespace SharpRepository.Db4oRepository
                 SetPrimaryKey(entity, id);
             }
 
-            _container.Store(entity);
+            Container.Store(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            _container.Delete(entity);
+            Container.Delete(entity);
         }
 
         protected override void UpdateItem(T entity)
         {
-            _container.Store(entity);
+            Container.Store(entity);
         }
 
         protected override void SaveChanges()
         {
-            _container.Commit();
+            Container.Commit();
         }
 
         public override void Dispose()
         {
-            _container.Close();
-            if (_container != null)
-                _container.Dispose();
+            Container.Close();
+            if (Container != null)
+                Container.Dispose();
         }
 
         private TKey GeneratePrimaryKey()

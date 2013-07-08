@@ -10,8 +10,8 @@ namespace SharpRepository.RavenDbRepository
 {
     public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
-        private DocumentStore _documentStore;
-        private IDocumentSession _session;
+        protected DocumentStore DocumentStore;
+        protected IDocumentSession Session;
 
         internal RavenDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {
@@ -30,8 +30,8 @@ namespace SharpRepository.RavenDbRepository
 
         private void Initialize(DocumentStore documentStore = null)
         {
-            _documentStore = documentStore ?? new DocumentStore { Url = "http://localhost:8080"};
-            _documentStore.Initialize();
+            DocumentStore = documentStore ?? new DocumentStore { Url = "http://localhost:8080"};
+            DocumentStore.Initialize();
             
             // see if we need to change the type name that defaults to Id
             var propInfo = GetPrimaryKeyPropertyInfo();
@@ -41,7 +41,7 @@ namespace SharpRepository.RavenDbRepository
                 // this is a global convention so will be used regardless of the entity type that is accessing the document store
                 //  this may or may not be a problem since the repository creates this and it's for a single entity type
                 //  we will need to test this, especially when 2 different repositories are instantiated at the same time
-                _documentStore.Conventions.FindIdentityProperty = p => p.Name == propInfo.Name;
+                DocumentStore.Conventions.FindIdentityProperty = p => p.Name == propInfo.Name;
             }
 
             // when upgrading to the new RavenDb.Client the following error is thrown when using an int as the PK
@@ -49,21 +49,21 @@ namespace SharpRepository.RavenDbRepository
             //      You can turn this error off by specifying documentStore.Conventions.AllowQueriesOnId = true;, but that is not recommend and provided for backward compatibility reasons only.
             //  So for now we will follow that advice and turn on the old convention
             // TODO: look at using a new way of doing the GetQuery to not have this issue when the PK is an int
-            _documentStore.Conventions.AllowQueriesOnId = true;
+            DocumentStore.Conventions.AllowQueriesOnId = true;
 
-            _session = _documentStore.OpenSession();
+            Session = DocumentStore.OpenSession();
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             // TODO: see about Raven Include syntax
-            return _session.Query<T>();
+            return Session.Query<T>();
         }
 
         protected override T GetQuery(TKey key)
         {
             if (typeof(TKey) == typeof(string))
-                return _session.Load<T>(key as string);
+                return Session.Load<T>(key as string);
 
             return base.GetQuery(key);
         }
@@ -78,12 +78,12 @@ namespace SharpRepository.RavenDbRepository
                 SetPrimaryKey(entity, id);
             }
 
-            _session.Store(entity);
+            Session.Store(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            _session.Delete(entity);
+            Session.Delete(entity);
         }
 
         protected override void UpdateItem(T entity)
@@ -93,16 +93,16 @@ namespace SharpRepository.RavenDbRepository
 
         protected override void SaveChanges()
         {
-            _session.SaveChanges();
+            Session.SaveChanges();
         }
 
         public override void Dispose()
         {
-            if (_session != null)
-                _session.Dispose();
+            if (Session != null)
+                Session.Dispose();
 
-            if (_documentStore != null)
-                _documentStore.Dispose();
+            if (DocumentStore != null)
+                DocumentStore.Dispose();
         }
 
         private TKey GeneratePrimaryKey()
