@@ -173,6 +173,8 @@ namespace SharpRepository.Repository
             set { Repository.Conventions = value;  }
         }
 
+        public IRepositoryReporting<T> Reporting { get { return Repository.Reporting; } }
+
         public T Get(TKey key)
         {
             return Repository.Get(key);

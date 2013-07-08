@@ -571,5 +571,7 @@ namespace SharpRepository.Repository
         {
             return GetEnumerator();
         }
+
+        public abstract IRepositoryReporting<T> Reporting { get; }
     }
 }

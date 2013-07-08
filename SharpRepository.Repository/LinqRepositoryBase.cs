@@ -13,6 +13,7 @@ namespace SharpRepository.Repository
     {
         protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {   
+            _reporting = new RepositoryReporting(this);
         }
 
         public override IQueryable<T> AsQueryable()
@@ -99,5 +100,42 @@ namespace SharpRepository.Repository
 
             return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
         }
+
+        private IRepositoryReporting<T> _reporting;
+        public override IRepositoryReporting<T> Reporting
+        {
+            get { return _reporting; }
+        }
+
+        public class RepositoryReporting : IRepositoryReporting<T>
+        {
+            private readonly IRepository<T, TKey> _repository;
+
+            public RepositoryReporting(IRepository<T, TKey> repository)
+            {
+                _repository = repository;
+            }
+
+            public IEnumerable<GroupCount<TGroupKey>> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            {
+                return _repository.AsQueryable().GroupBy(keySelector).Select(g => new GroupCount<TGroupKey> { Key = g.Key, Count = g.Count() }).OrderBy(x => x.Key).ToList();
+            }
+
+            public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
+                Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
+            {
+                return
+                    _repository.AsQueryable()
+                        .GroupBy(keySelector, resultSelector)
+                        .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList();
+            }
+
+            public int Count(Expression<Func<T, bool>> predicate = null)
+            {
+                return predicate == null ? _repository.AsQueryable().Count() : _repository.AsQueryable().Count(predicate);
+            }
+        }
+
+        
     }
 }
