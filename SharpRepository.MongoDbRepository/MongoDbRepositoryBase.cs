@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -19,6 +22,22 @@ namespace SharpRepository.MongoDbRepository
         private readonly string _databaseName;
         private MongoDatabase _database;
         private MongoServer _server;
+
+        private readonly Dictionary<Type, BsonType> _keyTypeToBsonType = new Dictionary<Type, BsonType>
+                                                                      {
+                                                                          {typeof(string), BsonType.ObjectId},
+                                                                          {typeof(Guid), BsonType.ObjectId},
+                                                                          {typeof(ObjectId), BsonType.ObjectId},
+                                                                          {typeof(byte[]), BsonType.ObjectId}
+                                                                      };
+
+        private readonly Dictionary<Type, IIdGenerator> _keyTypeToBsonGenerator = new Dictionary<Type, IIdGenerator>
+                                                                      {
+                                                                          {typeof (string), new StringObjectIdGenerator() },
+                                                                          {typeof (Guid), new GuidGenerator()},
+                                                                          {typeof (ObjectId), new ObjectIdGenerator()},
+                                                                          {typeof(byte[]), new BsonBinaryDataGuidGenerator(GuidRepresentation.Standard)}
+                                                                      };
 
         internal MongoDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
@@ -48,6 +67,29 @@ namespace SharpRepository.MongoDbRepository
         {
             _server = mongoServer ?? new MongoClient("mongodb://localhost").GetServer();
             _database = _server.GetDatabase(DatabaseName);
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof (T)))
+            {
+                var primaryKeyPropInfo = GetPrimaryKeyPropertyInfo();
+                var primaryKeyName = primaryKeyPropInfo.Name;
+
+                BsonClassMap.RegisterClassMap<T>(cm =>
+                                                     {
+                                                         cm.AutoMap();
+                                                         if (cm.IdMemberMap == null)
+                                                         {
+                                                             cm.SetIdMember(cm.GetMemberMap(primaryKeyName));
+
+                                                             if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
+                                                             {
+                                                                 cm.IdMemberMap.SetRepresentation(_keyTypeToBsonType[typeof(TKey)]);
+                                                                 cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
+                                                             }    
+                                                         }
+
+                                                         cm.Freeze();
+                                                     });
+            }
         }
 
         private MongoCollection<T> BaseCollection()
