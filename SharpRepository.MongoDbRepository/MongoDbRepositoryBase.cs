@@ -20,8 +20,8 @@ namespace SharpRepository.MongoDbRepository
     public class MongoDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         private readonly string _databaseName;
-        private MongoDatabase _database;
-        private MongoServer _server;
+        protected MongoDatabase Database;
+        protected MongoServer Server;
 
         private readonly Dictionary<Type, BsonType> _keyTypeToBsonType = new Dictionary<Type, BsonType>
                                                                       {
@@ -65,8 +65,8 @@ namespace SharpRepository.MongoDbRepository
 
         private void Initialize(MongoServer mongoServer = null)
         {
-            _server = mongoServer ?? new MongoClient("mongodb://localhost").GetServer();
-            _database = _server.GetDatabase(DatabaseName);
+            Server = mongoServer ?? new MongoClient("mongodb://localhost").GetServer();
+            Database = Server.GetDatabase(DatabaseName);
 
             if (!BsonClassMap.IsClassMapRegistered(typeof (T)))
             {
@@ -94,7 +94,7 @@ namespace SharpRepository.MongoDbRepository
 
         private MongoCollection<T> BaseCollection()
         {
-            return _database.GetCollection<T>(TypeName);
+            return Database.GetCollection<T>(TypeName);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
