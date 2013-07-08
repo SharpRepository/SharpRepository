@@ -25,7 +25,7 @@ namespace SharpRepository.MongoDbRepository
 
         private readonly Dictionary<Type, BsonType> _keyTypeToBsonType = new Dictionary<Type, BsonType>
                                                                       {
-                                                                          {typeof(string), BsonType.ObjectId},
+                                                                          {typeof(string), BsonType.String},
                                                                           {typeof(Guid), BsonType.ObjectId},
                                                                           {typeof(ObjectId), BsonType.ObjectId},
                                                                           {typeof(byte[]), BsonType.ObjectId}
