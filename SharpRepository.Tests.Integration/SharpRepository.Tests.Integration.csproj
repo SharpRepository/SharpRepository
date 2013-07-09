@@ -192,10 +192,11 @@
       <Name>SharpRepository.XmlRepository</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Data\Db4o\" />
-    <Folder Include="Data\Ef\" />
-    <Folder Include="Data\Xml\" />
+    <Content Include="Data\Db4o\README.txt" />
+    <Content Include="Data\Ef\README.txt" />
+    <Content Include="Data\Xml\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
