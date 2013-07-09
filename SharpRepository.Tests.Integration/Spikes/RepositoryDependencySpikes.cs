@@ -42,6 +42,19 @@ namespace SharpRepository.Tests.Integration.Spikes
         }
 
         [Test]
+        public void Ef5ConfigRepositoryFactory_Using_Ioc_Should_Return_TestObjectEntites_Without_DbContextType_Defined()
+        {
+            var config = new Ef5RepositoryConfiguration("TestConfig");
+            var factory = new Ef5ConfigRepositoryFactory(config);
+
+            var repos = factory.GetInstance<Contact, string>();
+
+            var propInfo = repos.GetType().GetProperty("Context", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            var dbContext = (TestObjectEntities)propInfo.GetValue(repos, null);
+            dbContext.ShouldBeType<TestObjectEntities>();
+        }
+
+        [Test]
         public void Ef5ConfigRepositoryFactory_Using_Ioc_Should_Share_DbContext()
         {
             var config = new Ef5RepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectEntities));
@@ -69,6 +82,11 @@ namespace SharpRepository.Tests.Integration.Spikes
                 scanner.TheCallingAssembly();
                 scanner.WithDefaultConventions();
             });
+
+            For<DbContext>()
+                .HybridHttpOrThreadLocalScoped()
+                .Use<TestObjectEntities>()
+                .Ctor<string>("connectionString").Is("Data Source=" + dbPath);
 
             For<TestObjectEntities>()
                 .HybridHttpOrThreadLocalScoped()

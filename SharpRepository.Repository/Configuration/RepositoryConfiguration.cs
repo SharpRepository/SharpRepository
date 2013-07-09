@@ -52,7 +52,7 @@ namespace SharpRepository.Repository.Configuration
 
         public string this[string key]
         {
-            get { return Attributes[key]; }
+            get { return Attributes.ContainsKey(key) ? Attributes[key] : null; }
         }
     }
 }
