@@ -70,6 +70,9 @@
     <Reference Include="Should">
       <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -111,6 +114,7 @@
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
+    <Compile Include="Spikes\RepositoryDependencySpikes.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
     <Compile Include="TestAttributes\AllRepositories.cs" />
     <Compile Include="TestAttributes\ExecuteForCompoundKeyRepositoriesAttribute.cs" />
@@ -166,6 +170,10 @@
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj">
+      <Project>{0b4bdc6d-6030-48fd-b22a-f9a9a7a00812}</Project>
+      <Name>SharpRepository.Ioc.StructureMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
       <Project>{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}</Project>
