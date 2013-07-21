@@ -11,52 +11,36 @@ namespace SharpRepository.Repository.Linq
         private static readonly MethodInfo ThenByMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "ThenBy" && method.GetParameters().Length == 2);
         private static readonly MethodInfo ThenByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "ThenByDescending" && method.GetParameters().Length == 2);
 
-        public static IOrderedQueryable<TSource> OrderByProperty<TSource>(this IQueryable<TSource> source, string propertyName)
+        public static IOrderedQueryable<TSource> ApplyOrdering<TSource>(IQueryable<TSource> source, string propertyName, MethodInfo orderingMethod)
         {
             var parameter = Expression.Parameter(typeof(TSource), "x");
             var orderByProperty = Expression.Property(parameter, propertyName);
 
             var lambda = Expression.Lambda(orderByProperty, new[] { parameter });
 
-            var genericMethod = OrderByMethod.MakeGenericMethod(new[] { typeof(TSource), orderByProperty.Type });
+            var genericMethod = orderingMethod.MakeGenericMethod(new[] { typeof(TSource), orderByProperty.Type });
 
             return (IOrderedQueryable<TSource>)genericMethod.Invoke(null, new object[] { source, lambda });
+        }
+
+        public static IOrderedQueryable<TSource> OrderByProperty<TSource>(this IQueryable<TSource> source, string propertyName)
+        {
+            return ApplyOrdering(source, propertyName, OrderByMethod);
         }
 
         public static IOrderedQueryable<TSource> OrderByDescendingProperty<TSource>(this IQueryable<TSource> source, string propertyName)
         {
-            var parameter = Expression.Parameter(typeof(TSource), "x");
-            var orderByProperty = Expression.Property(parameter, propertyName);
-
-            var lambda = Expression.Lambda(orderByProperty, new[] { parameter });
-
-            var genericMethod = OrderByDescendingMethod.MakeGenericMethod(new[] { typeof(TSource), orderByProperty.Type });
-
-            return (IOrderedQueryable<TSource>)genericMethod.Invoke(null, new object[] { source, lambda });
+            return ApplyOrdering(source, propertyName, OrderByDescendingMethod);
         }
 
         public static IOrderedQueryable<TSource> ThenByProperty<TSource>(this IOrderedQueryable<TSource> source, string propertyName)
         {
-            var parameter = Expression.Parameter(typeof(TSource), "x");
-            var orderByProperty = Expression.Property(parameter, propertyName);
-
-            var lambda = Expression.Lambda(orderByProperty, new[] { parameter });
-
-            var genericMethod = ThenByMethod.MakeGenericMethod(new[] { typeof(TSource), orderByProperty.Type });
-
-            return (IOrderedQueryable<TSource>)genericMethod.Invoke(null, new object[] { source, lambda });
+            return ApplyOrdering(source, propertyName, ThenByMethod);
         }
 
         public static IOrderedQueryable<TSource> ThenByDescendingProperty<TSource>(this IOrderedQueryable<TSource> source, string propertyName)
         {
-            var parameter = Expression.Parameter(typeof(TSource), "x");
-            var orderByProperty = Expression.Property(parameter, propertyName);
-
-            var lambda = Expression.Lambda(orderByProperty, new[] { parameter });
-
-            var genericMethod = ThenByDescendingMethod.MakeGenericMethod(new[] { typeof(TSource), orderByProperty.Type });
-
-            return (IOrderedQueryable<TSource>)genericMethod.Invoke(null, new object[] { source, lambda });
+            return ApplyOrdering(source, propertyName, ThenByDescendingMethod);
         }
     }
 }
