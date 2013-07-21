@@ -153,7 +153,7 @@ namespace SharpRepository.Tests.QueryOptions
             var qo = new SortingOptions<Contact>("ContactType.Name");
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 1");
+            queryable.First().Name.ShouldEqual("Test User 5");
         }
 
         [Test]
@@ -168,7 +168,7 @@ namespace SharpRepository.Tests.QueryOptions
             var qo = new SortingOptions<Contact>("ContactType.Name", isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 5");
+            queryable.First().Name.ShouldEqual("Test User 1");
         }
     }
 }
