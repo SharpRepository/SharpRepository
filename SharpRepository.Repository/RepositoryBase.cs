@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
+using SharpRepository.Repository.Reporting;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
 
@@ -30,12 +31,13 @@ namespace SharpRepository.Repository
             }
 
             Conventions = new RepositoryConventions();
-            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>(); // sets QueryManager as well
             // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
 
             _entityType = typeof(T);
             _typeName = _entityType.Name;
-            
+
+            Reporting = new RepositoryReporting<T, TKey>(this, QueryManager);
         }
 
         // conventions
@@ -74,6 +76,8 @@ namespace SharpRepository.Repository
       
         private bool BatchMode { get; set; }
 
+        public IRepositoryReporting<T> Reporting { get; internal set; }
+
         public ICachingStrategy<T, TKey> CachingStrategy 
         {
             get { return _cachingStrategy; } 
@@ -84,6 +88,7 @@ namespace SharpRepository.Repository
                 // make sure we keep the curent caching enabled status
                 var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
                 QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+                Reporting = new RepositoryReporting<T, TKey>(this, QueryManager);
             }
         } 
 
@@ -571,7 +576,5 @@ namespace SharpRepository.Repository
         {
             return GetEnumerator();
         }
-
-        public abstract IRepositoryReporting<T> Reporting { get; }
     }
 }

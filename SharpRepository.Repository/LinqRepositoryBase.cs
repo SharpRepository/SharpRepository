@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
-using SharpRepository.Repository.Reporting;
 using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository
@@ -14,7 +13,7 @@ namespace SharpRepository.Repository
     {
         protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
-            _reporting = new RepositoryReporting<T, TKey>(this, QueryManager);
+            
         }
 
         public override IQueryable<T> AsQueryable()
@@ -100,12 +99,6 @@ namespace SharpRepository.Repository
             }
 
             return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
-        }
-
-        private readonly IRepositoryReporting<T> _reporting;
-        public override IRepositoryReporting<T> Reporting
-        {
-            get { return _reporting; }
         }
     }
 }
