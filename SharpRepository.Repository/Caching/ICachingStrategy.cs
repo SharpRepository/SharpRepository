@@ -20,6 +20,18 @@ namespace SharpRepository.Repository.Caching
         bool TryFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out TResult result);
         void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result);
 
+        bool TryCountResult(ISpecification<T> criteria, out int count);
+        void SaveCountResult(ISpecification<T> criteria, int count);
+
+        bool TryLongCountResult(ISpecification<T> criteria, out long count);
+        void SaveLongCountResult(ISpecification<T> criteria, long count);
+
+        bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IEnumerable<GroupCount<TGroupKey>> result);
+        void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IEnumerable<GroupCount<TGroupKey>> result);
+
+        bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
+        void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
+
         void Add(TKey key, T result);
         void Update(TKey key, T result);
         void Delete(TKey key, T result);
@@ -30,5 +42,6 @@ namespace SharpRepository.Repository.Caching
         void ClearAll();
 
         ICachingProvider CachingProvider { get; set; }
+        
     }
 }

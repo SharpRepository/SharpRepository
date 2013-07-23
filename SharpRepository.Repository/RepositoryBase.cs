@@ -17,7 +17,7 @@ namespace SharpRepository.Repository
         private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        private QueryManager<T, TKey> _queryManager;
+        internal QueryManager<T, TKey> QueryManager;
 
         private readonly Type _entityType;
 
@@ -50,7 +50,7 @@ namespace SharpRepository.Repository
         
         public bool CacheUsed
         {
-            get { return _queryManager.CacheUsed; }
+            get { return QueryManager.CacheUsed; }
         }
 
         public IBatch<T> BeginBatch()
@@ -82,15 +82,15 @@ namespace SharpRepository.Repository
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
 
                 // make sure we keep the curent caching enabled status
-                var cachingEnabled = _queryManager == null || _queryManager.CacheEnabled;
-                _queryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+                var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
+                QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
             }
         } 
 
         public bool CachingEnabled
         {
-            get { return _queryManager.CacheEnabled; }
-            set { _queryManager.CacheEnabled = value; }
+            get { return QueryManager.CacheEnabled; }
+            set { QueryManager.CacheEnabled = value; }
         }
 
         public abstract IQueryable<T> AsQueryable();
@@ -106,7 +106,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
-            return _queryManager.ExecuteGetAll(
+            return QueryManager.ExecuteGetAll(
                 () => GetAllQuery(queryOptions).ToList(),
                 null,
                 queryOptions
@@ -117,7 +117,7 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteGetAll(
+            return QueryManager.ExecuteGetAll(
                 () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
                 selector,
                 queryOptions
@@ -133,7 +133,7 @@ namespace SharpRepository.Repository
 
         public T Get(TKey key)
         {
-            return _queryManager.ExecuteGet(
+            return QueryManager.ExecuteGet(
                 () => GetQuery(key),
                 key
                 );
@@ -144,7 +144,7 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             // get the full entity, possibly from cache
-            var result = _queryManager.ExecuteGet(
+            var result = QueryManager.ExecuteGet(
                 () => GetQuery(key),
                 key
                 );
@@ -197,7 +197,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFindAll(
+            return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
                 null,
@@ -209,7 +209,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFindAll(
+            return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
                 criteria,
                 selector,
@@ -240,7 +240,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFind(
+            return QueryManager.ExecuteFind(
                 () => FindQuery(criteria, queryOptions),
                 criteria,
                 null,
@@ -253,7 +253,7 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteFind(
+            return QueryManager.ExecuteFind(
                 () =>
                     {
                         var result = FindQuery(criteria, queryOptions);
@@ -396,7 +396,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemAdded(key, entity);
+                QueryManager.OnItemAdded(key, entity);
         }
 
         public void Add(IEnumerable<T> entities)
@@ -429,7 +429,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemDeleted(key, entity);
+                QueryManager.OnItemDeleted(key, entity);
         }
 
         public void Delete(IEnumerable<T> entities)
@@ -469,7 +469,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemUpdated(key, entity);
+                QueryManager.OnItemUpdated(key, entity);
         }
 
         public void Update(IEnumerable<T> entities)
@@ -488,7 +488,7 @@ namespace SharpRepository.Repository
         {
             SaveChanges();
             
-            _queryManager.OnSaveExecuted(); 
+            QueryManager.OnSaveExecuted(); 
         }
 
         

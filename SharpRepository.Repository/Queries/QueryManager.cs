@@ -98,6 +98,74 @@ namespace SharpRepository.Repository.Queries
             return result;
         }
 
+        public int ExecuteCount(Func<int> query, ISpecification<T> criteria)
+        {
+            int result;
+            if (CacheEnabled && _cachingStrategy.TryCountResult(criteria, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveCountResult(criteria, result);
+
+            return result;
+        }
+
+        public long ExecuteLongCount(Func<long> query, ISpecification<T> criteria)
+        {
+            long result;
+            if (CacheEnabled && _cachingStrategy.TryLongCountResult(criteria, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveLongCountResult(criteria, result);
+
+            return result;
+        }
+
+        public IEnumerable<GroupCount<TGroupKey>> ExecuteGroupCounts<TGroupKey>(Func<IEnumerable<GroupCount<TGroupKey>>> query, Func<T, TGroupKey> keySelector)
+        {
+            IEnumerable<GroupCount<TGroupKey>> result;
+            if (CacheEnabled && _cachingStrategy.TryGroupCountsResult(keySelector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveGroupCountsResult(keySelector, result);
+
+            return result;
+        }
+
+        public IEnumerable<GroupItem<TGroupKey, TGroupResult>> ExecuteGroupItems<TGroupKey, TGroupResult>(Func<IEnumerable<GroupItem<TGroupKey, TGroupResult>>> query, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
+        {
+            IEnumerable<GroupItem<TGroupKey, TGroupResult>> result;
+            if (CacheEnabled && _cachingStrategy.TryGroupItemsResult(keySelector, resultSelector, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveGroupItemsResult(keySelector, resultSelector, result);
+
+            return result;
+        }
+
         public void OnSaveExecuted()
         {
             if (CacheEnabled)

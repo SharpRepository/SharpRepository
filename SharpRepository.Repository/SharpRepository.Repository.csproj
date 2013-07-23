@@ -98,6 +98,7 @@
     <Compile Include="Linq\LinqHelpers.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="Caching\Cache.cs" />
+    <Compile Include="Reporting\RepositoryReporting.cs" />
     <Compile Include="RepositoryConventions.cs" />
     <Compile Include="DefaultRepositoryConventions.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />

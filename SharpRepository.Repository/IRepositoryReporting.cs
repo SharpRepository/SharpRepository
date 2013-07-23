@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository
 {
@@ -10,7 +11,10 @@ namespace SharpRepository.Repository
 
         IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector);
 
-        int Count(Expression<Func<T, bool>> predicate = null);
+        long LongCount(ISpecification<T> criteria = null);
+        long LongCount(Expression<Func<T, bool>> predicate);
+        int Count(ISpecification<T> criteria = null);
+        int Count(Expression<Func<T, bool>> predicate);
     }
     
     public class GroupCount<TGroupKey>

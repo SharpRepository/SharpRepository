@@ -343,6 +343,40 @@ namespace SharpRepository.Repository.Caching
             return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
         }
 
+        protected override string CountCacheKey(ISpecification<T> criteria)
+        {
+            TPartition partition;
+            if (TryPartitionValue(criteria, out partition))
+            {
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", FullCachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Count", Md5Helper.CalculateMd5(criteria.ToString()));
+            }
+
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "Count", Md5Helper.CalculateMd5(criteria.ToString()));
+        }
+
+        protected override string LongCountCacheKey(ISpecification<T> criteria)
+        {
+            TPartition partition;
+            if (TryPartitionValue(criteria, out partition))
+            {
+                return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", FullCachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "LongCount", Md5Helper.CalculateMd5(criteria.ToString()));
+            }
+
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "LongCount", Md5Helper.CalculateMd5(criteria.ToString()));
+        }
+
+        protected override string GroupCountsCacheKey<TGroupKey>(Func<T, TGroupKey> keySelector)
+        {
+            // TODO: see if we should implement this for partition
+            //  for now it will just get the next generation after each time
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "GroupCounts", Md5Helper.CalculateMd5(keySelector + "::" + typeof(TGroupKey).FullName));
+        }
+
+        protected override string GroupItemsCacheKey<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
+        {
+            return String.Format("{0}/{1}/{2}/{3}/{4}", FullCachePrefix, TypeFullName, GetGeneration(), "GroupItems", Md5Helper.CalculateMd5(keySelector + "::" + typeof(TGroupKey).FullName + "::" + resultSelector + "::" + typeof(TGroupResult).FullName));
+        }
+
         private int GetGeneration()
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider

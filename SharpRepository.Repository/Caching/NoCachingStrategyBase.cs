@@ -51,6 +51,50 @@ namespace SharpRepository.Repository.Caching
             return false;
         }
 
+        public virtual bool TryCountResult(ISpecification<T> criteria, out int count)
+        {
+            count = 0;
+            return false;
+        }
+
+        public virtual void SaveCountResult(ISpecification<T> criteria, int count)
+        {
+
+        }
+
+        public virtual bool TryLongCountResult(ISpecification<T> criteria, out long count)
+        {
+            count = 0;
+            return false;
+        }
+
+        public virtual void SaveLongCountResult(ISpecification<T> criteria, long count)
+        {
+
+        }
+
+        public bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IEnumerable<GroupCount<TGroupKey>> result)
+        {
+            result = default(IEnumerable<GroupCount<TGroupKey>>);
+            return false;
+        }
+
+        public void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IEnumerable<GroupCount<TGroupKey>> result)
+        {
+            
+        }
+
+        public bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
+        {
+            result = default(IEnumerable<GroupItem<TGroupKey, TGroupResult>>);
+            return false;
+        }
+
+        public void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
+        {
+            
+        }
+
         public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
         {
 
