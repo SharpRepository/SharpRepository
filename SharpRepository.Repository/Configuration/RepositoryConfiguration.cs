@@ -34,6 +34,14 @@ namespace SharpRepository.Repository.Configuration
 
         public IDictionary<string, string> Attributes { get; set; }
 
+        public IRepository<T> GetInstance<T>() where T : class, new()
+        {
+            // load up the factory if it exists and use it
+            var factory = (IConfigRepositoryFactory)Activator.CreateInstance(Factory, this);
+
+            return factory.GetInstance<T>();
+        }
+
         public IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new()
         {
             // load up the factory if it exists and use it

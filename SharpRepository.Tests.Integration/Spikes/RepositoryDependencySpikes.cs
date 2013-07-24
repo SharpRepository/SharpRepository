@@ -4,6 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using SharpRepository.Ef5Repository;
 using SharpRepository.Ioc.StructureMap;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Ioc;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
@@ -70,6 +71,18 @@ namespace SharpRepository.Tests.Integration.Spikes
             var dbContext2 = (TestObjectEntities)propInfo2.GetValue(repos2, null);
 
             dbContext1.ShouldEqual(dbContext2);
+        }
+
+        [Test]
+        public void Ioc_For_IRepository_T_Should_Not_Error()
+        {
+            var repos = ObjectFactory.GetInstance<IRepository<ContactType>>();
+        }
+
+        [Test]
+        public void Ioc_For_IRepository_T_TKey_Should_Not_Error()
+        {
+            var repos = ObjectFactory.GetInstance<IRepository<ContactType, int>>();
         }
     }
 

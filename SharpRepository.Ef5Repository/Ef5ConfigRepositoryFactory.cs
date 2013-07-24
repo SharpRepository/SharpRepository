@@ -14,6 +14,11 @@ namespace SharpRepository.Ef5Repository
         {
         }
 
+        public override IRepository<T> GetInstance<T>()
+        {
+            return new Ef5Repository<T>(GetDbContext());
+        }
+
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
             return new Ef5Repository<T, TKey>(GetDbContext());

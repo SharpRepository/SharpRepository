@@ -32,7 +32,7 @@ namespace SharpRepository.Repository
 
         public static object GetInstance(Type entityType, string repositoryName = null)
         {
-            return GetInstance(entityType, typeof(int), repositoryName);
+            return GetInstance(entityType, DefaultConfigSection, repositoryName);
         }
 
         public static object GetInstance(Type entityType, Type keyType, string repositoryName = null)
@@ -47,7 +47,7 @@ namespace SharpRepository.Repository
 
         public static object GetInstance(Type entityType, string configSection, string repositoryName)
         {
-            return GetInstance(entityType, typeof(int), configSection, repositoryName);
+            return GetInstance(entityType, GetConfiguration(configSection), repositoryName);
         }
 
         public static object GetInstance(Type entityType, Type keyType, string configSection, string repositoryName)
@@ -66,10 +66,17 @@ namespace SharpRepository.Repository
             return configuration.GetInstance<T, TKey>(repositoryName);
         }
 
-        public static object GetInstance(Type entityType, ISharpRepositoryConfiguration configuration,
-                                         string repositoryName = null)
+        public static object GetInstance(Type entityType, ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
-            return GetInstance(entityType, typeof (int), configuration, repositoryName);
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(entityType);
+            }
+
+            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`1");
+            var genericMethod = method.MakeGenericMethod(entityType);
+            return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
 
         public static object GetInstance(Type entityType, Type keyType, ISharpRepositoryConfiguration configuration, string repositoryName = null)

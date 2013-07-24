@@ -12,6 +12,7 @@ namespace SharpRepository.Repository.Configuration
         IDictionary<string, string> Attributes { get; set; }
         string this[string key] { get; }
 
+        IRepository<T> GetInstance<T>() where T : class, new();
         IRepository<T, TKey> GetInstance<T, TKey>() where T : class, new();
         ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class, new();
     }

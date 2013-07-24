@@ -19,6 +19,7 @@ namespace SharpRepository.Repository.Configuration
         string DefaultCachingProvider { get; set; }
         ICachingProviderConfiguration GetCachingProvider(string providerName);
 
+        IRepository<T> GetInstance<T>(string repositoryName = null) where T : class, new();
         IRepository<T, TKey> GetInstance<T, TKey>(string repositoryName = null) where T : class, new();
         ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string repositoryName = null) where T : class, new();
     }
