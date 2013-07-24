@@ -5,23 +5,31 @@ using System.Linq.Expressions;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
-namespace SharpRepository.Repository.Reporting
+namespace SharpRepository.Repository.Advanced
 {
-        public class RepositoryReporting<T, TKey> : IRepositoryReporting<T> where T : class
+        public class AdvancedRepository<T, TKey> : IAdvancedRepository<T> where T : class
         {
             private readonly IRepository<T, TKey> _repository;
             private readonly QueryManager<T, TKey> _queryManager;
 
-            public RepositoryReporting(IRepository<T, TKey> repository, QueryManager<T, TKey> queryManager)
+            public AdvancedRepository(IRepository<T, TKey> repository, QueryManager<T, TKey> queryManager)
             {
                 _repository = repository;
                 _queryManager = queryManager;
             }
 
-            public IEnumerable<GroupCount<TGroupKey>> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
             {
                 return _queryManager.ExecuteGroupCounts(
-                    () => _repository.AsQueryable().GroupBy(keySelector).Select(g => new GroupCount<TGroupKey> { Key = g.Key, Count = g.Count() }).OrderBy(x => x.Key).ToList(),
+                    () => _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
+                    keySelector
+                    );
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            {
+                return _queryManager.ExecuteGroupLongCounts(
+                    () => _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
                     keySelector
                     );
             }

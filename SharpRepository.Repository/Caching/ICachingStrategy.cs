@@ -26,8 +26,11 @@ namespace SharpRepository.Repository.Caching
         bool TryLongCountResult(ISpecification<T> criteria, out long count);
         void SaveLongCountResult(ISpecification<T> criteria, long count);
 
-        bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IEnumerable<GroupCount<TGroupKey>> result);
-        void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IEnumerable<GroupCount<TGroupKey>> result);
+        bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, int> result);
+        void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, int> result);
+
+        bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, long> result);
+        void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, long> result);
 
         bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
         void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);

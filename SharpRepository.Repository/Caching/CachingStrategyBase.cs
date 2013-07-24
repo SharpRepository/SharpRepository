@@ -207,9 +207,9 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       public virtual bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IEnumerable<GroupCount<TGroupKey>> result)
+       public virtual bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, int> result)
        {
-           result = default(IEnumerable<GroupCount<TGroupKey>>);
+           result = default(IDictionary<TGroupKey, int>);
            try
            {
                return IsInCache(GroupCountsCacheKey(keySelector), out result);
@@ -221,11 +221,37 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       public virtual void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IEnumerable<GroupCount<TGroupKey>> result)
+       public virtual void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, int> result)
        {
            try
            {
                SetCache(GroupCountsCacheKey(keySelector), result);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
+       }
+
+       public virtual bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, long> result)
+       {
+           result = default(IDictionary<TGroupKey, long>);
+           try
+           {
+               return IsInCache(GroupLongCountsCacheKey(keySelector), out result);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
+       }
+
+       public virtual void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, long> result)
+       {
+           try
+           {
+               SetCache(GroupLongCountsCacheKey(keySelector), result);
            }
            catch (Exception)
            {
@@ -418,6 +444,11 @@ namespace SharpRepository.Repository.Caching
        protected virtual string GroupCountsCacheKey<TGroupKey>(Func<T, TGroupKey> keySelector)
        {
            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "GroupCounts", Md5Helper.CalculateMd5(keySelector + "::" + typeof(TGroupKey).FullName));
+       }
+
+       protected virtual string GroupLongCountsCacheKey<TGroupKey>(Func<T, TGroupKey> keySelector)
+       {
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "GroupLongCounts", Md5Helper.CalculateMd5(keySelector + "::" + typeof(TGroupKey).FullName));
        }
 
        protected virtual string GroupItemsCacheKey<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)

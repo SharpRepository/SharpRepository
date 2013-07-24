@@ -73,13 +73,24 @@ namespace SharpRepository.Repository.Caching
 
         }
 
-        public bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IEnumerable<GroupCount<TGroupKey>> result)
+        public bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, int> result)
         {
-            result = default(IEnumerable<GroupCount<TGroupKey>>);
+            result = default(IDictionary<TGroupKey, int>);
             return false;
         }
 
-        public void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IEnumerable<GroupCount<TGroupKey>> result)
+        public void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, int> result)
+        {
+            
+        }
+
+        public bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, out IDictionary<TGroupKey, long> result)
+        {
+            result = default(IDictionary<TGroupKey, long>);
+            return false;
+        }
+
+        public void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, IDictionary<TGroupKey, long> result)
         {
             
         }

@@ -105,7 +105,7 @@
     <Compile Include="Data\EfDataDirectoryFactory.cs" />
     <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
     <Compile Include="Helpers\CurrentDirectory.cs" />
-    <Compile Include="RepositoryReportingTests.cs" />
+    <Compile Include="AdvancedRepositoryTests.cs" />
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\ConventionSpikes.cs" />
     <Compile Include="Spikes\Ef5CompoundKeySpikes.cs" />

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
-using SharpRepository.Repository.Reporting;
+using SharpRepository.Repository.Advanced;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
 
@@ -37,7 +37,7 @@ namespace SharpRepository.Repository
             _entityType = typeof(T);
             _typeName = _entityType.Name;
 
-            Reporting = new RepositoryReporting<T, TKey>(this, QueryManager);
+            Advanced = new AdvancedRepository<T, TKey>(this, QueryManager);
         }
 
         // conventions
@@ -76,7 +76,7 @@ namespace SharpRepository.Repository
       
         private bool BatchMode { get; set; }
 
-        public IRepositoryReporting<T> Reporting { get; internal set; }
+        public IAdvancedRepository<T> Advanced { get; internal set; }
 
         public ICachingStrategy<T, TKey> CachingStrategy 
         {
@@ -88,7 +88,7 @@ namespace SharpRepository.Repository
                 // make sure we keep the curent caching enabled status
                 var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
                 QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
-                Reporting = new RepositoryReporting<T, TKey>(this, QueryManager);
+                Advanced = new AdvancedRepository<T, TKey>(this, QueryManager);
             }
         } 
 
