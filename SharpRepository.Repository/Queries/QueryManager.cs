@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
@@ -14,7 +13,7 @@ namespace SharpRepository.Repository.Queries
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TKey">The type of the key.</typeparam>
-    public class QueryManager<T, TKey> where T : class
+    public partial class QueryManager<T, TKey> where T : class
     {
         private readonly ICachingStrategy<T, TKey> _cachingStrategy;
 
@@ -94,91 +93,6 @@ namespace SharpRepository.Repository.Queries
             result = query.Invoke();
 
             _cachingStrategy.SaveFindResult(criteria, queryOptions, selector, result);
-
-            return result;
-        }
-
-        public int ExecuteCount(Func<int> query, ISpecification<T> criteria)
-        {
-            int result;
-            if (CacheEnabled && _cachingStrategy.TryCountResult(criteria, out result))
-            {
-                CacheUsed = true;
-                return result;
-            }
-
-            CacheUsed = false;
-            result = query.Invoke();
-
-            _cachingStrategy.SaveCountResult(criteria, result);
-
-            return result;
-        }
-
-        public long ExecuteLongCount(Func<long> query, ISpecification<T> criteria)
-        {
-            long result;
-            if (CacheEnabled && _cachingStrategy.TryLongCountResult(criteria, out result))
-            {
-                CacheUsed = true;
-                return result;
-            }
-
-            CacheUsed = false;
-            result = query.Invoke();
-
-            _cachingStrategy.SaveLongCountResult(criteria, result);
-
-            return result;
-        }
-
-        public IDictionary<TGroupKey, int> ExecuteGroupCounts<TGroupKey>(Func<IDictionary<TGroupKey, int>> query, Func<T, TGroupKey> keySelector)
-        {
-            IDictionary<TGroupKey, int> result;
-            if (CacheEnabled && _cachingStrategy.TryGroupCountsResult(keySelector, out result))
-            {
-                CacheUsed = true;
-                return result;
-            }
-
-            CacheUsed = false;
-            result = query.Invoke();
-
-            _cachingStrategy.SaveGroupCountsResult(keySelector, result);
-
-            return result;
-        }
-
-        public IDictionary<TGroupKey, long> ExecuteGroupLongCounts<TGroupKey>(Func<IDictionary<TGroupKey, long>> query, Func<T, TGroupKey> keySelector)
-        {
-            IDictionary<TGroupKey, long> result;
-            if (CacheEnabled && _cachingStrategy.TryGroupLongCountsResult(keySelector, out result))
-            {
-                CacheUsed = true;
-                return result;
-            }
-
-            CacheUsed = false;
-            result = query.Invoke();
-
-            _cachingStrategy.SaveGroupLongCountsResult(keySelector, result);
-
-            return result;
-        }
-
-        public IEnumerable<GroupItem<TGroupKey, TGroupResult>> ExecuteGroupItems<TGroupKey, TGroupResult>(Func<IEnumerable<GroupItem<TGroupKey, TGroupResult>>> query, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
-        {
-            IEnumerable<GroupItem<TGroupKey, TGroupResult>> result;
-            if (CacheEnabled && _cachingStrategy.TryGroupItemsResult(keySelector, resultSelector, out result))
-            {
-                CacheUsed = true;
-                return result;
-            }
-
-            CacheUsed = false;
-            result = query.Invoke();
-
-            _cachingStrategy.SaveGroupItemsResult(keySelector, resultSelector, result);
 
             return result;
         }

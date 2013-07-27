@@ -1,6 +1,6 @@
 using System;
 using System.Linq.Expressions;
-using SharpRepository.Repository.Advanced;
+using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.Caching;
 
 
@@ -17,7 +17,7 @@ namespace SharpRepository.Repository
     {
         IRepositoryConventions Conventions { get; set; }
 
-        IAdvancedRepository<T> Advanced { get; }
+        IAggregateQueries<T> Aggregates { get; }
 
         /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.

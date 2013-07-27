@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using SharpRepository.Repository.Advanced;
+using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -174,7 +174,7 @@ namespace SharpRepository.Repository
             set { Repository.Conventions = value;  }
         }
 
-        public IAdvancedRepository<T> Advanced { get { return Repository.Advanced; } }
+        public IAggregateQueries<T> Aggregates { get { return Repository.Aggregates; } }
 
         public T Get(TKey key)
         {

@@ -285,6 +285,85 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
+       public virtual bool TrySumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum)
+       {
+           sum = default(TResult);
+           try
+           {
+               return IsInCache(SumCacheKey(selector, criteria), out sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
+       }
+
+       public virtual void SaveSumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum)
+       {
+           try
+           {
+               SetCache(SumCacheKey(selector, criteria), sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
+       }
+
+       public virtual bool TryMinResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum)
+       {
+           sum = default(TResult);
+           try
+           {
+               return IsInCache(MinCacheKey(selector, criteria), out sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
+       }
+
+       public virtual void SaveMinResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum)
+       {
+           try
+           {
+               SetCache(MinCacheKey(selector, criteria), sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
+       }
+
+       public virtual bool TryMaxResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum)
+       {
+           sum = default(TResult);
+           try
+           {
+               return IsInCache(MaxCacheKey(selector, criteria), out sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
+       }
+
+       public virtual void SaveMaxResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum)
+       {
+           try
+           {
+               SetCache(MaxCacheKey(selector, criteria), sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
+       }
+
+
        public abstract void Add(TKey key, T result);
 
        public abstract void Update(TKey key, T result);
@@ -454,6 +533,21 @@ namespace SharpRepository.Repository.Caching
        protected virtual string GroupItemsCacheKey<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
        {
            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "GroupItems", Md5Helper.CalculateMd5(keySelector + "::" + typeof(TGroupKey).FullName + "::" + resultSelector + "::" + typeof(TGroupResult).FullName));
+       }
+
+       protected virtual string SumCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
+       {
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Sum", Md5Helper.CalculateMd5(typeof(TResult).FullName + "::" + selector + "::" + criteria));
+       }
+
+       protected virtual string MinCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
+       {
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Min", Md5Helper.CalculateMd5(typeof(TResult).FullName + "::" + selector + "::" + criteria));
+       }
+
+       protected virtual string MaxCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
+       {
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Max", Md5Helper.CalculateMd5(typeof(TResult).FullName + "::" + selector + "::" + criteria));
        }
     }
 }

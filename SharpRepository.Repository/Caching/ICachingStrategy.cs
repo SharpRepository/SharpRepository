@@ -35,6 +35,15 @@ namespace SharpRepository.Repository.Caching
         bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
         void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
 
+        bool TrySumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum);
+        void SaveSumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum);
+        
+        bool TryMinResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum);
+        void SaveMinResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum);
+        
+        bool TryMaxResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum);
+        void SaveMaxResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum);
+
         void Add(TKey key, T result);
         void Update(TKey key, T result);
         void Delete(TKey key, T result);

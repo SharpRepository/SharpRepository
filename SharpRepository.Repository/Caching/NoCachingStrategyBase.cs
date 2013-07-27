@@ -51,6 +51,11 @@ namespace SharpRepository.Repository.Caching
             return false;
         }
 
+        public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
+        {
+
+        }
+
         public virtual bool TryCountResult(ISpecification<T> criteria, out int count)
         {
             count = 0;
@@ -106,7 +111,35 @@ namespace SharpRepository.Repository.Caching
             
         }
 
-        public void SaveFindResult<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, TResult result)
+        public virtual bool TrySumResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, out TSum sum)
+        {
+            sum = default(TSum);
+            return false;
+        }
+
+        public virtual void SaveSumResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, TSum sum)
+        {
+
+        }
+
+        public virtual bool TryMinResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, out TSum sum)
+        {
+            sum = default(TSum);
+            return false;
+        }
+
+        public virtual void SaveMinResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, TSum sum)
+        {
+
+        }
+
+        public virtual bool TryMaxResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, out TSum sum)
+        {
+            sum = default(TSum);
+            return false;
+        }
+
+        public virtual void SaveMaxResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, TSum sum)
         {
 
         }
