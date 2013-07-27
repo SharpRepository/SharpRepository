@@ -18,32 +18,62 @@ namespace SharpRepository.Repository.Aggregates
                 _queryManager = queryManager;
             }
 
-            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria = null)
             {
                 return _queryManager.ExecuteGroupCounts(
-                    () => _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
-                    keySelector
+                    () => criteria == null ? 
+                        _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count())
+                        :
+                        _repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
+                    keySelector,
+                    criteria
                     );
             }
 
-            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector, Expression<Func<T, bool>> predicate)
+            {
+                return GroupCounts(keySelector, predicate == null ? null : new Specification<T>(predicate));
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria = null)
             {
                 return _queryManager.ExecuteGroupLongCounts(
-                    () => _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
-                    keySelector
+                    () => criteria == null ?
+                        _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount())
+                        :
+                        _repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
+                    keySelector,
+                    criteria
                     );
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector, Expression<Func<T, bool>> predicate)
+            {
+                return GroupLongCounts(keySelector, predicate == null ? null : new Specification<T>(predicate));
             }
 
             public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
-                Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
+                Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria)
             {
                 return _queryManager.ExecuteGroupItems(
-                    () => _repository.AsQueryable()
-                        .GroupBy(keySelector, resultSelector)
-                        .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList(),
+                    () => criteria == null ?
+                            _repository.AsQueryable()
+                            .GroupBy(keySelector, resultSelector)
+                            .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList()
+                        :
+                            _repository.AsQueryable()
+                            .Where(criteria.Predicate)
+                            .GroupBy(keySelector, resultSelector)
+                            .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList(),
                     keySelector,
-                    resultSelector
+                    resultSelector,
+                    criteria
                     );
+            }
+
+            public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, Expression<Func<T, bool>> predicate)
+            {
+                return GroupItems(keySelector, resultSelector, predicate == null ? null : new Specification<T>(predicate));
             }
 
             public long LongCount(ISpecification<T> criteria = null)
