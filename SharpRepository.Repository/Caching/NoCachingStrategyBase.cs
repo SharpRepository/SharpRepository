@@ -111,13 +111,24 @@ namespace SharpRepository.Repository.Caching
             
         }
 
-        public virtual bool TrySumResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, out TSum sum)
+        public virtual bool TrySumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum)
         {
-            sum = default(TSum);
+            sum = default(TResult);
             return false;
         }
 
-        public virtual void SaveSumResult<TSum>(Expression<Func<T, TSum>> selector, ISpecification<T> criteria, TSum sum)
+        public virtual void SaveSumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum)
+        {
+
+        }
+
+        public virtual bool TryAverageResult<TSelector, TResult>(Expression<Func<T, TSelector>> selector, ISpecification<T> criteria, out TResult sum)
+        {
+            sum = default(TResult);
+            return false;
+        }
+
+        public virtual void SaveAverageResult<TSelector, TResult>(Expression<Func<T, TSelector>> selector, ISpecification<T> criteria, TResult sum)
         {
 
         }

@@ -109,6 +109,23 @@ namespace SharpRepository.Repository.Queries
             return result;
         }
 
+        public TResult ExecuteAverage<TSelector, TResult>(Func<TResult> query, Expression<Func<T, TSelector>> selector, ISpecification<T> criteria)
+        {
+            TResult result;
+            if (CacheEnabled && _cachingStrategy.TryAverageResult(selector, criteria, out result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+            result = query.Invoke();
+
+            _cachingStrategy.SaveAverageResult(selector, criteria, result);
+
+            return result;
+        }
+
         public TResult ExecuteMin<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
         {
             TResult result;

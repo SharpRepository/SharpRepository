@@ -56,6 +56,37 @@ namespace SharpRepository.Repository.Aggregates
         float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector);
         float? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector);
 
+        double Average(Expression<Func<T, int>> selector);
+        double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector);
+        double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector);
+        double? Average(Expression<Func<T, int?>> selector);
+        double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector);
+        double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector);
+        double Average(Expression<Func<T, long>> selector);
+        double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector);
+        double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector);
+        double? Average(Expression<Func<T, long?>> selector);
+        double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector);
+        double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector);
+        decimal Average(Expression<Func<T, decimal>> selector);
+        decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector);
+        decimal Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector);
+        decimal? Average(Expression<Func<T, decimal?>> selector);
+        decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector);
+        decimal? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector);
+        double Average(Expression<Func<T, double>> selector);
+        double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector);
+        double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector);
+        double? Average(Expression<Func<T, double?>> selector);
+        double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector);
+        double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector);
+        float Average(Expression<Func<T, float>> selector);
+        float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector);
+        float Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector);
+        float? Average(Expression<Func<T, float?>> selector);
+        float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector);
+        float? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector);
+
         TResult Min<TResult>(Expression<Func<T, TResult>> selector);
         TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector);
         TResult Min<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector);

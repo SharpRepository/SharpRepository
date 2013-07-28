@@ -320,6 +320,196 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
             }
 
+            public double Average(Expression<Func<T, int>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public double? Average(Expression<Func<T, int?>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public double Average(Expression<Func<T, long>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public double? Average(Expression<Func<T, long?>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public decimal Average(Expression<Func<T, decimal>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public decimal Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public decimal? Average(Expression<Func<T, decimal?>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public decimal? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public double Average(Expression<Func<T, double>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public double? Average(Expression<Func<T, double?>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public float Average(Expression<Func<T, float>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public float Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public float? Average(Expression<Func<T, float?>> selector)
+            {
+                return Average((ISpecification<T>)null, selector);
+            }
+
+            public virtual float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+            {
+                return QueryManager.ExecuteAverage(
+                    () => criteria == null ? Repository.AsQueryable().Average(selector) : Repository.AsQueryable().Where(criteria.Predicate).Average(selector),
+                    selector,
+                    criteria
+                    );
+            }
+
+            public float? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
+            {
+                return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
             public TResult Min<TResult>(Expression<Func<T, TResult>> selector)
             {
                 return Min((ISpecification<T>)null, selector);

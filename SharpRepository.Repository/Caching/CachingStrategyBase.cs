@@ -303,6 +303,32 @@ namespace SharpRepository.Repository.Caching
        {
            try
            {
+               SetCache(AverageCacheKey(selector, criteria), sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error saving cache stop everything else
+           }
+       }
+
+       public virtual bool TryAverageResult<TSelector, TResult>(Expression<Func<T, TSelector>> selector, ISpecification<T> criteria, out TResult sum)
+       {
+           sum = default(TResult);
+           try
+           {
+               return IsInCache(AverageCacheKey(selector, criteria), out sum);
+           }
+           catch (Exception)
+           {
+               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+               return false;
+           }
+       }
+
+       public virtual void SaveAverageResult<TSelector, TResult>(Expression<Func<T, TSelector>> selector, ISpecification<T> criteria, TResult sum)
+       {
+           try
+           {
                SetCache(SumCacheKey(selector, criteria), sum);
            }
            catch (Exception)
@@ -538,6 +564,11 @@ namespace SharpRepository.Repository.Caching
        protected virtual string SumCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
        {
            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Sum", Md5Helper.CalculateMd5(typeof(TResult).FullName + "::" + selector + "::" + criteria));
+       }
+
+       protected virtual string AverageCacheKey<TSelector>(Expression<Func<T, TSelector>> selector, ISpecification<T> criteria)
+       {
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Average", Md5Helper.CalculateMd5(typeof(TSelector).FullName + "::" + selector + "::" + criteria));
        }
 
        protected virtual string MinCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)

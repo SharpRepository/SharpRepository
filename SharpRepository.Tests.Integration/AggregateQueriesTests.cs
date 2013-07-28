@@ -210,6 +210,66 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
+        public void Average_All_Should_Return_Average(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId =i};
+                repository.Add(contact);
+            }
+
+            repository.Aggregates.Average(x => x.ContactTypeId).ShouldEqual(2.0);
+        }
+
+        [ExecuteForAllRepositories]
+        public void Average_With_Predicate_Should_Return_Average(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId =i};
+                repository.Add(contact);
+            }
+
+            repository.Aggregates.Average(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2.5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void Average_With_Specification_Should_Return_Average(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId =i};
+                repository.Add(contact);
+            }
+
+            repository.Aggregates.Average(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(2.5);
+        }
+
+        [ExecuteForAllRepositories]
+        public void Average_Decimal_All_Should_Return_Average(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId = i, SumDecimal = 0.5m + i };
+                repository.Add(contact);
+            }
+
+            repository.Aggregates.Average(x => x.SumDecimal).ShouldEqual(2.5m);
+        }
+
+        [ExecuteForAllRepositories]
+        public void Average_Decimal_With_Predicate_Should_Return_Average(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 3; i++)
+            {
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId = i, SumDecimal = 0.5m + i };
+                repository.Add(contact);
+            }
+
+            repository.Aggregates.Average(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(3m);
+        }
+
+        [ExecuteForAllRepositories]
         public void Min_All_Should_Return_One(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)

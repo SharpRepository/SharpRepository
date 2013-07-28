@@ -126,5 +126,95 @@ namespace SharpRepository.CouchDbRepository.Aggregates
                  criteria
                  );
         }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => Repository.FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
     }
 }
