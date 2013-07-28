@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using SharpRepository.CouchDbRepository.Aggregates;
 using SharpRepository.CouchDbRepository.Linq;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.CouchDbRepository
@@ -41,6 +43,11 @@ namespace SharpRepository.CouchDbRepository
             {
                 CouchDbManager.CreateDatabase(_serverUrl, _database);
             }
+        }
+
+        protected override IAggregateQueries<T> GetAggregateQueries(IRepository<T, string> repository, Repository.Queries.QueryManager<T, string> queryManager)
+        {
+            return new CouchDbAggregateQueries<T, string>(this, QueryManager);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)

@@ -2,7 +2,9 @@ using System;
 using System.Linq;
 using Raven.Client;
 using Raven.Client.Document;
+using SharpRepository.RavenDbRepository.Aggregates;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 
@@ -52,6 +54,11 @@ namespace SharpRepository.RavenDbRepository
             DocumentStore.Conventions.AllowQueriesOnId = true;
 
             Session = DocumentStore.OpenSession();
+        }
+
+        protected override IAggregateQueries<T> GetAggregateQueries(IRepository<T, TKey> repository, Repository.Queries.QueryManager<T, TKey> queryManager)
+        {
+            return new RavenDbAggregateQueries<T, TKey>(this, QueryManager);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)

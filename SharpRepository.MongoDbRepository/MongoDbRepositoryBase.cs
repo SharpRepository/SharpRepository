@@ -7,7 +7,9 @@ using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
+using SharpRepository.MongoDbRepository.Aggregates;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
@@ -48,6 +50,11 @@ namespace SharpRepository.MongoDbRepository
         {
             Server = mongoServer ?? new MongoClient("mongodb://localhost").GetServer();
             Database = Server.GetDatabase(DatabaseName);
+        }
+
+        protected override IAggregateQueries<T> GetAggregateQueries(IRepository<T, TKey> repository, Repository.Queries.QueryManager<T, TKey> queryManager)
+        {
+            return new MongoDbAggregateQueries<T, TKey>(this, QueryManager);
         }
 
         private MongoCollection<T> BaseCollection()

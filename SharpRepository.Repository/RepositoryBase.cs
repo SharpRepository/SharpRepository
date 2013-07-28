@@ -18,7 +18,7 @@ namespace SharpRepository.Repository
         private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        internal QueryManager<T, TKey> QueryManager;
+        protected QueryManager<T, TKey> QueryManager;
 
         private readonly Type _entityType;
 
@@ -37,7 +37,7 @@ namespace SharpRepository.Repository
             _entityType = typeof(T);
             _typeName = _entityType.Name;
 
-            Aggregates = new AggregateQueries<T, TKey>(this, QueryManager);
+            Aggregates = GetAggregateQueries(this, QueryManager);
         }
 
         // conventions
@@ -88,9 +88,17 @@ namespace SharpRepository.Repository
                 // make sure we keep the curent caching enabled status
                 var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
                 QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
-                Aggregates = new AggregateQueries<T, TKey>(this, QueryManager);
+                Aggregates = GetAggregateQueries(this, QueryManager);
             }
         } 
+
+        // this can be overwritten in specific implemenations of the repository if some of the aggregate methods won't work with the basic linq
+        //  for example, Couch, Mongo and Raven don't implement Sum
+        protected virtual IAggregateQueries<T> GetAggregateQueries(IRepository<T, TKey> repository,
+                                                                 QueryManager<T, TKey> queryManager)
+        {
+            return new AggregateQueries<T, TKey>(this, queryManager);
+        }
 
         public bool CachingEnabled
         {
@@ -200,7 +208,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(queryOptions);
 
             return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).ToList(),
@@ -212,7 +220,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(selector, queryOptions);
 
             return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
@@ -224,15 +232,15 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (predicate == null) return GetAll(queryOptions);
 
             return FindAll(new Specification<T>(predicate), queryOptions);
         }
 
         public IEnumerable<TResult> FindAll<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
             if (selector == null) throw new ArgumentNullException("selector");
+            if (predicate == null) return GetAll(selector, queryOptions);
 
             return FindAll(new Specification<T>(predicate), selector, queryOptions);
         }

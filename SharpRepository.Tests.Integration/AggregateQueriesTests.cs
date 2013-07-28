@@ -149,7 +149,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.LongCount(x => x.ContactTypeId == 2).ShouldEqual(expected);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Sum_All_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -161,7 +161,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Sum(x => x.ContactTypeId).ShouldEqual(6);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Sum_With_Predicate_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -173,7 +173,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Sum(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(5);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Sum_With_Specification_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -185,7 +185,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Sum(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(5);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Sum_Decimal_All_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -197,7 +197,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Sum(x => x.SumDecimal).ShouldEqual(7.5m);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Sum_Decimal_With_Predicate_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -209,7 +209,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Sum(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(6m);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Min_All_Should_Return_One(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -221,7 +221,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Min(x => x.ContactTypeId).ShouldEqual(1);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Min_With_Predicate_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -233,7 +233,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Min(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Min_Decimal_All_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -245,7 +245,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Min(x => x.SumDecimal).ShouldEqual(1.5m);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Min_Decimal_With_Predicate_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -257,7 +257,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Min(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(2.5m);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Max_All_Should_Return_Max(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -269,7 +269,7 @@ namespace SharpRepository.Tests.Integration
             repository.Aggregates.Max(x => x.ContactTypeId).ShouldEqual(3);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.CouchDb, Reason = "Not Supported")]
+        [ExecuteForAllRepositories]
         public void Max_With_Predicate_Should_Return_Max(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)

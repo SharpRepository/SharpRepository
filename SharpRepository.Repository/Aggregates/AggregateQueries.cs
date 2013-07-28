@@ -9,13 +9,13 @@ namespace SharpRepository.Repository.Aggregates
 {
         public class AggregateQueries<T, TKey> : IAggregateQueries<T> where T : class
         {
-            private readonly IRepository<T, TKey> _repository;
-            private readonly QueryManager<T, TKey> _queryManager;
+            protected readonly IRepository<T, TKey> Repository;
+            protected readonly QueryManager<T, TKey> QueryManager;
 
             public AggregateQueries(IRepository<T, TKey> repository, QueryManager<T, TKey> queryManager)
             {
-                _repository = repository;
-                _queryManager = queryManager;
+                Repository = repository;
+                QueryManager = queryManager;
             }
 
             public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
@@ -25,11 +25,11 @@ namespace SharpRepository.Repository.Aggregates
 
             public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector)
             {
-                return _queryManager.ExecuteGroupCounts(
+                return QueryManager.ExecuteGroupCounts(
                     () => criteria == null ? 
-                        _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count())
+                        Repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count())
                         :
-                        _repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
+                        Repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
                     keySelector,
                     criteria
                     );
@@ -47,11 +47,11 @@ namespace SharpRepository.Repository.Aggregates
 
             public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector)
             {
-                return _queryManager.ExecuteGroupLongCounts(
+                return QueryManager.ExecuteGroupLongCounts(
                     () => criteria == null ?
-                        _repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount())
+                        Repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount())
                         :
-                        _repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
+                        Repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
                     keySelector,
                     criteria
                     );
@@ -71,13 +71,13 @@ namespace SharpRepository.Repository.Aggregates
             public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
                 ISpecification<T> criteria, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
             {
-                return _queryManager.ExecuteGroupItems(
+                return QueryManager.ExecuteGroupItems(
                     () => criteria == null ?
-                            _repository.AsQueryable()
+                            Repository.AsQueryable()
                             .GroupBy(keySelector, resultSelector)
                             .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList()
                         :
-                            _repository.AsQueryable()
+                            Repository.AsQueryable()
                             .Where(criteria.Predicate)
                             .GroupBy(keySelector, resultSelector)
                             .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList(),
@@ -101,8 +101,8 @@ namespace SharpRepository.Repository.Aggregates
 
             public long LongCount(ISpecification<T> criteria)
             {                
-                return _queryManager.ExecuteLongCount(
-                    () => criteria == null ? _repository.AsQueryable().LongCount() : _repository.AsQueryable().LongCount(criteria.Predicate),
+                return QueryManager.ExecuteLongCount(
+                    () => criteria == null ? Repository.AsQueryable().LongCount() : Repository.AsQueryable().LongCount(criteria.Predicate),
                     criteria
                     );
             }
@@ -119,8 +119,8 @@ namespace SharpRepository.Repository.Aggregates
 
             public int Count(ISpecification<T> criteria)
             {
-                return _queryManager.ExecuteCount(
-                    () => criteria == null ? _repository.AsQueryable().Count() : _repository.AsQueryable().Count(criteria.Predicate),
+                return QueryManager.ExecuteCount(
+                    () => criteria == null ? Repository.AsQueryable().Count() : Repository.AsQueryable().Count(criteria.Predicate),
                     criteria
                     );
             }
@@ -135,10 +135,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+            public virtual int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -154,10 +154,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public int? Sum(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+            public virtual int? Sum(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -173,10 +173,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public long Sum(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+            public virtual long Sum(ISpecification<T> criteria, Expression<Func<T, long>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -192,10 +192,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public long? Sum(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+            public virtual long? Sum(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -211,10 +211,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public decimal Sum(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+            public virtual decimal Sum(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -230,10 +230,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public decimal? Sum(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+            public virtual decimal? Sum(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -249,10 +249,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public double Sum(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+            public virtual double Sum(ISpecification<T> criteria, Expression<Func<T, double>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -268,10 +268,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public double? Sum(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+            public virtual double? Sum(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -287,10 +287,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public float Sum(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+            public virtual float Sum(ISpecification<T> criteria, Expression<Func<T, float>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -306,10 +306,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Sum((ISpecification<T>)null, selector);
             }
 
-            public float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+            public virtual float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
             {
-                return _queryManager.ExecuteSum(
-                    () => criteria == null ? _repository.AsQueryable().Sum(selector) : _repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
+                return QueryManager.ExecuteSum(
+                    () => criteria == null ? Repository.AsQueryable().Sum(selector) : Repository.AsQueryable().Where(criteria.Predicate).Sum(selector),
                     selector,
                     criteria
                     );
@@ -325,10 +325,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Min((ISpecification<T>)null, selector);
             }
 
-            public TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+            public virtual TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
             {
-                return _queryManager.ExecuteMin(
-                    () => criteria == null ? _repository.AsQueryable().Min(selector) : _repository.AsQueryable().Where(criteria.Predicate).Min(selector),
+                return QueryManager.ExecuteMin(
+                    () => criteria == null ? Repository.AsQueryable().Min(selector) : Repository.AsQueryable().Where(criteria.Predicate).Min(selector),
                     selector,
                     criteria
                     );
@@ -344,10 +344,10 @@ namespace SharpRepository.Repository.Aggregates
                 return Max((ISpecification<T>)null, selector);
             }
 
-            public TResult Max<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+            public virtual TResult Max<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
             {
-                return _queryManager.ExecuteMax(
-                    () => criteria == null ? _repository.AsQueryable().Max(selector) : _repository.AsQueryable().Where(criteria.Predicate).Max(selector),
+                return QueryManager.ExecuteMax(
+                    () => criteria == null ? Repository.AsQueryable().Max(selector) : Repository.AsQueryable().Where(criteria.Predicate).Max(selector),
                     selector,
                     criteria
                     );

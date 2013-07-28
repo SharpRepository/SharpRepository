@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\CouchDbAggregateQueries.cs" />
     <Compile Include="CouchDbManager.cs" />
     <Compile Include="CouchDbRepository.cs" />
     <Compile Include="CouchDbRepositoryBase.cs" />
