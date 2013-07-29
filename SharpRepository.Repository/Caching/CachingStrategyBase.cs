@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Caching;
 using SharpRepository.Repository.Helpers;
@@ -207,12 +208,12 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       public virtual bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, int> result)
+       public virtual bool TryGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, out IEnumerable<TResult> result)
        {
-           result = default(IDictionary<TGroupKey, int>);
+           result = default(IEnumerable<TResult>);
            try
            {
-               return IsInCache(GroupCountsCacheKey(keySelector, criteria), out result);
+               return IsInCache(GroupCacheKey(keySelector, resultSelector, criteria), out result);
            }
            catch (Exception)
            {
@@ -221,63 +222,11 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       public virtual void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, int> result)
+       public virtual void SaveGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, IEnumerable<TResult> result)
        {
            try
            {
-               SetCache(GroupCountsCacheKey(keySelector, criteria), result);
-           }
-           catch (Exception)
-           {
-               // don't let an error saving cache stop everything else
-           }
-       }
-
-       public virtual bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, long> result)
-       {
-           result = default(IDictionary<TGroupKey, long>);
-           try
-           {
-               return IsInCache(GroupLongCountsCacheKey(keySelector, criteria), out result);
-           }
-           catch (Exception)
-           {
-               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
-               return false;
-           }
-       }
-
-       public virtual void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, long> result)
-       {
-           try
-           {
-               SetCache(GroupLongCountsCacheKey(keySelector, criteria), result);
-           }
-           catch (Exception)
-           {
-               // don't let an error saving cache stop everything else
-           }
-       }
-
-       public virtual bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
-       {
-           result = default(IEnumerable<GroupItem<TGroupKey, TGroupResult>>);
-           try
-           {
-               return IsInCache(GroupItemsCacheKey(keySelector, resultSelector, criteria), out result);
-           }
-           catch (Exception)
-           {
-               // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
-               return false;
-           }
-       }
-
-       public virtual void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
-       {
-           try
-           {
-               SetCache(GroupItemsCacheKey(keySelector, resultSelector, criteria), result);
+               SetCache(GroupCacheKey(keySelector, resultSelector, criteria), result);
            }
            catch (Exception)
            {
@@ -556,9 +505,9 @@ namespace SharpRepository.Repository.Caching
            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "GroupLongCounts", Md5Helper.CalculateMd5((criteria == null ? "null" : criteria.ToString()) + "::" + keySelector + "::" + typeof(TGroupKey).FullName));
        }
 
-       protected virtual string GroupItemsCacheKey<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria)
+       protected virtual string GroupCacheKey<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria)
        {
-           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "GroupItems", Md5Helper.CalculateMd5((criteria == null ? "null" : criteria.ToString()) + "::" + keySelector + "::" + typeof(TGroupKey).FullName + "::" + resultSelector + "::" + typeof(TGroupResult).FullName));
+           return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, "Group", Md5Helper.CalculateMd5((criteria == null ? "null" : criteria.ToString()) + "::" + keySelector + "::" + typeof(TGroupKey).FullName + "::" + resultSelector + "::" + typeof(TResult).FullName));
        }
 
        protected virtual string SumCacheKey<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria)

@@ -18,80 +18,33 @@ namespace SharpRepository.Repository.Aggregates
                 QueryManager = queryManager;
             }
 
-            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
+            // TODO: allowing ordering of grouped results
+            public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
             {
-                return GroupCounts((ISpecification<T>) null, keySelector);
+                return Group((ISpecification<T>)null, keySelector, resultSelector);
             }
 
-            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector)
+            public IEnumerable<TResult> Group<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
             {
-                return QueryManager.ExecuteGroupCounts(
-                    () => criteria == null ? 
-                        Repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count())
-                        :
-                        Repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Count()),
-                    keySelector,
-                    criteria
-                    );
-            }
+                return QueryManager.ExecuteGroup(
+                    () =>
+                        {
+                            var query = criteria == null ? Repository.AsQueryable() : Repository.AsQueryable().Where(criteria.Predicate);
 
-            public IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector)
-            {
-                return GroupCounts(predicate == null ? null : new Specification<T>(predicate), keySelector);
-            }
+//                            if (queryOptions != null)
+//                                query = queryOptions.Apply(query);
 
-            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector)
-            {
-                return GroupLongCounts((ISpecification<T>)null, keySelector);
-            }
-
-            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector)
-            {
-                return QueryManager.ExecuteGroupLongCounts(
-                    () => criteria == null ?
-                        Repository.AsQueryable().GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount())
-                        :
-                        Repository.AsQueryable().Where(criteria.Predicate).GroupBy(keySelector).OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.LongCount()),
-                    keySelector,
-                    criteria
-                    );
-            }
-
-            public IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector)
-            {
-                return GroupLongCounts(predicate == null ? null : new Specification<T>(predicate), keySelector);
-            }
-
-            public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
-                Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
-            {
-                return GroupItems((ISpecification<T>) null, keySelector, resultSelector);
-            }
-
-            public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
-                ISpecification<T> criteria, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector)
-            {
-                return QueryManager.ExecuteGroupItems(
-                    () => criteria == null ?
-                            Repository.AsQueryable()
-                            .GroupBy(keySelector, resultSelector)
-                            .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList()
-                        :
-                            Repository.AsQueryable()
-                            .Where(criteria.Predicate)
-                            .GroupBy(keySelector, resultSelector)
-                            .Select(g => new GroupItem<TGroupKey, TGroupResult> { Key = g.Key, Items = g.Select(x => x) }).OrderBy(x => x.Key).ToList(),
+                            return query.GroupBy(keySelector).OrderBy(x => x.Key).Select(resultSelector).ToList();
+                        },
                     keySelector,
                     resultSelector,
                     criteria
                     );
             }
 
-            public IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(
-                Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector,
-                Func<T, TGroupResult> resultSelector)
+            public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
             {
-                return GroupItems(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
+                return Group(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
             }
 
             public long LongCount()
@@ -546,6 +499,76 @@ namespace SharpRepository.Repository.Aggregates
             public TResult Max<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
             {
                 return Max(predicate == null ? null : new Specification<T>(predicate), selector);
+            }
+
+            public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return GroupCount((ISpecification<T>)null, groupSelector);
+            }
+
+            public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return Group(criteria, groupSelector, x => new { x.Key, Count = x.Count() }).ToDictionary(x => x.Key, x => x.Count);
+            }
+
+            public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return GroupCount(predicate == null ? null : new Specification<T>(predicate), groupSelector);
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return GroupLongCount((ISpecification<T>)null, groupSelector);
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return Group(criteria, groupSelector, x => new { x.Key, Count = x.LongCount() }).ToDictionary(x => x.Key, x => x.Count);
+            }
+
+            public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector)
+            {
+                return GroupLongCount(predicate == null ? null : new Specification<T>(predicate), groupSelector);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(
+                Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector)
+            {
+                return GroupMin((ISpecification<T>)null, groupSelector, selector);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(ISpecification<T> criteria,
+                                                                                Expression<Func<T, TGroupKey>> groupSelector,
+                                                                                Func<T, TResult> selector)
+            {
+                return Group(criteria, groupSelector, x => new { x.Key, Min = x.Min(selector) }).ToDictionary(x => x.Key, x => x.Min);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(Expression<Func<T, bool>> predicate,
+                                                                                Expression<Func<T, TGroupKey>>groupSelector,
+                                                                                Func<T, TResult> selector)
+            {
+                return GroupMin(predicate == null ? null : new Specification<T>(predicate), groupSelector, selector);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(
+                Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector)
+            {
+                return GroupMax((ISpecification<T>)null, groupSelector, selector);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(ISpecification<T> criteria,
+                                                                                Expression<Func<T, TGroupKey>> groupSelector,
+                                                                                Func<T, TResult> selector)
+            {
+                return Group(criteria, groupSelector, x => new { x.Key, Max = x.Max(selector) }).ToDictionary(x => x.Key, x => x.Max);
+            }
+
+            public IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(Expression<Func<T, bool>> predicate,
+                                                                                Expression<Func<T, TGroupKey>>groupSelector,
+                                                                                Func<T, TResult> selector)
+            {
+                return GroupMax(predicate == null ? null : new Specification<T>(predicate), groupSelector, selector);
             }
         }
 }

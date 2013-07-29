@@ -11,8 +11,8 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class AggregateQueriesTests
     {
-        [ExecuteForAllRepositories]
-        public void GroupCounts_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
+        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        public void GroupCount_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
             {
@@ -25,15 +25,15 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.GroupCounts(x => x.ContactTypeId);
+            var groups = repository.Aggregates.GroupCount(x => x.ContactTypeId);
 
             groups.Count().ShouldEqual(2);
             groups[1].ShouldEqual(3);
             groups[2].ShouldEqual(4);
         }
 
-        [ExecuteForAllRepositories]
-        public void GroupLongCounts_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
+        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        public void GroupLongCount_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
             {
@@ -46,7 +46,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.GroupLongCounts(x => x.ContactTypeId);
+            var groups = repository.Aggregates.GroupLongCount(x => x.ContactTypeId);
 
             groups.Count().ShouldEqual(2);
 
@@ -55,9 +55,60 @@ namespace SharpRepository.Tests.Integration
             groups[1].ShouldEqual(expected1);
             groups[2].ShouldEqual(expected2);
         }
+//
+//        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+//        public void GroupMin_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
+//        {
+//            for (var i = 1; i <= 3; i++)
+//            {
+//                var contact = new Contact { Name = "Test User " + i, ContactTypeId =1, SumDecimal = 0.5m + i};
+//                repository.Add(contact);
+//            }
+//            for (var i = 4; i <= 7; i++)
+//            {
+//                var contact = new Contact { Name = "Test User " + i, ContactTypeId = 2, SumDecimal = 0.5m + i};
+//                repository.Add(contact);
+//            }
+//
+//            var groups = repository.Aggregates.GroupMin(x =>x.ContactTypeId, x => x.SumDecimal);
+//
+//            groups.Count().ShouldEqual(2);
+//
+//
+//            groups[1].ShouldEqual(1.5m);
+//            groups[2].ShouldEqual(4.5m);
+//        }
+//
+//        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+//        public void GroupMax_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
+//        {
+//            for (var i = 1; i <= 3; i++)
+//            {
+//                var contact = new Contact { Name = "Test User " + i, ContactTypeId =1, SumDecimal = 0.5m + i};
+//                repository.Add(contact);
+//            }
+//            for (var i = 4; i <= 7; i++)
+//            {
+//                var contact = new Contact { Name = "Test User " + i, ContactTypeId = 2, SumDecimal = 0.5m + i};
+//                repository.Add(contact);
+//            }
+//
+//            var groups = repository.Aggregates.Group(x => x.ContactTypeId,
+//                                                       x => new {Key = x.Key, Max = x.Max(o => o.SumDecimal)});
+//
+//            //var groups = repository.Aggregates.GroupMax(x =>x.ContactTypeId, x => x.SumDecimal);
+//
+//            groups.Count().ShouldEqual(2);
+//            groups.First().Key.ShouldEqual(1);
+//            groups.First().Max.ShouldEqual(3.5m);
+//            groups.Last().Key.ShouldEqual(2);
+//            groups.Last().Max.ShouldEqual(7.5m);
+////            groups[1].ShouldEqual(3.5m);
+////            groups[2].ShouldEqual(7.5m);
+//        }
 
-        [ExecuteForAllRepositories]
-        public void GroupItems_Should_Return_Proper_Items(IRepository<Contact, string> repository)
+        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        public void Group_Should_Return_Proper_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
             {
@@ -70,13 +121,16 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.GroupItems(x => x.ContactTypeId, x => x.Title);
+            var groups = repository.Aggregates.Group(new Specification<Contact>(x => x.ContactTypeId > 0), x => x.ContactTypeId,
+                                          x => new { ContactTypeId = x.Key, Count = x.Count(), Average = x.Average(o => o.ContactTypeId) });
 
-            groups.Count().ShouldEqual(2);
-            groups.First().Key.ShouldEqual(1);
-            groups.First().Items.Count().ShouldEqual(3);
-            groups.Last().Key.ShouldEqual(2);
-            groups.Last().Items.Count().ShouldEqual(4);
+            //var groups = repository.Aggregates.GroupItems(x => x.ContactTypeId, x => x.Title);
+            groups.First().ContactTypeId.ShouldEqual(1);
+            groups.First().Count.ShouldEqual(3);
+            groups.First().Average.ShouldEqual(1.0);
+            groups.Last().ContactTypeId.ShouldEqual(2);
+            groups.Last().Count.ShouldEqual(4);
+            groups.Last().Average.ShouldEqual(2.0);
         }
 
         [ExecuteForAllRepositories]

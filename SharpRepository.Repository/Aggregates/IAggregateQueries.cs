@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Specifications;
 
@@ -7,20 +8,14 @@ namespace SharpRepository.Repository.Aggregates
 {
     public interface IAggregateQueries<T> where T : class
     {
-        IDictionary<TGroupKey, int> GroupCounts<TGroupKey>( Func<T, TGroupKey> keySelector);
-        IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector);
-        IDictionary<TGroupKey, int> GroupCounts<TGroupKey>(Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector);
-        IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Func<T, TGroupKey> keySelector);
-        IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector);
-        IDictionary<TGroupKey, long> GroupLongCounts<TGroupKey>(Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector);
-
-        IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector);
-        IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(ISpecification<T> criteria, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector);
-        IEnumerable<GroupItem<TGroupKey, TGroupResult>> GroupItems<TGroupKey, TGroupResult>(Expression<Func<T, bool>> predicate, Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector);
+        IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector);
+        IEnumerable<TResult> Group<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector);
+        IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector);
 
         long LongCount();
         long LongCount(ISpecification<T> criteria);
         long LongCount(Expression<Func<T, bool>> predicate);
+
         int Count();
         int Count(ISpecification<T> criteria);
         int Count(Expression<Func<T, bool>> predicate);
@@ -94,5 +89,24 @@ namespace SharpRepository.Repository.Aggregates
         TResult Max<TResult>(Expression<Func<T, TResult>> selector);
         TResult Max<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector);
         TResult Max<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector);
+
+        // convenience methods
+        IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, TGroupKey>> groupSelector);
+        IDictionary<TGroupKey, int> GroupCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector);
+        IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector);
+
+        IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, TGroupKey>> groupSelector);
+        IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector);
+        IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector);
+
+//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+//
+//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
+
+
     }
 }

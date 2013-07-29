@@ -34,16 +34,6 @@ namespace SharpRepository.Repository
             Repository = RepositoryFactory.GetInstance<T, TKey>(repositoryName);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Repository.GetEnumerator();
-        }
-
         public void Dispose()
         {
             Repository.Dispose();

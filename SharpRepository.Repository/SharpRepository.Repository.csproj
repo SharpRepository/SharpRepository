@@ -94,8 +94,6 @@
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
-    <Compile Include="GroupCount.cs" />
-    <Compile Include="GroupItem.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Linq\LinqHelpers.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />

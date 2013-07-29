@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -26,14 +27,8 @@ namespace SharpRepository.Repository.Caching
         bool TryLongCountResult(ISpecification<T> criteria, out long count);
         void SaveLongCountResult(ISpecification<T> criteria, long count);
 
-        bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, int> result);
-        void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, int> result);
-
-        bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, long> result);
-        void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, long> result);
-
-        bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
-        void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result);
+        bool TryGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, out IEnumerable<TResult> result);
+        void SaveGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, IEnumerable<TResult> result);
 
         bool TrySumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum);
         void SaveSumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, TResult sum);

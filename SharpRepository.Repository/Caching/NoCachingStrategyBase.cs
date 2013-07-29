@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -56,6 +57,17 @@ namespace SharpRepository.Repository.Caching
 
         }
 
+        public virtual bool TryGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, out IEnumerable<TResult> result)
+        {
+            result = default(IEnumerable<TResult>);
+            return false;
+        }
+
+        public virtual void SaveGroupResult<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria, IEnumerable<TResult> result)
+        {
+
+        }
+
         public virtual bool TryCountResult(ISpecification<T> criteria, out int count)
         {
             count = 0;
@@ -76,39 +88,6 @@ namespace SharpRepository.Repository.Caching
         public virtual void SaveLongCountResult(ISpecification<T> criteria, long count)
         {
 
-        }
-
-        public virtual bool TryGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, int> result)
-        {
-            result = default(IDictionary<TGroupKey, int>);
-            return false;
-        }
-
-        public virtual void SaveGroupCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, int> result)
-        {
-            
-        }
-
-        public virtual bool TryGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, out IDictionary<TGroupKey, long> result)
-        {
-            result = default(IDictionary<TGroupKey, long>);
-            return false;
-        }
-
-        public virtual void SaveGroupLongCountsResult<TGroupKey>(Func<T, TGroupKey> keySelector, ISpecification<T> criteria, IDictionary<TGroupKey, long> result)
-        {
-            
-        }
-
-        public virtual bool TryGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, out IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
-        {
-            result = default(IEnumerable<GroupItem<TGroupKey, TGroupResult>>);
-            return false;
-        }
-
-        public virtual void SaveGroupItemsResult<TGroupKey, TGroupResult>(Func<T, TGroupKey> keySelector, Func<T, TGroupResult> resultSelector, ISpecification<T> criteria, IEnumerable<GroupItem<TGroupKey, TGroupResult>> result)
-        {
-            
         }
 
         public virtual bool TrySumResult<TResult>(Expression<Func<T, TResult>> selector, ISpecification<T> criteria, out TResult sum)
