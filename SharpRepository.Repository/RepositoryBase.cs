@@ -517,6 +517,19 @@ namespace SharpRepository.Repository
         
         public abstract void Dispose();
 
+        protected virtual void SetTraceInfo(string caller, string info, bool append = false)
+        {
+            var formatted = String.Format("[{0}] {1}: {2}", this.GetType().FullName, caller, info);
+
+            TraceInfo = append ? TraceInfo + "\n" + formatted : formatted;
+        }
+
+        protected virtual void SetTraceInfo(string caller, IQueryable query, bool append = false)
+        {
+            SetTraceInfo(caller, query.ToString(), append);
+        }
+        public string TraceInfo { get; protected set; }
+
         protected virtual bool GetPrimaryKey(T entity, out TKey key) 
         {
             key = default(TKey);

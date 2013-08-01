@@ -249,6 +249,11 @@ namespace SharpRepository.Repository
             Repository.ClearCache();
         }
 
+        public string TraceInfo
+        {
+            get { return Repository.TraceInfo; }
+        }
+
         public ICachingStrategy<T, TKey> CachingStrategy
         {
             get { return Repository.CachingStrategy; }

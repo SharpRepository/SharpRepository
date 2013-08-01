@@ -84,6 +84,8 @@ namespace SharpRepository.Repository
         /// Clears the cache for this particular repository.  All other repositories will still have their caches available. Use Repository.ClearAllCache() to clear the cache for every repository
         /// </summary>
         void ClearCache();
+
+        string TraceInfo { get; }
     }
 
     /// <summary>
