@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -7,12 +9,11 @@ using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
-using SharpRepository.MongoDbRepository.Aggregates;
 using SharpRepository.Repository;
-using SharpRepository.Repository.Aggregates;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
+using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.MongoDbRepository
 {
@@ -52,11 +53,6 @@ namespace SharpRepository.MongoDbRepository
             Database = Server.GetDatabase(DatabaseName);
         }
 
-        protected override IAggregateQueries<T> GetAggregateQueries(IRepository<T, TKey> repository, Repository.Queries.QueryManager<T, TKey> queryManager)
-        {
-            return new MongoDbAggregateQueries<T, TKey>(this, QueryManager);
-        }
-
         private MongoCollection<T> BaseCollection()
         {
             return Database.GetCollection<T>(TypeName);
@@ -74,6 +70,186 @@ namespace SharpRepository.MongoDbRepository
             return IsValidKey(key)
                            ? BaseCollection().FindOneById(BsonTypeMapper.MapToBsonValue(key, keyBsonType))
                            : default(T);
+        }
+
+        public override int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal? Sum(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal Sum(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Sum(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Sum(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float Sum(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override int? Sum(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override long? Sum(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override long Sum(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                 () => FindAll(criteria, selector).ToList().Sum(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
+        }
+
+        public override double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                 () => FindAll(criteria, selector).ToList().Average(),
+                 selector,
+                 criteria
+                 );
         }
 
         protected override void AddItem(T entity)

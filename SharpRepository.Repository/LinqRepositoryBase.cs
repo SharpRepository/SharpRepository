@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -20,8 +19,6 @@ namespace SharpRepository.Repository
         {
             return BaseQuery();
         }
-
-        protected abstract IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null);
 
         protected override T GetQuery(TKey key)
         {
@@ -75,6 +72,8 @@ namespace SharpRepository.Repository
 
             return queryOptions.Apply(query);
         }
+
+        
 		
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
@@ -90,7 +89,6 @@ namespace SharpRepository.Repository
             {
                 innerQuery = innerQuery.ToList().AsQueryable();
                 outerQuery = outerQuery.ToList().AsQueryable();
-                return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));
             }
 
             return new CompositeRepository<TResult>(outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector));

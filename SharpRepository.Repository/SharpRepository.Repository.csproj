@@ -37,7 +37,6 @@
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\IAggregateQueries.cs" />
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\ICachePrefixManager.cs" />
     <Compile Include="Caching\MultiServerCachePrefixManager.cs" />
@@ -94,11 +93,11 @@
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
+    <Compile Include="IRepositoryAggregates.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Linq\LinqHelpers.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="Caching\Cache.cs" />
-    <Compile Include="Aggregates\AggregateQueries.cs" />
     <Compile Include="Queries\QueryManager.Aggregates.cs">
       <DependentUpon>QueryManager.cs</DependentUpon>
     </Compile>

@@ -25,7 +25,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.GroupCount(x => x.ContactTypeId);
+            var groups = repository.GroupCount(x => x.ContactTypeId);
 
             groups.Count().ShouldEqual(2);
             groups[1].ShouldEqual(3);
@@ -46,7 +46,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.GroupLongCount(x => x.ContactTypeId);
+            var groups = repository.GroupLongCount(x => x.ContactTypeId);
 
             groups.Count().ShouldEqual(2);
 
@@ -70,10 +70,10 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Aggregates.Group(new Specification<Contact>(x => x.ContactTypeId > 0), x => x.ContactTypeId,
+            var groups = repository.Group(new Specification<Contact>(x => x.ContactTypeId > 0), x => x.ContactTypeId,
                                           x => new { ContactTypeId = x.Key, Count = x.Count(), Average = x.Average(o => o.ContactTypeId) });
 
-            //var groups = repository.Aggregates.GroupItems(x => x.ContactTypeId, x => x.Title);
+            //var groups = repository.GroupItems(x => x.ContactTypeId, x => x.Title);
             groups.First().ContactTypeId.ShouldEqual(1);
             groups.First().Count.ShouldEqual(3);
             groups.First().Average.ShouldEqual(1.0);
@@ -96,7 +96,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Count().ShouldEqual(7);
+            repository.Count().ShouldEqual(7);
         }
 
         [ExecuteForAllRepositories]
@@ -114,7 +114,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             const long expected = 7;
-            repository.Aggregates.LongCount().ShouldEqual(expected);
+            repository.LongCount().ShouldEqual(expected);
         }
 
         [ExecuteForAllRepositories]
@@ -131,7 +131,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Count(x => x.ContactTypeId == 2).ShouldEqual(4);
+            repository.Count(x => x.ContactTypeId == 2).ShouldEqual(4);
         }
 
         [ExecuteForAllRepositories]
@@ -149,7 +149,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             const long expected = 4;
-            repository.Aggregates.LongCount(x => x.ContactTypeId == 2).ShouldEqual(expected);
+            repository.LongCount(x => x.ContactTypeId == 2).ShouldEqual(expected);
         }
 
         [ExecuteForAllRepositories]
@@ -161,7 +161,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Sum(x => x.ContactTypeId).ShouldEqual(6);
+            repository.Sum(x => x.ContactTypeId).ShouldEqual(6);
         }
 
         [ExecuteForAllRepositories]
@@ -173,7 +173,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Sum(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(5);
+            repository.Sum(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(5);
         }
 
         [ExecuteForAllRepositories]
@@ -185,7 +185,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Sum(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(5);
+            repository.Sum(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(5);
         }
 
         [ExecuteForAllRepositories]
@@ -197,7 +197,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Sum(x => x.SumDecimal).ShouldEqual(7.5m);
+            repository.Sum(x => x.SumDecimal).ShouldEqual(7.5m);
         }
 
         [ExecuteForAllRepositories]
@@ -209,7 +209,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Sum(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(6m);
+            repository.Sum(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(6m);
         }
 
         [ExecuteForAllRepositories]
@@ -221,7 +221,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Average(x => x.ContactTypeId).ShouldEqual(2.0);
+            repository.Average(x => x.ContactTypeId).ShouldEqual(2.0);
         }
 
         [ExecuteForAllRepositories]
@@ -233,7 +233,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Average(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2.5);
+            repository.Average(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2.5);
         }
 
         [ExecuteForAllRepositories]
@@ -245,7 +245,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Average(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(2.5);
+            repository.Average(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldEqual(2.5);
         }
 
         [ExecuteForAllRepositories]
@@ -257,7 +257,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Average(x => x.SumDecimal).ShouldEqual(2.5m);
+            repository.Average(x => x.SumDecimal).ShouldEqual(2.5m);
         }
 
         [ExecuteForAllRepositories]
@@ -269,7 +269,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Average(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(3m);
+            repository.Average(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(3m);
         }
 
         [ExecuteForAllRepositories]
@@ -281,7 +281,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Min(x => x.ContactTypeId).ShouldEqual(1);
+            repository.Min(x => x.ContactTypeId).ShouldEqual(1);
         }
 
         [ExecuteForAllRepositories]
@@ -293,7 +293,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Min(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2);
+            repository.Min(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldEqual(2);
         }
 
         [ExecuteForAllRepositories]
@@ -305,7 +305,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Min(x => x.SumDecimal).ShouldEqual(1.5m);
+            repository.Min(x => x.SumDecimal).ShouldEqual(1.5m);
         }
 
         [ExecuteForAllRepositories]
@@ -317,7 +317,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Min(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(2.5m);
+            repository.Min(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldEqual(2.5m);
         }
 
         [ExecuteForAllRepositories]
@@ -329,7 +329,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Max(x => x.ContactTypeId).ShouldEqual(3);
+            repository.Max(x => x.ContactTypeId).ShouldEqual(3);
         }
 
         [ExecuteForAllRepositories]
@@ -341,7 +341,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            repository.Aggregates.Max(x => x.ContactTypeId < 3, x => x.ContactTypeId).ShouldEqual(2);
+            repository.Max(x => x.ContactTypeId < 3, x => x.ContactTypeId).ShouldEqual(2);
         }
 
         //
@@ -359,7 +359,7 @@ namespace SharpRepository.Tests.Integration
         //                repository.Add(contact);
         //            }
         //
-        //            var groups = repository.Aggregates.GroupMin(x =>x.ContactTypeId, x => x.SumDecimal);
+        //            var groups = repository.GroupMin(x =>x.ContactTypeId, x => x.SumDecimal);
         //
         //            groups.Count().ShouldEqual(2);
         //
@@ -382,10 +382,10 @@ namespace SharpRepository.Tests.Integration
         //                repository.Add(contact);
         //            }
         //
-        //            var groups = repository.Aggregates.Group(x => x.ContactTypeId,
+        //            var groups = repository.Group(x => x.ContactTypeId,
         //                                                       x => new {Key = x.Key, Max = x.Max(o => o.SumDecimal)});
         //
-        //            //var groups = repository.Aggregates.GroupMax(x =>x.ContactTypeId, x => x.SumDecimal);
+        //            //var groups = repository.GroupMax(x =>x.ContactTypeId, x => x.SumDecimal);
         //
         //            groups.Count().ShouldEqual(2);
         //            groups.First().Key.ShouldEqual(1);
