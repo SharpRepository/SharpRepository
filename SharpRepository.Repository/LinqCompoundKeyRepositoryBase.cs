@@ -77,11 +77,6 @@ namespace SharpRepository.Repository
             return queryOptions.Apply(query);
         }
 
-        public override IEnumerator<T> GetEnumerator()
-        {
-            return BaseQuery().GetEnumerator();
-        }
-
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
             var innerQuery = innerRepository.AsQueryable();
@@ -170,11 +165,6 @@ namespace SharpRepository.Repository
 
             return queryOptions.Apply(query);
         }
-
-        public override IEnumerator<T> GetEnumerator()
-        {
-            return BaseQuery().GetEnumerator();
-		}
 		
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
@@ -264,11 +254,6 @@ namespace SharpRepository.Repository
 
             return queryOptions.Apply(query);
         }
-
-        public override IEnumerator<T> GetEnumerator()
-        {
-            return BaseQuery().GetEnumerator();
-		}
 		
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {

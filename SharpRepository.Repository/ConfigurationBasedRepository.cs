@@ -33,16 +33,6 @@ namespace SharpRepository.Repository
             Repository = RepositoryFactory.GetInstance<T, TKey>(repositoryName);
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return Repository.GetEnumerator();
-        }
-
         public void Dispose()
         {
             Repository.Dispose();
@@ -264,6 +254,411 @@ namespace SharpRepository.Repository
         public bool CacheUsed
         {
             get { return Repository.CacheUsed; }
+        }
+
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return Repository.GroupBy(keySelector, resultSelector);
+        }
+
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return Repository.GroupBy(criteria, keySelector, resultSelector);
+        }
+
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return Repository.GroupBy(predicate, keySelector, resultSelector);
+        }
+
+        public int Count()
+        {
+            return Repository.Count();
+        }
+
+        public int Count(ISpecification<T> criteria)
+        {
+            return Repository.Count(criteria);
+        }
+
+        public int Count(Expression<Func<T, bool>> predicate)
+        {
+            return Repository.Count(predicate);
+        }
+
+        public long LongCount()
+        {
+            return Repository.LongCount();
+        }
+
+        public long LongCount(ISpecification<T> criteria)
+        {
+            return Repository.LongCount(criteria);
+        }
+
+        public long LongCount(Expression<Func<T, bool>> predicate)
+        {
+            return Repository.LongCount(predicate);
+        }
+
+        public int Sum(Expression<Func<T, int>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public int Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public int? Sum(Expression<Func<T, int?>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public int? Sum(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public int? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public long Sum(Expression<Func<T, long>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public long Sum(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public long Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public long? Sum(Expression<Func<T, long?>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public long? Sum(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public long? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public decimal Sum(Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public decimal Sum(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public decimal Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public decimal? Sum(Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public decimal? Sum(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public decimal? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public double Sum(Expression<Func<T, double>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public double Sum(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public double Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public double? Sum(Expression<Func<T, double?>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public double? Sum(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public double? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public float Sum(Expression<Func<T, float>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public float Sum(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public float Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public float? Sum(Expression<Func<T, float?>> selector)
+        {
+            return Repository.Sum(selector);
+        }
+
+        public float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return Repository.Sum(criteria, selector);
+        }
+
+        public float? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
+        {
+            return Repository.Sum(predicate, selector);
+        }
+
+        public double Average(Expression<Func<T, int>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public double? Average(Expression<Func<T, int?>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public double Average(Expression<Func<T, long>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public double? Average(Expression<Func<T, long?>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public decimal Average(Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public decimal Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public decimal? Average(Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public decimal? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public double Average(Expression<Func<T, double>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public double? Average(Expression<Func<T, double?>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public float Average(Expression<Func<T, float>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public float Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public float? Average(Expression<Func<T, float?>> selector)
+        {
+            return Repository.Average(selector);
+        }
+
+        public float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return Repository.Average(criteria, selector);
+        }
+
+        public float? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
+        {
+            return Repository.Average(predicate, selector);
+        }
+
+        public TResult Min<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Min(selector);
+        }
+
+        public TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Min(criteria, selector);
+        }
+
+        public TResult Min<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Min(predicate, selector);
+        }
+
+        public TResult Max<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Max(selector);
+        }
+
+        public TResult Max<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Max(criteria, selector);
+        }
+
+        public TResult Max<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
+            return Repository.Max(predicate, selector);
+        }
+
+        public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupCount(selector);
+        }
+
+        public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupCount(criteria, selector);
+        }
+
+        public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupCount(predicate, selector);
+        }
+
+        public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupLongCount(selector);
+        }
+
+        public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupLongCount(criteria, selector);
+        }
+
+        public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
+        {
+            return Repository.GroupLongCount(predicate, selector);
         }
     }
 }

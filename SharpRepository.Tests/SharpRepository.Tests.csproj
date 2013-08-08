@@ -95,7 +95,6 @@
     <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Conventions\DefaultConventionTests.cs" />
-    <Compile Include="Enumerable\ForEachTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
     <Compile Include="Ioc\DependencyResolverTests.cs" />
     <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />

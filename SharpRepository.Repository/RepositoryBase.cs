@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -18,7 +18,7 @@ namespace SharpRepository.Repository
         private ICachingStrategy<T, TKey> _cachingStrategy;
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        private QueryManager<T, TKey> _queryManager;
+        protected QueryManager<T, TKey> QueryManager;
 
         private readonly Type _entityType;
 
@@ -31,12 +31,11 @@ namespace SharpRepository.Repository
             }
 
             Conventions = new RepositoryConventions();
-            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
+            CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>(); // sets QueryManager as well
             // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
 
             _entityType = typeof(T);
             _typeName = _entityType.Name;
-            
         }
 
         // conventions
@@ -51,7 +50,7 @@ namespace SharpRepository.Repository
         
         public bool CacheUsed
         {
-            get { return _queryManager.CacheUsed; }
+            get { return QueryManager.CacheUsed; }
         }
 
         public IBatch<T> BeginBatch()
@@ -83,16 +82,18 @@ namespace SharpRepository.Repository
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
 
                 // make sure we keep the curent caching enabled status
-                var cachingEnabled = _queryManager == null || _queryManager.CacheEnabled;
-                _queryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+                var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
+                QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
             }
         } 
 
         public bool CachingEnabled
         {
-            get { return _queryManager.CacheEnabled; }
-            set { _queryManager.CacheEnabled = value; }
+            get { return QueryManager.CacheEnabled; }
+            set { QueryManager.CacheEnabled = value; }
         }
+
+        protected abstract IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null);
 
         public abstract IQueryable<T> AsQueryable();
 
@@ -107,7 +108,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
-            return _queryManager.ExecuteGetAll(
+            return QueryManager.ExecuteGetAll(
                 () => GetAllQuery(queryOptions).ToList(),
                 null,
                 queryOptions
@@ -118,7 +119,7 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteGetAll(
+            return QueryManager.ExecuteGetAll(
                 () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
                 selector,
                 queryOptions
@@ -134,7 +135,7 @@ namespace SharpRepository.Repository
 
         public T Get(TKey key)
         {
-            return _queryManager.ExecuteGet(
+            return QueryManager.ExecuteGet(
                 () => GetQuery(key),
                 key
                 );
@@ -145,7 +146,7 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             // get the full entity, possibly from cache
-            var result = _queryManager.ExecuteGet(
+            var result = QueryManager.ExecuteGet(
                 () => GetQuery(key),
                 key
                 );
@@ -196,9 +197,9 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(queryOptions);
 
-            return _queryManager.ExecuteFindAll(
+            return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
                 null,
@@ -208,9 +209,9 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(selector, queryOptions);
 
-            return _queryManager.ExecuteFindAll(
+            return QueryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
                 criteria,
                 selector,
@@ -220,15 +221,15 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
+            if (predicate == null) return GetAll(queryOptions);
 
             return FindAll(new Specification<T>(predicate), queryOptions);
         }
 
         public IEnumerable<TResult> FindAll<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
             if (selector == null) throw new ArgumentNullException("selector");
+            if (predicate == null) return GetAll(selector, queryOptions);
 
             return FindAll(new Specification<T>(predicate), selector, queryOptions);
         }
@@ -241,7 +242,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFind(
+            return QueryManager.ExecuteFind(
                 () => FindQuery(criteria, queryOptions),
                 criteria,
                 null,
@@ -254,7 +255,7 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteFind(
+            return QueryManager.ExecuteFind(
                 () =>
                     {
                         var result = FindQuery(criteria, queryOptions);
@@ -377,6 +378,520 @@ namespace SharpRepository.Repository
             }
         }
 
+        // TODO: allowing ordering of grouped results
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return GroupBy((ISpecification<T>)null, keySelector, resultSelector);
+        }
+
+        public virtual IEnumerable<TResult> GroupBy<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return QueryManager.ExecuteGroup(
+                () =>
+                {
+                    var query = criteria == null ? BaseQuery() : BaseQuery().Where(criteria.Predicate);
+
+                    //                            if (queryOptions != null)
+                    //                                query = queryOptions.Apply(query);
+
+                    return query.GroupBy(keySelector).OrderBy(x => x.Key).Select(resultSelector).ToList();
+                },
+                keySelector,
+                resultSelector,
+                criteria
+                );
+        }
+
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        {
+            return GroupBy(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
+        }
+
+        public long LongCount()
+        {
+            return LongCount((ISpecification<T>)null);
+        }
+
+        public virtual long LongCount(ISpecification<T> criteria)
+        {
+            return QueryManager.ExecuteLongCount(
+                () => criteria == null ? BaseQuery().LongCount() : BaseQuery().LongCount(criteria.Predicate),
+                criteria
+                );
+        }
+
+        public long LongCount(Expression<Func<T, bool>> predicate)
+        {
+            return LongCount(predicate == null ? null : new Specification<T>(predicate));
+        }
+
+        public int Count()
+        {
+            return Count((ISpecification<T>)null);
+        }
+
+        public virtual int Count(ISpecification<T> criteria)
+        {
+            return QueryManager.ExecuteCount(
+                () => criteria == null ? BaseQuery().Count() : BaseQuery().Count(criteria.Predicate),
+                criteria
+                );
+        }
+
+        public int Count(Expression<Func<T, bool>> predicate)
+        {
+            return Count(predicate == null ? null : new Specification<T>(predicate));
+        }
+
+        public int Sum(Expression<Func<T, int>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public int Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public int? Sum(Expression<Func<T, int?>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual int? Sum(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public int? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public long Sum(Expression<Func<T, long>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual long Sum(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public long Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public long? Sum(Expression<Func<T, long?>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual long? Sum(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public long? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public decimal Sum(Expression<Func<T, decimal>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual decimal Sum(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public decimal Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public decimal? Sum(Expression<Func<T, decimal?>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual decimal? Sum(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public decimal? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double Sum(Expression<Func<T, double>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual double Sum(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double? Sum(Expression<Func<T, double?>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual double? Sum(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public float Sum(Expression<Func<T, float>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual float Sum(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public float Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public float? Sum(Expression<Func<T, float?>> selector)
+        {
+            return Sum((ISpecification<T>)null, selector);
+        }
+
+        public virtual float? Sum(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return QueryManager.ExecuteSum(
+                () => criteria == null ? BaseQuery().Sum(selector) : BaseQuery().Where(criteria.Predicate).Sum(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public float? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
+        {
+            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double Average(Expression<Func<T, int>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double Average(ISpecification<T> criteria, Expression<Func<T, int>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double? Average(Expression<Func<T, int?>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, int?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double Average(Expression<Func<T, long>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double Average(ISpecification<T> criteria, Expression<Func<T, long>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double? Average(Expression<Func<T, long?>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, long?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public decimal Average(Expression<Func<T, decimal>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual decimal Average(ISpecification<T> criteria, Expression<Func<T, decimal>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public decimal Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public decimal? Average(Expression<Func<T, decimal?>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual decimal? Average(ISpecification<T> criteria, Expression<Func<T, decimal?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public decimal? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double Average(Expression<Func<T, double>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double Average(ISpecification<T> criteria, Expression<Func<T, double>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public double? Average(Expression<Func<T, double?>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual double? Average(ISpecification<T> criteria, Expression<Func<T, double?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public float Average(Expression<Func<T, float>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual float Average(ISpecification<T> criteria, Expression<Func<T, float>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public float Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public float? Average(Expression<Func<T, float?>> selector)
+        {
+            return Average((ISpecification<T>)null, selector);
+        }
+
+        public virtual float? Average(ISpecification<T> criteria, Expression<Func<T, float?>> selector)
+        {
+            return QueryManager.ExecuteAverage(
+                () => criteria == null ? BaseQuery().Average(selector) : BaseQuery().Where(criteria.Predicate).Average(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public float? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
+        {
+            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public TResult Min<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return Min((ISpecification<T>)null, selector);
+        }
+
+        public virtual TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+        {
+            return QueryManager.ExecuteMin(
+                () => criteria == null ? BaseQuery().Min(selector) : BaseQuery().Where(criteria.Predicate).Min(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public TResult Min<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
+            return Min(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public TResult Max<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return Max((ISpecification<T>)null, selector);
+        }
+
+        public virtual TResult Max<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+        {
+            return QueryManager.ExecuteMax(
+                () => criteria == null ? BaseQuery().Max(selector) : BaseQuery().Where(criteria.Predicate).Max(selector),
+                selector,
+                criteria
+                );
+        }
+
+        public TResult Max<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
+        {
+            return Max(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupCount((ISpecification<T>)null, selector);
+        }
+
+        public virtual IDictionary<TGroupKey, int> GroupCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupBy(criteria, selector, x => new { x.Key, Count = x.Count() }).ToDictionary(x => x.Key, x => x.Count);
+        }
+
+        public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupCount(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+
+        public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupLongCount((ISpecification<T>)null, selector);
+        }
+
+        public virtual IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupBy(criteria, selector, x => new { x.Key, Count = x.LongCount() }).ToDictionary(x => x.Key, x => x.Count);
+        }
+
+        public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
+        {
+            return GroupLongCount(predicate == null ? null : new Specification<T>(predicate), selector);
+        }
+        
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void AddItem(T entity);
 
@@ -397,7 +912,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemAdded(key, entity);
+                QueryManager.OnItemAdded(key, entity);
         }
 
         public void Add(IEnumerable<T> entities)
@@ -430,7 +945,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemDeleted(key, entity);
+                QueryManager.OnItemDeleted(key, entity);
         }
 
         public void Delete(IEnumerable<T> entities)
@@ -470,7 +985,7 @@ namespace SharpRepository.Repository
 
             TKey key;
             if (GetPrimaryKey(entity, out key))
-                _queryManager.OnItemUpdated(key, entity);
+                QueryManager.OnItemUpdated(key, entity);
         }
 
         public void Update(IEnumerable<T> entities)
@@ -489,7 +1004,7 @@ namespace SharpRepository.Repository
         {
             SaveChanges();
             
-            _queryManager.OnSaveExecuted(); 
+            QueryManager.OnSaveExecuted(); 
         }
 
         
@@ -565,12 +1080,6 @@ namespace SharpRepository.Repository
 
             InternalCache.PrimaryKeyMapping[tupleKey] = propInfo;
             return propInfo;
-        }
-
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

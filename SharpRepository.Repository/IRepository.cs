@@ -12,7 +12,7 @@ namespace SharpRepository.Repository
     /// </summary>
     /// <typeparam name="T">The entity type that the repository acts on.</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
-    public interface IRepository<T, TKey> : IRepositoryBase<T>, IRepositoryQueryable<T>  where T : class
+    public interface IRepository<T, TKey> : IRepositoryBase<T>, IRepositoryQueryable<T>, IRepositoryAggregates<T> where T : class
     {
         IRepositoryConventions Conventions { get; set; }
 

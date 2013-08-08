@@ -13,6 +13,8 @@ namespace SharpRepository.Tests.Integration.TestObjects
         public string Title { get; set; }
         public int ContactTypeId { get; set; } // for partitioning on 
 
+        public decimal SumDecimal { get; set; }
+
         public List<EmailAddress> EmailAddresses { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
     }

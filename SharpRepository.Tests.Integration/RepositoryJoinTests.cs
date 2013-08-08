@@ -14,7 +14,7 @@ namespace SharpRepository.Tests.Integration
         [ExecuteForAllRepositories]
         public void Join_GetAll_Should_Return_All_Items(IRepository<Contact, string> repository)
         {
-            for (int i = 1; i <= 5; i++)
+            for (var i = 1; i <= 5; i++)
             {
                 var contact = new Contact { Name = "Test User " + i, ContactTypeId = (i % 2) + 1};
                 repository.Add(contact);
