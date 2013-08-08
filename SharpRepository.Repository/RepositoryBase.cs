@@ -378,12 +378,12 @@ namespace SharpRepository.Repository
         }
 
         // TODO: allowing ordering of grouped results
-        public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return Group((ISpecification<T>)null, keySelector, resultSelector);
+            return GroupBy((ISpecification<T>)null, keySelector, resultSelector);
         }
 
-        public virtual IEnumerable<TResult> Group<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public virtual IEnumerable<TResult> GroupBy<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
             return QueryManager.ExecuteGroup(
                 () =>
@@ -401,9 +401,9 @@ namespace SharpRepository.Repository
                 );
         }
 
-        public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return Group(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
+            return GroupBy(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
         }
 
         public long LongCount()
@@ -867,7 +867,7 @@ namespace SharpRepository.Repository
 
         public virtual IDictionary<TGroupKey, int> GroupCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
         {
-            return Group(criteria, selector, x => new { x.Key, Count = x.Count() }).ToDictionary(x => x.Key, x => x.Count);
+            return GroupBy(criteria, selector, x => new { x.Key, Count = x.Count() }).ToDictionary(x => x.Key, x => x.Count);
         }
 
         public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
@@ -882,7 +882,7 @@ namespace SharpRepository.Repository
 
         public virtual IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector)
         {
-            return Group(criteria, selector, x => new { x.Key, Count = x.LongCount() }).ToDictionary(x => x.Key, x => x.Count);
+            return GroupBy(criteria, selector, x => new { x.Key, Count = x.LongCount() }).ToDictionary(x => x.Key, x => x.Count);
         }
 
         public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)

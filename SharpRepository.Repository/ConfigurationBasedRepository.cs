@@ -256,19 +256,19 @@ namespace SharpRepository.Repository
             get { return Repository.CacheUsed; }
         }
 
-        public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return Repository.Group(keySelector, resultSelector);
+            return Repository.GroupBy(keySelector, resultSelector);
         }
 
-        public IEnumerable<TResult> Group<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return Repository.Group(criteria, keySelector, resultSelector);
+            return Repository.GroupBy(criteria, keySelector, resultSelector);
         }
 
-        public IEnumerable<TResult> Group<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
+        public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return Repository.Group(predicate, keySelector, resultSelector);
+            return Repository.GroupBy(predicate, keySelector, resultSelector);
         }
 
         public int Count()

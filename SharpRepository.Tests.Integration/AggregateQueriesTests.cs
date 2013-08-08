@@ -70,7 +70,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            var groups = repository.Group(new Specification<Contact>(x => x.ContactTypeId > 0), x => x.ContactTypeId,
+            var groups = repository.GroupBy(new Specification<Contact>(x => x.ContactTypeId > 0), x => x.ContactTypeId,
                                           x => new { ContactTypeId = x.Key, Count = x.Count(), Average = x.Average(o => o.ContactTypeId) });
 
             //var groups = repository.GroupItems(x => x.ContactTypeId, x => x.Title);
@@ -382,7 +382,7 @@ namespace SharpRepository.Tests.Integration
         //                repository.Add(contact);
         //            }
         //
-        //            var groups = repository.Group(x => x.ContactTypeId,
+        //            var groups = repository.GroupBy(x => x.ContactTypeId,
         //                                                       x => new {Key = x.Key, Max = x.Max(o => o.SumDecimal)});
         //
         //            //var groups = repository.GroupMax(x =>x.ContactTypeId, x => x.SumDecimal);
