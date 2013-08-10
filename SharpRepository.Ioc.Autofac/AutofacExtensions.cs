@@ -9,11 +9,13 @@ namespace SharpRepository.Ioc.Autofac
         public static void RegisterSharpRepository(this ContainerBuilder container, string repositoryName = null)
         {
             throw new NotImplementedException();
+            //container.RegisterGeneric(typeof (ConfigurationBasedRepository<,>)).As(typeof (IRepository<,>));
         }
 
         public static void RegisterSharpRepository(this ContainerBuilder container, ISharpRepositoryConfiguration configuration)
         {
             throw new NotImplementedException();
+            //container.RegisterGeneric(typeof (ConfigurationBasedRepository<,>)).As(typeof (IRepository<,>));
         }
     }
 }

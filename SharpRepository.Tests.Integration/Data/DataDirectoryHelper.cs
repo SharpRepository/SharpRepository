@@ -9,7 +9,14 @@ namespace SharpRepository.Tests.Integration.Data
         {
             var rd = new CurrentDirectory();
             rd.MoveUpToDirectory("SharpRepository.Tests.Integration");
-            return Path.Combine(rd.FullName, @"Data");
+            var path = Path.Combine(rd.FullName, @"Data");
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            return path;
         }
     }
 }
