@@ -10,21 +10,21 @@ namespace SharpRepository.Ioc.Ninject
         {
             kernel.Bind(typeof (IRepository<>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetGenericArguments();
 
                     return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
                 });
 
             kernel.Bind(typeof(IRepository<,>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetGenericArguments();
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
                 });
 
             kernel.Bind(typeof(ICompoundKeyRepository<,,>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetGenericArguments();
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], repositoryName);
                 });
@@ -34,21 +34,21 @@ namespace SharpRepository.Ioc.Ninject
         {
             kernel.Bind(typeof (IRepository<>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetGenericArguments();
 
                     return RepositoryFactory.GetInstance(genericArgs[0], configuration);
                 });
 
             kernel.Bind(typeof(IRepository<,>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetGenericArguments();
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
                 });
 
             kernel.Bind(typeof(ICompoundKeyRepository<,,>)).ToMethod(context =>
             {
-                var genericArgs = context.Request.ParentRequest.Service.GetGenericArguments();
+                var genericArgs = context.Request.Service.GetGenericArguments();
 
                 return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
             });
