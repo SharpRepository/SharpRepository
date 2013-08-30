@@ -40,6 +40,7 @@
     <Compile Include="Aspects\IRepositoryAspect.cs" />
     <Compile Include="Aspects\RepositoryAspect.cs" />
     <Compile Include="Aspects\RepositoryAspectCollection.cs" />
+    <Compile Include="Aspects\RepositoryActionBaseAttribute.cs" />
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\ICachePrefixManager.cs" />
     <Compile Include="Caching\MultiServerCachePrefixManager.cs" />

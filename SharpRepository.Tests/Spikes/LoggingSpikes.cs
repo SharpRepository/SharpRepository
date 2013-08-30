@@ -13,8 +13,8 @@ namespace SharpRepository.Tests.Spikes
         public void Logging_Via_Aspects()
         {
             var repository = new InMemoryRepository<Contact, int>();
-            repository.Aspects.Add(new Log4NetRepositoryLogger<Contact, int>());
-            repository.Aspects.Add(new NLogRepositoryLogger<Contact, int>());
+//            repository.Aspects.Add(new Log4NetRepositoryLog<Contact, int>());
+//            repository.Aspects.Add(new NLogRepositoryLogger<Contact, int>());
 
 
             var contact1 = new Contact() {Name = "Contact 1"};

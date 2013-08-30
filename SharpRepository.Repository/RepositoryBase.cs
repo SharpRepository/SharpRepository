@@ -9,6 +9,7 @@ using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
+using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.Repository
 {
@@ -30,23 +31,20 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
-            Aspects = new RepositoryAspectCollection<T, TKey>();
             Conventions = new RepositoryConventions();
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>();
             CachingStrategy.CachePrefix = DefaultRepositoryConventions.CachePrefix;
 
             _entityType = typeof(T);
             _typeName = _entityType.Name;
-            
-            // TODO: this is not working since currently i'm adding the aspects after this runs, so the collection is empty
-            Aspects.OnInitialize(this);
-        }
 
-        // aspects
-        public RepositoryAspectCollection<T, TKey> Aspects { get; set; } 
+            _aspects = typeof (T).GetAllAttributes<RepositoryActionBaseAttribute>();
+        }
 
         // conventions
         public IRepositoryConventions Conventions { get; set; }
+
+        private readonly RepositoryActionBaseAttribute[] _aspects;
 
         // just the type name, used to find the primary key if it is [TypeName]Id
         private readonly string _typeName;
@@ -383,6 +381,24 @@ namespace SharpRepository.Repository
             }
         }
 
+        private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
+        {
+            return _aspects.All(action);
+        }
+
+        private void RunAspect(Action<RepositoryActionBaseAttribute> action)
+        {
+            foreach (var attribute in _aspects)
+            {
+                action(attribute);
+            }
+        }
+
+        private RepositoryActionContext<T, TKey> GetRepositoryActionContext(T entity)
+        {
+            return new RepositoryActionContext<T, TKey>(entity, this);
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void AddItem(T entity);
 
@@ -390,11 +406,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            if (!Aspects.OnAddExecuting(entity)) return;
+            var context = GetRepositoryActionContext(entity);
+            if (!RunAspect(attribute => attribute.OnAddExecuting(context)))
+                return;
 
             ProcessAdd(entity, BatchMode);
 
-            Aspects.OnAddExecuted(entity);
+            RunAspect(attribute => attribute.OnAddExecuted(context));
         }
 
         // used from the Add method above and the Save below for the batch save
@@ -427,11 +445,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            if (!Aspects.OnDeleteExecuting(entity)) return;
+            var context = GetRepositoryActionContext(entity);
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(context)))
+                return;
 
             ProcessDelete(entity, BatchMode);
 
-            Aspects.OnDeleteExecuted(entity);
+            RunAspect(attribute => attribute.OnDeleteExecuted(context));
         }
 
         // used from the Delete method above and the Save below for the batch save
@@ -471,11 +491,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            if (!Aspects.OnUpdateExecuting(entity)) return;
+            var context = GetRepositoryActionContext(entity);
+            if (!RunAspect(attribute => attribute.OnUpdateExecuting(context)))
+                return;
 
             ProcessUpdate(entity, BatchMode);
 
-            Aspects.OnUpdateExecuted(entity);
+            RunAspect(attribute => attribute.OnUpdateExecuted(context));
         }
 
         // used from the Update method above and the Save below for the batch save
@@ -505,13 +527,15 @@ namespace SharpRepository.Repository
 
         private void Save()
         {
-            if (!Aspects.OnSaveExecuting()) return;
+            var context = GetRepositoryActionContext(null);
+            if (!RunAspect(attribute => attribute.OnSaveExecuting(context)))
+                return;
 
             SaveChanges();
             
-            _queryManager.OnSaveExecuted(); 
+            _queryManager.OnSaveExecuted();
 
-            Aspects.OnSaveExecuted();
+            RunAspect(attribute => attribute.OnSaveExecuted(context));
         }
 
         

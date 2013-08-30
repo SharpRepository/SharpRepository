@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using SharpRepository.Logging.Log4net;
 
 namespace SharpRepository.Tests.TestObjects
 {
+    [Log4NetRepositoryLogging()]
     public class Contact
     {
         public int ContactId { get; set; }

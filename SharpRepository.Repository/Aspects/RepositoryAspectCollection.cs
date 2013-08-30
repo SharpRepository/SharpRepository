@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SharpRepository.Repository.Aspects
 {
@@ -14,13 +15,7 @@ namespace SharpRepository.Repository.Aspects
 
         public bool OnAddExecuting(T entity)
         {
-            var ret = true;
-            foreach (var item in Items)
-            {
-                if (!item.OnAddExecuting(entity)) ret = false;
-            }
-
-            return ret;
+            return Items.All(x => x.OnAddExecuting(entity));
         }
 
         public void OnAddExecuted(T entity)
@@ -33,13 +28,7 @@ namespace SharpRepository.Repository.Aspects
 
         public bool OnUpdateExecuting(T entity)
         {
-            var ret = true;
-            foreach (var item in Items)
-            {
-                if (!item.OnUpdateExecuting(entity)) ret = false;
-            }
-
-            return ret;
+            return Items.All(x => x.OnUpdateExecuting(entity));
         }
 
         public void OnUpdateExecuted(T entity)
@@ -52,13 +41,7 @@ namespace SharpRepository.Repository.Aspects
 
         public bool OnDeleteExecuting(T entity)
         {
-            var ret = true;
-            foreach (var item in Items)
-            {
-                if (!item.OnDeleteExecuting(entity)) ret = false;
-            }
-
-            return ret;
+            return Items.All(x => x.OnDeleteExecuting(entity));
         }
 
         public void OnDeleteExecuted(T entity)
@@ -71,13 +54,7 @@ namespace SharpRepository.Repository.Aspects
 
         public bool OnSaveExecuting()
         {
-            var ret = true;
-            foreach (var item in Items)
-            {
-                if (!item.OnSaveExecuting()) ret = false;
-            }
-
-            return ret;
+            return Items.All(x => x.OnSaveExecuting());
         }
 
         public void OnSaveExecuted()
