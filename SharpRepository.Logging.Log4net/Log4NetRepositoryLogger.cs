@@ -18,37 +18,37 @@ namespace SharpRepository.Logging.Log4net
             _logger.Debug(String.Format("Initialized IRepository<{0}, {1}>", typeof(T).Name, typeof(TKey).Name));
         }
 
-        public override bool OnAddExecuting<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override bool OnAddExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Adding {0} entity", typeof(T).Name));
             return true;
         }
 
-        public override void OnAddExecuted<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override void OnAddExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Added {0} entity", typeof(T).Name));
         }
 
-        public override bool OnUpdateExecuting<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override bool OnUpdateExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Updating {0} entity", typeof(T).Name));
 
             return true;
         }
 
-        public override void OnUpdateExecuted<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override void OnUpdateExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Updated {0} entity", typeof(T).Name));
         }
 
-        public override bool OnDeleteExecuting<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override bool OnDeleteExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Deleting {0} entity", typeof(T).Name));
 
             return true;
         }
 
-        public override void OnDeleteExecuted<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override void OnDeleteExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Deleted {0} entity", typeof(T).Name));
         }

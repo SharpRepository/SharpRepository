@@ -202,24 +202,40 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFindAll(
+            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            RunAspect(attribute => attribute.OnFindAllExecuting(context));
+
+            var results = _queryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).ToList(),
                 criteria,
                 null,
                 queryOptions
                 );
+
+            context.NumberOfResults = results.Count();
+            RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+            return results;
         }
 
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFindAll(
+            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            RunAspect(attribute => attribute.OnFindAllExecuting(context));
+
+            var results = _queryManager.ExecuteFindAll(
                 () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
                 criteria,
                 selector,
                 queryOptions
                 );
+
+            context.NumberOfResults = results.Count();
+            RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+            return results;
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
@@ -394,9 +410,10 @@ namespace SharpRepository.Repository
             }
         }
 
-        private RepositoryActionContext<T, TKey> GetRepositoryActionContext(T entity)
+        private RepositoryActionContext<T, TKey> _repositoryActionContext = null;
+        private RepositoryActionContext<T, TKey> GetRepositoryActionContext()
         {
-            return new RepositoryActionContext<T, TKey>(entity, this);
+            return _repositoryActionContext ?? (_repositoryActionContext = new RepositoryActionContext<T, TKey>(this));
         }
 
         // This is the actual implementation that the derived class needs to implement
@@ -406,13 +423,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            var context = GetRepositoryActionContext(entity);
-            if (!RunAspect(attribute => attribute.OnAddExecuting(context)))
+            var context = GetRepositoryActionContext();
+            if (!RunAspect(attribute => attribute.OnAddExecuting(entity, context)))
                 return;
 
             ProcessAdd(entity, BatchMode);
 
-            RunAspect(attribute => attribute.OnAddExecuted(context));
+            RunAspect(attribute => attribute.OnAddExecuted(entity, context));
         }
 
         // used from the Add method above and the Save below for the batch save
@@ -445,13 +462,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            var context = GetRepositoryActionContext(entity);
-            if (!RunAspect(attribute => attribute.OnDeleteExecuting(context)))
+            var context = GetRepositoryActionContext();
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, context)))
                 return;
 
             ProcessDelete(entity, BatchMode);
 
-            RunAspect(attribute => attribute.OnDeleteExecuted(context));
+            RunAspect(attribute => attribute.OnDeleteExecuted(entity, context));
         }
 
         // used from the Delete method above and the Save below for the batch save
@@ -491,13 +508,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
-            var context = GetRepositoryActionContext(entity);
-            if (!RunAspect(attribute => attribute.OnUpdateExecuting(context)))
+            var context = GetRepositoryActionContext();
+            if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, context)))
                 return;
 
             ProcessUpdate(entity, BatchMode);
 
-            RunAspect(attribute => attribute.OnUpdateExecuted(context));
+            RunAspect(attribute => attribute.OnUpdateExecuted(entity, context));
         }
 
         // used from the Update method above and the Save below for the batch save
@@ -527,7 +544,7 @@ namespace SharpRepository.Repository
 
         private void Save()
         {
-            var context = GetRepositoryActionContext(null);
+            var context = GetRepositoryActionContext();
             if (!RunAspect(attribute => attribute.OnSaveExecuting(context)))
                 return;
 

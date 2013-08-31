@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using SharpRepository.Logging.Log4net;
-using SharpRepository.Logging.NLog;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
 
@@ -13,8 +11,6 @@ namespace SharpRepository.Tests.Spikes
         public void Logging_Via_Aspects()
         {
             var repository = new InMemoryRepository<Contact, int>();
-//            repository.Aspects.Add(new Log4NetRepositoryLog<Contact, int>());
-//            repository.Aspects.Add(new NLogRepositoryLogger<Contact, int>());
 
 
             var contact1 = new Contact() {Name = "Contact 1"};
@@ -26,6 +22,8 @@ namespace SharpRepository.Tests.Spikes
             repository.Update(contact1);
 
             repository.Delete(2);
+
+            repository.FindAll(x => x.ContactId < 50);
         }
     }
 }
