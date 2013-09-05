@@ -2,7 +2,6 @@
 using SharpRepository.Repository;
 using SharpRepository.Repository.Aspects;
 using NLog;
-using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Logging.NLog
 {
@@ -65,6 +64,51 @@ namespace SharpRepository.Logging.NLog
         public override void OnSaveExecuted<T, TKey>(RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Saved {0} entity", typeof(T).Name));
+        }
+
+        public override void OnGetExecuting<T, TKey>(RepositoryGetContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executing Get: Id = {1}", typeDisplay, context.Id));
+        }
+
+        public override void OnGetExecuted<T, TKey>(RepositoryGetContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executed Get: Id = {1}", typeDisplay, context.Id));
+            _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
+        }
+
+        public override void OnGetAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executing GetAll", typeDisplay));
+        }
+
+        public override void OnGetAllExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executed GetAll", typeDisplay));
+            _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
+        }
+
+        public override void OnFindExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executing Find: {1}", typeDisplay, context.Specification.Predicate));
+        }
+
+        public override void OnFindExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        {
+            var typeDisplay = RepositoryTypeDisplay(context.Repository);
+
+            _logger.Debug(String.Format("{0} Executed Find: {1}", typeDisplay, context.Specification.Predicate));
+            _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
         public override void OnFindAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)

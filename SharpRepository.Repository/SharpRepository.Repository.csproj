@@ -37,10 +37,10 @@
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aspects\IRepositoryAspect.cs" />
-    <Compile Include="Aspects\RepositoryAspect.cs" />
-    <Compile Include="Aspects\RepositoryAspectCollection.cs" />
     <Compile Include="Aspects\RepositoryActionBaseAttribute.cs" />
+    <Compile Include="Aspects\RepositoryActionContext.cs" />
+    <Compile Include="Aspects\RepositoryGetContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryContext.cs" />
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\ICachePrefixManager.cs" />
     <Compile Include="Caching\MultiServerCachePrefixManager.cs" />
