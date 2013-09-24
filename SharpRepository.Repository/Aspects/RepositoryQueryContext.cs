@@ -13,6 +13,8 @@ namespace SharpRepository.Repository.Aspects
             NumberOfResults = numberOfResults;
         }
 
+        // should I include the results so they can be manipulated?
+
         public ISpecification<T> Specification { get; set; }
         public IQueryOptions<T> QueryOptions { get; set; }
         public int NumberOfResults { get; set; }
