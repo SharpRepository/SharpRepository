@@ -218,6 +218,16 @@ namespace SharpRepository.Repository
             Repository.Delete(entities);
         }
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Repository.Delete(predicate);
+        }
+
+        public void Delete(ISpecification<T> criteria)
+        {
+            Repository.Delete(criteria);
+        }
+
         public void Delete(TKey key)
         {
             Repository.Delete(key);

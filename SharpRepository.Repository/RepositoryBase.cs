@@ -965,6 +965,16 @@ namespace SharpRepository.Repository
             Delete(entity);
         }
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Delete(new Specification<T>(predicate));
+        }
+
+        public void Delete(ISpecification<T> criteria)
+        {
+            Delete(FindAll(criteria));
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void UpdateItem(T entity);
 
