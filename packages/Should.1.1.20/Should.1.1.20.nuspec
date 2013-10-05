@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Should</id>
+    <version>1.1.20</version>
+    <authors>Eric Hexter,  Tim Scott</authors>
+    <owners>Eric Hexter,  Tim Scott</owners>
+    <licenseUrl>https://github.com/erichexter/Should/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/erichexter/Should/blob/master/README.markdown</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The Should Assertion Library provides a set of extension methods for test assertions for AAA and BDD style tests. It provides assertions only, and as a result it is test runner agnostic.  The assertions are a direct fork of the xUnit test assertions.  This project was born because test runners Should be independent of the assertions!</description>
+    <language>en-US</language>
+  </metadata>
+</package>
