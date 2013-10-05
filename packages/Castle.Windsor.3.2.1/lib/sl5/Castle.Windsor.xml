@@ -156,12 +156,6 @@
               Specifies the proxying behavior for a component.
             </summary>
         </member>
-        <member name="P:Castle.Core.ComponentProxyBehaviorAttribute.UseMarshalByRefProxy">
-            <summary>
-              Gets or sets a value indicating whether the generated 
-              interface proxy should inherit from <see cref="T:System.MarshalByRefObject"/>.
-            </summary>
-        </member>
         <member name="P:Castle.Core.ComponentProxyBehaviorAttribute.AdditionalInterfaces">
             <summary>
               Gets or sets the additional interfaces used during proxy generation.
@@ -994,13 +988,6 @@
             <param name="name"></param>
             <param name="innerException"></param>
         </member>
-        <member name="M:Castle.MicroKernel.Handlers.HandlerException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.Handlers.HandlerException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
-        </member>
         <member name="M:Castle.MicroKernel.Handlers.GenericHandlerTypeMismatchException.#ctor(System.String,Castle.Core.ComponentName)">
             <summary>
               Initializes a new instance of the <see cref="T:Castle.MicroKernel.Handlers.HandlerException"/> class.
@@ -1015,13 +1002,6 @@
             <param name="message">The message.</param>
             <param name="name"></param>
             <param name="innerException"></param>
-        </member>
-        <member name="M:Castle.MicroKernel.Handlers.GenericHandlerTypeMismatchException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.Handlers.HandlerException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
         </member>
         <member name="T:Castle.MicroKernel.Context.CreationContext">
             <summary>
@@ -1291,7 +1271,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.MicroKernel.IKernel"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -1304,7 +1284,7 @@
                 kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The kernel.</returns>
         </member>
         <member name="M:Castle.MicroKernel.IKernel.ReleaseComponent(System.Object)">
@@ -1634,7 +1614,7 @@
         <member name="M:Castle.MicroKernel.DefaultKernel.Register(Castle.MicroKernel.Registration.IRegistration[])">
             <summary>
               Registers the components with the <see cref="T:Castle.MicroKernel.IKernel"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API. Most common entry points are
-              <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>. Let the Intellisense drive you through the
+              <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>. Let the Intellisense drive you through the
               fluent
               API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
@@ -1644,7 +1624,7 @@
             <example>
               <code>kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));</code>
             </example>
-            <param name="registrations"> The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> , <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent
+            <param name="registrations"> The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> , <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent
             API. </param>
             <returns> The kernel. </returns>
         </member>
@@ -1864,29 +1844,6 @@
             <param name="message"></param>
             <param name="component"></param>
         </member>
-        <member name="M:Castle.MicroKernel.CircularDependencyException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the
-              <see cref="T:Castle.MicroKernel.CircularDependencyException"/>
-              class.
-            </summary>
-            <param name="info">The
-              <see cref="T:System.Runtime.Serialization.SerializationInfo"/>
-              that holds the serialized object data about the exception being thrown.</param>
-            <param name="context">The
-              <see cref="T:System.Runtime.Serialization.StreamingContext"/>
-              that contains contextual information about the source or destination.</param>
-            <exception cref="T:System.ArgumentNullException">The
-              <paramref name="info"/>
-              parameter is
-              <see langword="null"/>
-              .</exception>
-            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is
-              <see langword="null"/>
-              or
-              <see cref="P:System.Exception.HResult"/>
-              is zero (0).</exception>
-        </member>
         <member name="T:Castle.MicroKernel.ComponentNotFoundException">
             <summary>
               Exception threw when a request for a component
@@ -1920,15 +1877,6 @@
             </summary>
             <param name="service">The service.</param>
         </member>
-        <member name="M:Castle.MicroKernel.ComponentNotFoundException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the
-              <see cref="T:Castle.MicroKernel.ComponentNotFoundException"/>
-              class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
-        </member>
         <member name="T:Castle.MicroKernel.ComponentRegistrationException">
             <summary>
               Exception threw when there is a problem
@@ -1940,13 +1888,6 @@
               Initializes a new instance of the <see cref="T:Castle.MicroKernel.ComponentRegistrationException"/> class.
             </summary>
             <param name="message">The message.</param>
-        </member>
-        <member name="M:Castle.MicroKernel.ComponentRegistrationException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.ComponentRegistrationException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
         </member>
         <member name="T:Castle.MicroKernel.IHandlersFilter">
             <summary>
@@ -1991,13 +1932,6 @@
             </summary>
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
-        </member>
-        <member name="M:Castle.MicroKernel.KernelException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.KernelException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
         </member>
         <member name="T:Castle.MicroKernel.Facilities.AbstractFacility">
             <summary>
@@ -2546,14 +2480,6 @@
             </exception>
             <remarks>The interface gives no thread safety guarantees. When the scope can be accessed from multiple threads the implementor should ensure thread safety.</remarks>
         </member>
-        <member name="T:Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope">
-            <summary>
-              Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref="F:Castle.Core.LifestyleType.Scoped"/> .
-            </summary>
-            <remarks>
-              The scope is passed on to child threads, including ThreadPool threads. The capability is limited to single <see cref="T:System.AppDomain"/> and should be used cauciously as call to <see cref="M:Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope.Dispose"/> may occur while the child thread is still executing, what in turn may lead to subtle threading bugs.
-            </remarks>
-        </member>
         <member name="T:Castle.MicroKernel.Lifestyle.Scoped.ScopedInstanceActivationCallback">
             <summary>
               Delegate used by <see cref="T:Castle.MicroKernel.Lifestyle.Scoped.ILifetimeScope"/> to request a new instance to be created (that would be the first instance in that scope, subsequently reused).
@@ -2625,11 +2551,6 @@
                 The corresponding <see cref="T:Castle.MicroKernel.Registration.FromDescriptor"/>
             </returns>
         </member>
-        <member name="M:Castle.MicroKernel.Registration.Classes.FromAssemblyInDirectory(Castle.MicroKernel.Registration.AssemblyFilter)">
-            <summary>Prepares to register types from assemblies found in a given directory that meet additional optional restrictions.</summary>
-            <param name = "filter"> </param>
-            <returns> </returns>
-        </member>
         <member name="M:Castle.MicroKernel.Registration.Classes.FromAssemblyInThisApplication">
             <summary>Scans current assembly and all refernced assemblies with the same first part of the name.</summary>
             <returns> </returns>
@@ -2693,11 +2614,6 @@
             <returns>
                 The corresponding <see cref="T:Castle.MicroKernel.Registration.FromDescriptor"/>
             </returns>
-        </member>
-        <member name="M:Castle.MicroKernel.Registration.Types.FromAssemblyInDirectory(Castle.MicroKernel.Registration.AssemblyFilter)">
-            <summary>Prepares to register types from assemblies found in a given directory that meet additional optional restrictions.</summary>
-            <param name = "filter"> </param>
-            <returns> </returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.Types.FromAssemblyInThisApplication">
             <summary>Scans current assembly and all refernced assemblies with the same first part of the name.</summary>
@@ -3654,12 +3570,6 @@
         <member name="P:Castle.MicroKernel.Proxy.ProxyOptions.AllowChangeTarget">
             <summary>
             	Determines if the proxied component can change targets.
-            </summary>
-        </member>
-        <member name="P:Castle.MicroKernel.Proxy.ProxyOptions.UseMarshalByRefAsBaseClass">
-            <summary>
-            	Determines if the interface proxied component should inherit 
-            	from <see cref="T:System.MarshalByRefObject"/>
             </summary>
         </member>
         <member name="P:Castle.MicroKernel.Proxy.ProxyOptions.Hook">
@@ -4754,23 +4664,6 @@
             <param name = "value"> </param>
             <returns> </returns>
         </member>
-        <member name="M:Castle.MicroKernel.Registration.Dependency.OnAppSettingsValue(System.String,System.String)">
-            <summary>
-            Specifies that value from application configuration file's appSettings section named <paramref name = "settingName" /> should be used to satisfy dependencies matched by
-                <paramref name = "dependencyName" />. The value is provided as a string and will be converted to appropriate type when resolving.
-            </summary>
-            <param name = "dependencyName"> </param>
-            <param name = "settingName"> </param>
-            <returns> </returns>
-        </member>
-        <member name="M:Castle.MicroKernel.Registration.Dependency.OnAppSettingsValue(System.String)">
-            <summary>
-            Specifies that value from application configuration file's appSettings section named <paramref name = "name" /> should be used to satisfy dependencies matched by <paramref name = "name" />. The value
-            is provided as a string and will be converted to appropriate type when resolving.
-            </summary>
-            <param name = "name"> </param>
-            <returns> </returns>
-        </member>
         <member name="M:Castle.MicroKernel.Registration.Dependency.OnComponent(System.String,System.String)">
             <summary>
             Specifies that component registered with <paramref name = "componentName" /> should be used to satisfy dependencies matched by <paramref name = "dependencyName" />
@@ -4969,14 +4862,14 @@
             <summary>
               Create a <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/> with key.
             </summary>
-            <param key="key">The property key.</param>
+            <param name="key">The property key.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.Property.ForKey(System.Type)">
             <summary>
               Create a <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/> with key.
             </summary>
-            <param key="key">The property key.</param>
+            <param name="key">The property key.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.Property.ForKey``1">
@@ -5005,7 +4898,7 @@
             <summary>
               Builds the <see cref="T:Castle.MicroKernel.Registration.Property"/> with key/value.
             </summary>
-            <param key="value">The property value.</param>
+            <param name="value">The property value.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.Property"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.PropertyKey.Is(System.String)">
@@ -5151,13 +5044,6 @@
             </summary>
             <typeparam name="T">The type belonging to the assembly.</typeparam>
             <returns>The corresponding <see cref="T:Castle.MicroKernel.Registration.FromDescriptor"/></returns>
-        </member>
-        <member name="M:Castle.MicroKernel.Registration.AllTypes.FromAssemblyInDirectory(Castle.MicroKernel.Registration.AssemblyFilter)">
-            <summary>
-              Prepares to register types from assemblies found in a given directory that meet additional optional restrictions.
-            </summary>
-            <param name = "filter"></param>
-            <returns></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.AllTypes.FromAssemblyNamed(System.String)">
             <summary>
@@ -5857,13 +5743,6 @@
             </summary>
             <param name="message">The message.</param>
         </member>
-        <member name="M:Castle.MicroKernel.Resolvers.DependencyResolverException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.Resolvers.DependencyResolverException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
-        </member>
         <member name="T:Castle.MicroKernel.Resolvers.LazyOfTComponentLoader">
             <summary>
               Lazily adds component for <see cref="T:System.Lazy`1"/>.
@@ -6198,13 +6077,6 @@
             <param name="message">The message.</param>
             <param name="innerException">The inner exception.</param>
         </member>
-        <member name="M:Castle.MicroKernel.SubSystems.Conversion.ConverterException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.MicroKernel.SubSystems.Conversion.ConverterException"/> class.
-            </summary>
-            <param name="info">The object that holds the serialized object data.</param>
-            <param name="context">The contextual information about the source or destination.</param>
-        </member>
         <member name="T:Castle.MicroKernel.SubSystems.Conversion.AttributeAwareConverter">
             <summary>
               Looks for a <see cref="T:Castle.MicroKernel.SubSystems.Conversion.ConvertibleAttribute"/> on the type to be converted. 
@@ -6284,6 +6156,13 @@
         <member name="T:Castle.MicroKernel.SubSystems.Conversion.PrimitiveConverter">
             <summary>
               Implements all standard conversions.
+            </summary>
+        </member>
+        <member name="T:Castle.MicroKernel.SubSystems.Conversion.TypeDescriptor">
+            <summary>
+            Our own minimalistic implementation of TypeDescriptor class, which does not exist in Silverlight.
+            It exists solely to support functionality of <see cref="T:Castle.MicroKernel.SubSystems.Conversion.ComponentModelConverter"/> and does not provide
+            full functionality of the actually thing from the full .NET framework.
             </summary>
         </member>
         <member name="T:Castle.MicroKernel.SubSystems.Conversion.TypeNameConverter">
@@ -6490,12 +6369,6 @@
               Key used for the resource subsystem
             </summary>
         </member>
-        <member name="T:Castle.Windsor.Configuration.AppDomain.CastleSectionHandler">
-            <summary>
-              Implementation of <see cref="T:System.Configuration.IConfigurationSectionHandler"/>.
-              Do not support configuration inheritance.
-            </summary>
-        </member>
         <member name="T:Castle.Windsor.Configuration.IConfigurationInterpreter">
             <summary>
               Interpreter of a specific language to describe 
@@ -6553,194 +6426,6 @@
             </summary>
             <value>The name of the environment.</value>
         </member>
-        <member name="T:Castle.Windsor.Configuration.Interpreters.XmlInterpreter">
-            <summary>
-              Reads the configuration from a XmlFile. Sample structure:
-              <code>
-                &lt;configuration&gt;
-                &lt;facilities&gt;
-                &lt;facility id="myfacility"&gt;
-                
-                &lt;/facility&gt;
-                &lt;/facilities&gt;
-              
-                &lt;components&gt;
-                &lt;component id="component1"&gt;
-                
-                &lt;/component&gt;
-                &lt;/components&gt;
-                &lt;/configuration&gt;
-              </code>
-            </summary>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlInterpreter.#ctor">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlInterpreter"/> class.
-            </summary>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlInterpreter.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlInterpreter"/> class.
-            </summary>
-            <param name="filename">The filename.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlInterpreter.#ctor(Castle.Core.Resource.IResource)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlInterpreter"/> class.
-            </summary>
-            <param name="source">The source.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine"/> class.
-            </summary>
-            <param name="environmentName">Name of the environment.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine.#ctor(System.String,Castle.MicroKernel.SubSystems.Resource.IResourceSubSystem)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine"/> class.
-            </summary>
-            <param name="environmentName">Name of the environment.</param>
-            <param name="resourceSubSystem">The resource sub system.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine.DispatchProcessAll(Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorNodeList)">
-            <summary>
-              Processes the element.
-            </summary>
-            <param name = "nodeList">The element.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorEngine.DispatchProcessCurrent(Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorNodeList)">
-            <summary>
-              Processes the element.
-            </summary>
-            <param name = "nodeList">The element.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.DefaultXmlProcessorNodeList.CloneNodeList(System.Xml.XmlNodeList)">
-            <summary>
-              Make a shallow copy of the nodeList.
-            </summary>
-            <param name = "nodeList">The nodeList to be copied.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.AbstractXmlNodeProcessor.Accept(System.Xml.XmlNode)">
-            <summary>
-              Accepts the specified node.
-              Check if node has the same name as the processor and the node.NodeType
-              is in the AcceptNodeTypes List
-            </summary>
-            <param name = "node">The node.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.AbstractXmlNodeProcessor.GetNodeAsElement(System.Xml.XmlElement,System.Xml.XmlNode)">
-            <summary>
-              Convert and return child parameter into an XmlElement
-              An exception will be throw in case the child node cannot be converted
-            </summary>
-            <param name = "element">Parent node</param>
-            <param name = "child">Node to be converted</param>
-            <returns>child node as XmlElement</returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.AttributesElementProcessor.Process(Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorNodeList,Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorEngine)">
-            <summary>
-            </summary>
-            <param name = "nodeList"></param>
-            <param name = "engine"></param>
-            <example>
-              <code>
-                <properties>
-                  <attributes>
-                    <myAttribute>attributeValue</myAttribute>
-                  </attributes>
-                  <myProperty>propertyValue</myProperty>
-                </properties>
-              </code>
-            </example>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.DefaultElementProcessor.Process(Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorNodeList,Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorEngine)">
-            <summary>
-              Processes the specified node list.
-            </summary>
-            <param name = "nodeList">The node list.</param>
-            <param name = "engine">The engine.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.DefaultElementProcessor.ProcessAttributes(System.Xml.XmlElement,Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorEngine)">
-            <summary>
-              Processes element attributes.
-              if the attribute is include will append to the element
-              all contents from the file.
-              if the attribute has a property reference the reference will be
-              expanded
-            </summary>
-            <param name = "element">The element.</param>
-            <param name = "engine"></param>
-        </member>
-        <member name="F:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.DefaultTextNodeProcessor.PropertyValidationRegExp">
-            <summary>
-              Properties names can contain a-zA-Z0-9_. 
-              i.e. #!{ my_node_name } || #{ my.node.name }
-              spaces are trimmed
-            </summary>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.DefaultTextNodeProcessor.ProcessString(System.Xml.XmlNode,System.String,Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorEngine)">
-            <summary>
-              Processes the string.
-            </summary>
-            <param name = "node">The node.</param>
-            <param name = "value">The value.</param>
-            <param name = "engine">The context.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.IncludeElementProcessor.Accept(System.Xml.XmlNode)">
-            <summary>
-              Accepts the specified node.
-              Check if node has the same name as the processor and the node.NodeType
-              is in the AcceptNodeTypes List
-              NOTE: since the BatchRegistrationFacility already uses an include
-              element we will distinguish between both by looking for the presence of an uri attribute
-              we should revisit this later by using xml-namespaces
-            </summary>
-            <param name = "node">The node.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.ElementProcessors.PropertiesElementProcessor.Process(Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorNodeList,Castle.Windsor.Configuration.Interpreters.XmlProcessor.IXmlProcessorEngine)">
-            <summary>
-            </summary>
-            <param name = "nodeList"></param>
-            <param name = "engine"></param>
-            <example>
-              <code>
-                <properties>
-                  <attributes>
-                    <myAttribute>attributeValue</myAttribute>
-                  </attributes>
-                  <myProperty>propertyValue</myProperty>
-                </properties>
-              </code>
-            </example>
-        </member>
-        <member name="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor">
-            <summary>
-              Pendent
-            </summary>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor.#ctor">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor"/> class.
-            </summary>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor.#ctor(System.String,Castle.MicroKernel.SubSystems.Resource.IResourceSubSystem)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor"/> class.
-            </summary>
-            <param name="environmentName">Name of the environment.</param>
-            <param name="resourceSubSystem">The resource sub system.</param>
-        </member>
-        <member name="M:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.Configuration.Interpreters.XmlProcessor.XmlProcessor"/> class.
-            </summary>
-        </member>
         <member name="T:Castle.Windsor.Diagnostics.IAllComponentsDiagnostic">
             <summary>
               Collects all handlers for components in hosting container.
@@ -6764,6 +6449,17 @@
             	Within the service group, first one would be the default (the one obtained when callling <see cref="M:Castle.MicroKernel.IKernel.Resolve(System.Type)"/> for the service type)
             </summary>
         </member>
+        <member name="T:Castle.Windsor.Diagnostics.IDuplicatedDependenciesDiagnostic">
+            <summary>
+              Collects dependencies that are duplicated between constructors and properties.
+            </summary>
+        </member>
+        <member name="T:Castle.Windsor.Diagnostics.IUsingContainerAsServiceLocatorDiagnostic">
+            <summary>
+              Detects components that are not extending Windsor's infrastructure yet depend on the container which usually means they use the container as service locator
+              which is a bad practice and should be avoided. Consult the documentation for more details: http://j.mp/WindsorSL
+            </summary>
+        </member>
         <member name="T:Castle.Windsor.Diagnostics.IDiagnosticsHost">
             <summary>
               Hosts different diagnostics available in the container.
@@ -6785,23 +6481,6 @@
             </summary>
             <typeparam name = "TDiagnostic"> </typeparam>
             <returns> </returns>
-        </member>
-        <member name="P:Castle.Windsor.Diagnostics.DebuggerViews.MasterDetailsDebuggerViewItem.AMaster">
-            <summary>
-              Stupid name, but debugger views in Visual Studio display items in alphabetical order so if we want
-              to have that item on top its name must be alphabetically before <see cref="P:Castle.Windsor.Diagnostics.DebuggerViews.MasterDetailsDebuggerViewItem.Details"/>
-            </summary>
-        </member>
-        <member name="T:Castle.Windsor.Diagnostics.IDuplicatedDependenciesDiagnostic">
-            <summary>
-              Collects dependencies that are duplicated between constructors and properties.
-            </summary>
-        </member>
-        <member name="T:Castle.Windsor.Diagnostics.IUsingContainerAsServiceLocatorDiagnostic">
-            <summary>
-              Detects components that are not extending Windsor's infrastructure yet depend on the container which usually means they use the container as service locator
-              which is a bad practice and should be avoided. Consult the documentation for more details: http://j.mp/WindsorSL
-            </summary>
         </member>
         <member name="T:Castle.Windsor.Diagnostics.IExposeDiagnostics`1">
             <summary>
@@ -6830,26 +6509,6 @@
             <summary>
               Gets the name of the environment.
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Installer.Configuration.FromAppConfig">
-            <summary>
-              Installs all the components from the App.Config file.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Installer.Configuration.FromXml(Castle.Core.Resource.IResource)">
-            <summary>
-              Installs all the component from the xml configuration.
-            </summary>
-            <param name = "resource">The xml configuration resource.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Castle.Windsor.Installer.Configuration.FromXmlFile(System.String)">
-            <summary>
-              Installs all the component from the xml configuration file.
-            </summary>
-            <param name = "file">The xml configuration file.</param>
             <returns></returns>
         </member>
         <member name="T:Castle.Windsor.Installer.EnvironmentDelegate">
@@ -6928,23 +6587,6 @@
                 Scans the assembly containing specified type for types implementing <see cref="T:Castle.MicroKernel.Registration.IWindsorInstaller"/>, instantiates using given <see cref="T:Castle.Windsor.Installer.InstallerFactory"/> and returns so that
                 <see cref="M:Castle.Windsor.IWindsorContainer.Install(Castle.MicroKernel.Registration.IWindsorInstaller[])"/> can install them.
             </summary>
-            <returns> </returns>
-        </member>
-        <member name="M:Castle.Windsor.Installer.FromAssembly.InDirectory(Castle.MicroKernel.Registration.AssemblyFilter)">
-            <summary>
-                Scans assemblies in directory specified by <paramref name="filter"/> for types implementing <see cref="T:Castle.MicroKernel.Registration.IWindsorInstaller"/>, instantiates and returns so that
-                <see cref="M:Castle.Windsor.IWindsorContainer.Install(Castle.MicroKernel.Registration.IWindsorInstaller[])"/> can install them.
-            </summary>
-            <param name="filter"> </param>
-            <returns> </returns>
-        </member>
-        <member name="M:Castle.Windsor.Installer.FromAssembly.InDirectory(Castle.MicroKernel.Registration.AssemblyFilter,Castle.Windsor.Installer.InstallerFactory)">
-            <summary>
-                Scans assemblies in directory specified by <paramref name="filter"/> for types implementing <see cref="T:Castle.MicroKernel.Registration.IWindsorInstaller"/>, instantiates using given <see cref="T:Castle.Windsor.Installer.InstallerFactory"/> and
-                returns so that <see cref="M:Castle.Windsor.IWindsorContainer.Install(Castle.MicroKernel.Registration.IWindsorInstaller[])"/> can install them.
-            </summary>
-            <param name="filter"> </param>
-            <param name="installerFactory"> </param>
             <returns> </returns>
         </member>
         <member name="M:Castle.Windsor.Installer.FromAssembly.InThisApplication">
@@ -7102,7 +6744,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.Windsor.IWindsorContainer"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -7115,7 +6757,7 @@
                 container.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The container.</returns>
         </member>
         <member name="M:Castle.Windsor.IWindsorContainer.Release(System.Object)">
@@ -7418,16 +7060,6 @@
             <param name="interpreter">The interpreter.</param>
             <param name="environmentInfo">The environment info.</param>
         </member>
-        <member name="M:Castle.Windsor.WindsorContainer.#ctor(System.String)">
-            <summary>
-              Initializes a new instance of the <see cref="T:Castle.Windsor.WindsorContainer"/> class using a
-              resource pointed to by the parameter. That may be a file, an assembly embedded resource, a UNC path or a config file section.
-              <para>
-                Equivalent to the use of <c>new WindsorContainer(new XmlInterpreter(configurationUri))</c>
-              </para>
-            </summary>
-            <param name="configurationUri">The XML file.</param>
-        </member>
         <member name="M:Castle.Windsor.WindsorContainer.#ctor(Castle.MicroKernel.IKernel,Castle.Windsor.IComponentsInstaller)">
             <summary>
               Constructs a container using the specified <see cref="T:Castle.MicroKernel.IKernel"/>
@@ -7539,7 +7171,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.Windsor.IWindsorContainer"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -7552,7 +7184,7 @@
                 container.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The container.</returns>
         </member>
         <member name="M:Castle.Windsor.WindsorContainer.Release(System.Object)">

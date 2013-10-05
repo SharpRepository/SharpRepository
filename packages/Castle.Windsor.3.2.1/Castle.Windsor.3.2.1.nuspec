@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>Castle.Windsor</id>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
     <title>Castle Windsor</title>
     <authors>Castle Project Contributors</authors>
     <owners>Castle Project Contributors</owners>
@@ -11,10 +11,8 @@
     <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/windsorLogo100px.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle Windsor is best of breed, mature Inversion of Control container available for .NET and Silverlight.</description>
-    <releaseNotes />
     <copyright>Copyright 2004-2013 Castle Project - http://www.castleproject.org/</copyright>
-    <language />
-    <tags>castle, windsor, inversionOfControl, DependencyInjection</tags>
+    <tags>castle windsor inversionOfControl DependencyInjection</tags>
     <dependencies>
       <dependency id="Castle.Core" version="3.2.0" />
     </dependencies>
@@ -32,8 +30,5 @@
       <frameworkAssembly assemblyName="System.Core" targetFramework="Silverlight5.0" />
       <frameworkAssembly assemblyName="System.Windows" targetFramework="Silverlight5.0" />
     </frameworkAssemblies>
-    <references>
-      <reference file="Castle.Windsor.dll" />
-    </references>
   </metadata>
 </package>

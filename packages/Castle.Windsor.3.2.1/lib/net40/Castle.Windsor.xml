@@ -1337,7 +1337,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.MicroKernel.IKernel"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -1350,7 +1350,7 @@
                 kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The kernel.</returns>
         </member>
         <member name="M:Castle.MicroKernel.IKernel.ReleaseComponent(System.Object)">
@@ -1680,7 +1680,7 @@
         <member name="M:Castle.MicroKernel.DefaultKernel.Register(Castle.MicroKernel.Registration.IRegistration[])">
             <summary>
               Registers the components with the <see cref="T:Castle.MicroKernel.IKernel"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API. Most common entry points are
-              <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>. Let the Intellisense drive you through the
+              <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>. Let the Intellisense drive you through the
               fluent
               API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
@@ -1690,7 +1690,7 @@
             <example>
               <code>kernel.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));</code>
             </example>
-            <param name="registrations"> The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> , <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent
+            <param name="registrations"> The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> , <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent
             API. </param>
             <returns> The kernel. </returns>
         </member>
@@ -2604,7 +2604,7 @@
               Provides explicit lifetime scoping within logical path of execution. Used for types with <see cref="F:Castle.Core.LifestyleType.Scoped"/> .
             </summary>
             <remarks>
-              The scope is passed on to child threads, including ThreadPool threads. The capability is limited to single <see cref="T:System.AppDomain"/> and should be used cauciously as call to <see cref="M:Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope.Dispose"/> may occur while the child thread is still executing, what in turn may lead to subtle threading bugs.
+              The scope is passed on to child threads, including ThreadPool threads. The capability is limited to single <see cref="T:System.AppDomain"/> and should be used cautiously as call to <see cref="M:Castle.MicroKernel.Lifestyle.Scoped.CallContextLifetimeScope.Dispose"/> may occur while the child thread is still executing, what in turn may lead to subtle threading bugs.
             </remarks>
         </member>
         <member name="T:Castle.MicroKernel.Lifestyle.Scoped.ScopedInstanceActivationCallback">
@@ -5028,14 +5028,14 @@
             <summary>
               Create a <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/> with key.
             </summary>
-            <param key="key">The property key.</param>
+            <param name="key">The property key.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.Property.ForKey(System.Type)">
             <summary>
               Create a <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/> with key.
             </summary>
-            <param key="key">The property key.</param>
+            <param name="key">The property key.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.PropertyKey"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.Property.ForKey``1">
@@ -5064,7 +5064,7 @@
             <summary>
               Builds the <see cref="T:Castle.MicroKernel.Registration.Property"/> with key/value.
             </summary>
-            <param key="value">The property value.</param>
+            <param name="value">The property value.</param>
             <returns>The new <see cref="T:Castle.MicroKernel.Registration.Property"/></returns>
         </member>
         <member name="M:Castle.MicroKernel.Registration.PropertyKey.Is(System.String)">
@@ -5928,6 +5928,11 @@
             </summary>
             <param name="info">The object that holds the serialized object data.</param>
             <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="T:Castle.MicroKernel.Resolvers.LazyOfTComponentLoader">
+            <summary>
+              Lazily adds component for <see cref="T:System.Lazy`1"/>.
+            </summary>
         </member>
         <member name="T:Castle.MicroKernel.Resolvers.SpecializedResolvers.ArrayResolver">
             <summary>
@@ -7162,7 +7167,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.Windsor.IWindsorContainer"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -7175,7 +7180,7 @@
                 container.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The container.</returns>
         </member>
         <member name="M:Castle.Windsor.IWindsorContainer.Release(System.Object)">
@@ -7599,7 +7604,7 @@
             <summary>
               Registers the components with the <see cref="T:Castle.Windsor.IWindsorContainer"/>. The instances of <see cref="T:Castle.MicroKernel.Registration.IRegistration"/> are produced by fluent registration API.
               Most common entry points are <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/> method to register a single type or (recommended in most cases) 
-              <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/>.
+              <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/>.
               Let the Intellisense drive you through the fluent API past those entry points. For details see the documentation at http://j.mp/WindsorApi
             </summary>
             <example>
@@ -7612,7 +7617,7 @@
                 container.Register(Classes.FromThisAssembly().BasedOn&lt;IService&gt;().WithServiceDefaultInterfaces().Configure(c =&gt; c.LifestyleTransient()));
               </code>
             </example>
-            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.AllTypes.FromThisAssembly"/> or different entry method to the fluent API.</param>
+            <param name="registrations">The component registrations created by <see cref="M:Castle.MicroKernel.Registration.Component.For``1"/>, <see cref="M:Castle.MicroKernel.Registration.Classes.FromThisAssembly"/> or different entry method to the fluent API.</param>
             <returns>The container.</returns>
         </member>
         <member name="M:Castle.Windsor.WindsorContainer.Release(System.Object)">
