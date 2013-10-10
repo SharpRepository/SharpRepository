@@ -64,6 +64,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Unity",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Mvc", "SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj", "{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.WebApi", "SharpRepository.Ioc.WebApi\SharpRepository.Ioc.WebApi.csproj", "{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +162,14 @@ Global
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +187,8 @@ Global
 		{792FCCD7-8509-4477-9672-10C178D690F1} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{14E6AF4A-B613-418F-B046-D84074963C0F} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{D0218585-6696-4E3D-832F-E596E2903337} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{4C4F3977-7327-4BBF-90ED-0C61172A48D4} = {9E5BA6B3-50AA-4482-A526-F35F132304B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
