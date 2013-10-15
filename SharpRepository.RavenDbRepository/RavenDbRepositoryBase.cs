@@ -8,7 +8,7 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.RavenDbRepository
 {
-    public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
+    public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class
     {
         public DocumentStore DocumentStore;
         public  IDocumentSession Session; // TODO: public so we can access it in the AdvancedConfiguration Aspect, not sure I like this

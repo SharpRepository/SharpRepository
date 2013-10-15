@@ -1,21 +1,20 @@
 ﻿using System;
-using SharpRepository.Repository;
 using SharpRepository.Repository.Aspects;
 
 namespace SharpRepository.RavenDbRepository
 {
-    public class AdvancedConfiguration<T, TKey> : RepositoryAspect<T, TKey> where T : class, new()
+    public class RavenDbAdvancedConfigurationAttribute : RepositoryActionBaseAttribute
     {
         public bool? UseOptimisticConcurency { get; set; }
         public bool? AllowNonAuthoritativeInformation { get; set; }
         public TimeSpan? NonAuthoritativeInformationTimeout { get; set; }
         public int? MaxNumberOfRequestsPerSession { get; set; }
 
-        public AdvancedConfiguration()
+        public RavenDbAdvancedConfigurationAttribute()
         {
         }
 
-        public AdvancedConfiguration(bool? useOptimisticConcurrency, bool? allowNonAuthoritativeInformation = null, TimeSpan? nonAuthoritativeInfoTimeout = null, int? maxRequestsPerSession = null)
+        public RavenDbAdvancedConfigurationAttribute(bool? useOptimisticConcurrency, bool? allowNonAuthoritativeInformation = null, TimeSpan? nonAuthoritativeInfoTimeout = null, int? maxRequestsPerSession = null)
         {
             UseOptimisticConcurency = useOptimisticConcurrency;
             MaxNumberOfRequestsPerSession = maxRequestsPerSession;
@@ -23,9 +22,9 @@ namespace SharpRepository.RavenDbRepository
             NonAuthoritativeInformationTimeout = nonAuthoritativeInfoTimeout;
         }
 
-        public override void OnInitialize(IRepository<T, TKey> repository)
+        public override void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context)
         {
-            var ravenDbRepository = (RavenDbRepository<T, TKey>) repository;
+            var ravenDbRepository = (RavenDbRepository<T, TKey>)context.Repository;
 
             if (UseOptimisticConcurency.HasValue)
                 ravenDbRepository.Session.Advanced.UseOptimisticConcurrency = UseOptimisticConcurency.Value;

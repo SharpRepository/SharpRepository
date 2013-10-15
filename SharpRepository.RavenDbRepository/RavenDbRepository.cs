@@ -9,7 +9,7 @@ namespace SharpRepository.RavenDbRepository
     /// </summary>
     /// <typeparam name="T">The type of object the repository acts on.</typeparam>
     /// <typeparam name="TKey">The type of the primary key.</typeparam>
-    public class RavenDbRepository<T, TKey> : RavenDbRepositoryBase<T, TKey> where T : class, new()
+    public class RavenDbRepository<T, TKey> : RavenDbRepositoryBase<T, TKey> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RavenDbRepository&lt;T, TKey&gt;"/> class.
