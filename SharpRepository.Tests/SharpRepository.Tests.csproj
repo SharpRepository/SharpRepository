@@ -98,6 +98,7 @@
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
     <Compile Include="Ioc\DependencyResolverTests.cs" />
     <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />
+    <Compile Include="Misc\MiscTests.cs" />
     <Compile Include="PrimaryKey\Ef5PrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\MongoDbPrimaryKeyTests.cs" />
     <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />

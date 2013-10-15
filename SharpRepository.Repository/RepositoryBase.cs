@@ -41,6 +41,16 @@ namespace SharpRepository.Repository
         // conventions
         public IRepositoryConventions Conventions { get; set; }
 
+        public Type EntityType
+        {
+            get { return typeof (T); }
+        }
+        
+        public Type KeyType
+        {
+            get { return typeof(TKey); }
+        }
+
         // just the type name, used to find the primary key if it is [TypeName]Id
         private readonly string _typeName;
         protected string TypeName

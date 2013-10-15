@@ -17,6 +17,16 @@ namespace SharpRepository.Repository
         IRepositoryConventions Conventions { get; set; }
 
         /// <summary>
+        /// Returns the Type for the entity of this repository.
+        /// </summary>
+        Type EntityType { get; }
+
+        /// <summary>
+        /// Returns the Type for the key of this repository.
+        /// </summary>
+        Type KeyType { get; }
+
+        /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
         /// </summary>
         /// <param name="key">The primary key.</param>

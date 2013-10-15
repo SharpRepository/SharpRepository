@@ -162,6 +162,16 @@ namespace SharpRepository.Repository
             set { Repository.Conventions = value;  }
         }
 
+        public Type EntityType
+        {
+            get { return Repository.EntityType; }
+        }
+
+        public Type KeyType
+        {
+            get { return Repository.KeyType; }
+        }
+
         public T Get(TKey key)
         {
             return Repository.Get(key);
