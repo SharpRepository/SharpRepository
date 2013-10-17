@@ -158,10 +158,15 @@ namespace SharpRepository.Repository
             var context = new RepositoryGetContext<T, TKey>(this, key);
             RunAspect(attribute => attribute.OnGetExecuting(context));
 
-            return _queryManager.ExecuteGet(
+            var result = _queryManager.ExecuteGet(
                 () => GetQuery(key),
                 key
                 );
+
+            context.NumberOfResults = result == default(T) ? 0 : 1;
+            RunAspect(attribute => attribute.OnGetExecuted(context));
+
+            return result;
         }
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
@@ -176,6 +181,9 @@ namespace SharpRepository.Repository
                 () => GetQuery(key),
                 key
                 );
+
+            context.NumberOfResults = result == default(T) ? 0 : 1;
+            RunAspect(attribute => attribute.OnGetExecuted(context));
 
             // return the entity with the selector applied to it
             return result == null ? default(TResult) : new[] { result }.AsQueryable().Select(selector).First();
