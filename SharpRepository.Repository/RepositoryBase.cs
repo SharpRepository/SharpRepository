@@ -111,7 +111,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
-            var context = new RepositoryQueryContext<T, TKey>(this, null, queryOptions);
+            var context = new RepositoryQueryMultipleContext<T, TKey>(this, null, queryOptions);
             RunAspect(attribute => attribute.OnGetAllExecuting(context));
 
             var results = _queryManager.ExecuteGetAll(
@@ -120,7 +120,7 @@ namespace SharpRepository.Repository
                 queryOptions
                 );
 
-            context.NumberOfResults = results != null ? results.Count() : 0;
+            context.Results = results;
             RunAspect(attribute => attribute.OnGetAllExecuted(context));
 
             return results;
@@ -131,7 +131,7 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
 
             // TODO: add selector to the context
-            var context = new RepositoryQueryContext<T, TKey>(this, null, queryOptions);
+            var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, null, queryOptions);
             RunAspect(attribute => attribute.OnGetAllExecuting(context));
 
             var results = _queryManager.ExecuteGetAll(
@@ -140,7 +140,7 @@ namespace SharpRepository.Repository
                 queryOptions
                 );
 
-            context.NumberOfResults = results != null ? results.Count() : 0;
+            context.Results = results;
             RunAspect(attribute => attribute.OnGetAllExecuted(context));
 
             return results;
@@ -163,7 +163,7 @@ namespace SharpRepository.Repository
                 key
                 );
 
-            context.NumberOfResults = result == default(T) ? 0 : 1;
+            context.Result = result;
             RunAspect(attribute => attribute.OnGetExecuted(context));
 
             return result;
@@ -173,7 +173,7 @@ namespace SharpRepository.Repository
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var context = new RepositoryGetContext<T, TKey>(this, key);
+            var context = new RepositoryGetContext<T, TKey, TResult>(this, key);
             RunAspect(attribute => attribute.OnGetExecuting(context));
 
             // get the full entity, possibly from cache
@@ -182,11 +182,15 @@ namespace SharpRepository.Repository
                 key
                 );
 
-            context.NumberOfResults = result == default(T) ? 0 : 1;
+            // return the entity with the selector applied to it
+            var selectedResult = result == null
+                                         ? default(TResult)
+                                         : new[] {result}.AsQueryable().Select(selector).First();
+
+            context.Result = selectedResult;
             RunAspect(attribute => attribute.OnGetExecuted(context));
 
-            // return the entity with the selector applied to it
-            return result == null ? default(TResult) : new[] { result }.AsQueryable().Select(selector).First();
+            return selectedResult;
         }
 
         public bool Exists(TKey key)
@@ -233,7 +237,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            var context = new RepositoryQueryMultipleContext<T, TKey>(this, criteria, queryOptions);
             RunAspect(attribute => attribute.OnFindAllExecuting(context));
 
             var results = _queryManager.ExecuteFindAll(
@@ -243,7 +247,7 @@ namespace SharpRepository.Repository
                 queryOptions
                 );
 
-            context.NumberOfResults = results != null ? results.Count() : 0;
+            context.Results = results;
             RunAspect(attribute => attribute.OnFindAllExecuted(context));
 
             return results;
@@ -253,7 +257,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, criteria, queryOptions);
             RunAspect(attribute => attribute.OnFindAllExecuting(context));
 
             var results = _queryManager.ExecuteFindAll(
@@ -263,7 +267,7 @@ namespace SharpRepository.Repository
                 queryOptions
                 );
 
-            context.NumberOfResults = results != null ? results.Count() : 0;
+            context.Results = results;
             RunAspect(attribute => attribute.OnFindAllExecuted(context));
 
             return results;
@@ -292,7 +296,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            var context = new RepositoryQueryOneContext<T, TKey>(this, criteria, queryOptions);
             RunAspect(attribute => attribute.OnFindExecuting(context));
 
             var item = _queryManager.ExecuteFind(
@@ -302,8 +306,8 @@ namespace SharpRepository.Repository
                 null
                 );
 
-            context.NumberOfResults = item.Equals(default(T)) ? 0 : 1;
-            RunAspect(attribute => attribute.OnFindAllExecuted(context));
+            context.Result = item;
+            RunAspect(attribute => attribute.OnFindExecuted(context));
 
             return item;
         }
@@ -313,7 +317,7 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var context = new RepositoryQueryContext<T, TKey>(this, criteria, queryOptions);
+            var context = new RepositoryQueryOneContext<T, TKey, TResult>(this, criteria, queryOptions);
             RunAspect(attribute => attribute.OnFindExecuting(context));
 
             var item = _queryManager.ExecuteFind(
@@ -331,8 +335,8 @@ namespace SharpRepository.Repository
                 null
                 );
 
-            context.NumberOfResults = item.Equals(default(TResult)) ? 0 : 1;
-            RunAspect(attribute => attribute.OnFindAllExecuted(context));
+            context.Result = item;
+            RunAspect(attribute => attribute.OnFindExecuted(context));
 
             return item;
         }

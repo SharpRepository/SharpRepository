@@ -66,14 +66,14 @@ namespace SharpRepository.Logging.NLog
             _logger.Debug(String.Format("Saved {0} entity", typeof(T).Name));
         }
 
-        public override void OnGetExecuting<T, TKey>(RepositoryGetContext<T, TKey> context)
+        public override void OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executing Get: Id = {1}", typeDisplay, context.Id));
         }
 
-        public override void OnGetExecuted<T, TKey>(RepositoryGetContext<T, TKey> context)
+        public override void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
@@ -81,14 +81,14 @@ namespace SharpRepository.Logging.NLog
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
-        public override void OnGetAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executing GetAll", typeDisplay));
         }
 
-        public override void OnGetAllExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnGetAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
@@ -96,14 +96,14 @@ namespace SharpRepository.Logging.NLog
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
-        public override void OnFindExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnFindExecuting<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executing Find: {1}", typeDisplay, context.Specification.Predicate));
         }
 
-        public override void OnFindExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnFindExecuted<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
@@ -111,14 +111,14 @@ namespace SharpRepository.Logging.NLog
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
-        public override void OnFindAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnFindAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executing FindAll: {1}", typeDisplay, context.Specification.Predicate));
         }
 
-        public override void OnFindAllExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnFindAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 

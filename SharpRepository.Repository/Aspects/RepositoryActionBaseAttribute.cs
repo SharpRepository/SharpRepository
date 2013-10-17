@@ -45,35 +45,35 @@ namespace SharpRepository.Repository.Aspects
         }
 
         /* Queries */
-        public virtual void OnGetExecuting<T, TKey>(RepositoryGetContext<T, TKey> context) where T : class
+        public virtual void OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnGetExecuted<T, TKey>(RepositoryGetContext<T, TKey> context) where T : class
+        public virtual void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnGetAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnGetAllExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnGetAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnFindExecuting<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnFindExecuted<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnFindAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindAllExecuted<T, TKey>(RepositoryQueryContext<T, TKey> context) where T : class
+        public virtual void OnFindAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
     }

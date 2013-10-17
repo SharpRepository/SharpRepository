@@ -65,19 +65,19 @@ namespace SharpRepository.Logging.Log4net
             _logger.Debug(String.Format("Saved {0} entity", typeof(T).Name));
         }
 
-        public override void OnGetExecuting<T, TKey>(RepositoryGetContext<T, TKey> context)
+        public override void OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
         {
-            base.OnGetExecuting<T, TKey>(context);
+            base.OnGetExecuting<T, TKey, TResult>(context);
         }
 
-        public override void OnGetExecuted<T, TKey>(RepositoryGetContext<T, TKey> context)
+        public override void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
         {
-            base.OnGetExecuted<T, TKey>(context);
+            base.OnGetExecuted<T, TKey, TResult>(context);
         }
 
-        public override void OnGetAllExecuting<T, TKey>(RepositoryQueryContext<T, TKey> context)
+        public override void OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
         {
-            base.OnGetAllExecuting<T, TKey>(context);
+            base.OnGetAllExecuting<T, TKey, TResult>(context);
         }
     }
 //

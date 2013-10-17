@@ -41,6 +41,8 @@
     <Compile Include="Aspects\RepositoryActionContext.cs" />
     <Compile Include="Aspects\RepositoryGetContext.cs" />
     <Compile Include="Aspects\RepositoryQueryContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryMultipleContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryOneContext.cs" />
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\ICachePrefixManager.cs" />
     <Compile Include="Caching\MultiServerCachePrefixManager.cs" />
