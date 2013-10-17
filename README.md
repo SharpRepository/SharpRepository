@@ -13,5 +13,10 @@ How do I get started?
 Check out the [getting started guide](https://github.com/SharpRepository/SharpRepository/wiki/Getting-started). When you're done there, review the SharpRepository.Samples, SharpRepository.Tests.Integration and SharpRepository.Tests 
 project for additional sample usage and implementation details.
 
+Have Questions?
+--------------------------------
+Please use the google group for SharpRepository:
+* sharprepository@googlegroups.com
+* https://groups.google.com/d/forum/sharprepository
 
 
