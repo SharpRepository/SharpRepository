@@ -8,7 +8,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
         public override bool OnAddExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             // this is hacky but just for testing
-            var tmp = entity as AspectTestObject;
+            var tmp = entity as IAuditable;
 
             if (tmp != null)
             {
@@ -23,10 +23,15 @@ namespace SharpRepository.Tests.Integration.TestObjects
     }
 
     [CurrentDateTimeSetter]
-    public class AspectTestObject
+    public class AspectTestObject : IAuditable
     {
         public int AspectTestObjectId { get; set; }
         public string Name { get; set; }
         public DateTime Created { get; set; }
+    }
+
+    public interface IAuditable
+    {
+        DateTime Created { get; set; }
     }
 }
