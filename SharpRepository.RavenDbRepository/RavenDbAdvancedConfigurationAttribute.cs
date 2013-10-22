@@ -24,7 +24,9 @@ namespace SharpRepository.RavenDbRepository
 
         public override void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context)
         {
-            var ravenDbRepository = (RavenDbRepository<T, TKey>)context.Repository;
+            var ravenDbRepository = context.Repository as RavenDbRepository<T, TKey>;
+
+            if (ravenDbRepository == null) return;
 
             if (UseOptimisticConcurency.HasValue)
                 ravenDbRepository.Session.Advanced.UseOptimisticConcurrency = UseOptimisticConcurency.Value;
