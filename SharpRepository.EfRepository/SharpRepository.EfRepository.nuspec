@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SharpRepository.EfRepository</id>
+    <version>0.0.0.0</version>
+    <title>SharpRepository for EF</title>
+    <authors>Jeff Treuting, Ben Griswold, Fairway Technologies</authors>
+    <owners>jtreuting, bgriswold</owners>
+    <licenseUrl>https://github.com/SharpRepository/SharpRepository/blob/develop/license.txt</licenseUrl>
+    <projectUrl>https://github.com/SharpRepository/SharpRepository</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.</description>
+    <copyright>Copyright 2013</copyright>
+    <tags>SharpRepository Repository EntityFramework EF5 EF6</tags>
+	<dependencies>
+      <dependency id="SharpRepository.Repository" version="{{Repository.Dependency.Version}}" />
+	  <dependency id="EntityFramework" version="5.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+	<file src="_nuget\content\config.transform" target="content\app.config.transform"/>
+    <file src="_nuget\content\config.transform" target="content\web.config.transform"/>
+	<file src="_nuget\tools\Install.ps1" target="tools\Install.ps1"/>
+  </files>
+</package>

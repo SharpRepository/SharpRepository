@@ -4,7 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Tests.Integration.TestObjects;
-using SharpRepository.Ef5Repository;
+using SharpRepository.EfRepository;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.CacheRepository;
 
@@ -24,7 +24,7 @@ namespace SharpRepository.Tests.Integration.Data
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
-                yield return new TestCaseData(new Ef5Repository<User, string, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+                yield return new TestCaseData(new EfRepository<User, string, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
             if (includeType.Contains(RepositoryType.Cache))

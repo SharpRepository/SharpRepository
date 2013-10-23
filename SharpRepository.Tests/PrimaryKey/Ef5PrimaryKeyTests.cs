@@ -13,7 +13,7 @@ namespace SharpRepository.Tests.PrimaryKey
         [Test]
         public void Should_Return_KeyInt2_Property()
         {
-            var repos = new TestEf5Repository<ObjectKeys, int>(new DbContext("test"));
+            var repos = new TestEfRepository<ObjectKeys, int>(new DbContext("test"));
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
             propInfo.PropertyType.ShouldEqual(typeof(int));
@@ -21,9 +21,9 @@ namespace SharpRepository.Tests.PrimaryKey
         }
     }
 
-    internal class TestEf5Repository<T, TKey> : Ef5Repository.Ef5Repository<T, TKey> where T : class, new()
+    internal class TestEfRepository<T, TKey> : EfRepository.EfRepository<T, TKey> where T : class, new()
     {
-        public TestEf5Repository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
+        public TestEfRepository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
         }
 

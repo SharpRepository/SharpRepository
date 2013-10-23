@@ -1,10 +1,6 @@
-﻿using System;
-using NUnit.Framework;
-using SharpRepository.Ef5Repository;
+﻿using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
-using SharpRepository.XmlRepository;
-using Should;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Spikes
