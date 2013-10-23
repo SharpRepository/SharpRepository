@@ -13,6 +13,10 @@ How do I get started?
 Check out the [getting started guide](https://github.com/SharpRepository/SharpRepository/wiki/Getting-started). When you're done there, review the SharpRepository.Samples, SharpRepository.Tests.Integration and SharpRepository.Tests 
 project for additional sample usage and implementation details.
 
+Important EntityFramework Notice
+--------------------------------
+Please use SharpRepository.EfRepository moving forward instead of Ef5Repository.  Both will work with EF5 and EF6 but the naming was confusing once EF6 was released so we basically renamed the package.  All updates will be made to EfRepository moving forward.
+
 Have Questions?
 --------------------------------
 Please use the google group for SharpRepository:
