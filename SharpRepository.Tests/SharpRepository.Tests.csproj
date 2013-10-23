@@ -34,8 +34,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.1\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Enyim.Caching">
       <HintPath>..\packages\EnyimMemcached.2.12\lib\net35\Enyim.Caching.dll</HintPath>
@@ -72,7 +76,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -142,9 +145,9 @@
       <Project>{1174f5b3-d3be-453d-bd9f-d54eefb0adfe}</Project>
       <Name>SharpRepository.Caching.Redis</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Ef5Repository\SharpRepository.Ef5Repository.csproj">
-      <Project>{7acc7e0f-2eb9-45e1-8841-a00a40bcf0b5}</Project>
-      <Name>SharpRepository.Ef5Repository</Name>
+    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
+      <Project>{e52b3b50-143d-4f85-9e42-7434644ef07f}</Project>
+      <Name>SharpRepository.EfRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>

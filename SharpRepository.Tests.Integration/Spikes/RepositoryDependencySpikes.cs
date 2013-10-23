@@ -2,7 +2,7 @@
 using System.Data.Entity.Infrastructure;
 using System.Reflection;
 using NUnit.Framework;
-using SharpRepository.Ef5Repository;
+using SharpRepository.EfRepository;
 using SharpRepository.Ioc.StructureMap;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Ioc;
@@ -34,19 +34,19 @@ namespace SharpRepository.Tests.Integration.Spikes
         }
 
         [Test]
-        public void Ef5ConfigRepositoryFactory_Using_Ioc_Should_Not_Require_ConnectionString()
+        public void EfConfigRepositoryFactory_Using_Ioc_Should_Not_Require_ConnectionString()
         {
-            var config = new Ef5RepositoryConfiguration("TestConfig", null, typeof (TestObjectEntities));
-            var factory = new Ef5ConfigRepositoryFactory(config);
+            var config = new EfRepositoryConfiguration("TestConfig", null, typeof (TestObjectEntities));
+            var factory = new EfConfigRepositoryFactory(config);
 
             factory.GetInstance<Contact, string>();
         }
 
         [Test]
-        public void Ef5ConfigRepositoryFactory_Using_Ioc_Should_Return_TestObjectEntites_Without_DbContextType_Defined()
+        public void EfConfigRepositoryFactory_Using_Ioc_Should_Return_TestObjectEntites_Without_DbContextType_Defined()
         {
-            var config = new Ef5RepositoryConfiguration("TestConfig");
-            var factory = new Ef5ConfigRepositoryFactory(config);
+            var config = new EfRepositoryConfiguration("TestConfig");
+            var factory = new EfConfigRepositoryFactory(config);
 
             var repos = factory.GetInstance<Contact, string>();
 
@@ -56,10 +56,10 @@ namespace SharpRepository.Tests.Integration.Spikes
         }
 
         [Test]
-        public void Ef5ConfigRepositoryFactory_Using_Ioc_Should_Share_DbContext()
+        public void EfConfigRepositoryFactory_Using_Ioc_Should_Share_DbContext()
         {
-            var config = new Ef5RepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectEntities));
-            var factory = new Ef5ConfigRepositoryFactory(config);
+            var config = new EfRepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectEntities));
+            var factory = new EfConfigRepositoryFactory(config);
 
             var repos1 = factory.GetInstance<Contact, string>();
             var repos2 = factory.GetInstance<Contact, string>();
