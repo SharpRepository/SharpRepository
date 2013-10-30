@@ -40,7 +40,7 @@ namespace SharpRepository.Repository.Caching
         }
 
         // helpers
-        protected new void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
+        protected override  void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
         {
             try
             {

@@ -447,7 +447,7 @@ namespace SharpRepository.Repository.Caching
            }
        }
 
-       protected void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
+       protected virtual void SetCache<TCacheItem>(string cacheKey, TCacheItem result, IQueryOptions<T> queryOptions = null)
        {
            try
            {
