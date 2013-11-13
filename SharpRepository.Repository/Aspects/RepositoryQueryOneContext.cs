@@ -1,4 +1,6 @@
-﻿using SharpRepository.Repository.Queries;
+﻿using System;
+using System.Linq.Expressions;
+using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.Repository.Aspects
@@ -14,8 +16,8 @@ namespace SharpRepository.Repository.Aspects
     public class RepositoryQueryOneContext<T, TKey, TResult> : RepositoryQueryContext<T, TKey, TResult> where T : class
     {
         public RepositoryQueryOneContext(IRepository<T, TKey> repository, ISpecification<T> specification,
-                                         IQueryOptions<T> queryOptions)
-            : base(repository, specification, queryOptions)
+                                         IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector = null)
+            : base(repository, specification, queryOptions, selector)
         {
         }
 

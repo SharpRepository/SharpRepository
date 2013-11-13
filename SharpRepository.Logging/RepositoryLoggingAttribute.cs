@@ -1,15 +1,15 @@
 ﻿using System;
+using Common.Logging;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Aspects;
-using NLog;
 
-namespace SharpRepository.Logging.NLog
+namespace SharpRepository.Logging
 {
-    public class NLogRepositoryLoggingAttribute : RepositoryActionBaseAttribute
+    public class RepositoryLoggingAttribute : RepositoryActionBaseAttribute
     {
-        private readonly Logger _logger;
+        private readonly ILog _logger;
 
-        public NLogRepositoryLoggingAttribute()
+        public RepositoryLoggingAttribute()
         {
             _logger = LogManager.GetLogger("SharpRepository");
         }
@@ -78,6 +78,7 @@ namespace SharpRepository.Logging.NLog
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executed Get: Id = {1}", typeDisplay, context.Id));
+            _logger.Debug(context.Repository.TraceInfo);
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
@@ -93,6 +94,7 @@ namespace SharpRepository.Logging.NLog
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executed GetAll", typeDisplay));
+            _logger.Debug(context.Repository.TraceInfo);
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
@@ -108,6 +110,7 @@ namespace SharpRepository.Logging.NLog
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executed Find: {1}", typeDisplay, context.Specification.Predicate));
+            _logger.Debug(context.Repository.TraceInfo);
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
@@ -123,12 +126,13 @@ namespace SharpRepository.Logging.NLog
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executed FindAll: {1}", typeDisplay, context.Specification.Predicate));
+            _logger.Debug(context.Repository.TraceInfo);
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
         private static string RepositoryTypeDisplay<T, TKey>(IRepository<T, TKey> repository) where T : class
         {
-            return String.Format("[{0}<{1},{2}>]", repository.GetType().Name, typeof (T).Name, typeof (TKey).Name);
+            return String.Format("[{0}<{1},{2}>]", repository.GetType().Name, typeof(T).Name, typeof(TKey).Name);
         }
     }
 }

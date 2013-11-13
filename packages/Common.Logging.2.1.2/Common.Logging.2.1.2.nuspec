@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Common.Logging</id>
+    <version>2.1.2</version>
+    <title>Common.Logging</title>
+    <authors>Aleksandar Seovic,  Mark Pollack,  Erich Eichinger,  Stephen Bohlen</authors>
+    <owners>Aleksandar Seovic,  Mark Pollack,  Erich Eichinger,  Stephen Bohlen</owners>
+    <projectUrl>http://netcommon.sourceforge.net/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common.Logging library introduces a simple abstraction to allow you to select a specific logging implementation at runtime.</description>
+    <releaseNotes />
+    <copyright />
+    <language>en-US</language>
+  </metadata>
+</package>

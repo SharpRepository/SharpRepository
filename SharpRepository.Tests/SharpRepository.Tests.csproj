@@ -157,13 +157,9 @@
       <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Logging.Log4net\SharpRepository.Logging.Log4net.csproj">
-      <Project>{e1c23e29-f94b-48d3-968b-439ff78b5615}</Project>
-      <Name>SharpRepository.Logging.Log4net</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Logging.NLog\SharpRepository.Logging.NLog.csproj">
-      <Project>{b7657705-e565-4703-92fb-83cc18e7feb0}</Project>
-      <Name>SharpRepository.Logging.NLog</Name>
+    <ProjectReference Include="..\SharpRepository.Logging\SharpRepository.Logging.csproj">
+      <Project>{5301085f-dbcc-4786-b6f7-7dc83d93fba6}</Project>
+      <Name>SharpRepository.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
       <Project>{dc40febe-2e39-4cb8-ae11-dfe9f6865bd2}</Project>
