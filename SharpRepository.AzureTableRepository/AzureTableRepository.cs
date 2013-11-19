@@ -3,7 +3,7 @@ using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.AzureTableRepository
 {
-    public class AzureTableRepository<T> : AzureTableRepositoryBase<T> where T : class, new()
+    public class AzureTableRepository<T> : AzureTableRepositoryBase<T> where T : class, ITableEntity, new()
     {
         public AzureTableRepository(string connectionString, bool createIfNotExists = true, ICompoundKeyCachingStrategy<T, string, string> cachingStrategy = null)
             : base(connectionString, createIfNotExists, cachingStrategy)

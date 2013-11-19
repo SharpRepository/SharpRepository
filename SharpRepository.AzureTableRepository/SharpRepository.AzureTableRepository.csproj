@@ -37,9 +37,6 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="WindowsAzure.StorageExtensions">
-      <HintPath>..\packages\WindowsAzure.StorageExtensions.0.7.7\lib\net40\WindowsAzure.StorageExtensions.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureTableRepository.cs" />
