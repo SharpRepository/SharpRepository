@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>WindowsAzure.StorageExtensions</id>
+    <version>0.7.7</version>
+    <title>Windows Azure Storage Extensions</title>
+    <authors>Dmitry Tretyakov</authors>
+    <owners>Dmitry Tretyakov</owners>
+    <licenseUrl>https://raw.github.com/dtretyakov/WindowsAzure/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/dtretyakov/WindowsAzure</projectUrl>
+    <iconUrl>http://go.microsoft.com/fwlink/?LinkID=288890</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Windows Azure Storage Extensions is a .NET library aimed for managing and querying entities from Windows Azure Storage.
+It's built on top of Windows Azure Storage Client Library 2.0, provides LINQ to Azure Tables queries and async interfaces.</description>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>Azure Storage Blob Table Async Extensions LINQ IQueryable</tags>
+    <dependencies>
+      <dependency id="WindowsAzure.Storage" version="2.0.6.1" />
+    </dependencies>
+  </metadata>
+</package>
