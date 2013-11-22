@@ -99,9 +99,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsAzure.StorageExtensions">
-      <HintPath>..\packages\WindowsAzure.StorageExtensions.0.7.7\lib\net40\WindowsAzure.StorageExtensions.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\CommonAssembly.cs">
