@@ -12,14 +12,22 @@ namespace SharpRepository.AzureTableRepository
     {
         protected CloudTableClient TableClient { get; private set; }
         protected CloudTable Table { get; private set; }
+        protected string TableName { get; private set; }
 
-        internal AzureTableRepositoryBase(string connectionString, bool createIfNotExists, ICompoundKeyCachingStrategy<T, string, string> cachingStrategy = null)
+        internal AzureTableRepositoryBase(string connectionString, string tableName, bool createIfNotExists, ICompoundKeyCachingStrategy<T, string, string> cachingStrategy = null)
             : base(cachingStrategy)
         {
             var storageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse(connectionString);
 
+            TableName = TypeName;
+
+            if (!String.IsNullOrEmpty(tableName))
+            {
+                TableName = tableName;
+            }
+
             TableClient = storageAccount.CreateCloudTableClient();
-            Table = TableClient.GetTableReference(TypeName);
+            Table = TableClient.GetTableReference(TableName);
 
             if (createIfNotExists)
             {
