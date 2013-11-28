@@ -298,7 +298,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
 
-            var context = new RepositoryQueryOneContext<T, TKey>(this, criteria, queryOptions);
+            var context = new RepositoryQuerySingleContext<T, TKey>(this, criteria, queryOptions);
             RunAspect(attribute => attribute.OnFindExecuting(context));
 
             var item = _queryManager.ExecuteFind(
@@ -319,7 +319,7 @@ namespace SharpRepository.Repository
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
 
-            var context = new RepositoryQueryOneContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
+            var context = new RepositoryQuerySingleContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
             RunAspect(attribute => attribute.OnFindExecuting(context));
 
             var item = _queryManager.ExecuteFind(

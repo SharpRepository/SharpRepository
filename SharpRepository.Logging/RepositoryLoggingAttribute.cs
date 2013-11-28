@@ -98,14 +98,14 @@ namespace SharpRepository.Logging
             _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
         }
 
-        public override void OnFindExecuting<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context)
+        public override void OnFindExecuting<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 
             _logger.Debug(String.Format("{0} Executing Find: {1}", typeDisplay, context.Specification.Predicate));
         }
 
-        public override void OnFindExecuted<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context)
+        public override void OnFindExecuted<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context)
         {
             var typeDisplay = RepositoryTypeDisplay(context.Repository);
 

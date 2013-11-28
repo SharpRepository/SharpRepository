@@ -22,9 +22,9 @@ namespace SharpRepository.Repository.Aspects
         public TKey Id { get; set; }
         public TResult Result { get; set; }
 
-        public int NumberOfResults
+        public bool HasResult
         {
-            get { return Result.Equals(default(TResult)) ? 0 : 1; }
+            get { return Result.Equals(default(TResult)); }
         }
 
         public Expression<Func<T, TResult>> Selector { get; set; }

@@ -61,11 +61,11 @@ namespace SharpRepository.Repository.Aspects
         {
         }
 
-        public virtual void OnFindExecuting<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context) where T : class
+        public virtual void OnFindExecuting<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindExecuted<T, TKey, TResult>(RepositoryQueryOneContext<T, TKey, TResult> context) where T : class
+        public virtual void OnFindExecuted<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
         {
         }
 
