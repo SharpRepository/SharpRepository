@@ -8,6 +8,10 @@ namespace SharpRepository.Repository.Aspects
         {
         }
 
+//        public virtual void OnError<T, TKey>(RepositoryActionContext<T, TKey> context, Exception ex) where T : class
+//        {
+//        }
+
         public virtual bool OnAddExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context) where T : class
         {
             return true;

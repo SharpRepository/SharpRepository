@@ -22,17 +22,20 @@ namespace SharpRepository.Logging
         public override bool OnAddExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Adding {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
             return true;
         }
 
         public override void OnAddExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Added {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
         }
 
         public override bool OnUpdateExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Updating {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
 
             return true;
         }
@@ -40,11 +43,13 @@ namespace SharpRepository.Logging
         public override void OnUpdateExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Updated {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
         }
 
         public override bool OnDeleteExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Deleting {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
 
             return true;
         }
@@ -52,6 +57,7 @@ namespace SharpRepository.Logging
         public override void OnDeleteExecuted<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
             _logger.Debug(String.Format("Deleted {0} entity", typeof(T).Name));
+            _logger.Debug(String.Format("   {0}", entity.ToString()));
         }
 
         public override bool OnSaveExecuting<T, TKey>(RepositoryActionContext<T, TKey> context)
@@ -79,7 +85,7 @@ namespace SharpRepository.Logging
 
             _logger.Debug(String.Format("{0} Executed Get: Id = {1}", typeDisplay, context.Id));
             _logger.Debug(context.Repository.TraceInfo);
-            _logger.Debug(String.Format("{0} Results: {1} Cache Used: {2}", typeDisplay, context.NumberOfResults, context.Repository.CacheUsed));
+            _logger.Debug(String.Format("{0} Has Result: {1} Cache Used: {2}", typeDisplay, context.HasResult, context.Repository.CacheUsed));
         }
 
         public override void OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context)
