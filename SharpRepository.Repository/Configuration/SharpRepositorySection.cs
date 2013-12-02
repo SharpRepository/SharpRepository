@@ -138,6 +138,11 @@ namespace SharpRepository.Repository.Configuration
             return providerConfiguration;
         }
 
+        public IRepository<T> GetInstance<T>(string repositoryName = null) where T : class, new()
+        {
+            return ConfigurationHelper.GetInstance<T>(this, repositoryName);
+        }
+
         public IRepository<T, TKey> GetInstance<T, TKey>(string repositoryName = null) where T : class, new()
         {
             return ConfigurationHelper.GetInstance<T, TKey>(this, repositoryName);

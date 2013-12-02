@@ -88,5 +88,25 @@ namespace SharpRepository.Tests.Integration
             items.Count().ShouldEqual(1);
             items.First().Name.ShouldEqual("Contact 3");
         }
+
+        [ExecuteForAllRepositories]
+        public void Delete_Predicate_Should_Remove_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            IList<Contact> contacts = new List<Contact>
+                                        {
+                                            new Contact {Name = "Contact 1", ContactTypeId = 1},
+                                            new Contact {Name = "Contact 2", ContactTypeId = 1},
+                                            new Contact {Name = "Contact 3", ContactTypeId = 3},
+                                        };
+
+            repository.Add(contacts);
+            var items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(3);
+
+            repository.Delete(x => x.ContactTypeId < 3);
+            items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(1);
+            items.First().Name.ShouldEqual("Contact 3");
+        }
     }
 }

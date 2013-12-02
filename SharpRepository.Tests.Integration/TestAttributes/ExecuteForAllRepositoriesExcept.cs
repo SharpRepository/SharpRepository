@@ -31,11 +31,10 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         }
 
         private static RepositoryType[] _exceptions;
-        private static string _reason;
+        public string Reason { get; set;  }
 
-        public ExecuteForAllRepositoriesExceptAttribute(string reason, params RepositoryType[] exceptions) : this()
+        public ExecuteForAllRepositoriesExceptAttribute(params RepositoryType[] exceptions) : this()
         {
-            _reason = reason; // TODO: it would be nice to find a way to display this in the Unit test results, but helpful in the unit test for human readable in the code
             _exceptions = exceptions;
         }
 

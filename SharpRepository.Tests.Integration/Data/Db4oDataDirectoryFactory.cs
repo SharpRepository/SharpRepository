@@ -10,7 +10,12 @@ namespace SharpRepository.Tests.Integration.Data
         public static string Build(string type)
         {
             var dataDirectory = DataDirectoryHelper.GetDataDirectory();
-            string db4oPath = Path.Combine(dataDirectory, @"Db4o");
+            var db4oPath = Path.Combine(dataDirectory, @"Db4o");
+
+            if (!Directory.Exists(db4oPath))
+            {
+                Directory.CreateDirectory(db4oPath);
+            }
 
             var file = String.Format("{0}\\{1}.yap", db4oPath, _num);
             _num++; // since it goes through and calls this for each test before running them, we need a different database for each test 

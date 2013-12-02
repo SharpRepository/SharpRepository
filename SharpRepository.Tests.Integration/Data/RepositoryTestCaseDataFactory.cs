@@ -9,7 +9,7 @@ using SharpRepository.CouchDbRepository;
 using SharpRepository.Db4oRepository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
-using SharpRepository.Ef5Repository;
+using SharpRepository.EfRepository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
@@ -39,7 +39,7 @@ namespace SharpRepository.Tests.Integration.Data
                 var dbPath = EfDataDirectoryFactory.Build();
                 Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return
-                    new TestCaseData(new Ef5Repository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
             if (includeType.Contains(RepositoryType.Dbo4))

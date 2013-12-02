@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Specifications;
@@ -14,7 +13,7 @@ namespace SharpRepository.Repository.Queries
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TKey">The type of the key.</typeparam>
-    public class QueryManager<T, TKey> where T : class
+    public partial class QueryManager<T, TKey> where T : class
     {
         private readonly ICachingStrategy<T, TKey> _cachingStrategy;
 

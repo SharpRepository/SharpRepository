@@ -14,6 +14,8 @@ namespace SharpRepository.Tests.TestObjects
         public List<EmailAddress> EmailAddresses { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
 
+        public ContactType ContactType { get; set; }
+
         public byte[] Image { get; set; }
     }
 }

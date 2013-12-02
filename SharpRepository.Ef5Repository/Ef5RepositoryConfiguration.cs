@@ -36,7 +36,7 @@ namespace SharpRepository.Ef5Repository
                 if (value == null)
                     return;
 
-                Attributes["dbContextType"] = value.FullName;
+                Attributes["dbContextType"] = value.AssemblyQualifiedName;
             }
         }
     }

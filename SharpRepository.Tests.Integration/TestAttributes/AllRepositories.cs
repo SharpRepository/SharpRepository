@@ -8,14 +8,9 @@
             {
                 return new[]
                            {
-                               RepositoryType.InMemory,
-//                               RepositoryType.Dbo4,
-//                               RepositoryType.RavenDb,
-//                               RepositoryType.Xml,
-//                               RepositoryType.MongoDb,
+                               RepositoryType.MongoDb,                               RepositoryType.InMemory,
                                RepositoryType.Ef5,
-//                               RepositoryType.Cache,
-//                               RepositoryType.CouchDb
+                               RepositoryType.CouchDb
                            };
             }
         }

@@ -404,6 +404,16 @@ namespace SharpRepository.Repository
             Delete(entity);
         }
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Delete(new Specification<T>(predicate));
+        }
+
+        public void Delete(ISpecification<T> criteria)
+        {
+            Delete(FindAll(criteria));
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void UpdateItem(T entity);
 
@@ -512,12 +522,6 @@ namespace SharpRepository.Repository
             var type = typeof(T);
 
             return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
-        }
-
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 
@@ -938,6 +942,16 @@ namespace SharpRepository.Repository
             Delete(entity);
         }
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Delete(new Specification<T>(predicate));
+        }
+
+        public void Delete(ISpecification<T> criteria)
+        {
+            Delete(FindAll(criteria));
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void UpdateItem(T entity);
 
@@ -1045,12 +1059,6 @@ namespace SharpRepository.Repository
             var type = typeof(T);
 
             return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
-        }
-
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 
@@ -1475,6 +1483,16 @@ namespace SharpRepository.Repository
             Delete(entity);
         }
 
+        public void Delete(Expression<Func<T, bool>> predicate)
+        {
+            Delete(new Specification<T>(predicate));
+        }
+
+        public void Delete(ISpecification<T> criteria)
+        {
+            Delete(FindAll(criteria));
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void UpdateItem(T entity);
 
@@ -1593,12 +1611,6 @@ namespace SharpRepository.Repository
             var type = typeof(T);
 
             return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
-        }
-
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

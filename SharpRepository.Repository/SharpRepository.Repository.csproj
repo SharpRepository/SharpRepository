@@ -99,10 +99,15 @@
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
+    <Compile Include="Helpers\InternalCache.cs" />
+    <Compile Include="IRepositoryAggregates.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Linq\LinqHelpers.cs" />
     <Compile Include="Queries\IPagingOptions.cs" />
     <Compile Include="Caching\Cache.cs" />
+    <Compile Include="Queries\QueryManager.Aggregates.cs">
+      <DependentUpon>QueryManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="RepositoryConventions.cs" />
     <Compile Include="DefaultRepositoryConventions.cs" />
     <Compile Include="Helpers\ExpressionHelper.cs" />

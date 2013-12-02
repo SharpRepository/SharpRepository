@@ -59,10 +59,6 @@
       <Project>{06111314-669B-4E35-A0B9-AF67FA3F0FFD}</Project>
       <Name>SharpRepository.Caching.Memcached</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Ef5Repository\SharpRepository.Ef5Repository.csproj">
-      <Project>{7ACC7E0F-2EB9-45E1-8841-A00A40BCF0B5}</Project>
-      <Name>SharpRepository.Ef5Repository</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13ad3fca-4c9d-4674-b786-f30843638d3b}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>

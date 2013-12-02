@@ -12,6 +12,11 @@ namespace SharpRepository.Db4oRepository
         {
         }
 
+        public override IRepository<T> GetInstance<T>()
+        {
+            throw new NotImplementedException("Db4oRepository does not support using IRepository<T> directly to reference a IRepository<T, string>");
+        }
+
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
             // check for required parameters

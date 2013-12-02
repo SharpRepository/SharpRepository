@@ -10,6 +10,11 @@ namespace SharpRepository.CacheRepository
         {
         }
 
+        public override IRepository<T> GetInstance<T>()
+        {
+            return new CacheRepository<T>(RepositoryConfiguration["prefix"]);
+        }
+
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
             return new CacheRepository<T, TKey>(RepositoryConfiguration["prefix"]);

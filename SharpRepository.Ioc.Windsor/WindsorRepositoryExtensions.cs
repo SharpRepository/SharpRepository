@@ -16,11 +16,18 @@ namespace SharpRepository.Ioc.Windsor
                     return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
                 }));
 
-            container.Register(Component.For(typeof(IRepository<>)).UsingFactoryMethod((c, t) =>
+            container.Register(Component.For(typeof(IRepository<,>)).UsingFactoryMethod((c, t) =>
                 {
                     var genericArgs = t.GenericArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
+                }));
+
+            container.Register(Component.For(typeof(ICompoundKeyRepository<,,>)).UsingFactoryMethod((c, t) =>
+                {
+                    var genericArgs = t.GenericArguments;
+
+                    return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], repositoryName);
                 }));
         }
 
@@ -33,12 +40,19 @@ namespace SharpRepository.Ioc.Windsor
                     return RepositoryFactory.GetInstance(genericArgs[0], configuration);
                 }));
 
-            container.Register(Component.For(typeof(IRepository<>)).UsingFactoryMethod((c, t) =>
+            container.Register(Component.For(typeof(IRepository<,>)).UsingFactoryMethod((c, t) =>
                 {
                     var genericArgs = t.GenericArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
                 }));
+
+            container.Register(Component.For(typeof(ICompoundKeyRepository<,,>)).UsingFactoryMethod((c, t) =>
+            {
+                var genericArgs = t.GenericArguments;
+
+                return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
+            }));
         }
     }
 }

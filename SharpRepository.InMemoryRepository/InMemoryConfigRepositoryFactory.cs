@@ -10,6 +10,11 @@ namespace SharpRepository.InMemoryRepository
         {
         }
 
+        public override IRepository<T> GetInstance<T>()
+        {
+            return new InMemoryRepository<T>();
+        }
+
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
             return new InMemoryRepository<T, TKey>();

@@ -17,9 +17,9 @@ namespace SharpRepository.Repository.Ioc
 
         public static IRepositoryDependencyResolver Current { get; private set; }
 
-        public static void SetDependencyResolver(IRepositoryDependencyResolver container)
+        public static void SetDependencyResolver(IRepositoryDependencyResolver resolver)
         {
-            Current = container;
+            Current = resolver;
         }
     }
 }

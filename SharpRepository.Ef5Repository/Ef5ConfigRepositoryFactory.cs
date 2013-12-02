@@ -14,22 +14,38 @@ namespace SharpRepository.Ef5Repository
         {
         }
 
+        public override IRepository<T> GetInstance<T>()
+        {
+            return new Ef5Repository<T>(GetDbContext());
+        }
+
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
+            return new Ef5Repository<T, TKey>(GetDbContext());
+        }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        {
+            return new Ef5Repository<T, TKey, TKey2>(GetDbContext());
+        }
+
+        private DbContext GetDbContext()
+        {
+            var connectionString = RepositoryConfiguration["connectionString"];
+
             // check for required parameters
-            if (RepositoryDependencyResolver.Current == null && String.IsNullOrEmpty(RepositoryConfiguration["connectionString"]))
+            if (RepositoryDependencyResolver.Current == null && String.IsNullOrEmpty(connectionString))
             {
                 throw new ConfigurationErrorsException("The connectionString attribute is required in order to use the Ef5Repository via the configuration file, unless you set the RepositoryDependencyResolver to use an Ioc container.");
             }
 
             Type dbContextType = null;
 
-            if (!String.IsNullOrEmpty(RepositoryConfiguration["dbContextType"]))
+            var tmpDbContextType = RepositoryConfiguration["dbContextType"];
+            if (!String.IsNullOrEmpty(tmpDbContextType))
             {
-                dbContextType = Type.GetType(RepositoryConfiguration["dbContextType"]);
+                dbContextType = Type.GetType(tmpDbContextType);
             }
-
-            var connectionString = RepositoryConfiguration["connectionString"];
 
             // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters
             DbContext dbContext = null;
@@ -47,38 +63,14 @@ namespace SharpRepository.Ef5Repository
                     throw new RepositoryDependencyResolverException(typeof(DbContext));
                 }
             }
-
-            // the default way of getting a DbContext if there is no Ioc container setup
-            dbContext = dbContextType == null
-                            ? new DbContext(connectionString)
-                            : (DbContext) Activator.CreateInstance(dbContextType, connectionString);
-
-            return new Ef5Repository<T, TKey>(dbContext);
-        }
-
-        public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
-        {
-            // check for required parameters
-            if (String.IsNullOrEmpty(RepositoryConfiguration["connectionString"]))
+            else // the default way of getting a DbContext if there is no Ioc container setup
             {
-                throw new ConfigurationErrorsException("The connectionString attribute is required in order to use the Ef5Repository via the configuration file.");
+                dbContext = dbContextType == null
+                                ? new DbContext(connectionString)
+                                : (DbContext)Activator.CreateInstance(dbContextType, connectionString);
             }
 
-            Type dbContextType = null;
-
-            if (!String.IsNullOrEmpty(RepositoryConfiguration["dbContextType"]))
-            {
-                dbContextType = Type.GetType(RepositoryConfiguration["dbContextType"]);
-            }
-
-            var connectionString = RepositoryConfiguration["connectionString"];
-
-            // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters
-            var dbContext = dbContextType == null ?
-                new DbContext(connectionString) :
-                (DbContext)Activator.CreateInstance(dbContextType, connectionString);
-
-            return new Ef5Repository<T, TKey, TKey2>(dbContext);
+            return dbContext;
         }
     }
 }

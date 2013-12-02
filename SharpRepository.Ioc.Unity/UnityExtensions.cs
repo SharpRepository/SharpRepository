@@ -1,5 +1,5 @@
-﻿using Microsoft.Practices.Unity;
-using SharpRepository.Repository;
+﻿using System;
+using Microsoft.Practices.Unity;
 using SharpRepository.Repository.Configuration;
 
 namespace SharpRepository.Ioc.Unity
@@ -8,6 +8,7 @@ namespace SharpRepository.Ioc.Unity
     {
         public static void RegisterSharpRepository(this UnityContainer container, string repositoryName = null)
         {
+            throw new NotImplementedException();
             // using InjectionFactory I can get access to the container but I don't seem to ahve access to a context
             //  in the other Ioc's there is a context where I can get access to the type being resolved and get the generic arguments which is what i need
 //            container.RegisterType(typeof (IRepository<>), new InjectionFactory(c =>
@@ -18,7 +19,7 @@ namespace SharpRepository.Ioc.Unity
 
         public static void RegisterSharpRepository(this UnityContainer container, ISharpRepositoryConfiguration configuration)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

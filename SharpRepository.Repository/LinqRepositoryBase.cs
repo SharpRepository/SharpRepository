@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
-using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -12,15 +11,14 @@ namespace SharpRepository.Repository
     public abstract class LinqRepositoryBase<T, TKey> : RepositoryBase<T, TKey> where T : class
     {
         protected LinqRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
-        {   
+        {
+            
         }
 
         public override IQueryable<T> AsQueryable()
         {
             return BaseQuery();
         }
-
-        protected abstract IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null);
 
         protected override T GetQuery(TKey key)
         {
@@ -97,11 +95,6 @@ namespace SharpRepository.Repository
             return query;
         }
 
-        public override IEnumerator<T> GetEnumerator()
-        {
-            return BaseQuery().GetEnumerator();
-		}
-		
         public override IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
         {
             var innerQuery = innerRepository.AsQueryable();
