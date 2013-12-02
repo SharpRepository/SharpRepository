@@ -131,7 +131,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryQueryMultipleContext<T, TKey>(this, null, queryOptions);
                 RunAspect(attribute => attribute.OnGetAllExecuting(context));
 
-                var results = _queryManager.ExecuteGetAll(
+                var results = QueryManager.ExecuteGetAll(
                     () => GetAllQuery(queryOptions).ToList(),
                     null,
                     queryOptions
@@ -155,11 +155,10 @@ namespace SharpRepository.Repository
             {
                 if (selector == null) throw new ArgumentNullException("selector");
 
-
                 var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, null, queryOptions, selector);
                 RunAspect(attribute => attribute.OnGetAllExecuting(context));
 
-                var results = _queryManager.ExecuteGetAll(
+                var results = QueryManager.ExecuteGetAll(
                     () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
                     selector,
                     queryOptions
@@ -192,7 +191,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryGetContext<T, TKey>(this, key);
                 RunAspect(attribute => attribute.OnGetExecuting(context));
 
-                var result = _queryManager.ExecuteGet(
+                var result = QueryManager.ExecuteGet(
                     () => GetQuery(key),
                     key
                     );
@@ -223,7 +222,7 @@ namespace SharpRepository.Repository
 
 
                 // get the full entity, possibly from cache
-                var result = _queryManager.ExecuteGet(
+                var result = QueryManager.ExecuteGet(
                     () => GetQuery(key),
                     key
                     );
@@ -298,7 +297,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryQueryMultipleContext<T, TKey>(this, criteria, queryOptions);
                 RunAspect(attribute => attribute.OnFindAllExecuting(context));
 
-                var results = _queryManager.ExecuteFindAll(
+                var results = QueryManager.ExecuteFindAll(
                     () => FindAllQuery(criteria, queryOptions).ToList(),
                     criteria,
                     null,
@@ -329,7 +328,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
                 RunAspect(attribute => attribute.OnFindAllExecuting(context));
 
-                var results = _queryManager.ExecuteFindAll(
+                var results = QueryManager.ExecuteFindAll(
                     () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
                     criteria,
                     selector,
@@ -398,7 +397,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryQuerySingleContext<T, TKey>(this, criteria, queryOptions);
                 RunAspect(attribute => attribute.OnFindExecuting(context));
 
-                var item = _queryManager.ExecuteFind(
+                var item = QueryManager.ExecuteFind(
                     () => FindQuery(criteria, queryOptions),
                     criteria,
                     null,
@@ -429,7 +428,7 @@ namespace SharpRepository.Repository
                 var context = new RepositoryQuerySingleContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
                 RunAspect(attribute => attribute.OnFindExecuting(context));
 
-                var item = _queryManager.ExecuteFind(
+                var item = QueryManager.ExecuteFind(
                     () =>
 	                    {
 	                        var result = FindQuery(criteria, queryOptions);
@@ -1423,10 +1422,10 @@ namespace SharpRepository.Repository
 //            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
 //        }
 
-        public abstract IEnumerator<T> GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+//        public abstract IEnumerator<T> GetEnumerator();
+//        IEnumerator IEnumerable.GetEnumerator()
+//        {
+//            return GetEnumerator();
+//        }
     }
 }
