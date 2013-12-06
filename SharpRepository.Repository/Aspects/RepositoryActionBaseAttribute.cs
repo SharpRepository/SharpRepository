@@ -2,6 +2,7 @@
 
 namespace SharpRepository.Repository.Aspects
 {
+    [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public abstract class RepositoryActionBaseAttribute : Attribute
     {
         public virtual void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context) where T : class
