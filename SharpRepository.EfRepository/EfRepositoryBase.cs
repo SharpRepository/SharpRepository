@@ -43,6 +43,7 @@ namespace SharpRepository.EfRepository
 
         protected override void DeleteItem(T entity)
         {
+            DbSet.Attach(entity);
             DbSet.Remove(entity);
         }
 
