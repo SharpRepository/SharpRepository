@@ -29,7 +29,10 @@ namespace SharpRepository.Repository.Aspects
         }
         public override int NumberOfResults
         {
-            get { return Result.Equals(default(TResult)) ? 0 : 1; }
+            get 
+            { 
+                return Result == null || Result.Equals(default(TResult)) ? 0 : 1; 
+            }
         }
     }
 }

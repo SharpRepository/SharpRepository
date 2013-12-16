@@ -10,7 +10,6 @@ using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
-using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.Repository
 {

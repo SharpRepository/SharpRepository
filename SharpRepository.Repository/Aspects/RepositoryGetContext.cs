@@ -24,7 +24,7 @@ namespace SharpRepository.Repository.Aspects
 
         public bool HasResult
         {
-            get { return !Result.Equals(default(TResult)); }
+            get { return Result != null && !Result.Equals(default(TResult)); }
         }
 
         public Expression<Func<T, TResult>> Selector { get; set; }
