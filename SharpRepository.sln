@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.RavenDbRepository", "SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj", "{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}"
 EndProject
@@ -64,6 +65,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{F3F32398-DBE1-47CB-8A43-97F4362D6672}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Logging", "SharpRepository.Logging\SharpRepository.Logging.csproj", "{5301085F-DBCC-4786-B6F7-7DC83D93FBA6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Mvc", "SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj", "{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.WebApi", "SharpRepository.Ioc.WebApi\SharpRepository.Ioc.WebApi.csproj", "{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}"
