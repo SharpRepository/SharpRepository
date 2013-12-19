@@ -8,14 +8,14 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     public class AzureTableSpikes
     {
-        [Test]
-        public void TestAzureTableGet()
-        {
-            var repo = new AzureTableRepository<PoisonMessage>("UseDevelopmentStorage=true");
-            var item = repo.Get("QueueEmailModel", "722b6bea-d609-48e0-a4af-3ed0f5160ad9");
-
-            item.ShouldNotBeNull();
-        }
+//        [Test]
+//        public void TestAzureTableGet()
+//        {
+//            var repo = new AzureTableRepository<PoisonMessage>("UseDevelopmentStorage=true");
+//            var item = repo.Get("QueueEmailModel", "722b6bea-d609-48e0-a4af-3ed0f5160ad9");
+//
+//            item.ShouldNotBeNull();
+//        }
     }
 
     public class PoisonMessage : TableEntity
