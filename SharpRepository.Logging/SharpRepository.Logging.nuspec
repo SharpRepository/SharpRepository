@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SharpRepository.XmlRepository</id>
+    <version>0.0.0.0</version>
+    <title>SharpRepository Logging</title>
+    <authors>Jeff Treuting, Ben Griswold, Fairway Technologies</authors>
+    <owners>jtreuting, bgriswold</owners>
+    <licenseUrl>https://github.com/SharpRepository/SharpRepository/blob/develop/license.txt</licenseUrl>
+    <projectUrl>https://github.com/SharpRepository/SharpRepository</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpRepository is a generic repository written in C#.  This package offers logging abilities through Common.Logging</description>
+    <copyright>Copyright 2013</copyright>
+    <tags>SharpRepository Repository Logging</tags>
+	<dependencies>
+      <dependency id="SharpRepository.Repository" version="{{Repository.Dependency.Version}}" />
+    </dependencies>
+  </metadata>
+  <files>
+  </files>
+</package>
