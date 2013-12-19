@@ -29,13 +29,12 @@ namespace SharpRepository.EfRepository
     public class EfRepository<T, TKey> : EfRepositoryBase<T, TKey> where T : class, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ef5Repository&lt;T, TKey&gt;"/> class.
+        /// Initializes a new instance of the <see cref="EfRepository&lt;T, TKey&gt;"/> class.
         /// </summary>
         /// <param name="dbContext">The Entity Framework DbContext.</param>
         /// <param name="cachingStrategy">The caching strategy to use.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" /></param>
         public EfRepository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
-            if (dbContext == null) throw new ArgumentNullException("dbContext");
         }
     }
 
@@ -46,13 +45,12 @@ namespace SharpRepository.EfRepository
     public class EfRepository<T> : EfRepositoryBase<T, int>, IRepository<T> where T : class, new()
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Ef5Repository&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="EfRepository&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="dbContext">The Entity Framework DbContext.</param>
         /// <param name="cachingStrategy">The caching strategy to use.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" /></param>
         public EfRepository(DbContext dbContext, ICachingStrategy<T, int> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
-            if (dbContext == null) throw new ArgumentNullException("dbContext");
         }
     }
 }

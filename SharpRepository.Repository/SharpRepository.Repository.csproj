@@ -37,6 +37,12 @@
     <Reference Include="System.Runtime.Caching" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aspects\RepositoryActionBaseAttribute.cs" />
+    <Compile Include="Aspects\RepositoryActionContext.cs" />
+    <Compile Include="Aspects\RepositoryGetContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryMultipleContext.cs" />
+    <Compile Include="Aspects\RepositoryQueryOneContext.cs" />
     <Compile Include="Caching\CachingStrategyBase.cs" />
     <Compile Include="Caching\ICachePrefixManager.cs" />
     <Compile Include="Caching\MultiServerCachePrefixManager.cs" />
@@ -94,6 +100,7 @@
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
     <Compile Include="Helpers\InternalCache.cs" />
+    <Compile Include="ICrudRepository.cs" />
     <Compile Include="IRepositoryAggregates.cs" />
     <Compile Include="IDisabledCache.cs" />
     <Compile Include="Linq\LinqHelpers.cs" />

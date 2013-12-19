@@ -44,15 +44,34 @@
     <Reference Include="Enyim.Caching">
       <HintPath>..\packages\EnyimMemcached.2.12\lib\net35\Enyim.Caching.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=1.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.1.8.0.0\lib\net35-full\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=2.1.0.4, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WindowsAzure.Storage.2.1.0.4\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
@@ -69,14 +88,19 @@
     <Reference Include="ServiceStack.Text">
       <HintPath>..\packages\ServiceStack.Text.3.9.28\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
-    <Reference Include="Should">
-      <HintPath>..\packages\Should.1.1.12.0\lib\Should.dll</HintPath>
+    <Reference Include="Should, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Should.1.1.20\lib\Should.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -110,11 +134,14 @@
     <Compile Include="ReflectionExtensions.cs" />
     <Compile Include="RelativePath.cs" />
     <Compile Include="Specifications\SpecificationTests.cs" />
+    <Compile Include="Spikes\AzureTableSpikes.cs" />
     <Compile Include="Spikes\BatchSpike.cs" />
     <Compile Include="Spikes\CompoundKeySpikes.cs" />
+    <Compile Include="Spikes\AzureBlobSpikes.cs" />
     <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
     <Compile Include="Spikes\ExpressionParsingSpike.cs" />
     <Compile Include="Spikes\GenericClassInheritanceSpikes.cs" />
+    <Compile Include="Spikes\LoggingSpikes.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestObjects\CompoundKeyItem.cs" />
@@ -137,6 +164,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj">
+      <Project>{f766cc4f-b69c-444c-a89f-01e2e8b172a8}</Project>
+      <Name>SharpRepository.AzureBlobRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj">
+      <Project>{ef055b6d-6d7d-4002-91a9-4ded61346457}</Project>
+      <Name>SharpRepository.AzureTableRepository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj">
       <Project>{06111314-669b-4e35-a0b9-af67fa3f0ffd}</Project>
       <Name>SharpRepository.Caching.Memcached</Name>
@@ -152,6 +187,10 @@
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.Logging\SharpRepository.Logging.csproj">
+      <Project>{5301085f-dbcc-4786-b6f7-7dc83d93fba6}</Project>
+      <Name>SharpRepository.Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
       <Project>{dc40febe-2e39-4cb8-ae11-dfe9f6865bd2}</Project>

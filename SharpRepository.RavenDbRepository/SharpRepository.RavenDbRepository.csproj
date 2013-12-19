@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RavenDbAdvancedConfigurationAttribute.cs" />
     <Compile Include="IAmInRavenDbRepository.cs" />
     <Compile Include="RavenDbConfigRepositoryFactory.cs" />
     <Compile Include="RavenDbRepository.cs" />

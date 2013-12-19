@@ -11,10 +11,10 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.RavenDbRepository
 {
-    public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
+    public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class
     {
-        protected DocumentStore DocumentStore;
-        protected IDocumentSession Session;
+        public DocumentStore DocumentStore;
+        public  IDocumentSession Session; // TODO: public so we can access it in the AdvancedConfiguration Aspect, not sure I like this
 
         internal RavenDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {

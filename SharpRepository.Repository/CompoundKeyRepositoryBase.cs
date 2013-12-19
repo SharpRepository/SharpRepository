@@ -517,7 +517,7 @@ namespace SharpRepository.Repository
             return specification;
         }
 
-        protected PropertyInfo[] GetPrimaryKeyPropertyInfo()
+        protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
 
@@ -1054,7 +1054,7 @@ namespace SharpRepository.Repository
             return new Specification<T>(lambda).And(lambda2);
         }
 
-        protected PropertyInfo[] GetPrimaryKeyPropertyInfo()
+        protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
 
@@ -1606,7 +1606,7 @@ namespace SharpRepository.Repository
             return new Specification<T>(lambda).And(lambda2).And(lambda3);
         }
 
-        protected PropertyInfo[] GetPrimaryKeyPropertyInfo()
+        protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
 

@@ -72,6 +72,32 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
         }
 
+//        [Test]
+//        public void Use_Raven_Advanced_Configuration_Aspect()
+//        {
+//            var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
+//            using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore))
+//            {
+//                repos.Aspects.Add(new AdvancedConfiguration<RavenTestCustomIntKey, int>(true));
+//                repos.Aspects.Add(new NLogRepositoryLogger<RavenTestCustomIntKey, int>());
+//                repos.Aspects.OnInitialize(repos); // TODO: this is a hack since right now it's not calling OnIntitialize properly
+//
+//                repos.Add(new RavenTestCustomIntKey() { Name = "Jeff", Age = 33 });
+//                repos.Add(new RavenTestCustomIntKey() { Name = "Ben", Age = 53 }); // :)
+//
+//                var items = repos.GetAll().ToList();
+//
+//                items.Count.ShouldEqual(2);
+//
+//                // this works but won't work if the primary key is [ClassName]Id instead of just Id
+//                var item1 = repos.Get(1);
+//                item1.Name.ShouldEqual("Jeff");
+//
+//                var item2 = repos.Get(2);
+//                item2.Name.ShouldEqual("Ben");
+//            }
+//        }
+
     }
 
     public class RavenTestStringKey

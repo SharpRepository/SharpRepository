@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Aspects;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
@@ -14,14 +15,6 @@ namespace SharpRepository.Repository
 {
     public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey> where T : class
     {
-        // the caching strategy used
-        private ICachingStrategy<T, TKey> _cachingStrategy;
-
-        // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        protected QueryManager<T, TKey> QueryManager;
-
-        private readonly Type _entityType;
-
         protected RepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
         {
             if (typeof(T) == typeof(TKey))
@@ -34,12 +27,26 @@ namespace SharpRepository.Repository
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>(); // sets QueryManager as well
             // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
 
-            _entityType = typeof(T);
-            _typeName = _entityType.Name;
+            var entityType = typeof(T);
+            _typeName = entityType.Name;
+
+            _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
+
+            _repositoryActionContext = new RepositoryActionContext<T, TKey>(this);
+            RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
         }
+
+        // the caching strategy used
+        private ICachingStrategy<T, TKey> _cachingStrategy;
+
+        // the query manager uses the caching strategy to determine if it should check the cache or run the query
+        protected QueryManager<T, TKey> QueryManager;
 
         // conventions
         public IRepositoryConventions Conventions { get; set; }
+
+        private readonly RepositoryActionContext<T, TKey> _repositoryActionContext;
+        private readonly RepositoryActionBaseAttribute[] _aspects;
 
         public Type EntityType
         {
@@ -118,22 +125,54 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
-            return QueryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions).ToList(),
-                null,
-                queryOptions
-                );
+            try
+            {
+                var context = new RepositoryQueryMultipleContext<T, TKey>(this, null, queryOptions);
+                RunAspect(attribute => attribute.OnGetAllExecuting(context));
+
+                var results = QueryManager.ExecuteGetAll(
+                    () => GetAllQuery(queryOptions).ToList(),
+                    null,
+                    queryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnGetAllExecuted(context));
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return QueryManager.ExecuteGetAll(
-                () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
-                selector,
-                queryOptions
-                );
+                var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, null, queryOptions, selector);
+                RunAspect(attribute => attribute.OnGetAllExecuting(context));
+
+                var results = QueryManager.ExecuteGetAll(
+                    () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
+                    selector,
+                    queryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnGetAllExecuted(context));
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -145,24 +184,63 @@ namespace SharpRepository.Repository
 
         public T Get(TKey key)
         {
-            return QueryManager.ExecuteGet(
-                () => GetQuery(key),
-                key
-                );
+
+            try
+            {
+                var context = new RepositoryGetContext<T, TKey>(this, key);
+                RunAspect(attribute => attribute.OnGetExecuting(context));
+
+                var result = QueryManager.ExecuteGet(
+                    () => GetQuery(key),
+                    key
+                    );
+
+                context.Result = result;
+                RunAspect(attribute => attribute.OnGetExecuted(context));
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
-            if (selector == null) throw new ArgumentNullException("selector");
 
-            // get the full entity, possibly from cache
-            var result = QueryManager.ExecuteGet(
-                () => GetQuery(key),
-                key
-                );
+            try
+            {
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            // return the entity with the selector applied to it
-            return result == null ? default(TResult) : new[] { result }.AsQueryable().Select(selector).First();
+
+                var context = new RepositoryGetContext<T, TKey, TResult>(this, key, selector);
+                RunAspect(attribute => attribute.OnGetExecuting(context));
+
+
+
+                // get the full entity, possibly from cache
+                var result = QueryManager.ExecuteGet(
+                    () => GetQuery(key),
+                    key
+                    );
+
+                // return the entity with the selector applied to it
+                var selectedResult = result == null
+                    ? default(TResult)
+                    : new[] {result}.AsQueryable().Select(selector).First();
+
+                context.Result = selectedResult;
+                RunAspect(attribute => attribute.OnGetExecuted(context));
+
+                return selectedResult;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public bool Exists(TKey key)
@@ -188,6 +266,8 @@ namespace SharpRepository.Repository
 
         public bool TryGet<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult entity)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             entity = default(TResult);
 
             try
@@ -209,31 +289,81 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) return GetAll(queryOptions);
 
-            return QueryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).ToList(),
-                criteria,
-                null,
-                queryOptions
-                );
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
+
+
+                var context = new RepositoryQueryMultipleContext<T, TKey>(this, criteria, queryOptions);
+                RunAspect(attribute => attribute.OnFindAllExecuting(context));
+
+                var results = QueryManager.ExecuteFindAll(
+                    () => FindAllQuery(criteria, queryOptions).ToList(),
+                    criteria,
+                    null,
+                    queryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) return GetAll(selector, queryOptions);
 
-            return QueryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
-                criteria,
-                selector,
-                queryOptions
-                );
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
+                if (selector == null) throw new ArgumentNullException("selector");
+
+
+                var context = new RepositoryQueryMultipleContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
+                RunAspect(attribute => attribute.OnFindAllExecuting(context));
+
+                var results = QueryManager.ExecuteFindAll(
+                    () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                    criteria,
+                    selector,
+                    queryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
             if (predicate == null) return GetAll(queryOptions);
 
-            return FindAll(new Specification<T>(predicate), queryOptions);
+            try
+            {
+                if (predicate == null) throw new ArgumentNullException("predicate");
+
+
+                return FindAll(new Specification<T>(predicate), queryOptions);
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public IEnumerable<TResult> FindAll<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
@@ -241,7 +371,20 @@ namespace SharpRepository.Repository
             if (selector == null) throw new ArgumentNullException("selector");
             if (predicate == null) return GetAll(selector, queryOptions);
 
-            return FindAll(new Specification<T>(predicate), selector, queryOptions);
+            try
+            {
+                if (predicate == null) throw new ArgumentNullException("predicate");
+                if (selector == null) throw new ArgumentNullException("selector");
+
+            	if (predicate == null) return GetAll(selector, queryOptions);
+
+                return FindAll(new Specification<T>(predicate), selector, queryOptions);
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -250,35 +393,71 @@ namespace SharpRepository.Repository
 
         public T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return QueryManager.ExecuteFind(
-                () => FindQuery(criteria, queryOptions),
-                criteria,
-                null,
-                null
-                );
+
+                var context = new RepositoryQuerySingleContext<T, TKey>(this, criteria, queryOptions);
+                RunAspect(attribute => attribute.OnFindExecuting(context));
+
+                var item = QueryManager.ExecuteFind(
+                    () => FindQuery(criteria, queryOptions),
+                    criteria,
+                    null,
+                    null
+                    );
+
+                context.Result = item;
+                RunAspect(attribute => attribute.OnFindExecuted(context));
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public TResult Find<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
-            if (selector == null) throw new ArgumentNullException("selector");
 
-            return QueryManager.ExecuteFind(
-                () =>
-                    {
-                        var result = FindQuery(criteria, queryOptions);
-                        if (result == null)
-                            return default(TResult);
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
+                if (selector == null) throw new ArgumentNullException("selector");
 
-                        var results = new[] { result };
-                        return results.AsQueryable().Select(selector).First();
-                    },
-                criteria,
-                selector,
-                null
-                );
+
+                var context = new RepositoryQuerySingleContext<T, TKey, TResult>(this, criteria, queryOptions, selector);
+                RunAspect(attribute => attribute.OnFindExecuting(context));
+
+                var item = QueryManager.ExecuteFind(
+                    () =>
+	                    {
+	                        var result = FindQuery(criteria, queryOptions);
+	                        if (result == null)
+	                            return default(TResult);
+
+	                        var results = new[] { result };
+	                        return results.AsQueryable().Select(selector).First();
+	                    },
+
+                    criteria,
+                    selector,
+                    null
+                    );
+
+                context.Result = item;
+                RunAspect(attribute => attribute.OnFindExecuted(context));
+
+                return item;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public bool Exists(ISpecification<T> criteria)
@@ -314,6 +493,8 @@ namespace SharpRepository.Repository
 
         public bool TryFind<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             entity = default(TResult);
 
             try
@@ -329,17 +510,33 @@ namespace SharpRepository.Repository
 
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
+            try
+            {
+                if (predicate == null) throw new ArgumentNullException("predicate");
 
-            return Find(new Specification<T>(predicate), queryOptions);
+                return Find(new Specification<T>(predicate), queryOptions);
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public TResult Find<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (predicate == null) throw new ArgumentNullException("predicate");
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (predicate == null) throw new ArgumentNullException("predicate");
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return Find(new Specification<T>(predicate), selector, queryOptions);
+                return Find(new Specification<T>(predicate), selector, queryOptions);
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public bool Exists(Expression<Func<T, bool>> predicate)
@@ -375,6 +572,8 @@ namespace SharpRepository.Repository
 
         public bool TryFind<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, out TResult entity)
         {
+            if (selector == null) throw new ArgumentNullException("selector");
+
             entity = default(TResult);
 
             try
@@ -902,14 +1101,40 @@ namespace SharpRepository.Repository
         }
         
 
+        private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
+        {
+            return _aspects.All(action);
+        }
+
+        private void RunAspect(Action<RepositoryActionBaseAttribute> action)
+        {
+            foreach (var attribute in _aspects)
+            {
+                action(attribute);
+            }
+        }
+
         // This is the actual implementation that the derived class needs to implement
         protected abstract void AddItem(T entity);
 
         public void Add(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
+            try
+            {
+                if (entity == null) throw new ArgumentNullException("entity");
 
-            ProcessAdd(entity, BatchMode);
+                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
+                    return;
+
+                ProcessAdd(entity, BatchMode);
+
+                RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // used from the Add method above and the Save below for the batch save
@@ -927,11 +1152,19 @@ namespace SharpRepository.Repository
 
         public void Add(IEnumerable<T> entities)
         {
-            if (entities == null) throw new ArgumentNullException("entities");
-
-            foreach (var entity in entities)
+            try
             {
-                Add(entity);
+                if (entities == null) throw new ArgumentNullException("entities");
+
+                foreach (var entity in entities)
+                {
+                    Add(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
             }
         }
 
@@ -940,9 +1173,22 @@ namespace SharpRepository.Repository
 
         public void Delete(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
+            try
+            {
+                if (entity == null) throw new ArgumentNullException("entity");
 
-            ProcessDelete(entity, BatchMode);
+                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
+                    return;
+
+                ProcessDelete(entity, BatchMode);
+
+                RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // used from the Delete method above and the Save below for the batch save
@@ -968,11 +1214,19 @@ namespace SharpRepository.Repository
 
         public void Delete(TKey key)
         {
-            var entity = Get(key);
+            try
+            {
+                var entity = Get(key);
 
-            if (entity == null) throw new ArgumentException("No entity exists with this key.", "key");
+                if (entity == null) throw new ArgumentException("No entity exists with this key.", "key");
 
-            Delete(entity);
+                Delete(entity);
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public void Delete(Expression<Func<T, bool>> predicate)
@@ -990,9 +1244,22 @@ namespace SharpRepository.Repository
 
         public void Update(T entity)
         {
-            if (entity == null) throw new ArgumentNullException("entity");
+            try
+            {
+                if (entity == null) throw new ArgumentNullException("entity");
 
-            ProcessUpdate(entity, BatchMode);
+                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
+                    return;
+
+                ProcessUpdate(entity, BatchMode);
+
+                RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // used from the Update method above and the Save below for the batch save
@@ -1010,11 +1277,19 @@ namespace SharpRepository.Repository
 
         public void Update(IEnumerable<T> entities)
         {
-            if (entities == null) throw new ArgumentNullException("entities");
-
-            foreach (var entity in entities)
+            try
             {
-                Update(entity);
+                if (entities == null) throw new ArgumentNullException("entities");
+
+                foreach (var entity in entities)
+                {
+                    Update(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
             }
         }
 
@@ -1022,13 +1297,38 @@ namespace SharpRepository.Repository
 
         private void Save()
         {
-            SaveChanges();
+            try
+            {
+                if (!RunAspect(attribute => attribute.OnSaveExecuting(_repositoryActionContext)))
+                    return;
+
+                SaveChanges();
             
-            QueryManager.OnSaveExecuted(); 
+                QueryManager.OnSaveExecuted();
+
+                RunAspect(attribute => attribute.OnSaveExecuted(_repositoryActionContext));
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
-        
         public abstract void Dispose();
+
+        protected virtual void SetTraceInfo(string caller, string info, bool append = false)
+        {
+            var formatted = String.Format("[{0}] {1}: {2}", this.GetType().FullName, caller, info);
+
+            TraceInfo = append ? TraceInfo + "\n" + formatted : formatted;
+        }
+
+        protected virtual void SetTraceInfo(string caller, IQueryable query, bool append = false)
+        {
+            SetTraceInfo(caller, query.ToString(), append);
+        }
+        public string TraceInfo { get; protected set; }
 
         protected virtual bool GetPrimaryKey(T entity, out TKey key) 
         {
@@ -1101,5 +1401,24 @@ namespace SharpRepository.Repository
             InternalCache.PrimaryKeyMapping[tupleKey] = propInfo;
             return propInfo;
         }
+
+        private void Error(Exception ex)
+        {
+            RunAspect(aspect => aspect.OnError(new RepositoryActionContext<T, TKey>(this), ex));
+        }
+
+//        private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName, Type propertyType)
+//        {
+//            // make the property reflection lookup case insensitive
+//            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
+//
+//            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
+//        }
+
+//        public abstract IEnumerator<T> GetEnumerator();
+//        IEnumerator IEnumerable.GetEnumerator()
+//        {
+//            return GetEnumerator();
+//        }
     }
 }

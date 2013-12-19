@@ -18,6 +18,8 @@ namespace SharpRepository.EfRepository
 
         internal EfRepositoryBase(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
+            if (dbContext == null) throw new ArgumentNullException("dbContext");
+
             Initialize(dbContext);
         }
 
@@ -43,7 +45,7 @@ namespace SharpRepository.EfRepository
 
         protected override void DeleteItem(T entity)
         {
-            DbSet.Attach(entity);
+			DbSet.Attach(entity);
             DbSet.Remove(entity);
         }
 

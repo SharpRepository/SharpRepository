@@ -14,7 +14,6 @@
                                RepositoryType.Xml,
                                RepositoryType.MongoDb,
                                RepositoryType.Ef5,
-                               RepositoryType.Cache,
                                RepositoryType.CouchDb
                            };
             }
