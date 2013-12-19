@@ -15,14 +15,6 @@ namespace SharpRepository.Repository
 {
     public abstract partial class RepositoryBase<T, TKey> : IRepository<T, TKey> where T : class
     {
-        // the caching strategy used
-        private ICachingStrategy<T, TKey> _cachingStrategy;
-
-        // the query manager uses the caching strategy to determine if it should check the cache or run the query
-        protected QueryManager<T, TKey> QueryManager;
-
-        private readonly Type _entityType;
-
         protected RepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
         {
             if (typeof(T) == typeof(TKey))
@@ -35,17 +27,25 @@ namespace SharpRepository.Repository
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>(); // sets QueryManager as well
             // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
 
-            _entityType = typeof(T);
-            _typeName = _entityType.Name;
+            var entityType = typeof(T);
+            _typeName = entityType.Name;
 
-            _aspects = typeof (T).GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
+            _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
 
-            RunAspect(aspect => aspect.OnInitialized(new RepositoryActionContext<T, TKey>(this)));
+            _repositoryActionContext = new RepositoryActionContext<T, TKey>(this);
+            RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
         }
+
+        // the caching strategy used
+        private ICachingStrategy<T, TKey> _cachingStrategy;
+
+        // the query manager uses the caching strategy to determine if it should check the cache or run the query
+        protected QueryManager<T, TKey> QueryManager;
 
         // conventions
         public IRepositoryConventions Conventions { get; set; }
 
+        private readonly RepositoryActionContext<T, TKey> _repositoryActionContext;
         private readonly RepositoryActionBaseAttribute[] _aspects;
 
         public Type EntityType
@@ -1109,12 +1109,6 @@ namespace SharpRepository.Repository
             }
         }
 
-        private RepositoryActionContext<T, TKey> _repositoryActionContext = null;
-        private RepositoryActionContext<T, TKey> GetRepositoryActionContext()
-        {
-            return _repositoryActionContext ?? (_repositoryActionContext = new RepositoryActionContext<T, TKey>(this));
-        }
-
         // This is the actual implementation that the derived class needs to implement
         protected abstract void AddItem(T entity);
 
@@ -1124,13 +1118,12 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                var context = GetRepositoryActionContext();
-                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, context)))
+                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
                     return;
 
                 ProcessAdd(entity, BatchMode);
 
-                RunAspect(attribute => attribute.OnAddExecuted(entity, context));
+                RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1179,13 +1172,12 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                var context = GetRepositoryActionContext();
-                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, context)))
+                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
                     return;
 
                 ProcessDelete(entity, BatchMode);
 
-                RunAspect(attribute => attribute.OnDeleteExecuted(entity, context));
+                RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1251,13 +1243,12 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                var context = GetRepositoryActionContext();
-                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, context)))
+                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
                     return;
 
                 ProcessUpdate(entity, BatchMode);
 
-                RunAspect(attribute => attribute.OnUpdateExecuted(entity, context));
+                RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1303,15 +1294,14 @@ namespace SharpRepository.Repository
         {
             try
             {
-                var context = GetRepositoryActionContext();
-                if (!RunAspect(attribute => attribute.OnSaveExecuting(context)))
+                if (!RunAspect(attribute => attribute.OnSaveExecuting(_repositoryActionContext)))
                     return;
 
                 SaveChanges();
             
                 QueryManager.OnSaveExecuted();
 
-                RunAspect(attribute => attribute.OnSaveExecuted(context));
+                RunAspect(attribute => attribute.OnSaveExecuted(_repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1320,7 +1310,6 @@ namespace SharpRepository.Repository
             }
         }
 
-        
         public abstract void Dispose();
 
         protected virtual void SetTraceInfo(string caller, string info, bool append = false)
