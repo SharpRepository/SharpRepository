@@ -35,7 +35,6 @@ namespace SharpRepository.EfRepository
         /// <param name="cachingStrategy">The caching strategy to use.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" /></param>
         public EfRepository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
-            if (dbContext == null) throw new ArgumentNullException("dbContext");
         }
     }
 
@@ -52,7 +51,6 @@ namespace SharpRepository.EfRepository
         /// <param name="cachingStrategy">The caching strategy to use.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" /></param>
         public EfRepository(DbContext dbContext, ICachingStrategy<T, int> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
-            if (dbContext == null) throw new ArgumentNullException("dbContext");
         }
     }
 }
