@@ -30,7 +30,9 @@ namespace SharpRepository.Repository
             var entityType = typeof(T);
             _typeName = entityType.Name;
 
-            _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
+            _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
+                .OrderBy(x => x.Order)
+                .ToArray();
 
             _repositoryActionContext = new RepositoryActionContext<T, TKey>(this);
             RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));

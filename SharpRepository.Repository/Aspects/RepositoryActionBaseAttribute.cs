@@ -5,6 +5,13 @@ namespace SharpRepository.Repository.Aspects
     [AttributeUsage(AttributeTargets.Class, Inherited = true)]
     public abstract class RepositoryActionBaseAttribute : Attribute
     {
+        protected RepositoryActionBaseAttribute()
+        {
+            Order = 9999; // high number so if they don't set it, it happens last
+        }
+
+        public int Order { get; set; }
+
         public virtual void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context) where T : class
         {
         }
