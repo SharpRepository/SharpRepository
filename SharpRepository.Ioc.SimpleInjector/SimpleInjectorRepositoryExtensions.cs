@@ -11,7 +11,7 @@ namespace SharpRepository.Ioc.SimpleInjector
 {
     public static class SimpleInjectorRepositoryExtensions
     {
-        public static void BindSharpRepository(this Container container, string repositoryName = null)
+        public static void RegisterSharpRepository(this Container container, string repositoryName = null)
         {
             container.ResolveUnregisteredType += (s, e) =>
             {
@@ -36,7 +36,7 @@ namespace SharpRepository.Ioc.SimpleInjector
             };
         }
 
-        public static void BindSharpRepository(this Container container, ISharpRepositoryConfiguration configuration)
+        public static void RegisterSharpRepository(this Container container, ISharpRepositoryConfiguration configuration)
         {
 
             container.ResolveUnregisteredType += (s, e) =>
