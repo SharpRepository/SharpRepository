@@ -13,14 +13,6 @@ namespace SharpRepository.Ioc.SimpleInjector
     {
         public static void BindSharpRepository(this Container container, string repositoryName = null)
         {
-            //container.RegisterWithContext<IRepository<Object>>(context =>
-            //                                                   {
-            //                                                       var genericArgs = context.ImplementationType.GetGenericArguments();
-
-            //                                                       return RepositoryFactory.GetInstance(genericArgs[0],
-            //                                                           repositoryName);
-            //                                                   });
-
             container.ResolveUnregisteredType += (s, e) =>
             {
                 var type = e.UnregisteredServiceType;
@@ -42,9 +34,6 @@ namespace SharpRepository.Ioc.SimpleInjector
                     }
                 }
             };
-            
-            // todo - find out how to implement this method
-            //throw new NotImplementedException("SimpleInjector Extension methods are not implemented");
         }
 
         public static void BindSharpRepository(this Container container, ISharpRepositoryConfiguration configuration)
@@ -71,9 +60,6 @@ namespace SharpRepository.Ioc.SimpleInjector
                     }
                 }
             };
-
-            // todo - find out how to implement this method
-            //throw new NotImplementedException("SimpleInjector Extension methods are not implemented");
         }
     }
 }
