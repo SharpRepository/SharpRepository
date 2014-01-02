@@ -8,12 +8,17 @@ namespace SharpRepository.Logging
     public class RepositoryLoggingAttribute : RepositoryActionBaseAttribute
     {
         private readonly ILog _logger;
-        private readonly LogLevel _logLevel = LogLevel.Debug;
+        private LogLevel _logLevel = LogLevel.Debug;
 
-        public RepositoryLoggingAttribute(LogLevel logLevel = LogLevel.Debug)
+        public RepositoryLoggingAttribute()
         {
             _logger = LogManager.GetLogger("SharpRepository");
-            _logLevel = logLevel;
+        }
+
+        public LogLevel LogLevel
+        {
+            get { return _logLevel; }
+            set { _logLevel = value; }
         }
 
         private void Log(string message)
