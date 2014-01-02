@@ -7,10 +7,12 @@ namespace SharpRepository.Repository.Aspects
     {
         protected RepositoryActionBaseAttribute()
         {
+            Enabled = true;
             Order = 9999; // high number so if they don't set it, it happens last
         }
 
         public int Order { get; set; }
+        public bool Enabled { get; set; }
 
         public virtual void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context) where T : class
         {

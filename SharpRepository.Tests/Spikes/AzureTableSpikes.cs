@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Spikes
 //        public void TestAzureTableGet()
 //        {
 //            var repo = new AzureTableRepository<PoisonMessage>("UseDevelopmentStorage=true");
-//            var item = repo.Get("QueueEmailModel", "722b6bea-d609-48e0-a4af-3ed0f5160ad9");
+//            var item = repo.Get("QueueEmailModel", "3b80be6f-f28f-4768-99f1-6c181505ce86");
 //
 //            item.ShouldNotBeNull();
 //        }

@@ -31,6 +31,7 @@ namespace SharpRepository.Repository
             _typeName = entityType.Name;
 
             _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
+                .Where(x => x.Enabled)
                 .OrderBy(x => x.Order)
                 .ToArray();
 
