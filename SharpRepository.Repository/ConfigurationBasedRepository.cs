@@ -7,6 +7,7 @@ using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
+using SharpRepository.Repository.Configuration;
 
 namespace SharpRepository.Repository
 {
@@ -19,8 +20,9 @@ namespace SharpRepository.Repository
     {
         protected readonly IRepository<T, TKey> Repository;
 
-        // we have 2 constructors so you can use the defualt sharpRepository section or specify a config section
-        //  you can also provide the repository name from the config file instead of whatever the default is if needed
+        // we have 3 constructors so you can use the defualt sharpRepository section or specify a config section
+        // you can provide the repository name from the config file instead of whatever the default is if needed
+        // you can also provide the configuration object instead of building one from the config file
         public ConfigurationBasedRepository(string configSection, string repositoryName)
         {
             Repository = RepositoryFactory.GetInstance<T, TKey>(configSection, repositoryName);
@@ -30,6 +32,11 @@ namespace SharpRepository.Repository
         {
             // Load up the repository based on the default configuration file
             Repository = RepositoryFactory.GetInstance<T, TKey>(repositoryName);
+        }
+
+        public ConfigurationBasedRepository(ISharpRepositoryConfiguration configuration, string repositoryName = null)
+        {
+            Repository = RepositoryFactory.GetInstance<T, TKey>(configuration, repositoryName);
         }
 
         public void Dispose()
