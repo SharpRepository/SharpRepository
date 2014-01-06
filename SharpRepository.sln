@@ -75,6 +75,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.AzureTableRepository", "SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj", "{EF055B6D-6D7D-4002-91A9-4DED61346457}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.AzureBlobRepository", "SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj", "{F766CC4F-B69C-444C-A89F-01E2E8B172A8}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.SimpleInjector", "SharpRepository.Ioc.SimpleInjector\SharpRepository.Ioc.SimpleInjector.csproj", "{772C205D-D4DC-4581-9B77-C672D54F2558}"
 EndProject
 Global
