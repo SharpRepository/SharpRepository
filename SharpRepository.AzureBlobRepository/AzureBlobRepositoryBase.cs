@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using SharpRepository.Repository;
@@ -15,6 +13,7 @@ namespace SharpRepository.AzureBlobRepository
         protected CloudBlobClient BlobClient { get; private set; }
         protected CloudBlobContainer BlobContainer { get; private set; }
         protected string ContainerName { get; private set; }
+        protected bool CreateIfNotExists { get; private set; }
 
         internal AzureBlobRepositoryBase(string connectionString, string containerName, bool createIfNotExists,
             ICachingStrategy<T, TKey> cachingStrategy = null)
@@ -29,10 +28,17 @@ namespace SharpRepository.AzureBlobRepository
                 ContainerName = containerName;
             }
 
+            CreateIfNotExists = createIfNotExists;
             BlobClient = storageAccount.CreateCloudBlobClient();
-            BlobContainer = BlobClient.GetContainerReference(ContainerName);
+            SetContainer(containerName);
+        }
 
-            if (createIfNotExists)
+        protected void SetContainer(string containerName)
+        {
+            ContainerName = containerName;
+            BlobContainer = BlobClient.GetContainerReference(containerName);
+
+            if (CreateIfNotExists)
             {
                 BlobContainer.CreateIfNotExists();
             }
