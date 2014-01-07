@@ -196,8 +196,8 @@ namespace SharpRepository.Repository
                     return context.Result;
 
                 var result = QueryManager.ExecuteGet(
-                    () => GetQuery(key),
-                    key
+                    () => GetQuery(context.Id),
+                    context.Id
                     );
 
                 context.Result = result;
@@ -298,10 +298,10 @@ namespace SharpRepository.Repository
                     return context.Results;
 
                 var results = QueryManager.ExecuteFindAll(
-                    () => FindAllQuery(criteria, queryOptions).ToList(),
-                    criteria,
+                    () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
+                    context.Specification,
                     null,
-                    queryOptions
+                    context.QueryOptions
                     );
 
                 context.Results = results;
