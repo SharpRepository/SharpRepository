@@ -59,32 +59,36 @@ namespace SharpRepository.Repository.Aspects
         }
 
         /* Queries */
-        public virtual void OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
+        public virtual bool OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
         {
+            return true;
         }
 
         public virtual void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
+        public virtual bool OnGetAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
+            return true;
         }
 
         public virtual void OnGetAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindExecuting<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
+        public virtual bool OnFindExecuting<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
         {
+            return true;
         }
 
         public virtual void OnFindExecuted<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
         {
         }
 
-        public virtual void OnFindAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
+        public virtual bool OnFindAllExecuting<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
+            return true;
         }
 
         public virtual void OnFindAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
