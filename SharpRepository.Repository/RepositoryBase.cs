@@ -201,7 +201,7 @@ namespace SharpRepository.Repository
                 context.Result = result;
                 RunAspect(attribute => attribute.OnGetExecuted(context));
 
-                return result;
+                return context.Result;
             }
             catch (Exception ex)
             {
