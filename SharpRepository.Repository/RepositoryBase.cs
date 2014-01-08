@@ -134,11 +134,19 @@ namespace SharpRepository.Repository
                 if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
                     return context.Results;
 
-                var results = QueryManager.ExecuteGetAll(
-                    () => GetAllQuery(context.QueryOptions).ToList(),
-                    null,
-                    context.QueryOptions
-                    );
+                // if the aspect altered the specificaiton then we need to run a FindAll with that specification
+                var results = context.Specification == null
+                    ? QueryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions).ToList(),
+                        null,
+                        context.QueryOptions
+                        )
+                    : QueryManager.ExecuteFindAll(
+                        () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
+                        context.Specification,
+                        null,
+                        context.QueryOptions
+                        );
 
                 context.Results = results;
                 RunAspect(attribute => attribute.OnGetAllExecuted(context));
@@ -162,11 +170,20 @@ namespace SharpRepository.Repository
                 if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
                     return context.Results;
 
-                var results = QueryManager.ExecuteGetAll(
-                    () => GetAllQuery(context.QueryOptions).Select(context.Selector).ToList(),
-                    context.Selector,
-                    context.QueryOptions
-                    );
+                // if the aspect altered the specificaiton then we need to run a FindAll with that specification
+                var results = context.Specification == null
+                    ? QueryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions).Select(context.Selector).ToList(),
+                        context.Selector,
+                        context.QueryOptions
+                        )
+                    : QueryManager.ExecuteFindAll(
+                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
+                        context.Specification,
+                        context.Selector,
+                        context.QueryOptions
+                        );
+
 
                 context.Results = results;
                 RunAspect(attribute => attribute.OnGetAllExecuted(context));
