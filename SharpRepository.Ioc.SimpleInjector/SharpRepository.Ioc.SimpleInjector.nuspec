@@ -3,14 +3,14 @@
   <metadata>
     <id>SharpRepository.Ioc.SimpleInjector</id>
     <version>0.0.0.0</version>
-    <title>SharpRepository with Ninject IoC</title>
-    <authors>Ben Griswold, Jeff Treuting, Fairway Technologies</authors>
+    <title>SharpRepository with SimpleInjector IoC</title>
+    <authors>Jeff Treuting, Ben Griswold, Fairway Technologies</authors>
     <owners>jtreuting, bgriswold</owners>
     <licenseUrl>https://github.com/SharpRepository/SharpRepository/blob/develop/license.txt</licenseUrl>
     <projectUrl>https://github.com/SharpRepository/SharpRepository</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.</description>
-    <copyright>Copyright 2013</copyright>
+    <description>SharpRepository is a generic repository written in C#.  This package adds support for using SimpleInjector with SharpRepository.</description>
+    <copyright>Copyright 2014</copyright>
     <tags>SharpRepository Repository IoC SimpleInjector</tags>
 	<dependencies>
       <dependency id="SharpRepository.Repository" version="{{Repository.Dependency.Version}}" />
