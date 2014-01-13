@@ -51,6 +51,7 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="HowToConfigure.cs" />
+    <Compile Include="HowToUseCaching.cs" />
     <Compile Include="HowToUseGetSelectors.cs" />
     <Compile Include="HowToUsePagingAndSorting.cs" />
     <Compile Include="HowToUseSpecifications.cs" />
