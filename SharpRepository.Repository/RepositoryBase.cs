@@ -1152,7 +1152,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-	        NotifyQueryManagerOfAddedEntity();
+	        NotifyQueryManagerOfAddedEntity(entity);
         }
 
 	    private void NotifyQueryManagerOfAddedEntity(T entity)
