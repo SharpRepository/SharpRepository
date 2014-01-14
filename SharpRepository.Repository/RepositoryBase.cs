@@ -100,10 +100,10 @@ namespace SharpRepository.Repository
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
-
-                // make sure we keep the curent caching enabled status
-                var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
-                QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+				QueryManager = new QueryManager<T, TKey>(_cachingStrategy)
+				               {
+					               CacheEnabled = !(_cachingStrategy is NoCachingStrategy<T, TKey>)
+				               };
             }
         } 
 
