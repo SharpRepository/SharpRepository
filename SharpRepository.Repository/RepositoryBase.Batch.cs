@@ -75,9 +75,9 @@ namespace SharpRepository.Repository
 
             public void Commit()
             {
-                _repository.BatchMode = true;
-
-                foreach (var batchItem in _items)
+				_repository.BatchMode = true;
+				
+				foreach (var batchItem in _items)
                 {
                     switch (batchItem.Action)
                     {
@@ -87,7 +87,7 @@ namespace SharpRepository.Repository
 
                         case BatchAction.Update:
                             _repository.Update(batchItem.Item);
-                            break;
+							break;
 
                         case BatchAction.Delete:
                             _repository.Delete(batchItem.Item);
@@ -97,6 +97,25 @@ namespace SharpRepository.Repository
 
                 _repository.Save();
 
+				// call QueryManager.OnItem{action} for each item in the batch only after saving the whole batch
+				foreach (var batchItem in _items)
+	            {
+		            switch (batchItem.Action)
+		            {
+						case BatchAction.Add:
+							_repository.NotifyQueryManagerOfAddedEntity(batchItem.Item);
+							break;
+
+						case BatchAction.Update:
+							_repository.NotifyQueryManagerOfUpdatedEntity(batchItem.Item);
+							break;
+
+						case BatchAction.Delete:
+							_repository.NotifyQueryManagerOfDeletedEntity(batchItem.Item);
+							break;
+		            }
+					
+	            }
                 _repository.BatchMode = false;
                 _items.Clear();
             }

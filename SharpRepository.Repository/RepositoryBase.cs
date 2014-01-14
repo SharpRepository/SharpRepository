@@ -100,10 +100,10 @@ namespace SharpRepository.Repository
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
-
-                // make sure we keep the curent caching enabled status
-                var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
-                QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+				QueryManager = new QueryManager<T, TKey>(_cachingStrategy)
+				               {
+					               CacheEnabled = !(_cachingStrategy is NoCachingStrategy<T, TKey>)
+				               };
             }
         } 
 
@@ -1152,10 +1152,15 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemAdded(key, entity);
+	        NotifyQueryManagerOfAddedEntity(entity);
         }
+
+	    private void NotifyQueryManagerOfAddedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemAdded(key, entity);
+	    }
 
         public void Add(IEnumerable<T> entities)
         {
@@ -1206,10 +1211,15 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemDeleted(key, entity);
+	        NotifyQueryManagerOfDeletedEntity(entity);
         }
+
+		private void NotifyQueryManagerOfDeletedEntity(T entity)
+		{
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemDeleted(key, entity);
+		}
 
         public void Delete(IEnumerable<T> entities)
         {
@@ -1270,17 +1280,22 @@ namespace SharpRepository.Repository
         }
 
         // used from the Update method above and the Save below for the batch save
-        private void ProcessUpdate(T entity, bool batchMode)
-        {
-            UpdateItem(entity);
-            if (batchMode) return;
+	    private void ProcessUpdate(T entity, bool batchMode)
+	    {
+		    UpdateItem(entity);
+		    if (batchMode) return;
 
-            Save();
+		    Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemUpdated(key, entity);
-        }
+		    NotifyQueryManagerOfUpdatedEntity(entity);
+	    }
+
+	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemUpdated(key, entity);
+	    }
 
         public void Update(IEnumerable<T> entities)
         {
