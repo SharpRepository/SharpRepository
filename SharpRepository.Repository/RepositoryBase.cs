@@ -1152,10 +1152,15 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemAdded(key, entity);
+	        NotifyQueryManagerOfAddedEntity();
         }
+
+	    private void NotifyQueryManagerOfAddedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemAdded(key, entity);
+	    }
 
         public void Add(IEnumerable<T> entities)
         {
@@ -1206,10 +1211,15 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemDeleted(key, entity);
+	        NotifyQueryManagerOfDeletedEntity(entity);
         }
+
+		private void NotifyQueryManagerOfDeletedEntity(T entity)
+		{
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemDeleted(key, entity);
+		}
 
         public void Delete(IEnumerable<T> entities)
         {
