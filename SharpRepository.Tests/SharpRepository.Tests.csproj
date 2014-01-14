@@ -136,6 +136,7 @@
     <Compile Include="Specifications\SpecificationTests.cs" />
     <Compile Include="Spikes\AzureTableSpikes.cs" />
     <Compile Include="Spikes\BatchSpike.cs" />
+    <Compile Include="Spikes\CacheEnabledSpike.cs" />
     <Compile Include="Spikes\CompoundKeySpikes.cs" />
     <Compile Include="Spikes\AzureBlobSpikes.cs" />
     <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
