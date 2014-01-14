@@ -1270,17 +1270,22 @@ namespace SharpRepository.Repository
         }
 
         // used from the Update method above and the Save below for the batch save
-        private void ProcessUpdate(T entity, bool batchMode)
-        {
-            UpdateItem(entity);
-            if (batchMode) return;
+	    private void ProcessUpdate(T entity, bool batchMode)
+	    {
+		    UpdateItem(entity);
+		    if (batchMode) return;
 
-            Save();
+		    Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemUpdated(key, entity);
-        }
+		    NotifyQueryManagerOfUpdatedEntity(entity);
+	    }
+
+	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemUpdated(key, entity);
+	    }
 
         public void Update(IEnumerable<T> entities)
         {

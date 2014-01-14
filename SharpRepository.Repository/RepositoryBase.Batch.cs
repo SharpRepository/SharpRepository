@@ -75,9 +75,11 @@ namespace SharpRepository.Repository
 
             public void Commit()
             {
-                _repository.BatchMode = true;
+				var updatedItems = new List<T>(); 
 
-                foreach (var batchItem in _items)
+				_repository.BatchMode = true;
+				
+				foreach (var batchItem in _items)
                 {
                     switch (batchItem.Action)
                     {
@@ -87,6 +89,7 @@ namespace SharpRepository.Repository
 
                         case BatchAction.Update:
                             _repository.Update(batchItem.Item);
+							updatedItems.Add(batchItem.Item);
                             break;
 
                         case BatchAction.Delete:
@@ -97,6 +100,10 @@ namespace SharpRepository.Repository
 
                 _repository.Save();
 
+	            foreach (var item in updatedItems)
+	            {
+					_repository.NotifyQueryManagerOfUpdatedEntity(item);
+	            }
                 _repository.BatchMode = false;
                 _items.Clear();
             }
