@@ -44,6 +44,9 @@ namespace SharpRepository.InMemoryRepository
                 var newItem = new T();
                 foreach (var propInfo in properties)
                 {
+                    // silently ignore properties that don't have set accessors
+                    if (!propInfo.CanWrite)
+                        continue;
                     propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
                 }
 
