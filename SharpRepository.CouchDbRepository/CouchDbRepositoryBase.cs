@@ -52,7 +52,7 @@ namespace SharpRepository.CouchDbRepository
         }
 
         // we override the implementation of LinqBaseRepository because this is built in 
-        protected override T GetQuery(string key)
+        protected override T GetQuery(string key, IFetchStrategy<T> fetchStrategy)
         {
             var item = Client.GetDocument(key);
 

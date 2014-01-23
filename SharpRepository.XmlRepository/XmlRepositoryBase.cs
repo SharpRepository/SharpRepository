@@ -64,9 +64,9 @@ namespace SharpRepository.XmlRepository
             //return CloneList(Items).AsQueryable();
         }
 
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return BaseQuery().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+            return BaseQuery(fetchStrategy).FirstOrDefault(x => MatchOnPrimaryKey(x, key));
         }
 
 //        private static IEnumerable<T> CloneList(IList<T> list)

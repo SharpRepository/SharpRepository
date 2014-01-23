@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 
 namespace SharpRepository.Repository.Traits
@@ -16,7 +17,14 @@ namespace SharpRepository.Repository.Traits
     public interface ICanGet<T, in TKey>
     {
         T Get(TKey key);
+        T Get(TKey key, IFetchStrategy<T> fetchStrategy);
+        T Get(TKey key, params string[] includePathes);
+        T Get(TKey key, params Expression<Func<T, object>>[] includePathes);
+
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePathes);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePathes);
 
         bool Exists(TKey key);
         bool TryGet(TKey key, out T entity);

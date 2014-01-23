@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
@@ -62,14 +63,79 @@ namespace SharpRepository.Repository
             return Repository.GetAll();
         }
 
+        public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.GetAll(fetchStrategy);
+        }
+
+        public IEnumerable<T> GetAll(params string[] includePaths)
+        {
+            return Repository.GetAll(includePaths);
+        }
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
+        {
+            return Repository.GetAll(includePaths);
+        }
+
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
             return Repository.GetAll(queryOptions);
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.GetAll(queryOptions, fetchStrategy);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            return Repository.GetAll(queryOptions, includePaths);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            return Repository.GetAll(queryOptions, includePaths);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return Repository.GetAll(selector);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
             return Repository.GetAll(selector, queryOptions);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.GetAll(selector, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return Repository.GetAll(selector, includePaths);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return Repository.GetAll(selector, includePaths);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.GetAll(selector, queryOptions, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            return Repository.GetAll(selector, queryOptions, includePaths);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            return Repository.GetAll(selector, queryOptions, includePaths);
         }
 
         public T Find(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
@@ -179,14 +245,44 @@ namespace SharpRepository.Repository
             get { return Repository.KeyType; }
         }
 
+        public T Get(TKey key, params string[] includePathes)
+        {
+            return Repository.Get(key, includePathes);
+        }
+
+        public T Get(TKey key, params Expression<Func<T, object>>[] includePathes)
+        {
+            return Repository.Get(key, includePathes);
+        }
+
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePathes)
+        {
+            return Repository.Get(key, selector, includePathes);
+        }
+
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePathes)
+        {
+            return Repository.Get(key, selector, includePathes);
+        }
+
         public T Get(TKey key)
         {
             return Repository.Get(key);
         }
 
+        public T Get(TKey key, IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.Get(key, fetchStrategy);
+        }
+
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
         {
             return Repository.Get(key, selector);
+        }
+
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return Repository.Get(key, selector, fetchStrategy);
         }
 
         public bool Exists(TKey key)

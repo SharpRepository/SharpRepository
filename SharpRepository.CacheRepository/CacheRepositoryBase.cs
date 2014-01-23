@@ -56,8 +56,8 @@ namespace SharpRepository.CacheRepository
         {
             return CloneDictionary(Items).AsQueryable();
         }
-        
-        protected override T GetQuery(TKey key)
+
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             T result;
             Items.TryGetValue(key, out result);

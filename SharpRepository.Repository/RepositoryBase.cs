@@ -118,15 +118,35 @@ namespace SharpRepository.Repository
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IQueryable<T> GetAllQuery();
-        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
 
         public IEnumerable<T> GetAll()
         {
-            return GetAll(null);
+            return GetAll((IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
+        {
+            return GetAll((IQueryOptions<T>)null, fetchStrategy);
+        }
+
+        public IEnumerable<T> GetAll(params string[] includePaths)
+        {
+            return GetAll(BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
+        {
+            return GetAll(queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             try
             {
@@ -135,18 +155,27 @@ namespace SharpRepository.Repository
                     return context.Results;
 
                 // if the aspect altered the specificaiton then we need to run a FindAll with that specification
-                var results = context.Specification == null
-                    ? QueryManager.ExecuteGetAll(
-                        () => GetAllQuery(context.QueryOptions).ToList(),
+                IEnumerable<T> results;
+
+                if (context.Specification == null)
+                {
+                    results = QueryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).ToList(),
                         null,
                         context.QueryOptions
-                        )
-                    : QueryManager.ExecuteFindAll(
+                        );
+                }
+                else
+                {
+                    context.Specification.FetchStrategy = fetchStrategy;
+
+                    results = QueryManager.ExecuteFindAll(
                         () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
                         context.Specification,
                         null,
                         context.QueryOptions
                         );
+                }
 
                 context.Results = results;
                 RunAspect(attribute => attribute.OnGetAllExecuted(context));
@@ -160,7 +189,42 @@ namespace SharpRepository.Repository
             }
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            return GetAll(queryOptions, BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(queryOptions, BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            return GetAll(selector, (IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            return GetAll(selector, queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return GetAll(selector, null, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return GetAll(selector, BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(selector, BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             try
             {
@@ -171,19 +235,27 @@ namespace SharpRepository.Repository
                     return context.Results;
 
                 // if the aspect altered the specificaiton then we need to run a FindAll with that specification
-                var results = context.Specification == null
-                    ? QueryManager.ExecuteGetAll(
-                        () => GetAllQuery(context.QueryOptions).Select(context.Selector).ToList(),
+                IEnumerable<TResult> results;
+
+                if (context.Specification == null)
+                {
+                    results = QueryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).Select(context.Selector).ToList(),
                         context.Selector,
                         context.QueryOptions
-                        )
-                    : QueryManager.ExecuteFindAll(
+                        );
+                }
+                else
+                {
+                    context.Specification.FetchStrategy = fetchStrategy;
+
+                    results = QueryManager.ExecuteFindAll(
                         () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
                         context.Specification,
                         context.Selector,
                         context.QueryOptions
                         );
-
+                }
 
                 context.Results = results;
                 RunAspect(attribute => attribute.OnGetAllExecuted(context));
@@ -197,14 +269,65 @@ namespace SharpRepository.Repository
             }
         }
 
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            return GetAll(selector, queryOptions, BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(selector, queryOptions, BuildFetchStrategy(includePaths));
+        }
+
+        private static IFetchStrategy<T> BuildFetchStrategy(params string[] includePaths)
+        {
+            var fetchStrategy = new GenericFetchStrategy<T>();
+            foreach (var path in includePaths)
+            {
+                fetchStrategy.Include(path);
+            }
+            return fetchStrategy;
+        }
+
+        private static IFetchStrategy<T> BuildFetchStrategy(params Expression<Func<T, object>>[] includePaths)
+        {
+            var fetchStrategy = new GenericFetchStrategy<T>();
+            foreach (var path in includePaths)
+            {
+                fetchStrategy.Include(path);
+            }
+            return fetchStrategy;
+        }
+
         // These are the actual implementation that the derived class needs to implement
-        protected abstract T GetQuery(TKey key);
+        protected abstract T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy);
 
         public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
             where TInner : class
             where TResult : class;
 
+        public T Get(TKey key, params Expression<Func<T, object>>[] includePaths)
+        {
+            var fetchStrategy = new GenericFetchStrategy<T>();
+            foreach (var path in includePaths)
+            {
+                fetchStrategy.Include(path);
+            }
+
+            return Get(key, fetchStrategy);
+        }
+
+        public T Get(TKey key, params string[] includePaths)
+        {
+            return Get(key, BuildFetchStrategy(includePaths));
+        }
+
         public T Get(TKey key)
+        {
+            return Get(key, (IFetchStrategy<T>)null);
+        }
+
+        public T Get(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             try
             {
@@ -213,7 +336,7 @@ namespace SharpRepository.Repository
                     return context.Result;
 
                 var result = QueryManager.ExecuteGet(
-                    () => GetQuery(context.Id),
+                    () => GetQuery(context.Id, fetchStrategy),
                     context.Id
                     );
 
@@ -229,7 +352,22 @@ namespace SharpRepository.Repository
             }
         }
 
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return Get(key, selector, BuildFetchStrategy(includePaths));
+        }
+
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return Get(key, selector, BuildFetchStrategy(includePaths));
+        }
+
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)
+        {
+            return Get(key, selector, (IFetchStrategy<T>)null);
+        }
+
+        public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
         {
             try
             {
@@ -241,7 +379,7 @@ namespace SharpRepository.Repository
 
                 // get the full entity, possibly from cache
                 var result = QueryManager.ExecuteGet(
-                    () => GetQuery(context.Id),
+                    () => GetQuery(context.Id, fetchStrategy),
                     context.Id
                     );
 
@@ -1380,7 +1518,7 @@ namespace SharpRepository.Repository
             return true;
         }
 
-        protected virtual ISpecification<T> ByPrimaryKeySpecification(TKey key)
+        protected virtual ISpecification<T> ByPrimaryKeySpecification(TKey key, IFetchStrategy<T> fetchStrategy = null)
         {
             var propInfo = GetPrimaryKeyPropertyInfo();
 
@@ -1393,7 +1531,14 @@ namespace SharpRepository.Repository
                     parameter
                 );
 
-            return new Specification<T>(lambda);
+            var spec = new Specification<T>(lambda);
+
+            if (fetchStrategy != null)
+            {
+                spec.FetchStrategy = fetchStrategy;
+            }
+
+            return spec;
         }
 
         protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()
