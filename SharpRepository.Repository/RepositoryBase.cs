@@ -1130,12 +1130,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessAdd(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1147,7 +1142,13 @@ namespace SharpRepository.Repository
         // used from the Add method above and the Save below for the batch save
         private void ProcessAdd(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
+                return;
+
             AddItem(entity);
+
+            RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
@@ -1189,12 +1190,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessDelete(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1206,7 +1202,13 @@ namespace SharpRepository.Repository
         // used from the Delete method above and the Save below for the batch save
         private void ProcessDelete(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
+                return;
+
             DeleteItem(entity);
+
+            RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
@@ -1265,12 +1267,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessUpdate(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1282,7 +1279,13 @@ namespace SharpRepository.Repository
         // used from the Update method above and the Save below for the batch save
 	    private void ProcessUpdate(T entity, bool batchMode)
 	    {
+            if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
+                return;
+
 		    UpdateItem(entity);
+
+            RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
+
 		    if (batchMode) return;
 
 		    Save();
