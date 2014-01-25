@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 
@@ -63,6 +64,18 @@ namespace SharpRepository.Repository
         /// </summary>
         /// <param name="key">The primary key.</param>
         void Delete(TKey key);
+
+        /// <summary>
+        /// Deletes the specified entities by the primary keys provided.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        void Delete(IEnumerable<TKey> keys);
+
+        /// <summary>
+        /// Deletes the specified entities by the primary keys provided.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        void Delete(params TKey[] keys);
 
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
 

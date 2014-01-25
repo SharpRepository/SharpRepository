@@ -1231,6 +1231,22 @@ namespace SharpRepository.Repository
             }
         }
 
+        public void Delete(IEnumerable<TKey> keys)
+        {
+            foreach (var key in keys)
+            {
+                Delete(key);
+            }
+        }
+
+        public void Delete(params TKey[] keys)
+        {
+            foreach (var key in keys)
+            {
+                Delete(key);
+            }
+        }
+
         public void Delete(TKey key)
         {
             try

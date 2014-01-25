@@ -250,6 +250,16 @@ namespace SharpRepository.Repository
             Repository.Delete(key);
         }
 
+        public void Delete(IEnumerable<TKey> keys)
+        {
+            Repository.Delete(keys);
+        }
+
+        public void Delete(params TKey[] keys)
+        {
+            Repository.Delete(keys);
+        }
+
         public IBatch<T> BeginBatch()
         {
             return Repository.BeginBatch();
