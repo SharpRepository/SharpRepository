@@ -101,5 +101,7 @@ namespace SharpRepository.Repository
         void ClearCache();
 
         string TraceInfo { get; }
+
+        TKey GetPrimaryKey(T entity);
     }
 }

@@ -280,6 +280,11 @@ namespace SharpRepository.Repository
             get { return Repository.TraceInfo; }
         }
 
+        public TKey GetPrimaryKey(T entity)
+        {
+            return Repository.GetPrimaryKey(entity);
+        }
+
         public ICachingStrategy<T, TKey> CachingStrategy
         {
             get { return Repository.CachingStrategy; }

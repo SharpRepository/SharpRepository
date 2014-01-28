@@ -1371,6 +1371,17 @@ namespace SharpRepository.Repository
         }
         public string TraceInfo { get; protected set; }
 
+        public TKey GetPrimaryKey(T entity)
+        {
+            TKey key;
+            if (GetPrimaryKey(entity, out key))
+            {
+                return key;
+            }
+
+            return default(TKey);
+        }
+
         protected virtual bool GetPrimaryKey(T entity, out TKey key) 
         {
             key = default(TKey);
