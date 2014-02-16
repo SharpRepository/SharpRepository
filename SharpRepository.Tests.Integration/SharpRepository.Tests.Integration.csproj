@@ -91,6 +91,7 @@
     <Compile Include="RepositoryRunningTest.cs" />
     <Compile Include="Spikes\AspectSpikes.cs" />
     <Compile Include="Spikes\ConventionSpikes.cs" />
+    <Compile Include="Spikes\EfNullablePartitionKeyCacheSpikes.cs" />
     <Compile Include="Spikes\EfCompoundKeySpikes.cs" />
     <Compile Include="Spikes\EfLazyLoadSpike.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="TestObjects\ContactInt.cs" />
     <Compile Include="TestObjects\Contact.cs" />
     <Compile Include="TestObjects\ConventionTestItems.cs" />
+    <Compile Include="TestObjects\Node.cs" />
     <Compile Include="TestObjects\User.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
