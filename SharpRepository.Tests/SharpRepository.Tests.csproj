@@ -137,6 +137,7 @@
     <Compile Include="Spikes\AzureTableSpikes.cs" />
     <Compile Include="Spikes\BatchSpike.cs" />
     <Compile Include="Spikes\CacheEnabledSpike.cs" />
+    <Compile Include="Spikes\CacheRepositorySpikes.cs" />
     <Compile Include="Spikes\CompoundKeySpikes.cs" />
     <Compile Include="Spikes\AzureBlobSpikes.cs" />
     <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
@@ -172,6 +173,10 @@
     <ProjectReference Include="..\SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj">
       <Project>{ef055b6d-6d7d-4002-91a9-4ded61346457}</Project>
       <Name>SharpRepository.AzureTableRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj">
+      <Project>{42e07863-9017-4b56-9d20-1ea35af1f501}</Project>
+      <Name>SharpRepository.CacheRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj">
       <Project>{06111314-669b-4e35-a0b9-af67fa3f0ffd}</Project>
