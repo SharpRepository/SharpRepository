@@ -15,7 +15,7 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     class CacheRepositorySpikes
     {
-        private IRepository<Contact, int> _repository;
+        private IRepository<TempTestObject, int> _repository;
 
         [SetUp]
         public void Initialize()
@@ -25,7 +25,7 @@ namespace SharpRepository.Tests.Spikes
             sharpRepositoryConfiguration.AddCachingProvider(new InMemoryCachingProviderConfiguration("inmemory"));
             sharpRepositoryConfiguration.AddRepository(new CacheRepositoryConfiguration("textFilter", "TextFilter", "standard", "inmemory"));
 
-            _repository = sharpRepositoryConfiguration.GetInstance<Contact, int>("textFilter");
+            _repository = sharpRepositoryConfiguration.GetInstance<TempTestObject, int>("textFilter");
         }
 
         [TearDown]
@@ -37,15 +37,35 @@ namespace SharpRepository.Tests.Spikes
         [Test]
         public void Add_Multiple_Should_Work()
         {
-            var list = new List<Contact>()
+            var list = new List<TempTestObject>()
                        {
-                           new Contact() {ContactTypeId = 1, Name = "Test 1"},
-                           new Contact() {ContactTypeId = 1, Name = "Test 2"},
-                           new Contact() {ContactTypeId = 1, Name = "Test 3"}
+                           new TempTestObject() { Name = "Test 1"},
+                           new TempTestObject() {Name = "Test 2"},
+                           new TempTestObject() {Name = "Test 3"}
                        };
             _repository.Add(list);
 
             _repository.GetAll().Count().ShouldEqual(3);
         }
+
+        [Test]
+        public void Add_Multiple_Should_Work2()
+        {
+            var list = new List<TempTestObject>()
+                       {
+                           new TempTestObject() {Name = "Test 4"},
+                           new TempTestObject() {Name = "Test 5"}
+                       };
+            _repository.Add(list);
+
+            _repository.GetAll().Count().ShouldEqual(2);
+        }
+    }
+
+    public class TempTestObject
+    {
+        [RepositoryPrimaryKey]
+        public int TestTempKey { get; set; }
+        public string Name { get; set; }
     }
 }
