@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="AzureBlobRepository.cs" />
     <Compile Include="AzureBlobRepositoryBase.cs" />
+    <Compile Include="AzureBlobConfigRepositoryFactory.cs" />
+    <Compile Include="AzureBlobRepositoryConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
