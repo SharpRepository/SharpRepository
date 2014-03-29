@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +10,7 @@ using SharpRepository.Repository.Helpers;
 
 namespace SharpRepository.EfRepository
 {
-    public class EfRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
+    public class EfRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class
     {
         protected IDbSet<T> DbSet { get; private set; }
         protected DbContext Context { get; private set; }
