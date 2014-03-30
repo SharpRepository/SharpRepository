@@ -19,6 +19,7 @@ namespace SharpRepository.AzureBlobRepository
         {
             ConnectionString = connectionString;
             Container = container;
+            CreateIfNotExists = createIfNotExists;
             CachingStrategy = cachingStrategy;
             CachingProvider = cachingProvider;
             Factory = typeof(AzureBlobConfigRepositoryFactory);
@@ -32,6 +33,11 @@ namespace SharpRepository.AzureBlobRepository
         public string Container
         {
             set { Attributes["container"] = String.IsNullOrEmpty(value) ? null : value; }
+        }
+
+        public bool CreateIfNotExists
+        {
+            set { Attributes["createIfNotExists"] = value.ToString(); }
         }
     }
 }

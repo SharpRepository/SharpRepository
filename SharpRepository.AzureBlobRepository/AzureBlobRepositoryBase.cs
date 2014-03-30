@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using SharpRepository.Repository;
@@ -45,9 +46,23 @@ namespace SharpRepository.AzureBlobRepository
 
         protected override T GetQuery(TKey key)
         {
-            var blob = BlobContainer.GetBlockBlobReference(key.ToString());
+            try
+            {
+                var blob = BlobContainer.GetBlockBlobReference(key.ToString());
 
-            return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadText());
+                return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadText());
+            }
+            catch (StorageException storageException)
+            {
+                // check for 404 and return null in that case only, let others bubble up
+                if (storageException.RequestInformation.HttpStatusCode == 404)
+                {
+                    return null;
+                }
+
+                throw;
+            }
+            
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)

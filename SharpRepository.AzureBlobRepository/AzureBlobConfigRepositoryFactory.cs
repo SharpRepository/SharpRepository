@@ -18,7 +18,10 @@ namespace SharpRepository.AzureBlobRepository
 
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
-            return new AzureBlobRepository<T, TKey>(RepositoryConfiguration["connectionString"], RepositoryConfiguration["container"]);
+            var createIfNotExists = false;
+            Boolean.TryParse(RepositoryConfiguration["createIfNotExists"], out createIfNotExists);
+
+            return new AzureBlobRepository<T, TKey>(RepositoryConfiguration["connectionString"], RepositoryConfiguration["container"], createIfNotExists);
         }
 
         public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
