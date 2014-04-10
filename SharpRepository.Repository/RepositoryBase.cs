@@ -262,6 +262,36 @@ namespace SharpRepository.Repository
             }
         }
 
+        public virtual IEnumerable<T> GetMany(params TKey[] keys)
+        {
+            return GetMany(keys.ToList());
+        }
+
+        public virtual IEnumerable<T> GetMany(IEnumerable<TKey> keys)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys));
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
+        {
+            return GetMany(keys.ToList(), selector);
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys), selector);
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys)
+        {
+            return GetManyAsDictionary(keys.ToList());
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
+        {
+            return  GetMany(keys).ToDictionary(GetPrimaryKey);
+        }
+
         public bool Exists(TKey key)
         {
             T entity;
@@ -1424,6 +1454,27 @@ namespace SharpRepository.Repository
                 );
 
             return new Specification<T>(lambda);
+        }
+
+        protected virtual ISpecification<T> ByMultipleKeysSpecification(IEnumerable<TKey> keys)
+        {
+            var propInfo = GetPrimaryKeyPropertyInfo();
+            if (propInfo == null || keys == null)
+                return null;
+
+            var parameter = Expression.Parameter(typeof(T), "x");
+
+            return keys.Select(key =>
+                    Expression.Lambda<Func<T, bool>>(
+                        Expression.Equal(
+                            Expression.PropertyOrField(parameter, propInfo.Name),
+                            Expression.Constant(key)
+                        ), parameter
+                    )
+                )
+                .Aggregate<Expression<Func<T, bool>>, ISpecification<T>>(null,
+                    (current, lambda) => current == null ? new Specification<T>(lambda) : current.Or(lambda)
+                );
         }
 
         protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()

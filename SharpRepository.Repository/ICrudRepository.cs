@@ -36,6 +36,28 @@ namespace SharpRepository.Repository
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
 
         /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        IEnumerable<T> GetMany(params TKey[] keys);
+
+        /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        IEnumerable<T> GetMany(IEnumerable<TKey> keys);
+
+        IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys);
+
+        IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector);
+
+        IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys);
+        
+        IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys);
+
+        /// <summary>
         /// Returns true if the specified entity of type <typeparamref name="T"/> from the repository by the primary key exists
         /// </summary>
         /// <param name="key">The primary key.</param>
