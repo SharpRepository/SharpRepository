@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -173,5 +174,24 @@ namespace SharpRepository.Repository.Traits
         /// <param name="queryOptions">The query options to apply like paging or sorting.</param>
         /// <returns></returns>
         IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+
+#if !NET40
+        Task<T> FindAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null);
+
+        Task<TResult> FindAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+
+        Task<T> FindAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null);
+
+        Task<TResult> FindAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null);
+
+        Task<IEnumerable<TResult>> FindAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+
+        Task<IEnumerable<T>> FindAllAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null);
+
+        Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null);
+#endif
+
     }
 }

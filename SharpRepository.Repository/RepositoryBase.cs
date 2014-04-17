@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Aspects;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -1523,5 +1524,107 @@ namespace SharpRepository.Repository
 //        {
 //            return GetEnumerator();
 //        }
+
+#if !NET40
+        public async Task<T> GetAsync(TKey key)
+        {
+            return await Task.Run(() => Get(key)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<TResult> GetAsync<TResult>(TKey key, Expression<Func<T, TResult>> selector)
+        {
+            return await Task.Run(() => Get(key, selector)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await Task.Run(() => GetAll()).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(IQueryOptions<T> queryOptions)
+        {
+            return await Task.Run(() => GetAll(queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => GetAll(selector, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<TResult> FindAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(predicate, selector, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<T> FindAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<TResult> FindAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => Find(criteria, selector, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(predicate, selector, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<T>> FindAllAsync(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task<IEnumerable<TResult>> FindAllAsync<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        {
+            return await Task.Run(() => FindAll(criteria, selector, queryOptions)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task AddAsync(T entity)
+        {
+            await Task.Run(() => Add(entity)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task AddAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Add(entities)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            await Task.Run(() => Update(entity)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task UpdateAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Update(entities)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task DeleteAsync(TKey key)
+        {
+            await Task.Run(() => Delete(key)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            await Task.Run(() => Delete(entity)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+
+        public async Task DeleteAsync(IEnumerable<T> entities)
+        {
+            await Task.Run(() => Delete(entities)).ConfigureAwait(continueOnCapturedContext: false);
+        }
+#endif
     }
 }

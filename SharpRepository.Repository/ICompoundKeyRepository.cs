@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.Repository
@@ -32,6 +33,14 @@ namespace SharpRepository.Repository
         void Delete(params object[] keys);
 
         ICompoundKeyCachingStrategy<T> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(params object[] keys);
+
+        Task<TResult> GetAsync<TResult>(Expression<Func<T, TResult>> selector, params object[] keys);
+
+        Task DeleteAsync(params object[] keys);
+#endif
     }
 
     /// <summary>
@@ -73,6 +82,14 @@ namespace SharpRepository.Repository
         void Delete(TKey key, TKey2 key2);
 
         ICompoundKeyCachingStrategy<T, TKey, TKey2> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector);
+
+        Task DeleteAsync(TKey key, TKey2 key2);
+#endif
     }
 
     /// <summary>
@@ -118,5 +135,13 @@ namespace SharpRepository.Repository
         void Delete(TKey key, TKey2 key2, TKey3 key3);
 
         ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> CachingStrategy { get; set; }
+
+#if !NET40
+        Task<T> GetAsync(TKey key, TKey2 key2, TKey3 key3);
+
+        Task<TResult> GetAsync<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector);
+
+        Task DeleteAsync(TKey key, TKey2 key2, TKey3 key3);
+#endif
     }
 }

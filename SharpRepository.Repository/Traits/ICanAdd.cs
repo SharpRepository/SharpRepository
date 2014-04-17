@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SharpRepository.Repository.Traits
 {
@@ -22,5 +23,11 @@ namespace SharpRepository.Repository.Traits
         /// </summary>
         /// <param name="entities">The entities.</param>
         void Add(IEnumerable<T> entities);
+
+#if !NET40
+        Task AddAsync(T entity);
+
+        Task AddAsync(IEnumerable<T> entities);
+#endif
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Specifications;
 
@@ -40,5 +41,13 @@ namespace SharpRepository.Repository.Traits
         /// </summary>
         /// <param name="criteria">Query</param>
         void Delete(ISpecification<T> criteria);
+
+#if !NET40
+        Task DeleteAsync(TKey key);
+        
+        Task DeleteAsync(T entity);
+
+        Task DeleteAsync(IEnumerable<T> entities);
+#endif
     }
 }
