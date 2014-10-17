@@ -30,7 +30,7 @@ namespace SharpRepository.Caching.Redis
 
         public int Port
         {
-            set { Attributes["post"] = value.ToString(); }
+            set { Attributes["port"] = value.ToString(); }
         }
 
         public string Password
