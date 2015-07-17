@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using SharpRepository.Repository;
@@ -30,13 +31,12 @@ namespace SharpRepository.AzureBlobRepository
 
             CreateIfNotExists = createIfNotExists;
             BlobClient = storageAccount.CreateCloudBlobClient();
-            SetContainer(containerName);
+            SetContainer();
         }
 
-        protected void SetContainer(string containerName)
+        protected void SetContainer()
         {
-            ContainerName = containerName;
-            BlobContainer = BlobClient.GetContainerReference(containerName);
+            BlobContainer = BlobClient.GetContainerReference(ContainerName);
 
             if (CreateIfNotExists)
             {
@@ -46,9 +46,23 @@ namespace SharpRepository.AzureBlobRepository
 
         protected override T GetQuery(TKey key)
         {
-            var blob = BlobContainer.GetBlockBlobReference(key.ToString());
+            try
+            {
+                var blob = BlobContainer.GetBlockBlobReference(key.ToString());
 
-            return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadText());
+                return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadText());
+            }
+            catch (StorageException storageException)
+            {
+                // check for 404 and return null in that case only, let others bubble up
+                if (storageException.RequestInformation.HttpStatusCode == 404)
+                {
+                    return null;
+                }
+
+                throw;
+            }
+            
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
@@ -66,8 +80,7 @@ namespace SharpRepository.AzureBlobRepository
 
         protected override void AddItem(T entity)
         {
-            var blob = GetBlobReference(entity);
-            blob.UploadText(JsonConvert.SerializeObject(entity));
+            AddOrUpdateItem(entity);
         }
 
         protected override void DeleteItem(T entity)
@@ -77,6 +90,11 @@ namespace SharpRepository.AzureBlobRepository
         }
 
         protected override void UpdateItem(T entity)
+        {
+            AddOrUpdateItem(entity);
+        }
+
+        private void AddOrUpdateItem(T entity)
         {
             var blob = GetBlobReference(entity);
             blob.UploadText(JsonConvert.SerializeObject(entity));

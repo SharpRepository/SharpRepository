@@ -100,10 +100,10 @@ namespace SharpRepository.Repository
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
-
-                // make sure we keep the curent caching enabled status
-                var cachingEnabled = QueryManager == null || QueryManager.CacheEnabled;
-                QueryManager = new QueryManager<T, TKey>(_cachingStrategy) {CacheEnabled = cachingEnabled};
+				QueryManager = new QueryManager<T, TKey>(_cachingStrategy)
+				               {
+					               CacheEnabled = !(_cachingStrategy is NoCachingStrategy<T, TKey>)
+				               };
             }
         } 
 
@@ -260,6 +260,36 @@ namespace SharpRepository.Repository
                 Error(ex);
                 throw;
             }
+        }
+
+        public virtual IEnumerable<T> GetMany(params TKey[] keys)
+        {
+            return GetMany(keys.ToList());
+        }
+
+        public virtual IEnumerable<T> GetMany(IEnumerable<TKey> keys)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys));
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
+        {
+            return GetMany(keys.ToList(), selector);
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys), selector);
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys)
+        {
+            return GetManyAsDictionary(keys.ToList());
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
+        {
+            return  GetMany(keys).ToDictionary(GetPrimaryKey);
         }
 
         public bool Exists(TKey key)
@@ -1130,12 +1160,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessAdd(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1147,15 +1172,26 @@ namespace SharpRepository.Repository
         // used from the Add method above and the Save below for the batch save
         private void ProcessAdd(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
+                return;
+
             AddItem(entity);
+
+            RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemAdded(key, entity);
+	        NotifyQueryManagerOfAddedEntity(entity);
         }
+
+	    private void NotifyQueryManagerOfAddedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemAdded(key, entity);
+	    }
 
         public void Add(IEnumerable<T> entities)
         {
@@ -1184,12 +1220,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessDelete(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1201,21 +1232,48 @@ namespace SharpRepository.Repository
         // used from the Delete method above and the Save below for the batch save
         private void ProcessDelete(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
+                return;
+
             DeleteItem(entity);
+
+            RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemDeleted(key, entity);
+	        NotifyQueryManagerOfDeletedEntity(entity);
         }
+
+		private void NotifyQueryManagerOfDeletedEntity(T entity)
+		{
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemDeleted(key, entity);
+		}
 
         public void Delete(IEnumerable<T> entities)
         {
             foreach (var entity in entities)
             {
                 Delete(entity);
+            }
+        }
+
+        public void Delete(IEnumerable<TKey> keys)
+        {
+            foreach (var key in keys)
+            {
+                Delete(key);
+            }
+        }
+
+        public void Delete(params TKey[] keys)
+        {
+            foreach (var key in keys)
+            {
+                Delete(key);
             }
         }
 
@@ -1255,12 +1313,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessUpdate(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1270,17 +1323,28 @@ namespace SharpRepository.Repository
         }
 
         // used from the Update method above and the Save below for the batch save
-        private void ProcessUpdate(T entity, bool batchMode)
-        {
-            UpdateItem(entity);
-            if (batchMode) return;
+	    private void ProcessUpdate(T entity, bool batchMode)
+	    {
+            if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
+                return;
 
-            Save();
+		    UpdateItem(entity);
 
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
-                QueryManager.OnItemUpdated(key, entity);
-        }
+            RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
+
+		    if (batchMode) return;
+
+		    Save();
+
+		    NotifyQueryManagerOfUpdatedEntity(entity);
+	    }
+
+	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
+	    {
+			TKey key;
+			if (GetPrimaryKey(entity, out key))
+				QueryManager.OnItemUpdated(key, entity);
+	    }
 
         public void Update(IEnumerable<T> entities)
         {
@@ -1337,6 +1401,17 @@ namespace SharpRepository.Repository
         }
         public string TraceInfo { get; protected set; }
 
+        public TKey GetPrimaryKey(T entity)
+        {
+            TKey key;
+            if (GetPrimaryKey(entity, out key))
+            {
+                return key;
+            }
+
+            return default(TKey);
+        }
+
         protected virtual bool GetPrimaryKey(T entity, out TKey key) 
         {
             key = default(TKey);
@@ -1379,6 +1454,27 @@ namespace SharpRepository.Repository
                 );
 
             return new Specification<T>(lambda);
+        }
+
+        protected virtual ISpecification<T> ByMultipleKeysSpecification(IEnumerable<TKey> keys)
+        {
+            var propInfo = GetPrimaryKeyPropertyInfo();
+            if (propInfo == null || keys == null)
+                return null;
+
+            var parameter = Expression.Parameter(typeof(T), "x");
+
+            return keys.Select(key =>
+                    Expression.Lambda<Func<T, bool>>(
+                        Expression.Equal(
+                            Expression.PropertyOrField(parameter, propInfo.Name),
+                            Expression.Constant(key)
+                        ), parameter
+                    )
+                )
+                .Aggregate<Expression<Func<T, bool>>, ISpecification<T>>(null,
+                    (current, lambda) => current == null ? new Specification<T>(lambda) : current.Or(lambda)
+                );
         }
 
         protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()

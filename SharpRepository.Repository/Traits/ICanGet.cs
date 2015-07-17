@@ -13,10 +13,17 @@ namespace SharpRepository.Repository.Traits
     /// </summary>
     /// <typeparam name="T">Generic repository entity type</typeparam>
     /// <typeparam name="TKey">Generic repository entity key type</typeparam>
-    public interface ICanGet<T, in TKey>
+    public interface ICanGet<T, TKey>
     {
         T Get(TKey key);
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+
+        IEnumerable<T> GetMany(params TKey[] keys);
+        IEnumerable<T> GetMany(IEnumerable<TKey> keys);
+        IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys);
+        IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector);
+        IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys);
+        IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys);
 
         bool Exists(TKey key);
         bool TryGet(TKey key, out T entity);

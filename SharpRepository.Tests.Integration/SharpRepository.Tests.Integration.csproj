@@ -146,6 +146,7 @@
     <Compile Include="Spikes\AspectSpikes.cs" />
     <Compile Include="Spikes\ConventionSpikes.cs" />
     <Compile Include="Spikes\EfCompoundKeySpikes.cs" />
+    <Compile Include="Spikes\EfLazyLoadSpike.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
     <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />

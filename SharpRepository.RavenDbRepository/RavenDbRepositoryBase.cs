@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Raven.Client;
@@ -69,6 +70,36 @@ namespace SharpRepository.RavenDbRepository
                 return Session.Load<T>(key as string);
 
             return base.GetQuery(key);
+        }
+
+        public override IEnumerable<T> GetMany(params TKey[] keys)
+        {
+            return GetMany(keys.ToList());
+        }
+
+        public override IEnumerable<T> GetMany(IEnumerable<TKey> keys)
+        {
+            return keys.Select(Get);
+        }
+
+        public override IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
+        {
+            return GetMany(keys.ToList(), selector);
+        }
+
+        public override IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector)
+        {
+            return keys.Select(x => Get(x, selector));
+        }
+
+        public override IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys)
+        {
+            return GetManyAsDictionary(keys.ToList());
+        }
+
+        public override IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
+        {
+            return GetMany(keys).ToDictionary(GetPrimaryKey);
         }
 
         public override TResult Min<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
