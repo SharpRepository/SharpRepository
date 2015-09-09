@@ -23,5 +23,9 @@ namespace SharpRepository.Repository.Caching
         {
             return new NoCachingStrategy<T, TKey, TKey2, TKey3>();
         }
+        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>()
+        {
+            return new NoCompoundKeyCachingStrategy<T>();
+        }
     }
 }

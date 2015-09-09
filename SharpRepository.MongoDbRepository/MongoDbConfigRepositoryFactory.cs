@@ -37,5 +37,11 @@ namespace SharpRepository.MongoDbRepository
         {
             throw new NotImplementedException();
         }
+
+        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

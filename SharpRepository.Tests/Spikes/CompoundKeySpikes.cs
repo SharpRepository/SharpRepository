@@ -46,8 +46,7 @@ namespace SharpRepository.Tests.Spikes
 
             repository.FindAll(x => x.SomeId == 1).Count().ShouldEqual(3);
         }
-
-
+        
         [Test]
         public void TripleCompoundKeyRepository_Should_Work()
         {
@@ -85,7 +84,5 @@ namespace SharpRepository.Tests.Spikes
 
             repository.FindAll(x => x.LastId == 11).Count().ShouldEqual(3);
         }
-
-
     }
 }

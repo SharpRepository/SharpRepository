@@ -43,5 +43,10 @@ namespace SharpRepository.XmlRepository
         {
             throw new NotImplementedException();
         }
+
+        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

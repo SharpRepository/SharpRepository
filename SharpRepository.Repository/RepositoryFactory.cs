@@ -138,7 +138,7 @@ namespace SharpRepository.Repository
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
 
-        // compound key triple key methods
+        // triple compound key methods
 
         public static ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(string repositoryName = null) where T : class, new()
         {
@@ -149,8 +149,7 @@ namespace SharpRepository.Repository
         {
             return GetInstance(entityType, keyType, key2Type, key3Type, DefaultConfigSection, repositoryName);
         }
-
-
+        
         public static ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(string configSection, string repositoryName) where T : class, new()
         {
             return GetInstance<T, TKey, TKey2, TKey3>(GetConfiguration(configSection), repositoryName);
@@ -184,6 +183,55 @@ namespace SharpRepository.Repository
             var genericMethod = method.MakeGenericMethod(entityType, keyType, key2Type, key3Type);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
+
+        /// compound key no generics methods
+
+        public static ICompoundKeyRepository<T> GetCompoundKeyInstance<T>(string repositoryName = null) where T : class, new()
+        {
+            return GetCompoundKeyInstance<T>(DefaultConfigSection, repositoryName);
+        }
+
+        public static object GetCompoundKeyInstance(Type entityType, string repositoryName = null)
+        {
+            return GetCompoundKeyInstance(entityType, DefaultConfigSection, repositoryName);
+        }
+
+
+        public static ICompoundKeyRepository<T> GetCompoundKeyInstance<T>(string configSection, string repositoryName) where T : class, new()
+        {
+            return GetCompoundKeyInstance<T>(GetConfiguration(configSection), repositoryName);
+        }
+
+        public static object GetCompoundKeyInstance(Type entityType, string configSection, string repositoryName)
+        {
+            return GetCompoundKeyInstance(entityType, GetConfiguration(configSection), repositoryName);
+        }
+
+        public static ICompoundKeyRepository<T> GetCompoundKeyInstance<T>(ISharpRepositoryConfiguration configuration, string repositoryName = null) where T : class, new()
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(typeof(T));
+            }
+
+            return configuration.GetCompoundKeyInstance<T>(repositoryName);
+        }
+
+        public static object GetCompoundKeyInstance(Type entityType, ISharpRepositoryConfiguration configuration, string repositoryName = null)
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(entityType);
+            }
+
+            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetCompoundKeyInstance");
+            var genericMethod = method.MakeGenericMethod(entityType);
+            return genericMethod.Invoke(configuration, new object[] { repositoryName });
+        }
+
+        //helper methods for configuration
 
         private static SharpRepositorySection GetConfiguration(string sectionName)
         {

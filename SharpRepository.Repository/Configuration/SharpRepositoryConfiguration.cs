@@ -157,5 +157,9 @@ namespace SharpRepository.Repository.Configuration
         {
             return ConfigurationHelper.GetInstance<T, TKey, TKey2, TKey3>(this, repositoryName);
         }
+        public ICompoundKeyRepository<T> GetCompoundKeyInstance<T>(string repositoryName = null) where T : class, new()
+        {
+            return ConfigurationHelper.GetCompoundKeyInstance<T>(this, repositoryName);
+        }
     }
 }
