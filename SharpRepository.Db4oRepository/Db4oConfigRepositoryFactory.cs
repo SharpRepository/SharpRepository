@@ -32,5 +32,10 @@ namespace SharpRepository.Db4oRepository
         {
             throw new NotImplementedException();
         }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -103,7 +103,7 @@ namespace SharpRepository.Repository
         {
             return GetInstance(entityType, keyType, key2Type, DefaultConfigSection, repositoryName);
         }
-
+       
         public static ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(string configSection, string repositoryName) where T : class, new()
         {
             return GetInstance<T, TKey, TKey2>(GetConfiguration(configSection), repositoryName);
@@ -135,6 +135,53 @@ namespace SharpRepository.Repository
 
             var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "ICompoundKeyRepository`3");
             var genericMethod = method.MakeGenericMethod(entityType, keyType, key2Type);
+            return genericMethod.Invoke(configuration, new object[] { repositoryName });
+        }
+
+        // compound key triple key methods
+
+        public static ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(string repositoryName = null) where T : class, new()
+        {
+            return GetInstance<T, TKey, TKey2, TKey3>(DefaultConfigSection, repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type, Type key3Type, string repositoryName = null)
+        {
+            return GetInstance(entityType, keyType, key2Type, key3Type, DefaultConfigSection, repositoryName);
+        }
+
+
+        public static ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(string configSection, string repositoryName) where T : class, new()
+        {
+            return GetInstance<T, TKey, TKey2, TKey3>(GetConfiguration(configSection), repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type, Type key3Type, string configSection, string repositoryName)
+        {
+            return GetInstance(entityType, keyType, key2Type, key3Type, GetConfiguration(configSection), repositoryName);
+        }
+
+        public static ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(ISharpRepositoryConfiguration configuration, string repositoryName = null) where T : class, new()
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(typeof(T));
+            }
+
+            return configuration.GetInstance<T, TKey, TKey2, TKey3>(repositoryName);
+        }
+
+        public static object GetInstance(Type entityType, Type keyType, Type key2Type, Type key3Type, ISharpRepositoryConfiguration configuration, string repositoryName = null)
+        {
+            if (String.IsNullOrEmpty(repositoryName))
+            {
+                // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
+                repositoryName = GetAttributeRepositoryName(entityType);
+            }
+
+            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "ICompoundKeyRepository`4");
+            var genericMethod = method.MakeGenericMethod(entityType, keyType, key2Type, key3Type);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
 
