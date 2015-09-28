@@ -228,7 +228,9 @@
       <Name>SharpRepository.XmlRepository</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Data\Db4o\README.txt" />
     <Content Include="Data\Ef\README.txt" />

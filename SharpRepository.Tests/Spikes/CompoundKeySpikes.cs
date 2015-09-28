@@ -46,5 +46,43 @@ namespace SharpRepository.Tests.Spikes
 
             repository.FindAll(x => x.SomeId == 1).Count().ShouldEqual(3);
         }
+        
+        [Test]
+        public void TripleCompoundKeyRepository_Should_Work()
+        {
+            var repository = new InMemoryRepository<TripleCompoundKeyItemInts, int, int, int>();
+
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
+
+            repository.Get(1, 1, 10).Title.ShouldEqual("1-1-10");
+            repository.Get(2, 1, 11).Title.ShouldEqual("2-1-11");
+            repository.Get(1, 2, 11).Title.ShouldEqual("1-2-11");
+
+            repository.FindAll(x => x.LastId == 11).Count().ShouldEqual(3);
+        }
+
+        [Test]
+        public void TripleCompoundKeyRepositoryNoGenerics_Should_Work()
+        {
+            var repository = new InMemoryCompoundKeyRepository<TripleCompoundKeyItemInts>();
+
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
+            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
+
+            repository.Get(1, 1, 10).Title.ShouldEqual("1-1-10");
+            repository.Get(2, 1, 11).Title.ShouldEqual("2-1-11");
+            repository.Get(1, 2, 11).Title.ShouldEqual("1-2-11");
+
+            repository.FindAll(x => x.LastId == 11).Count().ShouldEqual(3);
+        }
     }
 }
