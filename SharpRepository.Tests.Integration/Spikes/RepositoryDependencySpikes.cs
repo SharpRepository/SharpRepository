@@ -11,12 +11,16 @@ using SharpRepository.Tests.Integration.TestObjects;
 using Should;
 using StructureMap;
 using StructureMap.Configuration.DSL;
+using StructureMap.Web;
+using StructureMap.Graph;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
     [TestFixture]
     public class RepositoryDependencySpikes
     {
+        protected Container container;
+
         [SetUp]
         public void Setup()
         {
@@ -24,13 +28,13 @@ namespace SharpRepository.Tests.Integration.Spikes
             Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
 
             // structure map
-            ObjectFactory.Initialize(x =>
+            container = new Container(x =>
             {
                 x.AddRegistry(new StructureMapRegistry(dbPath));
                 x.ForRepositoriesUseSharpRepository();
             });
 
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapDependencyResolver(ObjectFactory.Container));
+            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapDependencyResolver(container));
         }
 
         [Test]
@@ -76,13 +80,13 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Ioc_For_IRepository_T_Should_Not_Error()
         {
-            var repos = ObjectFactory.GetInstance<IRepository<ContactType>>();
+            var repos = container.GetInstance<IRepository<ContactType>>();
         }
 
         [Test]
         public void Ioc_For_IRepository_T_TKey_Should_Not_Error()
         {
-            var repos = ObjectFactory.GetInstance<IRepository<ContactType, int>>();
+            var repos = container.GetInstance<IRepository<ContactType, int>>();
         }
     }
 

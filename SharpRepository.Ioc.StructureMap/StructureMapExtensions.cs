@@ -7,14 +7,14 @@ namespace SharpRepository.Ioc.StructureMap
 {
     public static class StructureMapExtensions
     {
-        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this IInitializationExpression initialization, string repositoryName = null)
+        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this ConfigurationExpression initialization, string repositoryName = null)
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
             initialization.For(typeof(IRepository<>))
                                  .Use(context =>
                                  {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+                                     var genericArgs = context.BuildUp.Current.RequestedType.GetGenericArguments();
 
                                      return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
                                  }
@@ -39,7 +39,7 @@ namespace SharpRepository.Ioc.StructureMap
                 );
         }
 
-        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this IInitializationExpression initialization, ISharpRepositoryConfiguration configuration)
+        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this ConfigurationExpression initialization, ISharpRepositoryConfiguration configuration)
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
