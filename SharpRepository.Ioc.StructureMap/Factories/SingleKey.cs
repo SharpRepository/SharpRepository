@@ -52,7 +52,7 @@ namespace SharpRepository.Ioc.StructureMap.Factories
             }
             else {
                 var ctor = instanceType.GetConstructor(new[] { typeof(string) });
-                return ctor.Invoke(new object[] { instanceType, this.repositoryName }) as Instance;
+                return ctor.Invoke(new object[] { this.repositoryName }) as Instance;
             }
         }
     }

@@ -31,7 +31,7 @@ namespace SharpRepository.Ioc.StructureMap.Factories
         {
             get
             {
-                return typeof(IRepository<,>);
+                return typeof(IRepository<>);
             }
         }
 
@@ -42,13 +42,13 @@ namespace SharpRepository.Ioc.StructureMap.Factories
 
         public override Instance CloseType(Type[] types)
         {
-            var instanceType = typeof(RepositoryInstance<,>).MakeGenericType(types);
+            var instanceType = typeof(RepositoryInstance<>).MakeGenericType(types);
             
             if (this.configuration != null) { 
                 return Activator.CreateInstance(instanceType,this.configuration, this.repositoryName) as Instance;
             } else {
                 var ctor = instanceType.GetConstructor(new[] { typeof(string) });
-                return ctor.Invoke(new object[] { instanceType, this.repositoryName }) as Instance;
+                return ctor.Invoke(new object[] { this.repositoryName }) as Instance;
             }
         }
     }
