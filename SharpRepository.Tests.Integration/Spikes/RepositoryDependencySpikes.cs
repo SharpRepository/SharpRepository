@@ -78,15 +78,38 @@ namespace SharpRepository.Tests.Integration.Spikes
         }
 
         [Test]
-        public void Ioc_For_IRepository_T_Should_Not_Error()
+        public void Ioc_For_IRepository_T_Should_Be_EfRepository_T()
         {
             var repos = container.GetInstance<IRepository<ContactType>>();
+            repos.ShouldBeType<EfRepository<ContactType>>();
         }
 
         [Test]
-        public void Ioc_For_IRepository_T_TKey_Should_Not_Error()
+        public void Ioc_For_IRepository_T_TKey_Should_Be_EfRepository_T_TKey()
         {
             var repos = container.GetInstance<IRepository<ContactType, int>>();
+            repos.ShouldBeType<EfRepository<ContactType, int>>();
+        }
+
+        [Test]
+        public void Ioc_For_ICompoundKeyRepository_T_TKey_TKey2_Should_Be_EfRepository_T_TKey_TKey2()
+        {
+            var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string>>();
+            repos.ShouldBeType<EfRepository<ContactType, int, string>>();
+        }
+
+        [Test]
+        public void Ioc_For_ICompoundRepository_T_TKey_TKey2_TKey3_Should_Be_EfRepository_T_TKey_TKey2_TKey3()
+        {
+            var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string, string>>();
+            repos.ShouldBeType<EfRepository<ContactType, int,string,string>>();
+        }
+
+        [Test]
+        public void Ioc_For_ICompoundRepository_T_Should_Be_EfCompoundRepository_T()
+        {
+            var repos = container.GetInstance<ICompoundKeyRepository<ContactType>>();
+            repos.ShouldBeType<EfCompoundKeyRepository<ContactType>>();
         }
     }
 
