@@ -44,8 +44,9 @@ namespace SharpRepository.Ioc.StructureMap.Factories
         {
             var instanceType = typeof(RepositoryCompoundKeyInstance<>).MakeGenericType(types);
             
-            if (this.configuration != null) { 
-                return Activator.CreateInstance(instanceType,this.configuration, this.repositoryName) as Instance;
+            if (this.configuration != null) {
+                var ctor = instanceType.GetConstructor(new[] { typeof(ISharpRepositoryConfiguration) });
+                return ctor.Invoke(new object[] { this.configuration }) as Instance;
             } else {
                 var ctor = instanceType.GetConstructor(new[] { typeof(string) });
                 return ctor.Invoke(new object[] { this.repositoryName }) as Instance;

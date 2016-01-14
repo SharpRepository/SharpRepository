@@ -34,7 +34,7 @@ namespace SharpRepository.Tests.Integration.Spikes
                 x.ForRepositoriesUseSharpRepository();
             });
 
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapDependencyResolver(container));
+            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
         }
 
         [Test]

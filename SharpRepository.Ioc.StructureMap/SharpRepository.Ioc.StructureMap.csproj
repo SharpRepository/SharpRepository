@@ -53,8 +53,8 @@
     <Compile Include="Factories\SingleKey.cs" />
     <Compile Include="Factories\NoKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StructureMapDependencyResolver.cs" />
     <Compile Include="StructureMapExtensions.cs" />
+    <Compile Include="StructureMapRepositoryDependencyResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">

@@ -4,10 +4,10 @@ using StructureMap;
 
 namespace SharpRepository.Ioc.StructureMap
 {
-    public class StructureMapDependencyResolver : BaseRepositoryDependencyResolver
+    public class StructureMapRepositoryDependencyResolver : BaseRepositoryDependencyResolver
     {
         private readonly IContainer _container;
-        public StructureMapDependencyResolver(IContainer container)
+        public StructureMapRepositoryDependencyResolver(IContainer container)
         {
             _container = container;
         }
