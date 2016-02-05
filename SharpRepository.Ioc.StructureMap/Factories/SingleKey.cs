@@ -33,7 +33,7 @@ namespace SharpRepository.Ioc.StructureMap.Factories
         {
             get
             {
-                return typeof(IRepository<>);
+                return typeof(IRepository<,>);
             }
         }
 
