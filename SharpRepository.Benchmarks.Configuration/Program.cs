@@ -9,6 +9,8 @@ using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using StructureMap;
+using StructureMap.Graph;
+using SharpRepository.Ioc.StructureMap;
 
 namespace SharpRepository.Benchmarks.Configuration
 {
@@ -21,51 +23,46 @@ namespace SharpRepository.Benchmarks.Configuration
 
     class Program
     {
-        static Program()
-        {
-            // This loads the StructureMap registry
-            Bootstrapper.Run();
-        }
-
         private const int Max = 250000;
         static void Main(string[] args)
         {
+            var benchmarks = new Benchmarks();
             var tests = new List<BenchmarkItem>()
                             {
                                 new BenchmarkItem()
                                     {
                                         Title = "Direct Creation: [new InMemoryRepository()]",
-                                        Test = DirectCreation,
+                                        Test = Benchmarks.DirectCreation,
                                         Order = 1
                                     },
                                 new BenchmarkItem()
                                     {
                                         Title = "Custom repo hardcoded: [UserRepository : InMemoryRepository<User,int>]",
-                                        Test = CustomRepositoryHardCoded,
+                                        Test = Benchmarks.CustomRepositoryHardCoded,
                                         Order = 2
                                     },
                                 new BenchmarkItem()
                                     {
                                         Title = "From config file: [RepositoryFactory.GetInstance<User, int>()]",
-                                        Test = CreateFromConfigFile,
+                                        Test = Benchmarks.CreateFromConfigFile,
                                         Order = 3
                                     },
                                 new BenchmarkItem()
                                     {
                                         Title = "From config obj: [RepositoryFactory.GetInstance<User, int>(config)]",
-                                        Test = CreateFromConfigObject,
+                                        Test = Benchmarks.CreateFromConfigObject,
                                         Order = 4
                                     },
                                 new BenchmarkItem()
                                     {
                                         Title = "Custom repo config: [UserRepository : ConfigurationBasedRepository<User, int>]",
-                                        Test = CustomRepositoryFromConfig,
+                                        Test = Benchmarks.CustomRepositoryFromConfig,
                                         Order = 5
                                     },
                                 new BenchmarkItem()
                                     {
-                                        Title = "StructureMap w/ config: [ObjectFactory.GetInstance<IRepository<User, int>>()]",
-                                        Test = DirectFromStructureMap,
+                                        Title = "StructureMap w/ config: [container.GetInstance<IRepository<User, int>>()]",
+                                        Test = benchmarks.DirectFromStructureMap,
                                         Order = 6
                                     }
                             };
@@ -99,43 +96,62 @@ namespace SharpRepository.Benchmarks.Configuration
             Console.WriteLine("\nDone: press enter to quit");
             Console.Read();
         }
+    }
+
+    public class Benchmarks
+    {
+        public Container container { get; set; }
+
+        public Benchmarks()
+        {
+            container = new Container(x =>
+            {
+                x.Scan(scan =>
+                {
+                    scan.TheCallingAssembly();
+                    scan.WithDefaultConventions();
+                });
+
+                x.ForRepositoriesUseSharpRepository();
+            });
+        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void DirectCreation()
+        public static void DirectCreation()
         {
             new InMemoryRepository<User, int>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void CreateFromConfigFile()
+        public static void CreateFromConfigFile()
         {
             RepositoryFactory.GetInstance<User, int>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void CustomRepositoryFromConfig()
+        public static void CustomRepositoryFromConfig()
         {
             new UserFromConfigRepository();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void CustomRepositoryHardCoded()
+        public static void CustomRepositoryHardCoded()
         {
             new UserRepository();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void DirectFromStructureMap()
+        public void DirectFromStructureMap()
         {
-            ObjectFactory.GetInstance<IRepository<User, int>>();
+            container.GetInstance<IRepository<User, int>>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void CreateFromConfigObject()
+        public static void CreateFromConfigObject()
         {
             var config = new SharpRepositoryConfiguration();
             config.AddRepository(new InMemoryRepositoryConfiguration("default"));
-             RepositoryFactory.GetInstance<User, int>(config);
+            RepositoryFactory.GetInstance<User, int>(config);
         }
     }
 }

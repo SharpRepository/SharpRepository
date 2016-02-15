@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StructureMap.Web</name>
+    </assembly>
+    <members>
+        <member name="M:StructureMap.Web.CreatePluginFamilyExpressionExtensions.HybridHttpOrThreadLocalScoped``1(StructureMap.Configuration.DSL.Expressions.CreatePluginFamilyExpression{``0})">
+            <summary>
+            Convenience method to mark a PluginFamily as a Hybrid lifecycle
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StructureMap.Web.CreatePluginFamilyExpressionExtensions.HttpContextScoped``1(StructureMap.Configuration.DSL.Expressions.CreatePluginFamilyExpression{``0})">
+            <summary>
+            Convenience method to mark a PluginFamily as HttpContext scoped
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StructureMap.Web.GenericFamilyExpressionExtensions.HybridHttpOrThreadLocalScoped(StructureMap.Configuration.DSL.Expressions.GenericFamilyExpression)">
+            <summary>
+            Convenience method to mark a PluginFamily as a Hybrid lifecycle
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StructureMap.Web.GenericFamilyExpressionExtensions.HttpContextScoped(StructureMap.Configuration.DSL.Expressions.GenericFamilyExpression)">
+            <summary>
+            Convenience method to mark a PluginFamily as HttpContext scoped
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StructureMap.Web.Pipeline.HttpContextLifecycle.DisposeAndClearAll">
+            <summary>
+            Remove and dispose all objects scoped by HttpContext.  Call this method at the *end* of an Http request to clean up resources
+            </summary>
+        </member>
+    </members>
+</doc>
