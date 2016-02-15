@@ -1199,9 +1199,14 @@ namespace SharpRepository.Repository
             {
                 if (entities == null) throw new ArgumentNullException("entities");
 
-                foreach (var entity in entities)
+                using (var batch = BeginBatch())
                 {
-                    Add(entity);
+                    foreach (var entity in entities)
+                    {
+                        batch.Add(entity);
+                    }
+
+                    batch.Commit();
                 }
             }
             catch (Exception ex)
@@ -1263,17 +1268,31 @@ namespace SharpRepository.Repository
 
         public void Delete(IEnumerable<TKey> keys)
         {
-            foreach (var key in keys)
-            {
-                Delete(key);
-            }
+            Delete(keys.ToArray());
         }
 
         public void Delete(params TKey[] keys)
         {
-            foreach (var key in keys)
+            try
             {
-                Delete(key);
+                using (var batch = BeginBatch())
+                {
+                    foreach (var key in keys)
+                    {
+                        var entity = Get(key);
+
+                        if (entity == null) throw new ArgumentException("No entity exists with this key.", "key");
+
+                        batch.Delete(entity);
+                    }
+
+                    batch.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
             }
         }
 
@@ -1352,9 +1371,14 @@ namespace SharpRepository.Repository
             {
                 if (entities == null) throw new ArgumentNullException("entities");
 
-                foreach (var entity in entities)
+                using (var batch = BeginBatch())
                 {
-                    Update(entity);
+                    foreach (var entity in entities)
+                    {
+                        batch.Update(entity);
+                    }
+
+                    batch.Commit();
                 }
             }
             catch (Exception ex)
