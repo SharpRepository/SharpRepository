@@ -21,7 +21,7 @@ namespace SharpRepository.InMemoryRepository
             return CloneDictionary(_items).AsQueryable();
         }
         
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             T result;
             _items.TryGetValue(key, out result);
@@ -44,7 +44,9 @@ namespace SharpRepository.InMemoryRepository
                 var newItem = new T();
                 foreach (var propInfo in properties)
                 {
-                    propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
+                    // Don't try and set a value to a property w/o a setter
+                    if(propInfo.CanWrite)
+                        propInfo.SetValue(newItem, propInfo.GetValue(keyValuePair.Value, null), null);
                 }
 
                 clonedList.Add(newItem);

@@ -1,44 +1,83 @@
 ﻿using System;
 using System.Runtime.Caching;
-using ServiceStack.Redis;
 using SharpRepository.Repository.Caching;
+using StackExchange.Redis;
 
 namespace SharpRepository.Caching.Redis
 {
     public class RedisCachingProvider : ICachingProvider
     {
-        protected RedisClient Client { get; set; }
+        protected IDatabase Redis { get; set; }
 
-        public RedisCachingProvider() : this(new RedisClient())
+        public RedisCachingProvider() : this("localhost")
         {
         }
 
-        public RedisCachingProvider(string host)
+        public RedisCachingProvider(string host, bool ssl = true)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
-            Client = new RedisClient(host);
+            var configOptions = new ConfigurationOptions
+                                {
+                                    EndPoints =
+                                    {
+                                        {host}
+                                    },
+                                    Ssl = ssl
+                                };
+
+            Initialize(configOptions);
         }
 
-        public RedisCachingProvider(string host, int port)
+        public RedisCachingProvider(string host, int port, bool ssl = true)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
-            Client = new RedisClient(host, port);
+            var configOptions = new ConfigurationOptions
+                                {
+                                    EndPoints =
+                                    {
+                                        {host, port}
+                                    },
+                                    Ssl = ssl
+                                };
+
+            Initialize(configOptions);
         }
 
-        public RedisCachingProvider(string host, int port, string password)
+        public RedisCachingProvider(string host, int port, string password, bool ssl  =true)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
-            Client = new RedisClient(host, port, password);
+            var configOptions = new ConfigurationOptions
+                          {
+                              EndPoints =
+                              {
+                                  { host, port}
+                              },
+                              Ssl = ssl,
+                              Password = password
+                          };
+
+            Initialize(configOptions);
         }
 
-        public RedisCachingProvider(RedisClient client)
+        public RedisCachingProvider(ConfigurationOptions configOptions)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (configOptions == null) throw new ArgumentNullException("configOptions");
 
-            Client = client;
+            Initialize(configOptions);
+        }
+
+        private void Initialize(ConfigurationOptions configOptions)
+        {
+            if (RedisConnector.Connection == null)
+            {
+                configOptions.AbortOnConnectFail = false;
+                RedisConnector.Connection = ConnectionMultiplexer.Connect(configOptions);
+            }
+
+            Redis = RedisConnector.Connection.GetDatabase();
         }
 
         /// <summary>
@@ -54,15 +93,13 @@ namespace SharpRepository.Caching.Redis
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
+            TimeSpan? expiry = null;
             if (timeoutInSeconds.HasValue)
             {
-                Client.Set(key, value, new TimeSpan(0, 0, 0, timeoutInSeconds.Value));
+                expiry = new TimeSpan(0, 0, 0, timeoutInSeconds.Value);
             }
-            else
-            {
-                Client.Set(key, value);    
-            }
-            
+
+            Redis.Set(key, value, expiry);
         }
 
         /// <summary>
@@ -73,7 +110,7 @@ namespace SharpRepository.Caching.Redis
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            Client.Remove(key);
+            Redis.KeyDelete(key);
         }
 
         /// <summary>
@@ -85,7 +122,7 @@ namespace SharpRepository.Caching.Redis
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            return (Client.Get(key) != null);
+            return Redis.KeyExists(key);
         }
 
         /// <summary>
@@ -102,7 +139,7 @@ namespace SharpRepository.Caching.Redis
 
             try
             {
-                value = Client.Get<T>(key);
+                value = Redis.Get<T>(key);
 
                 if (Equals(value, default(T)))
                 {
@@ -124,13 +161,12 @@ namespace SharpRepository.Caching.Redis
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
             // no need to use a lock since the redis increment method is atomic already
-            return Convert.ToInt32(Client.Increment(key, Convert.ToUInt32(value)));
+            return Convert.ToInt32(Redis.StringIncrement(key, value));
         }
 
         public void Dispose()
         {
-            Client.Dispose();
-            Client = null;
+            
         }
     }
 }

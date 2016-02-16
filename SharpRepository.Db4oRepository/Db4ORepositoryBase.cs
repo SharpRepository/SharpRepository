@@ -28,9 +28,9 @@ namespace SharpRepository.Db4oRepository
             return Container.AsQueryable<T>();
         }
 
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return Container.AsQueryable<T>().FirstOrDefault(x => MatchOnPrimaryKey(x, key));
+            return BaseQuery(fetchStrategy).FirstOrDefault(x => MatchOnPrimaryKey(x, key));
         }
 
         private bool MatchOnPrimaryKey(T item, TKey keyValue)

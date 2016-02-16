@@ -4,7 +4,7 @@ namespace SharpRepository.AzureBlobRepository
 {
     public class AzureBlobRepository<T, TKey> : AzureBlobRepositoryBase<T, TKey> where T: class, new()
     {
-        public AzureBlobRepository(string connectionString, string containerName = null, bool createIfNotExists = true, ICachingStrategy<T, TKey> cachingStrategy = null)
+        public AzureBlobRepository(string connectionString, string containerName = null, bool createIfNotExists = false, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(connectionString, containerName, createIfNotExists, cachingStrategy)
         {
             
@@ -13,7 +13,7 @@ namespace SharpRepository.AzureBlobRepository
 
     public class AzureBlobRepository<T> : AzureBlobRepositoryBase<T, string> where T : class, new()
     {
-        public AzureBlobRepository(string connectionString, string containerName = null, bool createIfNotExists = true, ICachingStrategy<T, string> cachingStrategy = null)
+        public AzureBlobRepository(string connectionString, string containerName = null, bool createIfNotExists = false, ICachingStrategy<T, string> cachingStrategy = null)
             : base(connectionString, containerName, createIfNotExists, cachingStrategy)
         {
 

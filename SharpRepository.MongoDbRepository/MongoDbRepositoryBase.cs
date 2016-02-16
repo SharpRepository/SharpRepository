@@ -104,7 +104,7 @@ namespace SharpRepository.MongoDbRepository
             return BaseCollection().AsQueryable();
         }
 
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             var keyBsonType = ((RepresentationSerializationOptions)BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.SerializationOptions).Representation;
 

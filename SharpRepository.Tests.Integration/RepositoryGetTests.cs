@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
@@ -109,9 +110,70 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositories]
-        public void TryGet_Should_Return_Falsel_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
+        public void TryGet_Should_Return_False_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
             repository.Exists(string.Empty).ShouldBeFalse();
+        }
+
+        [ExecuteForAllRepositories]
+        public void GetMany_Params_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i};
+                repository.Add(contact);
+            }
+
+            var items = repository.GetMany("1", "3", "4", "5");
+            items.Count().ShouldEqual(4);
+        }
+
+        [ExecuteForAllRepositories]
+        public void GetMany_List_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i};
+                repository.Add(contact);
+            }
+
+            var items = repository.GetMany(new [] {"1", "3", "4", "5" }.ToList());
+            items.Count().ShouldEqual(4);
+        }
+
+        [ExecuteForAllRepositories]
+        public void GetManyAsDictionary_Params_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i};
+                repository.Add(contact);
+            }
+
+            var items = repository.GetManyAsDictionary("1", "3", "4", "5");
+            items.Count().ShouldEqual(4);
+            items.ContainsKey("1").ShouldBeTrue();
+            items.ContainsKey("2").ShouldBeFalse();
+            items.ContainsKey("3").ShouldBeTrue();
+            items.ContainsKey("4").ShouldBeTrue();
+            items.ContainsKey("5").ShouldBeTrue();
+        }
+
+        [ExecuteForAllRepositories]
+        public void GetManyAsDictionary_List_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i};
+                repository.Add(contact);
+            }
+
+            var items = repository.GetManyAsDictionary(new [] {"1", "3", "4", "5" }.ToList());
+            items.ContainsKey("1").ShouldBeTrue();
+            items.ContainsKey("2").ShouldBeFalse();
+            items.ContainsKey("3").ShouldBeTrue();
+            items.ContainsKey("4").ShouldBeTrue();
+            items.ContainsKey("5").ShouldBeTrue();
         }
     }
 }

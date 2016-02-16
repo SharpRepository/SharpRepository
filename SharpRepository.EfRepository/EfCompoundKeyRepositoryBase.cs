@@ -1,5 +1,4 @@
 using System;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using SharpRepository.Repository;
@@ -8,7 +7,7 @@ using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.EfRepository
 {
-    public class EfCompoundKeyRepositoryBase<T> : LinqCompoundKeyRepositoryBase<T> where T : class, new()
+    public class EfCompoundKeyRepositoryBase<T> : LinqCompoundKeyRepositoryBase<T> where T : class
     {
         protected IDbSet<T> DbSet { get; private set; }
         protected DbContext Context { get; private set; }
@@ -96,7 +95,7 @@ namespace SharpRepository.EfRepository
         }
     }
 
-    public class EfCompoundKeyRepositoryBase<T, TKey, TKey2> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class, new()
+    public class EfCompoundKeyRepositoryBase<T, TKey, TKey2> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2> where T : class
     {
         protected IDbSet<T> DbSet { get; private set; }
         protected DbContext Context { get; private set; }
@@ -184,7 +183,7 @@ namespace SharpRepository.EfRepository
         }
     }
 
-    public class EfCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> where T : class, new()
+    public class EfCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> : LinqCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> where T : class
     {
         protected IDbSet<T> DbSet { get; private set; }
         protected DbContext Context { get; private set; }

@@ -200,11 +200,11 @@ namespace SharpRepository.Repository.Specifications
         /// <returns></returns>
         public override string ToString()
         {
-            return String.Format("Specification Type: {0}\nEntity Type: {1}\nPredicate: {2}\nFetchStrategy Type: {3}",
+            return String.Format("Specification Type: {0}\nEntity Type: {1}\nPredicate: {2}\nFetchStrategy: {3}",
                                  GetType().Name,
                                  (typeof (T)).Name,
                                  HashGenerator.FromPredicate(Predicate),
-                                 FetchStrategy.GetType().Name
+                                 FetchStrategy
                 );
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 
 namespace SharpRepository.Repository.Traits
@@ -13,10 +14,24 @@ namespace SharpRepository.Repository.Traits
     /// </summary>
     /// <typeparam name="T">Generic repository entity type</typeparam>
     /// <typeparam name="TKey">Generic repository entity key type</typeparam>
-    public interface ICanGet<T, in TKey>
+    public interface ICanGet<T, TKey>
     {
         T Get(TKey key);
+        T Get(TKey key, IFetchStrategy<T> fetchStrategy);
+        T Get(TKey key, params string[] includePathes);
+        T Get(TKey key, params Expression<Func<T, object>>[] includePathes);
+
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePathes);
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePathes);
+
+        IEnumerable<T> GetMany(params TKey[] keys);
+        IEnumerable<T> GetMany(IEnumerable<TKey> keys);
+        IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys);
+        IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector);
+        IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys);
+        IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys);
 
         bool Exists(TKey key);
         bool TryGet(TKey key, out T entity);

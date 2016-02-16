@@ -48,7 +48,7 @@ namespace SharpRepository.AzureTableRepository
 
         protected override void AddItem(T entity)
         {
-            Table.Execute(TableOperation.Insert(entity));
+            Table.Execute(TableOperation.InsertOrReplace(entity));
         }
 
         // TODO: override Add(IEnumerable<T> entities) to use the TableSet.Add(entities) isntead of looping ourselves and having AddItem() called multiple times
