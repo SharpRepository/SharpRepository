@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -63,6 +64,28 @@ namespace SharpRepository.Repository
 
 
         /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        IEnumerable<T> GetMany(params TKey[] keys);
+
+        /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        IEnumerable<T> GetMany(IEnumerable<TKey> keys);
+
+        IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys);
+
+        IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector);
+
+        IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys);
+        
+        IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys);
+
+        /// <summary>
         /// Returns true if the specified entity of type <typeparamref name="T"/> from the repository by the primary key exists
         /// </summary>
         /// <param name="key">The primary key.</param>
@@ -92,6 +115,18 @@ namespace SharpRepository.Repository
         /// <param name="key">The primary key.</param>
         void Delete(TKey key);
 
+        /// <summary>
+        /// Deletes the specified entities by the primary keys provided.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        void Delete(IEnumerable<TKey> keys);
+
+        /// <summary>
+        /// Deletes the specified entities by the primary keys provided.
+        /// </summary>
+        /// <param name="keys">The primary keys.</param>
+        void Delete(params TKey[] keys);
+
         ICachingStrategy<T, TKey> CachingStrategy { get; set; }
 
         /// <summary>
@@ -116,5 +151,7 @@ namespace SharpRepository.Repository
         void ClearCache();
 
         string TraceInfo { get; }
+
+        TKey GetPrimaryKey(T entity);
     }
 }

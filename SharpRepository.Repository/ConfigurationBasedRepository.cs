@@ -285,6 +285,36 @@ namespace SharpRepository.Repository
             return Repository.Get(key, selector, fetchStrategy);
         }
 
+        public IEnumerable<T> GetMany(params TKey[] keys)
+        {
+            return Repository.GetMany(keys);
+        }
+
+        public IEnumerable<T> GetMany(IEnumerable<TKey> keys)
+        {
+            return Repository.GetMany(keys);
+        }
+
+        public IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
+        {
+            return Repository.GetMany(selector, keys);
+        }
+
+        public IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector)
+        {
+            return Repository.GetMany(keys, selector);
+        }
+
+        public IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys)
+        {
+            return Repository.GetManyAsDictionary(keys);
+        }
+
+        public IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
+        {
+            return Repository.GetManyAsDictionary(keys);
+        }
+
         public bool Exists(TKey key)
         {
             T entity;
@@ -346,6 +376,16 @@ namespace SharpRepository.Repository
             Repository.Delete(key);
         }
 
+        public void Delete(IEnumerable<TKey> keys)
+        {
+            Repository.Delete(keys);
+        }
+
+        public void Delete(params TKey[] keys)
+        {
+            Repository.Delete(keys);
+        }
+
         public IBatch<T> BeginBatch()
         {
             return Repository.BeginBatch();
@@ -364,6 +404,11 @@ namespace SharpRepository.Repository
         public string TraceInfo
         {
             get { return Repository.TraceInfo; }
+        }
+
+        public TKey GetPrimaryKey(T entity)
+        {
+            return Repository.GetPrimaryKey(entity);
         }
 
         public ICachingStrategy<T, TKey> CachingStrategy

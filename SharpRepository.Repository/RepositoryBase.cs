@@ -400,6 +400,36 @@ namespace SharpRepository.Repository
             }
         }
 
+        public virtual IEnumerable<T> GetMany(params TKey[] keys)
+        {
+            return GetMany(keys.ToList());
+        }
+
+        public virtual IEnumerable<T> GetMany(IEnumerable<TKey> keys)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys));
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
+        {
+            return GetMany(keys.ToList(), selector);
+        }
+
+        public virtual IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector)
+        {
+            return FindAll(ByMultipleKeysSpecification(keys), selector);
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys)
+        {
+            return GetManyAsDictionary(keys.ToList());
+        }
+
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
+        {
+            return  GetMany(keys).ToDictionary(GetPrimaryKey);
+        }
+
         public bool Exists(TKey key)
         {
             T entity;
@@ -1268,12 +1298,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessAdd(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1285,7 +1310,13 @@ namespace SharpRepository.Repository
         // used from the Add method above and the Save below for the batch save
         private void ProcessAdd(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
+                return;
+
             AddItem(entity);
+
+            RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
@@ -1306,9 +1337,14 @@ namespace SharpRepository.Repository
             {
                 if (entities == null) throw new ArgumentNullException("entities");
 
-                foreach (var entity in entities)
+                using (var batch = BeginBatch())
                 {
-                    Add(entity);
+                    foreach (var entity in entities)
+                    {
+                        batch.Add(entity);
+                    }
+
+                    batch.Commit();
                 }
             }
             catch (Exception ex)
@@ -1327,12 +1363,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessDelete(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1344,7 +1375,13 @@ namespace SharpRepository.Repository
         // used from the Delete method above and the Save below for the batch save
         private void ProcessDelete(T entity, bool batchMode)
         {
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
+                return;
+
             DeleteItem(entity);
+
+            RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
+
             if (batchMode) return;
 
             Save();
@@ -1364,6 +1401,36 @@ namespace SharpRepository.Repository
             foreach (var entity in entities)
             {
                 Delete(entity);
+            }
+        }
+
+        public void Delete(IEnumerable<TKey> keys)
+        {
+            Delete(keys.ToArray());
+        }
+
+        public void Delete(params TKey[] keys)
+        {
+            try
+            {
+                using (var batch = BeginBatch())
+                {
+                    foreach (var key in keys)
+                    {
+                        var entity = Get(key);
+
+                        if (entity == null) throw new ArgumentException("No entity exists with this key.", "key");
+
+                        batch.Delete(entity);
+                    }
+
+                    batch.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
             }
         }
 
@@ -1403,12 +1470,7 @@ namespace SharpRepository.Repository
             {
                 if (entity == null) throw new ArgumentNullException("entity");
 
-                if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
-                    return;
-
                 ProcessUpdate(entity, BatchMode);
-
-                RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
             }
             catch (Exception ex)
             {
@@ -1420,7 +1482,13 @@ namespace SharpRepository.Repository
         // used from the Update method above and the Save below for the batch save
 	    private void ProcessUpdate(T entity, bool batchMode)
 	    {
+            if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
+                return;
+
 		    UpdateItem(entity);
+
+            RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
+
 		    if (batchMode) return;
 
 		    Save();
@@ -1441,9 +1509,14 @@ namespace SharpRepository.Repository
             {
                 if (entities == null) throw new ArgumentNullException("entities");
 
-                foreach (var entity in entities)
+                using (var batch = BeginBatch())
                 {
-                    Update(entity);
+                    foreach (var entity in entities)
+                    {
+                        batch.Update(entity);
+                    }
+
+                    batch.Commit();
                 }
             }
             catch (Exception ex)
@@ -1489,6 +1562,17 @@ namespace SharpRepository.Repository
             SetTraceInfo(caller, query.ToString(), append);
         }
         public string TraceInfo { get; protected set; }
+
+        public TKey GetPrimaryKey(T entity)
+        {
+            TKey key;
+            if (GetPrimaryKey(entity, out key))
+            {
+                return key;
+            }
+
+            return default(TKey);
+        }
 
         protected virtual bool GetPrimaryKey(T entity, out TKey key) 
         {
@@ -1539,6 +1623,27 @@ namespace SharpRepository.Repository
             }
 
             return spec;
+        }
+
+        protected virtual ISpecification<T> ByMultipleKeysSpecification(IEnumerable<TKey> keys)
+        {
+            var propInfo = GetPrimaryKeyPropertyInfo();
+            if (propInfo == null || keys == null)
+                return null;
+
+            var parameter = Expression.Parameter(typeof(T), "x");
+
+            return keys.Select(key =>
+                    Expression.Lambda<Func<T, bool>>(
+                        Expression.Equal(
+                            Expression.PropertyOrField(parameter, propInfo.Name),
+                            Expression.Constant(key)
+                        ), parameter
+                    )
+                )
+                .Aggregate<Expression<Func<T, bool>>, ISpecification<T>>(null,
+                    (current, lambda) => current == null ? new Specification<T>(lambda) : current.Or(lambda)
+                );
         }
 
         protected virtual PropertyInfo GetPrimaryKeyPropertyInfo()

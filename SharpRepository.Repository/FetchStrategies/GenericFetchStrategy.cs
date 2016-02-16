@@ -9,7 +9,7 @@ namespace SharpRepository.Repository.FetchStrategies
     /// <see cref="http://blog.willbeattie.net/2011/02/specification-pattern-entity-framework.html"/>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class GenericFetchStrategy<T> : IFetchStrategy<T>
+    public class GenericFetchStrategy<T> : AbstractFetchStrategy<T>
     {
         private readonly IList<string> _properties;
 
@@ -18,17 +18,17 @@ namespace SharpRepository.Repository.FetchStrategies
             _properties = new List<string>();
         }
 
-        public IEnumerable<string> IncludePaths
+        public override IEnumerable<string> IncludePaths
         {
             get { return _properties; }
         }
 
-        public IFetchStrategy<T> Include(Expression<Func<T, object>> path)
+        public override IFetchStrategy<T> Include(Expression<Func<T, object>> path)
         {
             return Include(path.ToIncludeString());
         }
 
-        public IFetchStrategy<T> Include(string path)
+        public override IFetchStrategy<T> Include(string path)
         {
             _properties.Add(path);
             return this;

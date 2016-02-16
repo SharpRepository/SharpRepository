@@ -99,6 +99,7 @@
     <Compile Include="CompoundKeyRepositoryBase.Batch.cs" />
     <Compile Include="CompoundKeyRepositoryBase.BatchItem.cs" />
     <Compile Include="DisabledCache.cs" />
+    <Compile Include="FetchStrategies\AbstractFetchStrategy.cs" />
     <Compile Include="Helpers\InternalCache.cs" />
     <Compile Include="ICrudRepository.cs" />
     <Compile Include="IRepositoryAggregates.cs" />

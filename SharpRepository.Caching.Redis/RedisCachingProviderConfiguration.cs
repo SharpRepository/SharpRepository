@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository.Configuration;
+﻿using System;
+using SharpRepository.Repository.Configuration;
 
 namespace SharpRepository.Caching.Redis
 {
@@ -14,12 +15,13 @@ namespace SharpRepository.Caching.Redis
         {
         }
 
-        public RedisCachingProviderConfiguration(string name, string host, int port, string password)
+        public RedisCachingProviderConfiguration(string name, string host, int port, string password, bool ssl = true)
         {
             Name = name;
             Host = host;
             Port = port;
             Password = password;
+            Ssl = ssl;
             Factory = typeof (RedisConfigCachingProviderFactory);
         }
 
@@ -30,12 +32,17 @@ namespace SharpRepository.Caching.Redis
 
         public int Port
         {
-            set { Attributes["post"] = value.ToString(); }
+            set { Attributes["port"] = value.ToString(); }
         }
 
         public string Password
         {
             set { Attributes["password"] = value; }
+        }
+
+        public bool Ssl
+        {
+            set { Attributes["ssl"] = value.ToString(); }
         }
     }
 }

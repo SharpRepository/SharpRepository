@@ -108,5 +108,54 @@ namespace SharpRepository.Tests.Integration
             items.Count().ShouldEqual(1);
             items.First().Name.ShouldEqual("Contact 3");
         }
+
+        [ExecuteForAllRepositories]
+        public void Delete_By_Keys_Enum_Should_Remove_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            var contact1 = new Contact {Name = "Contact 1", ContactTypeId = 1};
+            var contact2 = new Contact {Name = "Contact 2", ContactTypeId = 1};
+            var contact3 = new Contact {Name = "Contact 3", ContactTypeId = 3};
+
+            repository.Add(contact1);
+            repository.Add(contact2);
+            repository.Add(contact3);
+
+            var items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(3);
+
+            var ids = new List<string>()
+                      {
+                          contact1.ContactId,
+                          contact2.ContactId
+                      };
+            repository.Delete(ids);
+
+
+            items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(1);
+            items.First().Name.ShouldEqual("Contact 3");
+        }
+
+        [ExecuteForAllRepositories]
+        public void Delete_By_Params_Should_Remove_Multiple_Items(IRepository<Contact, string> repository)
+        {
+            var contact1 = new Contact {Name = "Contact 1", ContactTypeId = 1};
+            var contact2 = new Contact {Name = "Contact 2", ContactTypeId = 1};
+            var contact3 = new Contact {Name = "Contact 3", ContactTypeId = 3};
+
+            repository.Add(contact1);
+            repository.Add(contact2);
+            repository.Add(contact3);
+
+            var items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(3);
+
+            repository.Delete(contact1.ContactId, contact2.ContactId);
+
+            items = repository.GetAll().ToList();
+            items.Count().ShouldEqual(1);
+            items.First().Name.ShouldEqual("Contact 3");
+        }
+
     }
 }
