@@ -101,6 +101,7 @@
     <Compile Include="DisabledCache.cs" />
     <Compile Include="FetchStrategies\AbstractFetchStrategy.cs" />
     <Compile Include="Helpers\InternalCache.cs" />
+    <Compile Include="Helpers\RepositoryHelper.cs" />
     <Compile Include="ICrudRepository.cs" />
     <Compile Include="IRepositoryAggregates.cs" />
     <Compile Include="IDisabledCache.cs" />
