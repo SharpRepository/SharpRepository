@@ -650,7 +650,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll()
         {
-            return GetAll((IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+            return GetAll((IQueryOptions<T>)null);
         }
 
         public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
@@ -694,10 +694,10 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, (IQueryOptions<T>)null);
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
