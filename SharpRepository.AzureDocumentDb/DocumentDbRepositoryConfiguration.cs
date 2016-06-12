@@ -4,11 +4,12 @@ namespace SharpRepository.AzureDocumentDb
 {
     public class DocumentDbRepositoryConfiguration : RepositoryConfiguration
     {
-        public DocumentDbRepositoryConfiguration(string endpointUrl, string authorizationKey, string databaseId, bool createIfNotExists = false, string cachingStrategy = null, string cachingProvider = null)
+        public DocumentDbRepositoryConfiguration(string endpointUrl, string authorizationKey, string databaseId, string collectionId = null, bool createIfNotExists = false, string cachingStrategy = null, string cachingProvider = null)
         {
             EndpointUrl = endpointUrl;
             AuthorizationKey = authorizationKey;
             DatabaseId = databaseId;
+            CollectionId = collectionId;
             CreateIfNotExists = createIfNotExists;
 
             CachingProvider = cachingProvider;
@@ -29,6 +30,11 @@ namespace SharpRepository.AzureDocumentDb
         public string DatabaseId
         {
             set { Attributes["databaseId"] = value; }
+        }
+
+        public string CollectionId
+        {
+            set { Attributes["collectionId"] = value; }
         }
 
         public bool CreateIfNotExists

@@ -24,15 +24,15 @@ namespace SharpRepository.AzureDocumentDb
         protected DocumentCollection BaseCollection { get; set; }
         protected string CollectionId { get; set; }
 
-        internal DocumentDbRepositoryBase(string endpointUrl, string authorizationKey, string databaseId, bool createIfNotExists, ICachingStrategy<T, TKey> cachingStrategy = null)
+        internal DocumentDbRepositoryBase(string endpointUrl, string authorizationKey, string databaseId, bool createIfNotExists, string collectionId = null, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
         {
             Client = new DocumentClient(new Uri(endpointUrl), authorizationKey);
 
-            Initilize(databaseId, createIfNotExists);
+            Initilize(databaseId, createIfNotExists, collectionId);
         }
 
-        private void Initilize(string databaseId, bool createIfNotExists)
+        private void Initilize(string databaseId, bool createIfNotExists, string collectionId = null)
         {
             Database = Client.CreateDatabaseQuery().Where(db => db.Id == databaseId).AsEnumerable().FirstOrDefault();
 
@@ -42,8 +42,13 @@ namespace SharpRepository.AzureDocumentDb
             if (Database == null)
                 throw new Exception(string.Format("No database {0} existed. Use createIfNotExists = true in order to create database.", databaseId));
 
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            CollectionId = rgx.Replace(typeof(T).FullName, "");
+            if (string.IsNullOrWhiteSpace(collectionId))
+            {
+                Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                CollectionId = rgx.Replace(typeof(T).FullName, "");
+            }
+            else
+                CollectionId = collectionId;
 
             BaseCollection =
                 Client.CreateDocumentCollectionQuery(Database.SelfLink)
