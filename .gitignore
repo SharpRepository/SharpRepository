@@ -11,6 +11,9 @@
 *.user
 *.bak
 
+# Don't exclude nuget.exe for Appveyor
+!.nuget/nuget.exe
+
 # VS Upgrade stuff #
 ####################
 UpgradeLog.XML
@@ -22,6 +25,7 @@ bin/
 obj/
 TestResults/
 logs/
+packages/
 
 # Web publish log #
 ###################
