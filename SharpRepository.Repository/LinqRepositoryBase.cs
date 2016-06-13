@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 
@@ -20,9 +21,9 @@ namespace SharpRepository.Repository
             return BaseQuery();
         }
 
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return FindQuery(ByPrimaryKeySpecification(key));
+            return FindQuery(ByPrimaryKeySpecification(key, fetchStrategy));
         }
 
         protected override T FindQuery(ISpecification<T> criteria)
@@ -46,19 +47,19 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-        protected override IQueryable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy)
         {
-            var query = BaseQuery();
+            var query = BaseQuery(fetchStrategy);
 
             SetTraceInfo("GetAll", query);
 
             return query;
         }
 
-        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery();
+                return GetAllQuery(fetchStrategy);
 
             var query = BaseQuery();
 

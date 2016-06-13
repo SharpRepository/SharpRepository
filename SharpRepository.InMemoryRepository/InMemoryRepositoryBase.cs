@@ -21,7 +21,7 @@ namespace SharpRepository.InMemoryRepository
             return CloneDictionary(_items).AsQueryable();
         }
         
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             T result;
             _items.TryGetValue(key, out result);

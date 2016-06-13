@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
+using SharpRepository.Repository.FetchStrategies;
 
 namespace SharpRepository.Repository
 {
@@ -27,6 +28,18 @@ namespace SharpRepository.Repository
         T Get(TKey key);
 
         /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.
+        /// </summary>
+        /// <param name="key">The primary key.</param>
+        /// <param name="fetchStrategy">The include syntax to eager load data.</param>
+        /// <returns>The entity that matches on the primary key</returns>
+        T Get(TKey key, IFetchStrategy<T> fetchStrategy);
+
+        T Get(TKey key, params string[] includePaths);
+
+        T Get(TKey key, params Expression<Func<T, object>>[] includePaths);
+
+        /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key and maps it to the result of type <typeparamref name="TResult"/>.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
@@ -34,6 +47,21 @@ namespace SharpRepository.Repository
         /// <param name="selector">The mapping selector that returns the result type.</param>
         /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
         TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector);
+
+        /// <summary>
+        /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key and maps it to the result of type <typeparamref name="TResult"/>.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="key">The primary key.</param>
+        /// <param name="selector">The mapping selector that returns the result type.</param>
+        /// <param name="fetchStrategy">The include syntax to eager load data.</param>
+        /// <returns>The mapped entity based on the selector that matches on the primary key.</returns>
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy);
+
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths);
+
+        TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePaths);
+
 
         /// <summary>
         /// Gets the specified entity of type <typeparamref name="T"/> from the repository by the primary key.

@@ -95,9 +95,9 @@ namespace SharpRepository.EfRepository
 
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.
         //  this also provides the EF5 first level caching out of the box
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return DbSet.Find(key);
+            return fetchStrategy == null ? DbSet.Find(key) : base.GetQuery(key, fetchStrategy);
         }
 
         protected override PropertyInfo GetPrimaryKeyPropertyInfo()

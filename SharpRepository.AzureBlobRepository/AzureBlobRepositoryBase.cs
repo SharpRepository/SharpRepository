@@ -44,7 +44,7 @@ namespace SharpRepository.AzureBlobRepository
             }
         }
 
-        protected override T GetQuery(TKey key)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             try
             {

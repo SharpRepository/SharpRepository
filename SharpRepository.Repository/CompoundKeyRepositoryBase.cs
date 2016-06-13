@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SharpRepository.Repository.Caching;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -65,7 +66,22 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll()
         {
-            return GetAll(null);
+            return GetAll((IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
@@ -77,6 +93,26 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (selector == null) throw new ArgumentNullException("selector");
@@ -86,6 +122,36 @@ namespace SharpRepository.Repository
                 selector,
                 queryOptions
                 );
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
@@ -584,7 +650,22 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll()
         {
-            return GetAll(null);
+            return GetAll((IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
@@ -596,6 +677,26 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (selector == null) throw new ArgumentNullException("selector");
@@ -605,6 +706,36 @@ namespace SharpRepository.Repository
                 selector,
                 queryOptions
                 );
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -1121,7 +1252,22 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll()
         {
-            return GetAll(null);
+            return GetAll((IQueryOptions<T>)null, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
@@ -1133,6 +1279,26 @@ namespace SharpRepository.Repository
                 );
         }
 
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (selector == null) throw new ArgumentNullException("selector");
@@ -1142,6 +1308,36 @@ namespace SharpRepository.Repository
                 selector,
                 queryOptions
                 );
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
+        {
+            throw new NotImplementedException();
         }
 
         // These are the actual implementation that the derived class needs to implement

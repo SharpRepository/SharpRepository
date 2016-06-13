@@ -25,8 +25,7 @@ namespace SharpRepository.Repository.FetchStrategies
 
         public override IFetchStrategy<T> Include(Expression<Func<T, object>> path)
         {
-            _properties.Add(path.ToIncludeString());
-            return this;
+            return Include(path.ToIncludeString());
         }
 
         public override IFetchStrategy<T> Include(string path)
