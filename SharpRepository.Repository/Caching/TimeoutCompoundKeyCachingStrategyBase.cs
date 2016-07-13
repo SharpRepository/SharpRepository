@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -43,11 +43,11 @@ namespace SharpRepository.Repository.Caching
         {
             try
             {
-                CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
+                CachingProvider.Set(cacheKey, result, CacheItemPriority.Normal, TimeoutInSeconds);
 
                 if (queryOptions is IPagingOptions)
                 {
-                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
+                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Normal, TimeoutInSeconds);
                 }
             }
             catch (Exception)
@@ -108,11 +108,11 @@ namespace SharpRepository.Repository.Caching
         {
             try
             {
-                CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
+                CachingProvider.Set(cacheKey, result, CacheItemPriority.Normal, TimeoutInSeconds);
 
                 if (queryOptions is IPagingOptions)
                 {
-                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
+                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Normal, TimeoutInSeconds);
                 }
             }
             catch (Exception)
@@ -173,11 +173,11 @@ namespace SharpRepository.Repository.Caching
         {
             try
             {
-                CachingProvider.Set(cacheKey, result, CacheItemPriority.Default, TimeoutInSeconds);
+                CachingProvider.Set(cacheKey, result, CacheItemPriority.Normal, TimeoutInSeconds);
 
                 if (queryOptions is IPagingOptions)
                 {
-                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Default, TimeoutInSeconds);
+                    CachingProvider.Set(cacheKey + "=>pagingTotal", ((PagingOptions<T>)queryOptions).TotalItems, CacheItemPriority.Normal, TimeoutInSeconds);
                 }
             }
             catch (Exception)

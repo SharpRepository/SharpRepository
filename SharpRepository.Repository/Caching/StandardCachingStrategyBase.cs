@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -441,7 +441,7 @@ namespace SharpRepository.Repository.Caching
 
         private int IncrementGeneration()
         {
-            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NeverRemove);
         }
 
         private string GetGenerationKey()
@@ -459,7 +459,7 @@ namespace SharpRepository.Repository.Caching
 
         private int IncrementPartitionGeneration(TPartition partition)
         {
-            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NotRemovable);
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NeverRemove);
         }
 
         protected string GetPartitionGenerationKey(TPartition partition)
