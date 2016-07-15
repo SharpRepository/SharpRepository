@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
+using System.Reflection;
 
 // References that were helpful in developing the Write Through Caching and Generational Caching logic
 //  http://www.regexprn.com/2011/06/web-application-caching-strategies.html
@@ -166,7 +167,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_4
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
@@ -531,7 +536,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_4
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
@@ -896,7 +905,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_4
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
