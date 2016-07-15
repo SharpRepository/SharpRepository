@@ -1,6 +1,9 @@
 ﻿using System;
+#if NET451
 using System.Configuration;
+#endif
 using System.Linq;
+using System.Reflection;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Helpers;
 
@@ -74,7 +77,12 @@ namespace SharpRepository.Repository
                 repositoryName = GetAttributeRepositoryName(entityType);
             }
 
-            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`1");
+#if NET451
+            var methods = typeof(ISharpRepositoryConfiguration).GetMethods();
+#elif NETSTANDARD1_4
+            var methods = typeof(ISharpRepositoryConfiguration).GetRuntimeMethods();
+#endif
+            var method = methods.First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`1");
             var genericMethod = method.MakeGenericMethod(entityType);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
@@ -87,7 +95,12 @@ namespace SharpRepository.Repository
                 repositoryName = GetAttributeRepositoryName(entityType);
             }
 
-            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`2");
+#if NET451
+            var methods = typeof(ISharpRepositoryConfiguration).GetMethods();
+#elif NETSTANDARD1_4
+            var methods = typeof(ISharpRepositoryConfiguration).GetRuntimeMethods();
+#endif
+            var method = methods.First(m => m.Name == "GetInstance" && m.ReturnType.Name == "IRepository`2");
             var genericMethod = method.MakeGenericMethod(entityType, keyType);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
@@ -132,8 +145,12 @@ namespace SharpRepository.Repository
                 // if no specific repository is provided then check to see if the SharpRepositoryConfigurationAttribute is used
                 repositoryName = GetAttributeRepositoryName(entityType);
             }
-
-            var method = typeof(ISharpRepositoryConfiguration).GetMethods().First(m => m.Name == "GetInstance" && m.ReturnType.Name == "ICompoundKeyRepository`3");
+            #if NET451
+            var methods = typeof(ISharpRepositoryConfiguration).GetMethods();
+#elif NETSTANDARD1_4
+            var methods = typeof(ISharpRepositoryConfiguration).GetRuntimeMethods();
+#endif
+            var method = methods.First(m => m.Name == "GetInstance" && m.ReturnType.Name == "ICompoundKeyRepository`3");
             var genericMethod = method.MakeGenericMethod(entityType, keyType, key2Type);
             return genericMethod.Invoke(configuration, new object[] { repositoryName });
         }
@@ -244,7 +261,11 @@ namespace SharpRepository.Repository
 
         private static string GetAttributeRepositoryName(Type entityType)
         {
+#if NET451
             var attribute = entityType.GetOneAttribute<SharpRepositoryConfigurationAttribute>();
+#elif NETSTANDARD1_4
+            var attribute = entityType.GetTypeInfo().GetOneAttribute<SharpRepositoryConfigurationAttribute>();
+#endif
             return attribute == null ? null : attribute.RepositoryName;
         }
     }

@@ -1,5 +1,7 @@
 ﻿using System;
+#if NET451
 using System.Configuration;
+#endif
 using SharpRepository.Repository.Configuration;
 
 namespace SharpRepository.Repository.Caching
