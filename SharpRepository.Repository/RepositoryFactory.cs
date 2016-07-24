@@ -1,6 +1,8 @@
 ﻿using System;
 #if NET451
 using System.Configuration;
+#elif NETSTANDARD1_4
+using Microsoft.Extensions.Configuration;
 #endif
 using System.Linq;
 using System.Reflection;

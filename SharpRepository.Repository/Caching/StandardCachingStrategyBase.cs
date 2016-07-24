@@ -6,6 +6,7 @@ using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
+using System.Reflection;
 
 // References that were helpful in developing the Write Through Caching and Generational Caching logic
 //  http://www.regexprn.com/2011/06/web-application-caching-strategies.html

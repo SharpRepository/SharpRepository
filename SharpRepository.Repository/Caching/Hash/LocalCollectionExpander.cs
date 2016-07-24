@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SharpRepository.Repository.Caching.Hash
 {
@@ -29,6 +30,7 @@ namespace SharpRepository.Repository.Caching.Hash
 
             // for any local collection parameters in the method, make a
             // replacement argument which will print its elements
+#if NET451
             var replacements = (from x in map
                                 where x.Param != null && x.Param.IsGenericType
                                 let g = x.Param.GetGenericTypeDefinition()
@@ -37,6 +39,16 @@ namespace SharpRepository.Repository.Caching.Hash
                                 let elementType = x.Param.GetGenericArguments().Single()
                                 let printer = MakePrinter((ConstantExpression)x.Arg, elementType)
                                 select new { x.Arg, Replacement = printer }).ToList();
+#elif NETSTANDARD1_4
+            var replacements = (from x in map
+                                where x.Param != null && x.Param.GetType().GetTypeInfo().IsGenericType
+                                let g = x.Param.GetGenericTypeDefinition()
+                                where g == typeof(IEnumerable<>) || g == typeof(List<>)
+                                where x.Arg.NodeType == ExpressionType.Constant
+                                let elementType = x.Param.GenericTypeArguments.Single()
+                                let printer = MakePrinter((ConstantExpression)x.Arg, elementType)
+                                select new { x.Arg, Replacement = printer }).ToList();
+#endif
 
             if (replacements.Any())
             {
