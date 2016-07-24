@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 #if NET451
 using System.Configuration;
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
 using System.Collections.ObjectModel;
 #endif
 using System.Linq;
@@ -12,7 +12,7 @@ namespace SharpRepository.Repository.Configuration
 #if NET451
     [ConfigurationCollection(typeof(RepositoryElement), AddItemName = "cachingStrategy", CollectionType = ConfigurationElementCollectionType.BasicMap)]
     public class CachingStrategyCollection : ConfigurationElementCollection
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
     public class CachingStrategyCollection : Collection<CachingStrategyElement>
 #endif
     {
@@ -39,7 +39,7 @@ namespace SharpRepository.Repository.Configuration
 #if NET451
             get { return (string)base["default"]; }
             set { base["default"] = value; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             set;
 #endif

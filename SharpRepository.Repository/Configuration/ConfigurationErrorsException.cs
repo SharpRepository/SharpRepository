@@ -2,7 +2,7 @@
 
 namespace SharpRepository.Repository.Configuration
 {
-#if NETSTANDARD1_4
+#if NETSTANDARD1_6
     public class ConfigurationErrorsException : Exception
     {
         public ConfigurationErrorsException()

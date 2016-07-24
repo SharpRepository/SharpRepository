@@ -9,6 +9,7 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
 using SharpRepository.Repository.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace SharpRepository.Repository
 {
@@ -21,6 +22,7 @@ namespace SharpRepository.Repository
     {
         protected readonly IRepository<T, TKey> Repository;
 
+#if NET451
         // we have 3 constructors so you can use the defualt sharpRepository section or specify a config section
         // you can provide the repository name from the config file instead of whatever the default is if needed
         // you can also provide the configuration object instead of building one from the config file
@@ -28,12 +30,20 @@ namespace SharpRepository.Repository
         {
             Repository = RepositoryFactory.GetInstance<T, TKey>(configSection, repositoryName);
         }
+#elif NETSTANDARD1_6
+        public ConfigurationBasedRepository(IOptions<SharpRepositoryConfiguration> configuration, string repositoryName = null)
+        {
+            Repository = RepositoryFactory.GetInstance<T, TKey>(configuration, repositoryName);
+        }
+#endif
 
+#if NET451
         public ConfigurationBasedRepository(string repositoryName = null)
         {
             // Load up the repository based on the default configuration file
             Repository = RepositoryFactory.GetInstance<T, TKey>(repositoryName);
         }
+#endif
 
         public ConfigurationBasedRepository(ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {

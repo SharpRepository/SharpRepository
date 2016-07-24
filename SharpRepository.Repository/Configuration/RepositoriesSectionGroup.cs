@@ -6,7 +6,7 @@ namespace SharpRepository.Repository.Configuration
 {
 #if NET451
     public class RepositoriesSectionGroup : ConfigurationSectionGroup
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
     public class RepositoriesSectionGroup
 #endif
     {

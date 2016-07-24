@@ -16,7 +16,7 @@ namespace SharpRepository.Repository
                                                                  {
 #if NET451
                                                                      var propInfo = entityType.GetProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>());
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
                                                                      var propInfo = entityType.GetRuntimeProperties().FirstOrDefault(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>());
 #endif
 
@@ -40,7 +40,7 @@ namespace SharpRepository.Repository
 
 #if NET451
         private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName)
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
         private static PropertyInfo GetPropertyCaseInsensitive(Type type, string propertyName)
 #endif
         {
@@ -49,7 +49,7 @@ namespace SharpRepository.Repository
             const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
 
             return type.GetProperty(propertyName, bindingFlags);
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             return type.GetRuntimeProperties().Where(pi => pi.Name.ToLowerInvariant() == propertyName.ToLowerInvariant()).FirstOrDefault();
 #endif
         }

@@ -9,7 +9,7 @@ namespace SharpRepository.Repository.Configuration
 {
 #if NET451
     public class SharpRepositorySection : ConfigurationSection, ISharpRepositoryConfiguration
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
     public class SharpRepositorySection : ISharpRepositoryConfiguration
 #endif
     {
@@ -20,7 +20,7 @@ namespace SharpRepository.Repository.Configuration
         {
 #if NET451
             get { return (RepositoriesCollection)this["repositories"]; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             private set;
 #endif
@@ -82,7 +82,7 @@ namespace SharpRepository.Repository.Configuration
         {
 #if NET451
             get { return (CachingStrategyCollection)this["cachingStrategies"]; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             private set;
 #endif
@@ -127,7 +127,7 @@ namespace SharpRepository.Repository.Configuration
         {
 #if NET451
             get { return (CachingProviderCollection)this["cachingProviders"]; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             private set;
 #endif

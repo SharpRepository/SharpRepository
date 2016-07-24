@@ -30,13 +30,10 @@ namespace SharpRepository.Repository
             var entityType = typeof(T);
             _typeName = entityType.Name;
 #if NET451
-            var allAttributes = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
-#elif NETSTANDARD1_4
-            var allAttributes = entityType.GetTypeInfo().GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true);
-#endif
-            _aspects = allAttributes.Where(x => x.Enabled).OrderBy(x => x.Order).ToArray();
-
             _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
+#elif NETSTANDARD1_6
+            _aspects = entityType.GetTypeInfo().GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
+#endif
                 .OrderBy(x => x.Order)
                 .ToDictionary(a => a.GetType().FullName, a => a);
 
@@ -150,7 +147,11 @@ namespace SharpRepository.Repository
         {
             var baseAttribute = typeof(RepositoryActionBaseAttribute);
 
+#if NET451
             if (!baseAttribute.IsAssignableFrom(aspectType))
+#elif NETSTANDARD1_6
+            if (!baseAttribute.GetTypeInfo().IsAssignableFrom(aspectType.GetTypeInfo()))
+#endif
                 throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
 
             if (!_aspects.ContainsKey(aspectType.FullName))
@@ -272,11 +273,12 @@ namespace SharpRepository.Repository
 
                 // if the aspect altered the specificaiton then we need to run a FindAll with that specification
                 IEnumerable<TResult> results;
+                var selectFunc = context.Selector.Compile();
 
                 if (context.Specification == null)
                 {
                     results = QueryManager.ExecuteGetAll(
-                        () => GetAllQuery(context.QueryOptions, fetchStrategy).Select(context.Selector).ToList(),
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).Select(selectFunc).ToList(),
                         context.Selector,
                         context.QueryOptions
                         );
@@ -286,7 +288,7 @@ namespace SharpRepository.Repository
                     context.Specification.FetchStrategy = fetchStrategy;
 
                     results = QueryManager.ExecuteFindAll(
-                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
+                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(selectFunc).ToList(),
                         context.Specification,
                         context.Selector,
                         context.QueryOptions
@@ -402,9 +404,10 @@ namespace SharpRepository.Repository
                     );
 
                 // return the entity with the selector applied to it
+                var selectFunc = selector.Compile();
                 var selectedResult = result == null
                     ? default(TResult)
-                    : new[] {result}.AsQueryable().Select(selector).First();
+                    : new[] {result}.AsEnumerable().Select(selectFunc).First();
 
                 context.Result = selectedResult;
                 RunAspect(attribute => attribute.OnGetExecuted(context));
@@ -531,8 +534,9 @@ namespace SharpRepository.Repository
                 if (!RunAspect(attribute => attribute.OnFindAllExecuting(context)))
                     return context.Results;
 
+                var selectFunc = context.Selector.Compile();
                 var results = QueryManager.ExecuteFindAll(
-                    () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
+                    () => FindAllQuery(context.Specification, context.QueryOptions).Select(selectFunc).ToList(),
                     context.Specification,
                     context.Selector,
                     context.QueryOptions
@@ -625,6 +629,7 @@ namespace SharpRepository.Repository
                 if (!RunAspect(attribute => attribute.OnFindExecuting(context)))
                     return context.Result;
 
+                var selectFunc = context.Selector.Compile();
                 var item = QueryManager.ExecuteFind(
                     () =>
 	                    {
@@ -633,7 +638,7 @@ namespace SharpRepository.Repository
 	                            return default(TResult);
 
 	                        var results = new[] { result };
-                            return results.AsQueryable().Select(context.Selector).First();
+                            return results.AsEnumerable().Select(selectFunc).First();
 	                    },
 
                     context.Specification,
@@ -1746,7 +1751,11 @@ namespace SharpRepository.Repository
 
             if (String.IsNullOrEmpty(propertyName)) return null;
 
+#if NET451
             var propInfo = type.GetProperty(propertyName);
+#elif NETSTANDARD1_6
+            var propInfo = type.GetTypeInfo().GetDeclaredProperty(propertyName);
+#endif
             propInfo = propInfo == null || propInfo.PropertyType != pkType ? null : propInfo;
 
             InternalCache.PrimaryKeyMapping[tupleKey] = propInfo;

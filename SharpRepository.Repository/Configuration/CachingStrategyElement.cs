@@ -10,7 +10,7 @@ namespace SharpRepository.Repository.Configuration
 {
 #if NET451
     public class CachingStrategyElement : ConfigurationElement, ICachingStrategyConfiguration
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
     public class CachingStrategyElement : ICachingStrategyConfiguration
 #endif
     {
@@ -24,7 +24,7 @@ namespace SharpRepository.Repository.Configuration
 #if NET451
             get { return (string)base["name"]; }
             set { base["name"] = value; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             set;
 #endif
@@ -38,7 +38,7 @@ namespace SharpRepository.Repository.Configuration
 #if NET451
             get { return base["maxResults"] as int?; }
             set { base["maxResults"] = value; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get;
             set;
 #endif
@@ -49,14 +49,14 @@ namespace SharpRepository.Repository.Configuration
         /// </summary>
 #if NET451
         [ConfigurationProperty("factory", IsRequired = true), TypeConverter(typeof(TypeNameConverter))]
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
         private Type _factory;
 #endif
         public Type Factory
         {
 #if NET451
             get { return (Type)base["factory"]; }
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             get { return _factory; }
 #endif
             set
@@ -64,7 +64,7 @@ namespace SharpRepository.Repository.Configuration
                 ConfigurationHelper.CheckForInterface(value, typeof(IConfigCachingStrategyFactory));
 #if NET451
                 base["factory"] = value;
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
                 _factory = value;
 #endif
             }
@@ -103,7 +103,7 @@ namespace SharpRepository.Repository.Configuration
 
 #if NET451
         public new string this[string key]
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
         public string this[string key]
 #endif
         {
@@ -111,7 +111,7 @@ namespace SharpRepository.Repository.Configuration
             {
                 return !_attributes.ContainsKey(key) ? null : _attributes[key];
             }
-#if NETSTANDARD1_4
+#if NETSTANDARD1_6
             private set
             {
                 _attributes[key] = value;

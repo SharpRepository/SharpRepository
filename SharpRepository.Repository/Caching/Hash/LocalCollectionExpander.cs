@@ -39,7 +39,7 @@ namespace SharpRepository.Repository.Caching.Hash
                                 let elementType = x.Param.GetGenericArguments().Single()
                                 let printer = MakePrinter((ConstantExpression)x.Arg, elementType)
                                 select new { x.Arg, Replacement = printer }).ToList();
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             var replacements = (from x in map
                                 where x.Param != null && x.Param.GetType().GetTypeInfo().IsGenericType
                                 let g = x.Param.GetGenericTypeDefinition()

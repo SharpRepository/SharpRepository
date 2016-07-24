@@ -168,7 +168,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_6
+            var propInfo = type.GetTypeInfo().DeclaredProperties.FirstOrDefault(p => p.Name == partitionName && p.PropertyType == typeof(TPartition));
+#endif
 
             if (propInfo == null)
                 return false;

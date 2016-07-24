@@ -169,7 +169,7 @@ namespace SharpRepository.Repository.Caching
             var type = typeof(T);
 #if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
 #endif
 
@@ -538,7 +538,7 @@ namespace SharpRepository.Repository.Caching
             var type = typeof(T);
 #if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
 #endif
 
@@ -907,7 +907,7 @@ namespace SharpRepository.Repository.Caching
             var type = typeof(T);
 #if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
-#elif NETSTANDARD1_4
+#elif NETSTANDARD1_6
             var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
 #endif
 
