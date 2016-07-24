@@ -9,7 +9,9 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Repository.Transactions;
 using SharpRepository.Repository.Configuration;
+#if NETSTANDARD1_6
 using Microsoft.Extensions.Options;
+#endif
 
 namespace SharpRepository.Repository
 {
