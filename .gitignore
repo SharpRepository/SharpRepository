@@ -11,8 +11,8 @@
 *.user
 *.bak
 
-# Include dlls if they’re in the NuGet packages directory
-!/packages/*/lib/**/*.dll
+# Don't exclude nuget.exe for Appveyor
+!.nuget/nuget.exe
 
 # VS Upgrade stuff #
 ####################
@@ -25,6 +25,7 @@ bin/
 obj/
 TestResults/
 logs/
+packages/
 
 # Web publish log #
 ###################

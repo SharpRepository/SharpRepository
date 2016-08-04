@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.RavenDbRepository", "SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj", "{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}"
 EndProject
@@ -79,6 +79,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.AzureBlobRepository", "SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj", "{F766CC4F-B69C-444C-A89F-01E2E8B172A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.SimpleInjector", "SharpRepository.Ioc.SimpleInjector\SharpRepository.Ioc.SimpleInjector.csproj", "{772C205D-D4DC-4581-9B77-C672D54F2558}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{01F28A0C-4CD6-40EB-B239-B7B2B87D9503}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.AzureDocumentDb", "SharpRepository.AzureDocumentDb\SharpRepository.AzureDocumentDb.csproj", "{70A9256C-564B-45CC-B9C7-BE81D690735D}"
 EndProject
