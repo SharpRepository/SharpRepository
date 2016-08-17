@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Repository.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.InMemoryRepository.DotNetCore", "SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.DotNetCore.csproj", "{51CE57B3-82EF-447D-A404-44C95DCD263E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.EfCoreRepository.DotNetCore", "SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.DotNetCore.csproj", "{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{51CE57B3-82EF-447D-A404-44C95DCD263E}.Release|x64.Build.0 = Release|x64
 		{51CE57B3-82EF-447D-A404-44C95DCD263E}.Release|x86.ActiveCfg = Release|x86
 		{51CE57B3-82EF-447D-A404-44C95DCD263E}.Release|x86.Build.0 = Release|x86
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|x64.ActiveCfg = Debug|x64
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|x64.Build.0 = Debug|x64
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|x86.ActiveCfg = Debug|x86
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Debug|x86.Build.0 = Debug|x86
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|x64.ActiveCfg = Release|x64
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|x64.Build.0 = Release|x64
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|x86.ActiveCfg = Release|x86
+		{0C9F0E83-1BF1-4EA3-9FD2-D35D657E3641}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
