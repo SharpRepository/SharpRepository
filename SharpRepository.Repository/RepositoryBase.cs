@@ -1304,12 +1304,17 @@ namespace SharpRepository.Repository
         {
             return _aspects.Values
                 .Where(a => a.Enabled)
+                .OrderBy(a => a.Order)
                 .All(action);
         }
 
         private void RunAspect(Action<RepositoryActionBaseAttribute> action)
         {
-            foreach (var attribute in _aspects.Values.Where(a => a.Enabled))
+            var aspects = _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order);
+
+            foreach (var attribute in aspects)
             {
                 action(attribute);
             }
