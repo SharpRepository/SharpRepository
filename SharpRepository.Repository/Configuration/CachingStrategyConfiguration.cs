@@ -45,6 +45,24 @@ namespace SharpRepository.Repository.Configuration
             return factory.GetInstance<T, TKey, TKey2>();
         }
 
+        public ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>() where T : class, new()
+        {
+            // load up the factory if it exists and use it
+            var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
+
+            return factory.GetInstance<T, TKey, TKey2, TKey3>();
+        }
+
+        public ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>() where T : class, new()
+        {
+            // load up the factory if it exists and use it
+            var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
+
+            return factory.GetCompoundKeyInstance<T>();
+        }
+
+
+
         public string this[string key]
         {
             get { return Attributes[key]; }

@@ -24,5 +24,15 @@ namespace SharpRepository.InMemoryRepository
         {
             return new InMemoryRepository<T, TKey, TKey2>();
         }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        {
+            return new InMemoryRepository<T, TKey, TKey2, TKey3>();
+        }
+
+        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
+        {
+            return new InMemoryCompoundKeyRepository<T>();
+        }
     }
 }

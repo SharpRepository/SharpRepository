@@ -61,8 +61,8 @@ namespace SharpRepository.Repository
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IQueryable<T> GetAllQuery();
-        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
 
         public IEnumerable<T> GetAll()
         {
@@ -71,87 +71,87 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
         {
-            throw new NotImplementedException();
+            return GetAll((IQueryOptions<T>)null, fetchStrategy);
         }
 
         public IEnumerable<T> GetAll(params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
+            return GetAll(queryOptions, (IFetchStrategy<T>) null);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).ToList(),
                 null,
                 queryOptions
                 );
         }
 
-        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, (IQueryOptions<T>)null, (IFetchStrategy<T>)null);
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            return GetAll(selector, queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return GetAll(selector, null, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
                 selector,
                 queryOptions
                 );
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
@@ -645,8 +645,8 @@ namespace SharpRepository.Repository
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IQueryable<T> GetAllQuery();
-        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
 
         public IEnumerable<T> GetAll()
         {
@@ -655,87 +655,87 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
         {
-            throw new NotImplementedException();
+            return GetAll((IQueryOptions<T>)null, fetchStrategy);
         }
 
         public IEnumerable<T> GetAll(params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
+            return GetAll(queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).ToList(),
                 null,
                 queryOptions
                 );
         }
 
-        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, (IQueryOptions<T>)null, (IFetchStrategy<T>)null);
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            return GetAll(selector, queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return GetAll(selector, null, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
             return _queryManager.ExecuteGetAll(
-                () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
                 selector,
                 queryOptions
                 );
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -1247,8 +1247,8 @@ namespace SharpRepository.Repository
         public abstract IQueryable<T> AsQueryable();
 
         // These are the actual implementation that the derived class needs to implement
-        protected abstract IQueryable<T> GetAllQuery();
-        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions);
+        protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
+        protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
 
         public IEnumerable<T> GetAll()
         {
@@ -1257,87 +1257,87 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IFetchStrategy<T> fetchStrategy)
         {
-            throw new NotImplementedException();
+            return GetAll((IQueryOptions<T>)null, fetchStrategy);
         }
 
         public IEnumerable<T> GetAll(params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
         {
+            return GetAll(queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
+        {
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).ToList(),
                 null,
                 queryOptions
                 );
         }
 
-        public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, (IQueryOptions<T>)null, (IFetchStrategy<T>)null);
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            return GetAll(selector, queryOptions, (IFetchStrategy<T>)null);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
+        {
+            return GetAll(selector, null, fetchStrategy);
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
+        {
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy(includePaths));
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
 
             return _queryManager.ExecuteGetAll(
-                () =>  GetAllQuery(queryOptions).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
                 selector,
                 queryOptions
                 );
         }
 
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            throw new NotImplementedException();
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         // These are the actual implementation that the derived class needs to implement
