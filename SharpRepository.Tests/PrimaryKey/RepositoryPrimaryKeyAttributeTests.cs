@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Aspects;
+using SharpRepository.Tests.TestObjects;
 using Should;
 
 namespace SharpRepository.Tests.PrimaryKey
@@ -118,6 +121,21 @@ namespace SharpRepository.Tests.PrimaryKey
         public PropertyInfo TestGetPrimaryKeyPropertyInfo()
         {
             return GetPrimaryKeyPropertyInfo();
+        }
+
+        public void SuppressAudit()
+        {
+            DisableAspect(typeof(AuditAttributeMock));
+        }
+
+        public void RestoreAudit()
+        {
+            EnableAspect(typeof(AuditAttributeMock));
+        }
+
+        public IEnumerable<RepositoryActionBaseAttribute> GetAspects()
+        {
+            return Aspects;
         }
     }
 }

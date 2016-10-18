@@ -132,6 +132,7 @@
     <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />
     <Compile Include="Configuration\ConfigurationTests.cs" />
     <Compile Include="Conventions\DefaultConventionTests.cs" />
+    <Compile Include="Aspects\RepositoryActionBaseAttributeTests.cs" />
     <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
     <Compile Include="Ioc\DependencyResolverTests.cs" />
     <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />
@@ -156,11 +157,13 @@
     <Compile Include="Spikes\LoggingSpikes.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects\AuditAttributeMock.cs" />
     <Compile Include="TestObjects\CompoundKeyItem.cs" />
     <Compile Include="TestObjects\Contact.cs" />
     <Compile Include="TestObjects\ContactType.cs" />
     <Compile Include="TestObjects\EmailAddress.cs" />
     <Compile Include="TestObjects\PhoneNumber.cs" />
+    <Compile Include="TestObjects\Product.cs" />
     <Compile Include="TestObjects\PrimaryKeys\ObjectKeys.cs" />
     <Compile Include="TestObjects\TestObjectEntities.cs" />
     <Compile Include="Traits\ICanGetTraitTests.cs" />
