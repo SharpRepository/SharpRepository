@@ -70,7 +70,7 @@ namespace SharpRepository.AzureBlobRepository
             throw new NotImplementedException();
         }
 
-        private CloudBlockBlob GetBlobReference(T entity)
+        protected virtual CloudBlockBlob GetBlobReference(T entity)
         {
             TKey key;
             GetPrimaryKey(entity, out key);
