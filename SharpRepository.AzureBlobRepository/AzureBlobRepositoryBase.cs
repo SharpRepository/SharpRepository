@@ -94,7 +94,7 @@ namespace SharpRepository.AzureBlobRepository
             AddOrUpdateItem(entity);
         }
 
-        private void AddOrUpdateItem(T entity)
+        protected virtual void AddOrUpdateItem(T entity)
         {
             var blob = GetBlobReference(entity);
             blob.UploadText(JsonConvert.SerializeObject(entity));
