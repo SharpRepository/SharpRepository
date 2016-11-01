@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SharpRepository.AzureBlobRepository</id>
-    <version>0.1.0-preview</version>
+    <version>0.1.2-preview</version>
     <title>SharpRepository for Azure Blob Storage</title>
     <authors>Jeff Treuting, Ben Griswold, Fairway Technologies</authors>
     <owners>jtreuting, bgriswold</owners>
