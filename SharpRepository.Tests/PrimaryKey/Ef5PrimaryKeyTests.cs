@@ -19,6 +19,20 @@ namespace SharpRepository.Tests.PrimaryKey
             propInfo.PropertyType.ShouldEqual(typeof(int));
             propInfo.Name.ShouldEqual("KeyInt2");
         }
+
+        [Test]
+        public void Should_Return_KeyInt1_2_3_Property()
+        {
+            var repos = new TestTripleKeyEfRepository<TripleObjectKeys, int, int, int>(new DbContext("test"));
+            var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
+
+            propInfo[0].PropertyType.ShouldEqual(typeof(int));
+            propInfo[0].Name.ShouldEqual("KeyInt1");
+            propInfo[1].PropertyType.ShouldEqual(typeof(int));
+            propInfo[1].Name.ShouldEqual("KeyInt2");
+            propInfo[2].PropertyType.ShouldEqual(typeof(int));
+            propInfo[2].Name.ShouldEqual("KeyInt3");
+        }
     }
 
     internal class TestEfRepository<T, TKey> : EfRepository.EfRepository<T, TKey> where T : class, new()
@@ -28,6 +42,18 @@ namespace SharpRepository.Tests.PrimaryKey
         }
 
         public PropertyInfo TestGetPrimaryKeyPropertyInfo()
+        {
+            return GetPrimaryKeyPropertyInfo();
+        }
+    }
+
+    internal class TestTripleKeyEfRepository<T, TKey, TKey2, TKey3> : EfRepository.EfRepository<T, TKey, TKey2, TKey3> where T : class, new()
+    {
+        public TestTripleKeyEfRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null) : base(dbContext, cachingStrategy)
+        {
+        }
+
+        public PropertyInfo[] TestGetPrimaryKeyPropertyInfo()
         {
             return GetPrimaryKeyPropertyInfo();
         }

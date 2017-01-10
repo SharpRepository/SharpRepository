@@ -51,5 +51,47 @@ namespace SharpRepository.Repository.Caching
 
             return strategy;
         }
+
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        {
+            var strategy = new StandardCachingStrategy<T, TKey, TKey2, TKey3>()
+            {
+                MaxResults = CachingStrategyConfiguration.MaxResults
+            };
+
+            bool enabled;
+            if (Boolean.TryParse(CachingStrategyConfiguration["generational"], out enabled))
+            {
+                strategy.GenerationalCachingEnabled = enabled;
+            }
+
+            if (Boolean.TryParse(CachingStrategyConfiguration["writeThrough"], out enabled))
+            {
+                strategy.WriteThroughCachingEnabled = enabled;
+            }
+
+            return strategy;
+        }
+        
+        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>()
+        {
+            var strategy = new StandardCompoundKeyCachingStrategy<T>()
+            {
+                MaxResults = CachingStrategyConfiguration.MaxResults
+            };
+
+            bool enabled;
+            if (Boolean.TryParse(CachingStrategyConfiguration["generational"], out enabled))
+            {
+                strategy.GenerationalCachingEnabled = enabled;
+            }
+
+            if (Boolean.TryParse(CachingStrategyConfiguration["writeThrough"], out enabled))
+            {
+                strategy.WriteThroughCachingEnabled = enabled;
+            }
+
+            return strategy;
+        }
     }
 }

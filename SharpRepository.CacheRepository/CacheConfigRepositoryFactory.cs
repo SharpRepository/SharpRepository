@@ -24,5 +24,15 @@ namespace SharpRepository.CacheRepository
         {
             return new CacheRepository<T, TKey, TKey2>(RepositoryConfiguration["prefix"]);
         }
+
+        public override ICompoundKeyRepository<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        {
+            return new CacheRepository<T, TKey, TKey2, TKey3>(RepositoryConfiguration["prefix"]);
+        }
+
+        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
+        {
+            return new CacheCompoundKeyRepository<T>(RepositoryConfiguration["prefix"]);
+        }
     }
 }
