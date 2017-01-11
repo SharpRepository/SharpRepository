@@ -31,9 +31,8 @@ namespace SharpRepository.Repository
             _typeName = entityType.Name;
 
             _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
-                .Where(x => x.Enabled)
                 .OrderBy(x => x.Order)
-                .ToArray();
+                .ToDictionary(a => a.GetType().FullName, a => a);
 
             _repositoryActionContext = new RepositoryActionContext<T, TKey>(this);
             RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
@@ -49,7 +48,13 @@ namespace SharpRepository.Repository
         public IRepositoryConventions Conventions { get; set; }
 
         private readonly RepositoryActionContext<T, TKey> _repositoryActionContext;
-        private readonly RepositoryActionBaseAttribute[] _aspects;
+        private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
+
+        // For purposes of testing
+        protected IEnumerable<RepositoryActionBaseAttribute> Aspects
+        {
+            get { return _aspects.Values; }
+        }
 
         public Type EntityType
         {
@@ -120,6 +125,31 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
         protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
+
+
+        //Managing aspects
+        protected void DisableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = false;
+        }
+        protected void EnableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = true;
+        }
+        private void ValidateArgument(Type aspectType)
+        {
+            var baseAttribute = typeof(RepositoryActionBaseAttribute);
+
+            if (!baseAttribute.IsAssignableFrom(aspectType))
+                throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
+
+            if (!_aspects.ContainsKey(aspectType.FullName))
+                throw new InvalidOperationException(string.Format("There is no aspect of a type {0}", aspectType.Name));
+        }
 
         public IEnumerable<T> GetAll()
         {
@@ -1260,12 +1290,19 @@ namespace SharpRepository.Repository
 
         private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
         {
-            return _aspects.All(action);
+            return _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order)
+                .All(action);
         }
 
         private void RunAspect(Action<RepositoryActionBaseAttribute> action)
         {
-            foreach (var attribute in _aspects)
+            var aspects = _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order);
+
+            foreach (var attribute in aspects)
             {
                 action(attribute);
             }
