@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Diagnostics;
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {
@@ -6,7 +8,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
     {
         public TestObjectEntities(string connectionString) : base(connectionString)
         {
-            
+            Database.Log = sql => Debug.WriteLine(sql);
         }
 
         public DbSet<Contact> Contacts { get; set; }

@@ -9,17 +9,17 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     public class AzureBlobSpikes
     {
-        [Test]
-        public void TestAzureBlobGet()
-        {
-            var guid = Guid.NewGuid();
-            var repo = new AzureBlobRepository<TestBlob, Guid>("UseDevelopmentStorage=true", "testContainer", true);
+        //[Test]
+        //public void TestAzureBlobGet()
+        //{
+        //    var guid = Guid.NewGuid();
+        //    var repo = new AzureBlobRepository<TestBlob, Guid>("UseDevelopmentStorage=true", "testContainer", true);
 
-            repo.Add(new TestBlob { Id = guid , Name = "test"});
+        //    repo.Add(new TestBlob { Id = guid , Name = "test"});
 
-            var item = repo.Get(guid);
+        //    var item = repo.Get(guid);
 
-            item.ShouldNotBeNull();
+        //    item.ShouldNotBeNull();
 
 //            var storageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse("UseDevelopmentStorage=true");
 //            var blobClient = storageAccount.CreateCloudBlobClient();
@@ -29,7 +29,7 @@ namespace SharpRepository.Tests.Spikes
 //            var text = blob.DownloadText();
 //
 //            text.ShouldNotBeNull();
-        }
+        //}
     }
 
     public class TestBlob
