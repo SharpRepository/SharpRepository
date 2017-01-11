@@ -163,12 +163,12 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(params string[] includePaths)
         {
-            return GetAll(BuildFetchStrategy(includePaths));
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includePaths)
         {
-            return GetAll(BuildFetchStrategy(includePaths));
+            return GetAll(RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions)
@@ -221,12 +221,12 @@ namespace SharpRepository.Repository
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            return GetAll(queryOptions, BuildFetchStrategy(includePaths));
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            return GetAll(queryOptions, BuildFetchStrategy(includePaths));
+            return GetAll(queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector)
@@ -246,12 +246,12 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params string[] includePaths)
         {
-            return GetAll(selector, BuildFetchStrategy(includePaths));
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
         {
-            return GetAll(selector, BuildFetchStrategy(includePaths));
+            return GetAll(selector, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
@@ -301,33 +301,15 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params string[] includePaths)
         {
-            return GetAll(selector, queryOptions, BuildFetchStrategy(includePaths));
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, params Expression<Func<T, object>>[] includePaths)
         {
-            return GetAll(selector, queryOptions, BuildFetchStrategy(includePaths));
+            return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
-        private static IFetchStrategy<T> BuildFetchStrategy(params string[] includePaths)
-        {
-            var fetchStrategy = new GenericFetchStrategy<T>();
-            foreach (var path in includePaths)
-            {
-                fetchStrategy.Include(path);
-            }
-            return fetchStrategy;
-        }
-
-        private static IFetchStrategy<T> BuildFetchStrategy(params Expression<Func<T, object>>[] includePaths)
-        {
-            var fetchStrategy = new GenericFetchStrategy<T>();
-            foreach (var path in includePaths)
-            {
-                fetchStrategy.Include(path);
-            }
-            return fetchStrategy;
-        }
+        
 
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy);
@@ -349,7 +331,7 @@ namespace SharpRepository.Repository
 
         public T Get(TKey key, params string[] includePaths)
         {
-            return Get(key, BuildFetchStrategy(includePaths));
+            return Get(key, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public T Get(TKey key)
@@ -384,12 +366,12 @@ namespace SharpRepository.Repository
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params Expression<Func<T, object>>[] includePaths)
         {
-            return Get(key, selector, BuildFetchStrategy(includePaths));
+            return Get(key, selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector, params string[] includePaths)
         {
-            return Get(key, selector, BuildFetchStrategy(includePaths));
+            return Get(key, selector, RepositoryHelper.BuildFetchStrategy<T>(includePaths));
         }
 
         public TResult Get<TResult>(TKey key, Expression<Func<T, TResult>> selector)

@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository;
+﻿using SharpRepository.Ioc.StructureMap.Factories;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using StructureMap;
 using StructureMap.Pipeline;
@@ -7,68 +8,34 @@ namespace SharpRepository.Ioc.StructureMap
 {
     public static class StructureMapExtensions
     {
-        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this IInitializationExpression initialization, string repositoryName = null)
+        public static void ForRepositoriesUseSharpRepository(this ConfigurationExpression initialization, string repositoryName = null)
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
-            initialization.For(typeof(IRepository<>))
-                                 .Use(context =>
-                                 {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+            initialization.For(typeof(IRepository<>)).Use(new RepositoryNoKeyInstanceFactory(repositoryName));
 
-                                     return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
-                                 }
-                );
+            initialization.For(typeof(IRepository<,>)).Use(new RepositorySingleKeyInstanceFactory(repositoryName));
 
-            initialization.For(typeof(IRepository<,>))
-                                 .Use(context =>
-                                 {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+            initialization.For(typeof(ICompoundKeyRepository<,,>)).Use(new RepositoryDoubleKeyInstanceFactory(repositoryName));
 
-                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
-                                 }
-                );
+            initialization.For(typeof(ICompoundKeyRepository<,,,>)).Use(new RepositoryTripleKeyInstanceFactory(repositoryName));
 
-            return initialization.For(typeof(ICompoundKeyRepository<,,>))
-                                .Use(context =>
-                                 {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-
-                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], repositoryName);
-                                 }
-                );
+            initialization.For(typeof(ICompoundKeyRepository<>)).Use(new RepositoryCompoundKeyInstanceFactory(repositoryName));
         }
 
-        public static LambdaInstance<object> ForRepositoriesUseSharpRepository(this IInitializationExpression initialization, ISharpRepositoryConfiguration configuration)
+        public static void ForRepositoriesUseSharpRepository(this ConfigurationExpression initialization, ISharpRepositoryConfiguration configuration)
         {
             initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
 
-            initialization.For(typeof(IRepository<>))
-                                 .Use(context =>
-                                 {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+            initialization.For(typeof(IRepository<>)).Use(new RepositoryNoKeyInstanceFactory(configuration));
 
-                                     return RepositoryFactory.GetInstance(genericArgs[0], configuration);
-                                 }
-                );
+            initialization.For(typeof(IRepository<,>)).Use(new RepositorySingleKeyInstanceFactory(configuration));
 
-            initialization.For(typeof(IRepository<,>))
-                                 .Use(context =>
-                                 {
-                                     var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
+            initialization.For(typeof(ICompoundKeyRepository<,,>)).Use(new RepositoryDoubleKeyInstanceFactory(configuration));
 
-                                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
-                                 }
-                );
+            initialization.For(typeof(ICompoundKeyRepository<,,,>)).Use(new RepositoryTripleKeyInstanceFactory(configuration));
 
-            return initialization.For(typeof(ICompoundKeyRepository<,,>))
-                                .Use(context =>
-                                {
-                                    var genericArgs = context.BuildStack.Current.RequestedType.GetGenericArguments();
-
-                                    return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
-                                }
-                );
+            initialization.For(typeof(ICompoundKeyRepository<>)).Use(new RepositoryCompoundKeyInstanceFactory(configuration));
         }
     }
 }

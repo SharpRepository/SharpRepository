@@ -1,13 +1,14 @@
 ﻿using SharpRepository.Ioc.StructureMap;
 using StructureMap;
+using StructureMap.Graph;
 
 namespace SharpRepository.Benchmarks.Configuration
 {
     public static class Bootstrapper
     {
-        public static void Run()
+        public static Container Run()
         {
-            ObjectFactory.Initialize(x =>
+            var container = new Container(x =>
             {
                 x.Scan(scan =>
                 {
@@ -17,6 +18,8 @@ namespace SharpRepository.Benchmarks.Configuration
 
                 x.ForRepositoriesUseSharpRepository();
             });
+
+            return container;
         }
     }
 }

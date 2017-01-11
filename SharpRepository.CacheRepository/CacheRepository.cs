@@ -44,4 +44,12 @@ namespace SharpRepository.CacheRepository
         {
         }
     }
+
+    public class CacheRepository<T, TKey, TKey2, TKey3> : CacheCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> where T : class, new()
+    {
+        public CacheRepository(string prefix, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
+            : base(prefix, cachingStrategy)
+        {
+        }
+    }
 }

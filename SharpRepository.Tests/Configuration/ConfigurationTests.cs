@@ -173,5 +173,27 @@ namespace SharpRepository.Tests.Configuration
                 throw new Exception("Not InMemoryRepository");
             }
         }
+
+        [Test]
+        public void TestFactoryOverloadMethodForTripleCompoundKey()
+        {
+            var repos = RepositoryFactory.GetInstance(typeof(Contact), typeof(string), typeof(string), typeof(string));
+
+            if (!(repos is InMemoryRepository<Contact, string, string, string>))
+            {
+                throw new Exception("Not InMemoryRepository");
+            }
+        }
+
+        [Test]
+        public void TestFactoryOverloadMethodForNoGenericsCompoundKey()
+        {
+            var repos = RepositoryFactory.GetCompoundKeyInstance(typeof(Contact));
+
+            if (!(repos is InMemoryCompoundKeyRepository<Contact>))
+            {
+                throw new Exception("Not InMemoryRepository");
+            }
+        }
     }
 }

@@ -12,6 +12,14 @@ namespace SharpRepository.EfRepository
         }
     }
 
+    public class EfRepository<T, TKey, TKey2, TKey3> : EfCompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> where T : class, new()
+    {
+        public EfRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
+            : base(dbContext, cachingStrategy)
+        {
+        }
+    }
+
     public class EfCompoundKeyRepository<T> : EfCompoundKeyRepositoryBase<T> where T : class
     {
         public EfCompoundKeyRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T> cachingStrategy = null)

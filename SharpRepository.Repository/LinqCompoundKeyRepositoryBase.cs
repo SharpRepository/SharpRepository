@@ -44,17 +44,17 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-        protected override IQueryable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy)
         {
-            return BaseQuery();
+            return BaseQuery(fetchStrategy);
         }
 
-        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery();
+                return GetAllQuery(null);
 
-            var query = BaseQuery();
+            var query = BaseQuery(fetchStrategy);
 
             return queryOptions.Apply(query);
         }
@@ -133,17 +133,17 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-        protected override IQueryable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy)
         {
-            return BaseQuery();
+            return BaseQuery(fetchStrategy);
         }
 
-        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery();
+                return GetAllQuery(null);
 
-            var query = BaseQuery();
+            var query = BaseQuery(fetchStrategy);
 
             return queryOptions.Apply(query);
         }
@@ -222,15 +222,15 @@ namespace SharpRepository.Repository
             return criteria.SatisfyingEntityFrom(query);
         }
 
-        protected override IQueryable<T> GetAllQuery()
+        protected override IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy)
         {
-            return BaseQuery();
+            return BaseQuery(fetchStrategy);
         }
 
-        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions)
+        protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery();
+                return GetAllQuery(null);
 
             var query = BaseQuery();
 
