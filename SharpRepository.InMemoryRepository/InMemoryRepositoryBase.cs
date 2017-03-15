@@ -11,9 +11,11 @@ namespace SharpRepository.InMemoryRepository
     public abstract class InMemoryRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         private readonly ConcurrentDictionary<TKey, T> _items = new ConcurrentDictionary<TKey, T>();
+        public bool GenerateKeyOnAdd { get; set; }
 
-        internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
-        {   
+        internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
+        {
+            GenerateKeyOnAdd = true;
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
@@ -59,7 +61,7 @@ namespace SharpRepository.InMemoryRepository
         {
             TKey id;
 
-            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
