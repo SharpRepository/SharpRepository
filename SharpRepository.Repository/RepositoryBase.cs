@@ -23,6 +23,7 @@ namespace SharpRepository.Repository
                 throw new InvalidOperationException("The repository type and the primary key type can not be the same.");
             }
 
+            GenerateKeyOnAdd = true;
             Conventions = new RepositoryConventions();
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey>(); // sets QueryManager as well
             // the CachePrefix is set to the default convention in the CachingStrategyBase class, the user to override when passing in an already created CachingStrategy class
@@ -1575,6 +1576,8 @@ namespace SharpRepository.Repository
             SetTraceInfo(caller, query.ToString(), append);
         }
         public string TraceInfo { get; protected set; }
+
+        public bool GenerateKeyOnAdd { get; set; }
 
         public TKey GetPrimaryKey(T entity)
         {

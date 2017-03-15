@@ -11,7 +11,6 @@ namespace SharpRepository.InMemoryRepository
     public abstract class InMemoryRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         private readonly ConcurrentDictionary<TKey, T> _items = new ConcurrentDictionary<TKey, T>();
-        public bool GenerateKeyOnAdd { get; set; }
 
         internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {

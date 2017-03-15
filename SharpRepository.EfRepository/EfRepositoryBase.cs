@@ -14,7 +14,6 @@ namespace SharpRepository.EfRepository
     {
         protected IDbSet<T> DbSet { get; private set; }
         protected DbContext Context { get; private set; }
-        public bool GenerateKeyOnAdd { get; set; }
 
         internal EfRepositoryBase(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
@@ -34,7 +33,7 @@ namespace SharpRepository.EfRepository
             if (typeof(TKey) == typeof(Guid) || typeof(TKey) == typeof(string))
             {
                 TKey id;
-                if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
+                if (GenerateKeyOnAdd && GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
                 {
                     id = GeneratePrimaryKey();
                     SetPrimaryKey(entity, id);
