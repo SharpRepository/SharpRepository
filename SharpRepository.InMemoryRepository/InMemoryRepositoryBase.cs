@@ -14,7 +14,7 @@ namespace SharpRepository.InMemoryRepository
 
         internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
-            GenerateKeyOnAdd = true;
+            
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)

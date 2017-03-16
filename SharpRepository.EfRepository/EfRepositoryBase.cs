@@ -18,7 +18,6 @@ namespace SharpRepository.EfRepository
         internal EfRepositoryBase(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
         {
             if (dbContext == null) throw new ArgumentNullException("dbContext");
-            GenerateKeyOnAdd = true;
             Initialize(dbContext);
         }
 
