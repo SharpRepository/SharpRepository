@@ -1,4 +1,4 @@
-using Rhino.Mocks;
+using Moq;
 
 namespace SharpRepository.Tests
 {
@@ -17,7 +17,8 @@ namespace SharpRepository.Tests
         /// <returns>T</returns>
         protected static T M<T>(params object[] argumentsForConstructor) where T : class
         {
-            return MockRepository.GenerateMock<T>(argumentsForConstructor);
+            var mock = new MockRepository(MockBehavior.Default).Create<T>(argumentsForConstructor);
+            return mock.Object;
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace SharpRepository.Tests
         /// <returns>T</returns>
         protected static T Pm<T>(params object[] argumentsForConstructor) where T : class
         {
-            return MockRepository.GeneratePartialMock<T>(argumentsForConstructor);
+            return M<T>(argumentsForConstructor);
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace SharpRepository.Tests
         /// <returns>T</returns>
         protected static T S<T>(params object[] argumentsForConstructor) where T : class
         {
-            return MockRepository.GenerateStub<T>(argumentsForConstructor);
+            return M<T>(argumentsForConstructor);
         }
     }
 }
