@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Runtime.Caching;
 using SharpRepository.Repository.Caching;
 using StackExchange.Redis;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SharpRepository.Caching.Redis
 {
@@ -89,7 +89,7 @@ namespace SharpRepository.Caching.Redis
         /// <param name="key">Name of item</param>
         /// <param name="priority"></param>
         /// <param name="timeoutInSeconds">Seconds to cache</param>
-        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? timeoutInSeconds = null)
+        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Normal, int? timeoutInSeconds = null)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -156,7 +156,7 @@ namespace SharpRepository.Caching.Redis
             return true;
         }
 
-        public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Default)
+        public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Normal)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
