@@ -3,6 +3,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using System;
 
 namespace SharpRepository.Tests.Conventions
 {
@@ -58,6 +59,25 @@ namespace SharpRepository.Tests.Conventions
 
             var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>());
             repos.CachingStrategy.FullCachePrefix.ShouldStartWith(newPrefix);
+        }
+
+        [Test]
+        public void RavenDb_Throws_NotSupportedException_When_GenerateKeyOnAdd_Is_Set_False()
+        {
+            var ravenDbRepo = new RavenDbRepository.RavenDbRepository<Contact>();
+            Exception actualException = null;
+
+            try
+            {
+                ravenDbRepo.GenerateKeyOnAdd = false;
+            }
+            catch(Exception ex)
+            {
+                actualException = ex;
+            }
+
+            actualException.ShouldNotBeNull();
+            actualException.ShouldBeType<NotSupportedException>();
         }
 
         internal class TestConventionObject

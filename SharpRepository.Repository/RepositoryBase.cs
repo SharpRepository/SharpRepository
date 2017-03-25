@@ -1577,7 +1577,7 @@ namespace SharpRepository.Repository
         }
         public string TraceInfo { get; protected set; }
 
-        public bool GenerateKeyOnAdd { get; set; }
+        public virtual bool GenerateKeyOnAdd { get; set; }
 
         public TKey GetPrimaryKey(T entity)
         {

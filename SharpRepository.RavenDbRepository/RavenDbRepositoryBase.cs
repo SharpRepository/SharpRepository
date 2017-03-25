@@ -344,6 +344,20 @@ namespace SharpRepository.RavenDbRepository
                 DocumentStore.Dispose();
         }
 
+        public override bool GenerateKeyOnAdd
+        {
+            get { return base.GenerateKeyOnAdd; }
+            set
+            {
+                if (value == false)
+                {
+                    throw new NotSupportedException("Raven DB driver always generates key values. SharpRepository can't avoid it.");
+                }
+
+                base.GenerateKeyOnAdd = value;
+            }
+        }
+
         private TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
