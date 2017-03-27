@@ -15,10 +15,9 @@ namespace SharpRepository.Repository.Helpers
         /// <returns>MD5 computed string</returns>
         public static string CalculateMd5(string input, Encoding useEncoding)
         {
-            var cryptoService = new MD5CryptoServiceProvider();
-
+            var md5 = MD5.Create();
             var bytes = useEncoding.GetBytes(input);
-            bytes = cryptoService.ComputeHash(bytes);
+            bytes = md5.ComputeHash(bytes);
             return BitConverter.ToString(bytes).Replace("-", "");
         }
 
@@ -31,7 +30,12 @@ namespace SharpRepository.Repository.Helpers
         public static string CalculateMd5(string input)
         {
             // That's just a shortcut to the base method
-            return CalculateMd5(input, Encoding.Default);
+#if NET451
+            var defaultEncoding = Encoding.Default;
+#elif NETSTANDARD1_6
+            var defaultEncoding = Encoding.GetEncoding(0);
+#endif
+            return CalculateMd5(input, defaultEncoding);
         }
     }
 }

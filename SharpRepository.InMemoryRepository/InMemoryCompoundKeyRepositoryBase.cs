@@ -5,6 +5,7 @@ using System.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
+using System.Reflection;
 
 namespace SharpRepository.InMemoryRepository
 {

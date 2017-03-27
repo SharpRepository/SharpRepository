@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -432,7 +432,7 @@ namespace SharpRepository.Repository.Caching
 
        private int IncrementCachingPrefixCounter()
        {
-           return CachingProvider.Increment(GetCachingPrefixCounterKey(), 1, 1, CacheItemPriority.NotRemovable);
+           return CachingProvider.Increment(GetCachingPrefixCounterKey(), 1, 1, CacheItemPriority.NeverRemove);
        }
 
        protected void ClearCache(string cacheKey)

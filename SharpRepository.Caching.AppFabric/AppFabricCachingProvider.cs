@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Runtime.Caching;
 using Microsoft.ApplicationServer.Caching;
 using SharpRepository.Repository.Caching;
+using Microsoft.Extensions.Caching.Memory;
 
 // Reference: http://stackoverflow.com/questions/4739548/appfabric-caching-examples-using-c-sharp
 
@@ -52,7 +52,7 @@ namespace SharpRepository.Caching.AppFabric
             Cache = String.IsNullOrEmpty(cacheName) ? cacheFactory.GetDefaultCache() : cacheFactory.GetCache(cacheName);
         }
 
-        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? cacheTime = null)
+        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Normal, int? cacheTime = null)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
@@ -102,7 +102,7 @@ namespace SharpRepository.Caching.AppFabric
             return true;
         }
 
-        public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Default)
+        public int Increment(string key, int defaultValue, int value, CacheItemPriority priority = CacheItemPriority.Normal)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 

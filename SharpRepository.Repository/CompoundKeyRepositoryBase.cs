@@ -136,9 +136,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selectFunc).ToList(),
                 selector,
                 queryOptions
                 );
@@ -173,6 +174,7 @@ namespace SharpRepository.Repository
         public TResult Get<TResult>(Expression<Func<T, TResult>> selector, params object[] keys)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGet(
                 () =>
@@ -182,7 +184,7 @@ namespace SharpRepository.Repository
                         return default(TResult);
 
                     var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
+                    return results.AsEnumerable().Select(selectFunc).First();
                 },
                 selector,
                 keys
@@ -229,9 +231,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                () => FindAllQuery(criteria, queryOptions).Select(selectFunc).ToList(),
                 criteria,
                 selector,
                 queryOptions
@@ -273,6 +276,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFind(
                 () =>
@@ -282,7 +286,7 @@ namespace SharpRepository.Repository
                         return default(TResult);
 
                     var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
+                    return results.AsEnumerable().Select(selectFunc).First();
                 },
                 criteria,
                 selector,
@@ -586,8 +590,13 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
+#if NET451
+            var properties = type.GetProperties();
+#elif NETSTANDARD1_6
+            var properties = type.GetTypeInfo().DeclaredProperties;
+#endif
 
-            return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
+            return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
     }
 
@@ -720,9 +729,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selectFunc).ToList(),
                 selector,
                 queryOptions
                 );
@@ -758,6 +768,7 @@ namespace SharpRepository.Repository
         public TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGet(
                 () =>
@@ -767,7 +778,7 @@ namespace SharpRepository.Repository
                         return default(TResult);
 
                     var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
+                    return results.AsEnumerable().Select(selectFunc).First();
                 },
                 selector,
                 key,
@@ -830,9 +841,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                () => FindAllQuery(criteria, queryOptions).Select(selectFunc).ToList(),
                 criteria,
                 selector,
                 queryOptions
@@ -874,6 +886,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFind(
                 () =>
@@ -883,7 +896,7 @@ namespace SharpRepository.Repository
                             return default(TResult);
 
                         var results = new[] { result };
-                        return results.AsQueryable().Select(selector).First();
+                        return results.AsEnumerable().Select(selectFunc).First();
                     },
                 criteria,
                 selector,
@@ -1188,8 +1201,13 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
+#if NET451
+            var properties = type.GetProperties();
+#elif NETSTANDARD1_6
+            var properties = type.GetTypeInfo().DeclaredProperties;
+#endif
 
-            return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
+            return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
     }
 
@@ -1322,9 +1340,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
+                () => GetAllQuery(queryOptions, fetchStrategy).Select(selectFunc).ToList(),
                 selector,
                 queryOptions
                 );
@@ -1361,6 +1380,7 @@ namespace SharpRepository.Repository
         public TResult Get<TResult>(TKey key, TKey2 key2, TKey3 key3, Expression<Func<T, TResult>> selector)
         {
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteGet(
                 () =>
@@ -1370,7 +1390,7 @@ namespace SharpRepository.Repository
                         return default(TResult);
 
                     var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
+                    return results.AsEnumerable().Select(selectFunc).First();
                 },
                 selector,
                 key,
@@ -1434,9 +1454,10 @@ namespace SharpRepository.Repository
         public IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
+                () => FindAllQuery(criteria, queryOptions).Select(selectFunc).ToList(),
                 criteria,
                 selector,
                 queryOptions
@@ -1478,6 +1499,7 @@ namespace SharpRepository.Repository
         {
             if (criteria == null) throw new ArgumentNullException("criteria");
             if (selector == null) throw new ArgumentNullException("selector");
+            var selectFunc = selector.Compile();
 
             return _queryManager.ExecuteFind(
                 () =>
@@ -1487,7 +1509,7 @@ namespace SharpRepository.Repository
                             return default(TResult);
 
                         var results = new[] { result };
-                        return results.AsQueryable().Select(selector).First();
+                        return results.AsEnumerable().Select(selectFunc).First();
                     },
                 criteria,
                 selector,
@@ -1805,8 +1827,12 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
-
-            return type.GetProperties().Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
+#if NET451
+            var properties = type.GetProperties();
+#elif NETSTANDARD1_6
+            var properties = type.GetTypeInfo().DeclaredProperties;
+#endif
+            return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
     }
 }

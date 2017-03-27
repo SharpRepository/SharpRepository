@@ -5,6 +5,7 @@ using System.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
+using System.Reflection;
 
 namespace SharpRepository.InMemoryRepository
 {
@@ -36,7 +37,6 @@ namespace SharpRepository.InMemoryRepository
 
             var type = typeof (T);
             var properties = type.GetProperties();
-
             var clonedList = new List<T>(list.Count);
 
             foreach (var keyValuePair in list)

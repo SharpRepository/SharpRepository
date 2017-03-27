@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
+#if NET451
 [assembly: AssemblyCompany("SharpRepository")]
 [assembly: AssemblyProduct("SharpRepository")]
+#endif
 [assembly: AssemblyCopyright("Copyright © SharpRepository 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -12,6 +14,7 @@ using System.Runtime.InteropServices;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: ComVisible(false)]
 
+#if NET451
 // The AssemblyVersion is used by the CLR to bind to strongly named assemblies.
 // It is stored in the AssemblyDef manifest metadata table of the built assembly, 
 // and in the AssemblyRef table of any assembly that references it. 
@@ -35,6 +38,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("SharpRepository.Repository")]
 [assembly: AssemblyDescription("")]
+#endif
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("ea497cf0-85ce-4a21-895f-bb6b4661b71a")]
