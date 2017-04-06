@@ -76,21 +76,28 @@ namespace SharpRepository.MongoDbRepository
                 var primaryKeyName = primaryKeyPropInfo.Name;
 
                 BsonClassMap.RegisterClassMap<T>(cm =>
-                                                     {
-                                                         cm.AutoMap();
-                                                         if (cm.IdMemberMap == null)
-                                                         {
-                                                             cm.SetIdMember(cm.GetMemberMap(primaryKeyName));
+                {
+                    cm.AutoMap();
+                    if (cm.IdMemberMap == null)
+                    {
+                        // GetMemberMap will return null if id column is contained in a base class.
+                        // If null just continue as the base class should have the correct
+                        // id parameter mapped already.
+                        var mm = cm.GetMemberMap(primaryKeyName);
+                        if (mm != null)
+                        {
+                            cm.SetIdMember(mm);
 
-                                                             if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
-                                                             {
-                                                                 cm.IdMemberMap.SetRepresentation(_keyTypeToBsonType[typeof(TKey)]);
-                                                                 cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
-                                                             }    
-                                                         }
+                            if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
+                            {
+                                cm.IdMemberMap.SetRepresentation(_keyTypeToBsonType[typeof(TKey)]);
+                                cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
+                            }
+                        }
+                    }
 
-                                                         cm.Freeze();
-                                                     });
+                    cm.Freeze();
+                });
             }
         }
 
