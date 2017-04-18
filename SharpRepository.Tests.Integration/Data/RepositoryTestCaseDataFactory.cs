@@ -64,8 +64,9 @@ namespace SharpRepository.Tests.Integration.Data
                 var documentStore = new EmbeddableDocumentStore
                                         {
                                             RunInMemory = true,
-                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
+                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.AlwaysWaitForNonStaleResultsAsOfLastWrite }
                                         };
+                //documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
 

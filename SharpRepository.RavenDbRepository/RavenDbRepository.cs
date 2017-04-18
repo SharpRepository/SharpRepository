@@ -1,6 +1,7 @@
 ﻿using System;
 using SharpRepository.Repository.Caching;
 using Raven.Client.Document;
+using Raven.Client;
 
 namespace SharpRepository.RavenDbRepository
 {
@@ -34,7 +35,7 @@ namespace SharpRepository.RavenDbRepository
         /// </summary>
         /// <param name="documentStore">The instantiated RavenDb Document Store.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
-        public RavenDbRepository(DocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(documentStore, cachingStrategy) 
+        public RavenDbRepository(IDocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(documentStore, cachingStrategy) 
         {
             if (documentStore == null) throw new ArgumentNullException("documentStore");
         }  
@@ -69,7 +70,7 @@ namespace SharpRepository.RavenDbRepository
         /// </summary>
         /// <param name="documentStore">The instantiated RavenDb Document Store.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
-        public RavenDbRepository(DocumentStore documentStore, ICachingStrategy<T, string> cachingStrategy = null) : base(documentStore, cachingStrategy)
+        public RavenDbRepository(IDocumentStore documentStore, ICachingStrategy<T, string> cachingStrategy = null) : base(documentStore, cachingStrategy)
         {
             if (documentStore == null) throw new ArgumentNullException("documentStore");
         }  

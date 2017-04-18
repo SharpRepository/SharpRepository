@@ -3,6 +3,8 @@ using NUnit.Framework;
 using Raven.Client.Embedded;
 using SharpRepository.RavenDbRepository;
 using Should;
+using Raven.Client.Document;
+using Raven.Client;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -12,7 +14,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Use_Raven_Db_Embedded_For_Tests()
         {
-            var documentStore = new EmbeddableDocumentStore() {RunInMemory = true};
+            IDocumentStore documentStore = new EmbeddableDocumentStore() {RunInMemory = true};
             using (var repos = new RavenDbRepository<RavenTestStringKey>(documentStore))
             {
                 repos.Add(new RavenTestStringKey() {Name = "Jeff", Age = 33});
