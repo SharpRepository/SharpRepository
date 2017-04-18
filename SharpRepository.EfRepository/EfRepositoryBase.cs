@@ -73,7 +73,7 @@ namespace SharpRepository.EfRepository
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore and try the default behavior
             }

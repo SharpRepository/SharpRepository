@@ -15,9 +15,6 @@ namespace SharpRepository.CouchDbRepository
         private readonly string _serverUrl;
         private readonly string _database;
 
-        //private readonly CouchDbQueryProvider _provider;
-        private readonly IQueryable<T> _baseQuery;
-
         internal CouchDbRepositoryBase()
             : this("127.0.0.1", 5984)
          {
