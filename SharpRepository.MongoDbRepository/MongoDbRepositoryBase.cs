@@ -69,7 +69,7 @@ namespace SharpRepository.MongoDbRepository
 
         private void Initialize(IMongoDatabase mongoDatabase = null)
         {
-            Database = mongoDatabase ?? new MongoClient("mongodb://localhost").GetDatabase(MongoUrl.Create("mongodb://localhost").DatabaseName);
+            Database = mongoDatabase ?? new MongoClient("mongodb://localhost/default").GetDatabase(MongoUrl.Create("mongodb://localhost/default").DatabaseName);
 
             if (!BsonClassMap.IsClassMapRegistered(typeof (T)))
             {

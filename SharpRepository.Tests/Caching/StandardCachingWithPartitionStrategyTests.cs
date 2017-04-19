@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Caching;
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using System.Runtime.Caching;
 
 namespace SharpRepository.Tests.Caching
 {
