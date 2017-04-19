@@ -35,7 +35,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void MongoDb_Supports_Basic_Crud_Operations()
         {
-            const string connectionString = "mongodb://localhost";
+            const string connectionString = "mongodb://localhost/Order";
             
             if (!MongoDbRepositoryManager.ServerIsRunning(connectionString))
             {
@@ -109,7 +109,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void MongoRepository_Supports_Basic_Crud_Operations()
         {
-            const string connectionString = "mongodb://127.0.0.1";
+            const string connectionString = "mongodb://127.0.0.1/test";
 
             if (!MongoDbRepositoryManager.ServerIsRunning(connectionString))
             {
