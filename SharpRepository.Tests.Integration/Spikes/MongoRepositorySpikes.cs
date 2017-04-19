@@ -5,7 +5,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using MongoDB.Driver.Linq;
 using NUnit.Framework;
 using SharpRepository.MongoDbRepository;
@@ -43,20 +42,20 @@ namespace SharpRepository.Tests.Integration.Spikes
                 AssertIgnores.MongoServerIsNotRunning();
             }
 
-            var server = new MongoClient(connectionString).GetServer();
-            var databaseNames = server.GetDatabaseNames();
+            var cli = new MongoClient(connectionString);
+            var databaseNames = cli.ListDatabases().ToList();
             foreach (var db in databaseNames)
             {
-                server.DropDatabase(db);    
+                cli.DropDatabase(db["name"].AsString);    
             }
             
-            var database = server.GetDatabase("Order");
+            var database = cli.GetDatabase("Order");
             var orders = database.GetCollection<Order>("Order");
             
             Console.WriteLine("* CREATE *");
 
             var create = new Order { Name = "Big sale" };
-            database.GetCollection<Order>("Order").Insert(create);
+            database.GetCollection<Order>("Order").InsertOne(create);
 
             foreach (var order in database.GetCollection<Order>("Order").AsQueryable())
             {
@@ -64,45 +63,47 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
 
             Console.WriteLine("* READ *");
-
-            var read = orders.AsQueryable().FirstOrDefault(e => e.OrderId == create.OrderId);
+            
+            var filter = Builders<Order>.Filter.Eq(o => o.OrderId, create.OrderId);
+            var read = orders.Find(filter).ToList().FirstOrDefault();
             read.Name.ShouldEqual(create.Name);
             
             Console.WriteLine("* UPDATE *");
-
-            read.Name = "Really big sale";
-            database.GetCollection<Order>("Order").Save(read);
+            
+            var update = Builders<Order>.Update.Set(o => o.Name, "Really big sale");
+            orders.UpdateOne(filter, update);
 
             foreach (var order in database.GetCollection<Order>("Order").AsQueryable())
             {
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
             
-            var update = database.GetCollection<Order>("Order").AsQueryable().FirstOrDefault(e => e.OrderId == read.OrderId);
-            update.OrderId.ShouldEqual(read.OrderId);
-            update.Name.ShouldEqual(read.Name);
+            var read_updated = orders.Find(filter).ToList().FirstOrDefault();
+            read_updated.OrderId.ShouldEqual(read.OrderId);
+            read_updated.Name.ShouldEqual(read.Name);
 
             Console.WriteLine("* DELETE *");
 
-            var delete = database.GetCollection<Order>("Order").AsQueryable().FirstOrDefault(e => e.OrderId == update.OrderId);
-
-            database.GetCollection<Order>("Order").Remove(Query.EQ("OrderId", delete.OrderId));
+            orders.DeleteOne(filter);
             
             foreach (var order in database.GetCollection<Order>("Order").AsQueryable())
             {
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
 
-            database.GetCollection<Order>("Order").RemoveAll();
+            orders.Count(filter).ShouldEqual(0);
 
             Console.WriteLine("* DELETE ALL *");
-            
+            orders.DeleteMany(new BsonDocument());
+
             foreach (var order in database.GetCollection<Order>("Order").AsQueryable())
             {
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
 
-            server.DropDatabase("Order");
+            orders.AsQueryable().Count().ShouldEqual(0);
+
+            cli.DropDatabase("Order");
         }
         
         [Test]

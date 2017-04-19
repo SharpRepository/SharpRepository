@@ -1,14 +1,16 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace SharpRepository.MongoDbRepository
 {
     public static class MongoDbRepositoryManager
     {
-        public static bool ServerIsRunning(MongoServer server)
+        public static bool ServerIsRunning(IMongoDatabase db)
         {
             try
             {
-                server.Ping();
+                db.RunCommandAsync((Command<BsonDocument>)"{ping:1}")
+                        .Wait();
             }
             catch
             {
@@ -20,7 +22,9 @@ namespace SharpRepository.MongoDbRepository
 
         public static bool ServerIsRunning(string connectionString)
         {
-            return ServerIsRunning(new MongoClient(connectionString).GetServer());
+            var db_name = MongoUrl.Create(connectionString).DatabaseName;
+            var cli = new MongoClient(connectionString);
+            return ServerIsRunning(cli.GetDatabase(db_name));
         }
 
         public static string DatabaseName(string connectionString)
@@ -30,9 +34,9 @@ namespace SharpRepository.MongoDbRepository
 
         public static void DropDatabase(string connectionString)
         {
-            var server = new MongoClient(connectionString).GetServer();
-            var db = DatabaseName(connectionString);
-            server.DropDatabase(db);
+            var cli = new MongoClient(connectionString);
+            var db_name = MongoUrl.Create(connectionString).DatabaseName;
+            cli.DropDatabase(db_name);
         }
     }
 }
