@@ -14,7 +14,7 @@ using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.CacheRepository;
-
+using System;
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -66,7 +66,12 @@ namespace SharpRepository.Tests.Integration.Data
                                             RunInMemory = true,
                                             Conventions = { DefaultQueryingConsistency = ConsistencyOptions.AlwaysWaitForNonStaleResultsAsOfLastWrite }
                                         };
-                //documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+                if (IntPtr.Size == 4)
+                {
+                    documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+                }
+
+                //
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
 
