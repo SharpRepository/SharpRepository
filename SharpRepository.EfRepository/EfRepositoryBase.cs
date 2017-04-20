@@ -44,8 +44,21 @@ namespace SharpRepository.EfRepository
 
         protected override void DeleteItem(T entity)
         {
-			DbSet.Attach(entity);
-            DbSet.Remove(entity);
+          /* Self referencing entities with nullable keys will be set null during delete. 
+           * If you have a partition on a self referencing nullable property then the later generated partition key will be incorrect 
+           * causing the partition generation to fail to increment and the old deleted cache enteries will be returned from the cache. */
+
+          var entry = Context.Entry<T>(entity);
+          entry.State = EntityState.Detached;
+
+          // Get an seperate attached entity.
+          TKey key;
+          if (GetPrimaryKey(entity, out key))
+          {
+            var attachedEntity = Context.Set<T>().Find(key);
+            if (attachedEntity != null)
+              DbSet.Remove(attachedEntity);
+          }
         }
 
         protected override void UpdateItem(T entity)
