@@ -309,7 +309,7 @@ namespace SharpRepository.MongoDbRepository
 
             if (IsValidKey(pkValue))
             {
-                var keyPropertyName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.ElementName;
+                var keyPropertyName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName;
                 var keyPair = GetMongoProperty(entity, keyPropertyName);
                 var filter = Builders<T>.Filter.Eq(keyPair.Key, keyPair.Value);
 
@@ -323,8 +323,11 @@ namespace SharpRepository.MongoDbRepository
             GetPrimaryKey(entity, out pkValue);
             if (IsValidKey(pkValue))
             {
-                var keyPropertyName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.ElementName;
-                var keyPair = GetMongoProperty(entity, keyPropertyName);
+                var keyMap = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap;
+                var keyPropertyName = keyMap.MemberName;
+                var keyBsonType = ((StringSerializer)keyMap.GetSerializer()).Representation;
+                var keyBsonPropertyValue = BsonTypeMapper.MapToBsonValue(pkValue, keyBsonType);
+                var keyPair = new KeyValuePair<string, BsonValue>(keyPropertyName, keyBsonPropertyValue);
                 var filter = Builders<T>.Filter.Eq(keyPair.Key, keyPair.Value);
 
 
@@ -344,11 +347,37 @@ namespace SharpRepository.MongoDbRepository
         public static KeyValuePair<string, BsonValue> GetMongoProperty(T entity, string propertyName)
         {
             var value = typeof(T).GetProperty(propertyName).GetValue(entity);
-            var memberMap = BsonClassMap.LookupClassMap(typeof(TKey)).GetMemberMap(propertyName);
-            var keyBsonType = ((StringSerializer)memberMap.GetSerializer()).Representation;
-            var bsonPropertyValue = BsonTypeMapper.MapToBsonValue(value, keyBsonType);
-            
+            var memberMap = BsonClassMap.LookupClassMap(typeof(T)).GetMemberMap(propertyName);
+            var memberBsonType = GetBsonType(value, memberMap);
+
+            // some "non-string types are mapped to string"
+            if (memberBsonType == BsonType.String)
+            {
+                value = value.ToString();
+            }
+
+            var bsonPropertyValue = BsonTypeMapper.MapToBsonValue(value, memberBsonType);
             return new KeyValuePair<string, BsonValue>(propertyName, bsonPropertyValue);
+        }
+
+        protected static BsonType GetBsonType(object value, BsonMemberMap memberMap)
+        {
+            BsonType keyBsonType;
+
+            if (value == null) {
+                keyBsonType = BsonType.Null;
+            } else {
+                var propertyInfo = memberMap.GetSerializer().GetType().GetProperty("Representation");
+                if (propertyInfo != null)
+                {
+                    keyBsonType = (BsonType)propertyInfo.GetValue(memberMap.GetSerializer());
+                } else
+                {
+                    keyBsonType = BsonType.Array;
+                }
+            }
+
+            return keyBsonType;
         }
 
         protected override void SaveChanges()

@@ -31,7 +31,7 @@ Install:
 
 The fastest way is use nunit3 console: you can get console here https://github.com/nunit/nunit-console/releases
 After that run tests with: 
-nunit3-console "SharpRepository.Samples\bin\Debug\SharpRepository.Samples.dll" "SharpRepository.Tests\bin\Debug\SharpRepository.Tests.dll" "SharpRepository.Tests.Integration\bin\Debug\SharpRepository.Tests.Integration.dll"
+nunit3-console -v "SharpRepository.Samples\bin\Debug\SharpRepository.Samples.dll" "SharpRepository.Tests\bin\Debug\SharpRepository.Tests.dll" "SharpRepository.Tests.Integration\bin\Debug\SharpRepository.Tests.Integration.dll"
 
 
 Have Questions?

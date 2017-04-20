@@ -62,16 +62,15 @@ namespace SharpRepository.Tests.Integration.Data
             if (includeType.Contains(RepositoryType.RavenDb))
             {
                 var documentStore = new EmbeddableDocumentStore
-                                        {
-                                            RunInMemory = true,
-                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.AlwaysWaitForNonStaleResultsAsOfLastWrite }
-                                        };
+                {
+                        RunInMemory = true,
+                        DataDirectory = "~\\Data\\RavenDb"
+                };
                 if (IntPtr.Size == 4)
                 {
                     documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
                 }
-
-                //
+                
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
 

@@ -80,7 +80,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             
             var read_updated = orders.Find(filter).ToList().FirstOrDefault();
             read_updated.OrderId.ShouldEqual(read.OrderId);
-            read_updated.Name.ShouldEqual(read.Name);
+            read_updated.Name.ShouldEqual("Really big sale");
 
             Console.WriteLine("* DELETE *");
 

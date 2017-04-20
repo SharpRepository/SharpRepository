@@ -66,7 +66,13 @@ namespace SharpRepository.RavenDbRepository
 
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return typeof(TKey) == typeof(string) ? Session.Load<T>(key as string) : base.GetQuery(key, fetchStrategy);
+            try
+            {
+                return typeof(TKey) == typeof(string) ? Session.Load<T>(key as string) : base.GetQuery(key, fetchStrategy);
+            } catch (ArgumentException)
+            {
+                return null;
+            }
         }
 
         public override IEnumerable<T> GetMany(params TKey[] keys)

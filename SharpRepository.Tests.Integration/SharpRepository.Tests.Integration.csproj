@@ -178,7 +178,6 @@
     <Compile Include="Spikes\EfLazyLoadSpike.cs" />
     <Compile Include="Spikes\MongoRepositorySpikes.cs" />
     <Compile Include="RepositoryJoinTests.cs" />
-    <Compile Include="Spikes\RavenDbEmbeddedTests.cs" />
     <Compile Include="Spikes\RepositoryDependencySpikes.cs" />
     <Compile Include="Spikes\StandardCachingSpikes.cs" />
     <Compile Include="TestAttributes\AllRepositories.cs" />
@@ -211,10 +210,6 @@
     <Compile Include="TestObjects\TestObjectEntities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\packages\RavenDB.Database.3.5.3\tools\Raven.Studio.Html5.zip">
-      <Link>Raven.Studio.Html5.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
