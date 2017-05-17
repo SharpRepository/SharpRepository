@@ -6,6 +6,7 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Should;
+using SharpRepository.EfRepository;
 
 namespace SharpRepository.Tests.Integration
 {

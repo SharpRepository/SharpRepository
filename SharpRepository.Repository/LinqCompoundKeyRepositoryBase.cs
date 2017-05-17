@@ -52,7 +52,7 @@ namespace SharpRepository.Repository
         protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery(null);
+                return GetAllQuery(fetchStrategy);
 
             var query = BaseQuery(fetchStrategy);
 
@@ -141,7 +141,7 @@ namespace SharpRepository.Repository
         protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery(null);
+                return GetAllQuery(fetchStrategy);
 
             var query = BaseQuery(fetchStrategy);
 
@@ -230,9 +230,9 @@ namespace SharpRepository.Repository
         protected override IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
             if (queryOptions == null)
-                return GetAllQuery(null);
+                return GetAllQuery(fetchStrategy);
 
-            var query = BaseQuery();
+            var query = BaseQuery(fetchStrategy);
 
             return queryOptions.Apply(query);
         }

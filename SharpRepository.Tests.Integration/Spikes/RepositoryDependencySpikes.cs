@@ -25,7 +25,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Setup()
         {
             var dbPath = EfDataDirectoryFactory.Build();
-            Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
 
             // structure map
             container = new Container(x =>

@@ -26,7 +26,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void CompoundKeyRepository_Should_Work()
         {
             var dbPath = EfDataDirectoryFactory.Build();
-            Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
             ICompoundKeyRepository<User, string, int> repository = new EfRepository<User, string, int>(new TestObjectEntities("Data Source=" + dbPath));
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });
@@ -48,7 +47,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void CompoundKeyRepositoryNoGenerics_Should_Work()
         {
             var dbPath = EfDataDirectoryFactory.Build();
-            Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
             ICompoundKeyRepository<User> repository = new EfCompoundKeyRepository<User>(new TestObjectEntities("Data Source=" + dbPath));
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });

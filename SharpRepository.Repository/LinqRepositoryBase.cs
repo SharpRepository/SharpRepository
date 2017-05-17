@@ -61,7 +61,7 @@ namespace SharpRepository.Repository
             if (queryOptions == null)
                 return GetAllQuery(fetchStrategy);
 
-            var query = BaseQuery();
+            var query = BaseQuery(fetchStrategy);
 
             query = queryOptions.Apply(query);
 

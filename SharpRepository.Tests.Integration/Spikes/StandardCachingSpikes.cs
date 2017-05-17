@@ -120,7 +120,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         {
             var cachingStrategy = new StandardCachingStrategy<Contact, string>();
             var dbPath = EfDataDirectoryFactory.Build();
-            Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
 
             var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
 
@@ -137,8 +136,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         {
             var cachingStrategy = new StandardCachingStrategy<Contact, string>();
             var dbPath = EfDataDirectoryFactory.Build();
-            Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
-
             var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
 
             repository.Add(new Contact() { ContactId = "1", Name = "Contact1", ContactTypeId = 1});

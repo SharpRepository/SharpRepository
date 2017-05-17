@@ -23,7 +23,6 @@ namespace SharpRepository.Tests.Integration.Data
             if (includeType.Contains(RepositoryType.Ef5))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
-                Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return new TestCaseData(new EfRepository<User, string, int>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
