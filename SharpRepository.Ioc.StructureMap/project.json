@@ -7,10 +7,13 @@
     "win10-x64": {},
     "win": {}
   },
+  "dependencies": {
+    "SharpRepository.Repository": "1.5.0-prerelease"
+  },
   "packOptions": {
     "summary": "SharpRepository: repository pattern implementation for C#",
-    "tags": [ "SharpRepository", "Repository" ],
-    "releaseNotes": "Version 1.5.0-prerelease: upgraded to .net 452",
+    "tags": [ "SharpRepository", "Repository", "StructureMap" ],
+    "releaseNotes": "Version 1.5.0-prerelease: upgraded to .net 452 and EF 6.1.3",
     "projectUrl": "https://github.com/SharpRepository/SharpRepository",
     "licenseUrl": "https://raw.githubusercontent.com/SharpRepository/SharpRepository/develop/license.txt",
     "requireLicenseAcceptance": false,
@@ -18,13 +21,7 @@
       "type": "git",
       "url": "https://github.com/SharpRepository/SharpRepository.git"
     },
-    "owners": [ "jtreuting", "bgriswold" ],
-    "files": {
-      "mappings": {
-        "content/app.config.transform": "_nuget/content/config.transform",
-        "content/web.config.transform": "_nuget/content/config.transform",
-        "tools/Install.ps1": "_nuget/tools/Install.ps1"
-      }
+    "owners": [ "jtreuting", "bgriswold" ]
     }
   }
 }

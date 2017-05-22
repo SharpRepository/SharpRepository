@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <None Include="_nuget\content\config.transform" />
+    <None Include="_nuget\tools\Install.ps1" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

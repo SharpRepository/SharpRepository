@@ -62,6 +62,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="project.json" />
+    <None Include="_nuget\content\config.transform" />
+    <None Include="_nuget\tools\Install.ps1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
