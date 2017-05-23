@@ -9,7 +9,9 @@
     "win": {}
   },
   "dependencies": {
-    "SharpRepository.Repository": "1.5.0-prerelease"
+    "SharpRepository.Repository": "1.5.0-prerelease",
+    "Newtonsoft.Json": "10.0.2",
+    "Remotion.Linq": "1.13.183.0"
   },
   "packOptions": {
     "summary": "SharpRepository: CouchDb repository pattern implementation for C#",

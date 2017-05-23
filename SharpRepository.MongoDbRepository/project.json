@@ -9,7 +9,11 @@
     "win": {}
   },
   "dependencies": {
-    "SharpRepository.Repository": "1.5.0-prerelease"
+    "SharpRepository.Repository": "1.5.0-prerelease",
+    "MongoDB.Bson": "2.4.3",
+    "MongoDB.Driver": "2.4.3",
+    "MongoDB.Driver.Core": "2.4.3",
+    "System.Runtime.InteropServices.RuntimeInformation": "4.0.0"
   },
   "packOptions": {
     "summary": "SharpRepository: EntityFramework repository pattern implementation for C#",
