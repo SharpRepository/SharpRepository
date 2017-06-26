@@ -30,9 +30,7 @@ namespace SharpRepository.Repository.Queries
 
         public T ExecuteGet(Func<T> query, TKey key)
         {
-            T result;
-
-            if (CacheEnabled && _cachingStrategy.TryGetResult(key, out result))
+            if (CacheEnabled && _cachingStrategy.TryGetResult(key, out T result))
             {
                 CacheUsed = true;
                 return result;
@@ -48,8 +46,7 @@ namespace SharpRepository.Repository.Queries
 
         public IEnumerable<TResult> ExecuteGetAll<TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
-            IEnumerable<TResult> result;
-            if (CacheEnabled && _cachingStrategy.TryGetAllResult(queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryGetAllResult(queryOptions, selector, out IEnumerable<TResult> result))
             {
                 CacheUsed = true;
                 return result;
@@ -65,8 +62,7 @@ namespace SharpRepository.Repository.Queries
 
         public IEnumerable<TResult> ExecuteFindAll<TResult>(Func<IEnumerable<TResult>> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
-            IEnumerable<TResult> result;
-            if (CacheEnabled && _cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryFindAllResult(criteria, queryOptions, selector, out IEnumerable<TResult> result))
             {
                 CacheUsed = true;
                 return result;
@@ -82,8 +78,7 @@ namespace SharpRepository.Repository.Queries
 
         public TResult ExecuteFind<TResult>(Func<TResult> query, ISpecification<T> criteria, Expression<Func<T, TResult>> selector,  IQueryOptions<T> queryOptions)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TryFindResult(criteria, queryOptions, selector, out result))
+            if (CacheEnabled && _cachingStrategy.TryFindResult(criteria, queryOptions, selector, out TResult result))
             {
                 CacheUsed = true;
                 return result;

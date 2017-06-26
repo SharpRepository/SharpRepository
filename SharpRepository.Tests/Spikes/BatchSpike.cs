@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Spikes
@@ -21,17 +21,17 @@ namespace SharpRepository.Tests.Spikes
                 batch.Add(new Contact { Name = "Test User 1" });
 
                 var result = repository.GetAll();
-                result.Count().ShouldEqual(0); // shouldn't have really been added yet
+                result.Count().ShouldBe(0); // shouldn't have really been added yet
 
                 batch.Add(new Contact { Name = "Test User 2" });
 
                 result = repository.GetAll();
-                result.Count().ShouldEqual(0); // shouldn't have really been added yet
+                result.Count().ShouldBe(0); // shouldn't have really been added yet
 
                 batch.Commit();
             }
 
-            repository.GetAll().Count().ShouldEqual(2);
+            repository.GetAll().Count().ShouldBe(2);
         }
     }
 }

@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Caching
 {
@@ -39,11 +39,11 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.GetAll(x => x.Name);
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
 
             items = repos.GetAll(x => x.Name);
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
         }
 
         [Test]
@@ -56,11 +56,11 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.GetAll();
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
 
             items = repos.GetAll();
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
         }
 
         [Test]
@@ -73,11 +73,11 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.FindAll(x => x.ContactId < 3, x => x.Name);
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
 
             items = repos.FindAll(x => x.ContactId < 3, x => x.Name);
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
         }
 
         [Test]
@@ -90,11 +90,11 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.FindAll(x => x.ContactId < 3);
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
 
             items = repos.FindAll(x => x.ContactId < 3);
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(2);
+            items.Count().ShouldBe(2);
         }
 
         [Test]
@@ -171,16 +171,16 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.FindAll(x => x.ContactId >= 2, x => x.Name, pagingOptions);
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(1);
-            pagingOptions.TotalItems.ShouldEqual(3);
+            items.Count().ShouldBe(1);
+            pagingOptions.TotalItems.ShouldBe(3);
 
             // reset paging options so the TotalItems is default
             pagingOptions = new PagingOptions<Contact>(1, 1, "Name");
 
             items = repos.FindAll(x => x.ContactId >= 2, x => x.Name, pagingOptions);
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(1);
-            pagingOptions.TotalItems.ShouldEqual(3);
+            items.Count().ShouldBe(1);
+            pagingOptions.TotalItems.ShouldBe(3);
         }
 
         [Test]
@@ -197,16 +197,16 @@ namespace SharpRepository.Tests.Caching
 
             var items = repos.GetAll(x => x.Name, pagingOptions);
             repos.CacheUsed.ShouldBeFalse();
-            items.Count().ShouldEqual(1);
-            pagingOptions.TotalItems.ShouldEqual(4);
+            items.Count().ShouldBe(1);
+            pagingOptions.TotalItems.ShouldBe(4);
 
             // reset paging options so the TotalItems is default
             pagingOptions = new PagingOptions<Contact>(1, 1, "Name");
 
             items = repos.GetAll(x => x.Name, pagingOptions);
             repos.CacheUsed.ShouldBeTrue();
-            items.Count().ShouldEqual(1);
-            pagingOptions.TotalItems.ShouldEqual(4);
+            items.Count().ShouldBe(1);
+            pagingOptions.TotalItems.ShouldBe(4);
         }
     }
 }

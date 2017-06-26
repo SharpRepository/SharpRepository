@@ -8,7 +8,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Spikes
 {

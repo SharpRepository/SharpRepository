@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Spikes
 {

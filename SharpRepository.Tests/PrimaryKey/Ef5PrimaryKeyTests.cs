@@ -3,7 +3,7 @@ using System.Reflection;
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects.PrimaryKeys;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.PrimaryKey
 {
@@ -16,8 +16,8 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestEfRepository<ObjectKeys, int>(new DbContext("test"));
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo.PropertyType.ShouldEqual(typeof(int));
-            propInfo.Name.ShouldEqual("KeyInt2");
+            propInfo.PropertyType.ShouldBe(typeof(int));
+            propInfo.Name.ShouldBe("KeyInt2");
         }
 
         [Test]
@@ -26,12 +26,12 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestTripleKeyEfRepository<TripleObjectKeys, int, int, int>(new DbContext("test"));
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo[0].PropertyType.ShouldEqual(typeof(int));
-            propInfo[0].Name.ShouldEqual("KeyInt1");
-            propInfo[1].PropertyType.ShouldEqual(typeof(int));
-            propInfo[1].Name.ShouldEqual("KeyInt2");
-            propInfo[2].PropertyType.ShouldEqual(typeof(int));
-            propInfo[2].Name.ShouldEqual("KeyInt3");
+            propInfo[0].PropertyType.ShouldBe(typeof(int));
+            propInfo[0].Name.ShouldBe("KeyInt1");
+            propInfo[1].PropertyType.ShouldBe(typeof(int));
+            propInfo[1].Name.ShouldBe("KeyInt2");
+            propInfo[2].PropertyType.ShouldBe(typeof(int));
+            propInfo[2].Name.ShouldBe("KeyInt3");
         }
     }
 

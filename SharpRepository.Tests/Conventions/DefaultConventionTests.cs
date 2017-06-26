@@ -2,7 +2,7 @@
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Conventions
 {
@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Conventions
         [Test]
         public void Default_PrimaryKeySuffix_Is_Id()
         {
-            DefaultRepositoryConventions.PrimaryKeySuffix.ShouldEqual("Id");
+            DefaultRepositoryConventions.PrimaryKeySuffix.ShouldBe("Id");
         }
 
         [Test]
@@ -28,7 +28,7 @@ namespace SharpRepository.Tests.Conventions
         [Test]
         public void Default_PrimaryKeyName()
         {
-            DefaultRepositoryConventions.GetPrimaryKeyName(typeof (Contact)).ShouldEqual("ContactId");
+            DefaultRepositoryConventions.GetPrimaryKeyName(typeof (Contact)).ShouldBe("ContactId");
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Conventions
 
             DefaultRepositoryConventions.GetPrimaryKeyName = type => "PK_" + type.Name + "_Id";
 
-            DefaultRepositoryConventions.GetPrimaryKeyName(typeof(TestConventionObject)).ShouldEqual("PK_TestConventionObject_Id");
+            DefaultRepositoryConventions.GetPrimaryKeyName(typeof(TestConventionObject)).ShouldBe("PK_TestConventionObject_Id");
 
             DefaultRepositoryConventions.GetPrimaryKeyName = orig;
         }

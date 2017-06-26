@@ -2,7 +2,7 @@
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Specifications
 {
@@ -13,7 +13,7 @@ namespace SharpRepository.Tests.Specifications
         public void Specification_Will_Default_To_GenericFetchStrategy()
         {
             var spec = new Specification<Contact>(p => p.ContactId == 1);
-            spec.FetchStrategy.ShouldBeType<GenericFetchStrategy<Contact>>();
+            spec.FetchStrategy.ShouldBeOfType<GenericFetchStrategy<Contact>>();
         }
 
         [Test]

@@ -14,7 +14,7 @@ using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.CacheRepository;
-
+using System;
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -37,7 +37,6 @@ namespace SharpRepository.Tests.Integration.Data
             if (includeType.Contains(RepositoryType.Ef5) || includeType.Contains(RepositoryType.Ef))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
-                Database.DefaultConnectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0");
                 yield return
                     new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
@@ -62,10 +61,15 @@ namespace SharpRepository.Tests.Integration.Data
             if (includeType.Contains(RepositoryType.RavenDb))
             {
                 var documentStore = new EmbeddableDocumentStore
-                                        {
-                                            RunInMemory = true,
-                                            Conventions = { DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites }
-                                        };
+                {
+                        RunInMemory = true,
+                        DataDirectory = "~\\Data\\RavenDb"
+                };
+                if (IntPtr.Size == 4)
+                {
+                    documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+                }
+                
                 yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
             }
 

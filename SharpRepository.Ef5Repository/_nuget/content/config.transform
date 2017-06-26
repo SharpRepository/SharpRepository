@@ -1,9 +1,0 @@
-<configuration>
-
-<sharpRepository>
-  <repositories>
-     <repository name="ef5Repository" connectionString="DefaultConnection" factory="SharpRepository.Ef5Repository.Ef5ConfigRepositoryFactory, SharpRepository.Ef5Repository" />
-  </repositories>
-</sharpRepository>
-
-</configuration>

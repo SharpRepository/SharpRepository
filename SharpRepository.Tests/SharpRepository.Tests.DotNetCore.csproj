@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>    
+    <AssemblyName>SharpRepository.Tests</AssemblyName>    
+    <RootNamespace>SharpRepository.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

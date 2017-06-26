@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.QueryOptions
 {
@@ -13,15 +13,15 @@ namespace SharpRepository.Tests.QueryOptions
         [Test]
         public void PagingOptions_PageNumber_Will_Be_Set_In_Constructor()
         {
-            new PagingOptions<Contact>(1, 10, "Name").PageNumber.ShouldEqual(1);
-            new PagingOptions<Contact, string>(1, 10, m => m.Name).PageNumber.ShouldEqual(1);
+            new PagingOptions<Contact>(1, 10, "Name").PageNumber.ShouldBe(1);
+            new PagingOptions<Contact, string>(1, 10, m => m.Name).PageNumber.ShouldBe(1);
         }
 
         [Test]
         public void PagingOptions_PageSize_Will_Be_Set_In_Constructor()
         {
-            new PagingOptions<Contact>(1, 10, "Name").PageSize.ShouldEqual(10);
-            new PagingOptions<Contact, string>(1, 10, m => m.Name).PageSize.ShouldEqual(10);
+            new PagingOptions<Contact>(1, 10, "Name").PageSize.ShouldBe(10);
+            new PagingOptions<Contact, string>(1, 10, m => m.Name).PageSize.ShouldBe(10);
         }
 
         [Test]
@@ -37,11 +37,11 @@ namespace SharpRepository.Tests.QueryOptions
             const int pageSize = 2;
             var qo = new PagingOptions<Contact>(resultingPage, pageSize, "Name", isDescending: true);
             qo.Apply(contacts.AsQueryable());
-            qo.TotalItems.ShouldEqual(5);
+            qo.TotalItems.ShouldBe(5);
 
             var qo2 = new PagingOptions<Contact, string>(resultingPage, pageSize, x => x.Name, isDescending: true);
             qo2.Apply(contacts.AsQueryable());
-            qo2.TotalItems.ShouldEqual(5);
+            qo2.TotalItems.ShouldBe(5);
         }
 
         [Test]
@@ -58,13 +58,13 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new PagingOptions<Contact>(resultingPage, pageSize, "Name", isDescending: true);
             IQueryable<Contact> queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(2);
-            queryable.First().Name.ShouldEqual("Test User 3");
+            queryable.Count().ShouldBe(2);
+            queryable.First().Name.ShouldBe("Test User 3");
 
             var qo2 = new PagingOptions<Contact, string>(resultingPage, pageSize, x => x.Name, isDescending: true);
             queryable = qo2.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(2);
-            queryable.First().Name.ShouldEqual("Test User 3");
+            queryable.Count().ShouldBe(2);
+            queryable.First().Name.ShouldBe("Test User 3");
         }
 
         [Test]
@@ -81,12 +81,12 @@ namespace SharpRepository.Tests.QueryOptions
             var qo = new PagingOptions<Contact>(resultingPage, pageSize, "Name", isDescending: true);
             qo.ThenSortBy("ContactTypeId");
             qo.Apply(contacts.AsQueryable());
-            qo.TotalItems.ShouldEqual(5);
+            qo.TotalItems.ShouldBe(5);
 
             var qo2 = new PagingOptions<Contact, string>(resultingPage, pageSize, x => x.Name, isDescending: true);
             qo2.ThenSortBy(x => x.ContactTypeId);
             qo2.Apply(contacts.AsQueryable());
-            qo2.TotalItems.ShouldEqual(5);
+            qo2.TotalItems.ShouldBe(5);
         }
 
         [Test]
@@ -105,21 +105,21 @@ namespace SharpRepository.Tests.QueryOptions
             qo.ThenSortBy("ContactTypeId", isDescending: true);
             
             IQueryable<Contact> queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(2);
+            queryable.Count().ShouldBe(2);
 
             var contact = queryable.First();
-            contact.Name.ShouldEqual("Test User 1");
-            contact.ContactTypeId.ShouldEqual(1);
+            contact.Name.ShouldBe("Test User 1");
+            contact.ContactTypeId.ShouldBe(1);
 
             var qo2 = new PagingOptions<Contact, string>(resultingPage, pageSize, x => x.Name, isDescending: true);
             qo2.ThenSortBy(x => x.ContactTypeId, isDescending: true);
 
             queryable = qo2.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(2);
+            queryable.Count().ShouldBe(2);
 
             contact = queryable.First();
-            contact.Name.ShouldEqual("Test User 1");
-            contact.ContactTypeId.ShouldEqual(1);
+            contact.Name.ShouldBe("Test User 1");
+            contact.ContactTypeId.ShouldBe(1);
         }
     }
 }

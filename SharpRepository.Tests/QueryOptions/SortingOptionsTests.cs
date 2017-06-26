@@ -4,7 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.QueryOptions
 {
@@ -22,8 +22,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact>("Name");
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 1");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
@@ -37,8 +37,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact>("Name", true);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 5");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
@@ -54,11 +54,11 @@ namespace SharpRepository.Tests.QueryOptions
             qo.ThenSortBy("ContactTypeId");
 
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
+            queryable.Count().ShouldBe(5);
 
             var contact = queryable.First();
-            contact.Name.ShouldEqual("Test User 0");
-            contact.ContactTypeId.ShouldEqual(2);
+            contact.Name.ShouldBe("Test User 0");
+            contact.ContactTypeId.ShouldBe(2);
         }
 
         [Test]
@@ -72,8 +72,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact, string>(x => x.Name);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 1");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
@@ -87,8 +87,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact, string>(x => x.Name, isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 5");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
@@ -104,11 +104,11 @@ namespace SharpRepository.Tests.QueryOptions
             qo.ThenSortBy(x => x.ContactTypeId);
 
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
+            queryable.Count().ShouldBe(5);
 
             var contact = queryable.First();
-            contact.Name.ShouldEqual("Test User 0");
-            contact.ContactTypeId.ShouldEqual(2);
+            contact.Name.ShouldBe("Test User 0");
+            contact.ContactTypeId.ShouldBe(2);
         }
 
         [Test]
@@ -122,8 +122,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact, string>(x => x.ContactType.Name);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 5");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
@@ -137,8 +137,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact, string>(x => x.ContactType.Name, isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 1");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
@@ -152,8 +152,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact>("ContactType.Name");
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 5");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
@@ -167,8 +167,8 @@ namespace SharpRepository.Tests.QueryOptions
 
             var qo = new SortingOptions<Contact>("ContactType.Name", isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldEqual(5);
-            queryable.First().Name.ShouldEqual("Test User 1");
+            queryable.Count().ShouldBe(5);
+            queryable.First().Name.ShouldBe("Test User 1");
         }
     }
 }

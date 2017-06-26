@@ -1,0 +1,36 @@
+﻿{
+  "version": "1.5.0.1-prerelease",
+  "title": "SharpRepository for EF",
+  "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
+  "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
+  "frameworks": { "net452": {} },
+  "runtimes": {
+    "win10-x64": {},
+    "win": {}
+  },
+  "dependencies": {
+    "SharpRepository.Repository": "1.5.0-prerelease",
+    "EntityFramework": "6.1.3"
+  },
+  "packOptions": {
+    "summary": "SharpRepository: EntityFramework repository pattern implementation for C#",
+    "tags": [ "SharpRepository", "Repository", "EF", "EntityFramework", "EF6" ],
+    "releaseNotes": "Version 1.5.0-prerelease: upgraded to .net 452 and EF 6.1.3",
+    "iconUrl": "https://cloud.githubusercontent.com/assets/2690653/26342225/79903c5e-3f97-11e7-810b-8bd77ddb4ac3.png",
+    "projectUrl": "https://github.com/SharpRepository/SharpRepository",
+    "licenseUrl": "https://raw.githubusercontent.com/SharpRepository/SharpRepository/develop/license.txt",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/SharpRepository/SharpRepository.git"
+    },
+    "owners": [ "jtreuting", "bgriswold" ],
+    "files": {
+      "mappings": {
+        "content/app.config.transform": "_nuget/content/config.transform",
+        "content/web.config.transform": "_nuget/content/config.transform",
+        "tools/Install.ps1": "_nuget/tools/Install.ps1"
+      }
+    }
+  }
+}

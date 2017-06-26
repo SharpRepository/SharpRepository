@@ -453,8 +453,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(TKey key)
         {
-            T entity;
-            return TryGet(key, out entity);
+            return TryGet(key, out T entity);
         }
 
         public bool TryGet(TKey key, out T entity)
@@ -660,8 +659,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(ISpecification<T> criteria)
         {
-            T entity;
-            return TryFind(criteria, out entity);
+            return TryFind(criteria, out T entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
@@ -739,8 +737,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -1405,10 +1402,9 @@ namespace SharpRepository.Repository
 
 	    private void NotifyQueryManagerOfAddedEntity(T entity)
 	    {
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemAdded(key, entity);
-	    }
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemAdded(key, entity);
+        }
 
         public void Add(IEnumerable<T> entities)
         {
@@ -1470,10 +1466,9 @@ namespace SharpRepository.Repository
 
 		private void NotifyQueryManagerOfDeletedEntity(T entity)
 		{
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemDeleted(key, entity);
-		}
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemDeleted(key, entity);
+        }
 
         public void Delete(IEnumerable<T> entities)
         {
@@ -1577,10 +1572,9 @@ namespace SharpRepository.Repository
 
 	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
 	    {
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemUpdated(key, entity);
-	    }
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemUpdated(key, entity);
+        }
 
         public void Update(IEnumerable<T> entities)
         {
@@ -1644,8 +1638,7 @@ namespace SharpRepository.Repository
 
         public TKey GetPrimaryKey(T entity)
         {
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
+            if (GetPrimaryKey(entity, out TKey key))
             {
                 return key;
             }
