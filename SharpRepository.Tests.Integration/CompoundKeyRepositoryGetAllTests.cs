@@ -5,7 +5,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -21,7 +21,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll().ToList();
-            result.Count().ShouldEqual(5);
+            result.Count().ShouldBe(5);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -39,9 +39,9 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(queryOptions).ToList();
-            result.Count().ShouldEqual(pageSize);
-            queryOptions.TotalItems.ShouldEqual(totalItems);
-            result.First().Username.ShouldEqual("Test User 3");
+            result.Count().ShouldBe(pageSize);
+            queryOptions.TotalItems.ShouldBe(totalItems);
+            result.First().Username.ShouldBe("Test User 3");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -53,7 +53,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(c => c.Username);
-            result.Count().ShouldEqual(5);
+            result.Count().ShouldBe(5);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -73,7 +73,7 @@ namespace SharpRepository.Tests.Integration
                 total++;
             }
 
-            total.ShouldEqual(5);
+            total.ShouldBe(5);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -91,9 +91,9 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(c => c.Username, queryOptions).ToList();
-            result.Count().ShouldEqual(pageSize);
-            queryOptions.TotalItems.ShouldEqual(totalItems);
-            result.First().ShouldEqual("Test User 3");
+            result.Count().ShouldBe(pageSize);
+            queryOptions.TotalItems.ShouldBe(totalItems);
+            result.First().ShouldBe("Test User 3");
         }
     }
 }

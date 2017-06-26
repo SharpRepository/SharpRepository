@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -75,12 +75,12 @@ namespace SharpRepository.Tests.Integration
 
             repository.Add(users);
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             repository.Delete(users.Take(2));
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Username.ShouldEqual("Test User 2");
+            items.Count().ShouldBe(1);
+            items.First().Username.ShouldBe("Test User 2");
         }
     }
 }

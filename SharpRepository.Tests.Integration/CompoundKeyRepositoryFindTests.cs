@@ -4,7 +4,7 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -20,7 +20,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<User>(p => p.Username == "Test User 1"));
-            result.Username.ShouldEqual("Test User 1");
+            result.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -32,7 +32,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Username == "Test User 1");
-            result.Username.ShouldEqual("Test User 1");
+            result.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -44,7 +44,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<User>(p => p.Username == "Test User 1").OrElse(new Specification<User>(p => p.Username == "Test User 1000")));
-            result.Username.ShouldEqual("Test User 1");
+            result.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -56,7 +56,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Username == "Test User 1" || p.Username == "Test User 1000");
-            result.Username.ShouldEqual("Test User 1");
+            result.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -68,10 +68,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<User>(p => p.Username.StartsWith("Test")), new SortingOptions<User>("Username", true));
-            result.Username.ShouldEqual("Test User 3");
+            result.Username.ShouldBe("Test User 3");
 
             var result2 = repository.Find(new Specification<User>(p => p.Username.StartsWith("Test")), new SortingOptions<User>("Username", false));
-            result2.Username.ShouldEqual("Test User 1");
+            result2.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -83,10 +83,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Username.StartsWith("Test"), new SortingOptions<User>("Username", true));
-            result.Username.ShouldEqual("Test User 3");
+            result.Username.ShouldBe("Test User 3");
 
             var result2 = repository.Find(p => p.Username.StartsWith("Test"), new SortingOptions<User>("Username", false));
-            result2.Username.ShouldEqual("Test User 1");
+            result2.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -98,10 +98,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<User>(p => p.Username.StartsWith("Test")), new SortingOptions<User, string>(c => c.Username, true));
-            result.Username.ShouldEqual("Test User 3");
+            result.Username.ShouldBe("Test User 3");
 
             var result2 = repository.Find(new Specification<User>(p => p.Username.StartsWith("Test")), new SortingOptions<User, string>(c => c.Username, false));
-            result2.Username.ShouldEqual("Test User 1");
+            result2.Username.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -113,10 +113,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Username.StartsWith("Test"), new SortingOptions<User, string>(c => c.Username, true));
-            result.Username.ShouldEqual("Test User 3");
+            result.Username.ShouldBe("Test User 3");
 
             var result2 = repository.Find(p => p.Username.StartsWith("Test"), new SortingOptions<User, string>(c => c.Username, false));
-            result2.Username.ShouldEqual("Test User 1");
+            result2.Username.ShouldBe("Test User 1");
         }
     }
 }

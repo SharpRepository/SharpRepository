@@ -1,14 +1,14 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+﻿//using System.Data.Entity;
+//using System.Data.Entity.Infrastructure;
 using System.Linq;
-using Microsoft.WindowsAzure.Storage.Shared.Protocol;
+//using Microsoft.WindowsAzure.Storage.Shared.Protocol;
 using NUnit.Framework;
 using SharpRepository.InMemoryRepository;
-using SharpRepository.EfRepository;
+//using SharpRepository.EfRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -29,11 +29,11 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contactId = "1";
             var contact = repository.Find(x => x.ContactId == contactId);
-            contact.ContactId.ShouldEqual(contactId);
+            contact.ContactId.ShouldBe(contactId);
 
             contactId = "2";
             contact = repository.Find(x => x.ContactId == contactId);
-            contact.ContactId.ShouldEqual(contactId);
+            contact.ContactId.ShouldBe(contactId);
         }
         
         [Test]
@@ -48,11 +48,11 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contactId = "1";
             repository.Find(x => x.ContactTypeId == 1 && x.ContactId == contactId)
-                .ContactId.ShouldEqual(contactId);
+                .ContactId.ShouldBe(contactId);
 
             contactId = "2";
             repository.Find(x => x.ContactTypeId == 1 && x.ContactId == contactId)
-                .ContactId.ShouldEqual(contactId);
+                .ContactId.ShouldBe(contactId);
         }
 
         [Test]
@@ -67,11 +67,11 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contactId = "1";
             repository.FindAll(x => x.ContactId == contactId)
-                .First().ContactId.ShouldEqual(contactId);
+                .First().ContactId.ShouldBe(contactId);
 
             contactId = "2";
             repository.FindAll(x => x.ContactId == contactId)
-                .First().ContactId.ShouldEqual(contactId);
+                .First().ContactId.ShouldBe(contactId);
         }
 
         [Test]
@@ -86,11 +86,11 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contactId = "1";
             repository.FindAll(x => x.ContactTypeId == 1 && x.ContactId == contactId)
-                .First().ContactId.ShouldEqual(contactId);
+                .First().ContactId.ShouldBe(contactId);
 
             contactId = "2";
             repository.FindAll(x => x.ContactTypeId == 1 && x.ContactId == contactId)
-                .First().ContactId.ShouldEqual(contactId);
+                .First().ContactId.ShouldBe(contactId);
         }
 
         [Test]
@@ -106,46 +106,46 @@ namespace SharpRepository.Tests.Integration.Spikes
             const string contactId = "1";
 
             var contactName = repository.Get(contactId, c => c.Name);
-            contactName.ShouldEqual("Contact 1");
+            contactName.ShouldBe("Contact 1");
 
             var contact = repository.Get(contactId);
             contact.Name = "Contact 1 - EDITED";
 
             contactName = repository.Get(contactId, c => c.Name);
-            contactName.ShouldEqual("Contact 1 - EDITED");
+            contactName.ShouldBe("Contact 1 - EDITED");
         }
 
-        [Test]
-        public void Delete_With_Cache_And_Ef()
-        {
-            var cachingStrategy = new StandardCachingStrategy<Contact, string>();
-            var dbPath = EfDataDirectoryFactory.Build();
+        //[Test]
+        //public void Delete_With_Cache_And_Ef()
+        //{
+        //    var cachingStrategy = new StandardCachingStrategy<Contact, string>();
+        //    var dbPath = EfDataDirectoryFactory.Build();
 
-            var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+        //    var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
 
-            repository.Add(new Contact() { ContactId = "1", Name = "Contact1"});
+        //    repository.Add(new Contact() { ContactId = "1", Name = "Contact1"});
 
-            repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
-            repository.Get("1");
-            repository.CacheUsed.ShouldBeTrue();
-            repository.Delete("1");
-        }
+        //    repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+        //    repository.Get("1");
+        //    repository.CacheUsed.ShouldBeTrue();
+        //    repository.Delete("1");
+        //}
 
-        [Test]
-        public void Delete_Loop_With_Cache_And_Ef()
-        {
-            var cachingStrategy = new StandardCachingStrategy<Contact, string>();
-            var dbPath = EfDataDirectoryFactory.Build();
-            var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+        //[Test]
+        //public void Delete_Loop_With_Cache_And_Ef()
+        //{
+        //    var cachingStrategy = new StandardCachingStrategy<Contact, string>();
+        //    var dbPath = EfDataDirectoryFactory.Build();
+        //    var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
 
-            repository.Add(new Contact() { ContactId = "1", Name = "Contact1", ContactTypeId = 1});
-            repository.Add(new Contact() { ContactId = "2", Name = "Contact2", ContactTypeId = 2});
-            repository.Add(new Contact() { ContactId = "3", Name = "Contact3", ContactTypeId = 2});
-            repository.FindAll(x => x.ContactTypeId == 2);
+        //    repository.Add(new Contact() { ContactId = "1", Name = "Contact1", ContactTypeId = 1});
+        //    repository.Add(new Contact() { ContactId = "2", Name = "Contact2", ContactTypeId = 2});
+        //    repository.Add(new Contact() { ContactId = "3", Name = "Contact3", ContactTypeId = 2});
+        //    repository.FindAll(x => x.ContactTypeId == 2);
 
-            repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+        //    repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
             
-            repository.Delete(x => x.ContactTypeId == 2);
-        }
+        //    repository.Delete(x => x.ContactTypeId == 2);
+        //}
     }
 }

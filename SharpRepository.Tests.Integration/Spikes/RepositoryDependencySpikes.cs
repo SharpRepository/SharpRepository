@@ -8,7 +8,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Ioc;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 using StructureMap;
 using StructureMap.Configuration.DSL;
 using StructureMap.Web;
@@ -73,7 +73,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var propInfo2 = repos2.GetType().GetProperty("Context", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             var dbContext2 = (TestObjectEntities)propInfo2.GetValue(repos2, null);
 
-            dbContext1.ShouldEqual(dbContext2);
+            dbContext1.ShouldBe(dbContext2);
         }
 
         [Test]

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -81,12 +81,12 @@ namespace SharpRepository.Tests.Integration
 
             repository.Add(contacts);
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             repository.Delete(contacts.Take(2));
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Name.ShouldEqual("Contact 3");
+            items.Count().ShouldBe(1);
+            items.First().Name.ShouldBe("Contact 3");
         }
 
         [ExecuteForAllRepositories]
@@ -101,12 +101,12 @@ namespace SharpRepository.Tests.Integration
 
             repository.Add(contacts);
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             repository.Delete(x => x.ContactTypeId < 3);
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Name.ShouldEqual("Contact 3");
+            items.Count().ShouldBe(1);
+            items.First().Name.ShouldBe("Contact 3");
         }
 
         [ExecuteForAllRepositories]
@@ -121,7 +121,7 @@ namespace SharpRepository.Tests.Integration
             repository.Add(contact3);
 
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             var ids = new List<string>()
                       {
@@ -132,8 +132,8 @@ namespace SharpRepository.Tests.Integration
 
 
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Name.ShouldEqual("Contact 3");
+            items.Count().ShouldBe(1);
+            items.First().Name.ShouldBe("Contact 3");
         }
 
         [ExecuteForAllRepositories]
@@ -148,13 +148,13 @@ namespace SharpRepository.Tests.Integration
             repository.Add(contact3);
 
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             repository.Delete(contact1.ContactId, contact2.ContactId);
 
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Name.ShouldEqual("Contact 3");
+            items.Count().ShouldBe(1);
+            items.First().Name.ShouldBe("Contact 3");
         }
 
     }

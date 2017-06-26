@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-// using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace SharpRepository.Tests.TestObjects.PrimaryKeys
 {
@@ -8,7 +8,7 @@ namespace SharpRepository.Tests.TestObjects.PrimaryKeys
     {
         public int Id { get; set; }
 
-        // [BsonId]
+        [BsonId]
         public int KeyInt1 { get; set; }
 
         [Key]

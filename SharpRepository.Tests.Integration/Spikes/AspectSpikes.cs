@@ -2,7 +2,7 @@
 using SharpRepository.InMemoryRepository;
 using NUnit.Framework;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -15,11 +15,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new InMemoryRepository<AspectTestObject>();
             var testObject = new AspectTestObject {AspectTestObjectId = 1, Name = "Test 1"};
 
-            testObject.Created.ShouldEqual(DateTime.MinValue);
+            testObject.Created.ShouldBe(DateTime.MinValue);
 
             repository.Add(testObject);
 
-            testObject.Created.ShouldNotEqual(DateTime.MinValue);
+            testObject.Created.ShouldNotBe(DateTime.MinValue);
         }
     }
 }

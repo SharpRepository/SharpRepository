@@ -1,20 +1,23 @@
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+//using System.Data.Entity;
+//using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
-using Raven.Client.Document;
-using Raven.Client.Embedded;
-using SharpRepository.CouchDbRepository;
-using SharpRepository.Db4oRepository;
+//using Raven.Client.Document;
+//using Raven.Client.Embedded;
+//using SharpRepository.CouchDbRepository;
+//using SharpRepository.Db4oRepository;
 using SharpRepository.Tests.Integration.TestObjects;
-using SharpRepository.XmlRepository;
-using SharpRepository.EfRepository;
-using SharpRepository.RavenDbRepository;
-using SharpRepository.MongoDbRepository;
+//using SharpRepository.XmlRepository;
+//using SharpRepository.EfRepository;
+//using SharpRepository.RavenDbRepository;
+//using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
-using SharpRepository.CacheRepository;
+using SharpRepository.EfCoreRepository;
+//using SharpRepository.CacheRepository;
 using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -27,69 +30,84 @@ namespace SharpRepository.Tests.Integration.Data
                 yield return new TestCaseData(new InMemoryRepository<Contact, string>()).SetName("InMemoryRepository Test");
             }
 
-            if (includeType.Contains(RepositoryType.Xml))
+            if (includeType.Contains(RepositoryType.EfCore))
             {
-                var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
-                yield return
-                    new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
+
+                var options = new DbContextOptionsBuilder<TestObjectContext>()
+                     .UseSqlite(connection)
+                     .Options;
+
+                // Create the schema in the database
+                var context = new TestObjectContext(options);
+                context.Database.EnsureCreated();
+                yield return new TestCaseData(new EfCoreRepository<Contact, string>(context)).SetName("EfCoreRepository Test");
             }
 
-            if (includeType.Contains(RepositoryType.Ef5) || includeType.Contains(RepositoryType.Ef))
-            {
-                var dbPath = EfDataDirectoryFactory.Build();
-                yield return
-                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
-            }
+            //if (includeType.Contains(RepositoryType.Xml))
+            //{
+            //    var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
+            //    yield return
+            //        new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository Test");
+            //}
 
-            if (includeType.Contains(RepositoryType.Dbo4))
-            {
-                var dbPath = Db4oDataDirectoryFactory.Build("Contact");
-                yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository Test");
-            }
+            //if (includeType.Contains(RepositoryType.Ef5) || includeType.Contains(RepositoryType.Ef))
+            //{
+            //    var dbPath = EfDataDirectoryFactory.Build();
+            //    yield return
+            //        new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+            //}
 
-            if (includeType.Contains(RepositoryType.MongoDb))
-            {
-                string connectionString = MongoDbConnectionStringFactory.Build("Contact");
-           
-                if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
-                {
-                    MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
-                    yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
-                }
-            }
+            //if (includeType.Contains(RepositoryType.Dbo4))
+            //{
+            //    var dbPath = Db4oDataDirectoryFactory.Build("Contact");
+            //    yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository Test");
+            //}
 
-            if (includeType.Contains(RepositoryType.RavenDb))
-            {
-                var documentStore = new EmbeddableDocumentStore
-                {
-                        RunInMemory = true,
-                        DataDirectory = "~\\Data\\RavenDb"
-                };
-                if (IntPtr.Size == 4)
-                {
-                    documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
-                }
-                
-                yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
-            }
+            //if (includeType.Contains(RepositoryType.MongoDb))
+            //{
+            //    string connectionString = MongoDbConnectionStringFactory.Build("Contact");
 
-            if (includeType.Contains(RepositoryType.Cache))
-            {
-                yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
-            }
+            //    if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
+            //    {
+            //        MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
+            //        yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
+            //    }
+            //}
 
-            if (includeType.Contains(RepositoryType.CouchDb))
-            {
-                if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
-                {
-                    var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
-                    CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
-                    CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+            //if (includeType.Contains(RepositoryType.RavenDb))
+            //{
+            //    var documentStore = new EmbeddableDocumentStore
+            //    {
+            //            RunInMemory = true,
+            //            DataDirectory = "~\\Data\\RavenDb"
+            //    };
+            //    if (IntPtr.Size == 4)
+            //    {
+            //        documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+            //    }
 
-                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");
-                }
+            //    yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
+            //}
 
-            }
+            //if (includeType.Contains(RepositoryType.Cache))
+            //{
+            //    yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
+            //}
+
+            //if (includeType.Contains(RepositoryType.CouchDb))
+            //{
+            //    if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
+            //    {
+            //        var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
+            //        CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+            //        CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
+
+            //        yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");
+            //    }
+
+            //}
         }
     }
 }
