@@ -2,7 +2,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Traits;
 using System.Linq;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -83,7 +83,7 @@ namespace SharpRepository.Samples
             repo.Add(new Order{Name = "Big Sale"});
 
             var result = repo.GetAll();
-            result.Count().ShouldEqual(1);
+            result.Count().ShouldBe(1);
         }
 
         /*
@@ -98,12 +98,12 @@ namespace SharpRepository.Samples
 
             var repo = new OrderRepository();
             repo.Add(order);
-            order.OrderId.ShouldEqual(1);
+            order.OrderId.ShouldBe(1);
             
-            repo.GetAll().Count().ShouldEqual(1);
+            repo.GetAll().Count().ShouldBe(1);
 
             repo.Delete(order);
-            repo.GetAll().Count().ShouldEqual(0);
+            repo.GetAll().Count().ShouldBe(0);
         }
     }
 }

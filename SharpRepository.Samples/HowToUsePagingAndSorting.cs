@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository.Queries;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -41,24 +41,24 @@ namespace SharpRepository.Samples
 
             // First, the Expression way
             var descendingOrders = repo.GetAll(new SortingOptions<Order, DateTime>(x => x.OrderDate, isDescending: true));
-            descendingOrders.First().OrderId.ShouldEqual(1);
+            descendingOrders.First().OrderId.ShouldBe(1);
 
             var ascendingOrders = repo.GetAll(new SortingOptions<Order, DateTime>(x => x.OrderDate, isDescending: false));
-            ascendingOrders.First().OrderId.ShouldEqual(2);
+            ascendingOrders.First().OrderId.ShouldBe(2);
 
             // You can also combine sortings and selectors (See HowToUseGetSelectors for more info)
             var descendingNames = repo.GetAll(x => x.Name, new SortingOptions<Order, DateTime>(x => x.OrderDate, isDescending: true));
-            descendingNames.First().ShouldEqual("Order 1");
+            descendingNames.First().ShouldBe("Order 1");
 
             // The Magic String approach to sorting
             //  you can see that you don't need the second generic type (the property type to sort on), just the name of the property
             ascendingOrders = repo.GetAll(new SortingOptions<Order>("OrderDate", isDescending: false));
-            ascendingOrders.First().OrderId.ShouldEqual(2);
+            ascendingOrders.First().OrderId.ShouldBe(2);
 
             // using sorting with FindAll
             var minDate = DateTime.Now.AddDays(-7);
             var ordersWithinAWeek = repo.FindAll(x => x.OrderDate > minDate, new SortingOptions<Order, double>(x => x.Total, true));
-            ordersWithinAWeek.Count().ShouldEqual(2);
+            ordersWithinAWeek.Count().ShouldBe(2);
         }
 
         [Test]
@@ -72,18 +72,18 @@ namespace SharpRepository.Samples
             var pagingOptions = new PagingOptions<Order, DateTime>(1, 2, x => x.OrderDate, isDescending: true);
             var pageOneOrders = repo.GetAll(pagingOptions).ToList();
 
-            pageOneOrders.Count.ShouldEqual(2);
-            pageOneOrders.First().OrderId.ShouldEqual(1);
-            pagingOptions.TotalItems.ShouldEqual(3);
+            pageOneOrders.Count.ShouldBe(2);
+            pageOneOrders.First().OrderId.ShouldBe(1);
+            pagingOptions.TotalItems.ShouldBe(3);
 
             // now we can get the second page of results
             pagingOptions.PageNumber = 2;
 
             var pageTwoOrders = repo.GetAll(pagingOptions).ToList();
 
-            pageTwoOrders.Count.ShouldEqual(1);
-            pageTwoOrders.First().OrderId.ShouldEqual(2);
-            pagingOptions.TotalItems.ShouldEqual(3);
+            pageTwoOrders.Count.ShouldBe(1);
+            pageTwoOrders.First().OrderId.ShouldBe(2);
+            pagingOptions.TotalItems.ShouldBe(3);
         }
 
 

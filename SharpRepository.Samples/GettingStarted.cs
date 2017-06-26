@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SharpRepository.Repository;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -52,19 +52,19 @@ namespace SharpRepository.Samples
             repo.Add(create);
 
             const int expectedOrderId = 1;
-            create.OrderId.ShouldEqual(expectedOrderId);
+            create.OrderId.ShouldBe(expectedOrderId);
 
             // Read 
             var read = repo.Get(expectedOrderId);
-            read.Name.ShouldEqual(create.Name);
+            read.Name.ShouldBe(create.Name);
             
             // Update
             read.Name = "Really big sale";
             repo.Update(read);
             
             var update = repo.Get(expectedOrderId);
-            update.OrderId.ShouldEqual(expectedOrderId);
-            update.Name.ShouldEqual(read.Name);
+            update.OrderId.ShouldBe(expectedOrderId);
+            update.Name.ShouldBe(read.Name);
 
             // Delete
             repo.Delete(update);
