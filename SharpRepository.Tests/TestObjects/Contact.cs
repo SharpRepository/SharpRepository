@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SharpRepository.Tests.TestObjects
 {
-    // [RepositoryLogging]
+    //[RepositoryLogging]
     public class Contact
     {
         public int ContactId { get; set; }
