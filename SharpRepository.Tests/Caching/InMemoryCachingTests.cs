@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.InMemoryRepository;
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
@@ -12,21 +12,19 @@ namespace SharpRepository.Tests.Caching
     [TestFixture]
     public class InMemoryCachingTests : TestBase
     {
+        protected MemoryCache cache;
+
         [SetUp]
         public void Setup()
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            var cache = MemoryCache.Default;
-            foreach (var item in cache)
-            {
-                cache.Remove(item.Key);
-            }
+            cache = new MemoryCache(new MemoryCacheOptions { });
         }
 
         [TearDown]
         public void Teardown()
         {
-
+            cache.Dispose();
         }
 
         [Test]

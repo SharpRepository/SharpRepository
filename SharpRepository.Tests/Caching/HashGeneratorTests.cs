@@ -48,7 +48,7 @@ namespace SharpRepository.Tests.Caching
             var hash1 = HashGenerator.FromSpecification(new Specification<Contact>(predicate));
             var hash2 = HashGenerator.FromSpecification(new Specification<Contact>(predicate2));
 
-            hash1.ShouldBe(hash2);
+            hash1.ShouldNotBe(hash2);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace SharpRepository.Tests.Caching
             var hash1 = HashGenerator.FromSpecification(spec);
             var hash2 = HashGenerator.FromSpecification(spec2);
 
-            hash1.ShouldBe(hash2);
+            hash1.ShouldNotBe(hash2);
         }
 
         [Test]
@@ -94,7 +94,7 @@ namespace SharpRepository.Tests.Caching
             Expression<Func<Contact, bool>> predicate2 = contact => (contact.Name == name && contact.ContactId == contactId);
             var hash2 = HashGenerator.FromSpecification(new Specification<Contact>(predicate2));
 
-            hash1.ShouldBe(hash2);
+            hash1.ShouldNotBe(hash2);
         }
 
         [Test]
@@ -141,7 +141,7 @@ namespace SharpRepository.Tests.Caching
             var hash1 = HashGenerator.FromSpecification(spec);
             var hash2 = HashGenerator.FromSpecification(spec2);
 
-            hash1.ShouldBe(hash2);
+            hash1.ShouldNotBe(hash2);
         }
     }
 }

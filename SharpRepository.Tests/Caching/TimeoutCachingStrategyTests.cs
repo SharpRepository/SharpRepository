@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Caching
@@ -18,12 +18,12 @@ namespace SharpRepository.Tests.Caching
             repository.Add(new Contact() { Name = "Test User"});
 
             var item = repository.Get(1); // after this call it's in cache
-            item.Name.ShouldEqual("Test User");
+            item.Name.ShouldBe("Test User");
 
             repository.Update(new Contact() { ContactId = 1, Name = "Test User EDITED" }); // does update cache
 
             var item2 = repository.Get(1); // should get from cache since the timeout hasn't happened
-            item2.Name.ShouldEqual("Test User EDITED");
+            item2.Name.ShouldBe("Test User EDITED");
         }
 
         [Test]

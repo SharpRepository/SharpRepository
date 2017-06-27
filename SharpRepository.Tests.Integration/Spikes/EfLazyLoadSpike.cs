@@ -88,151 +88,151 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.LazyLoadValue.ShouldBeFalse();
         }
 
-        //[Test]
-        //public void GetAll_Without_Includes_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfCoreRepository(dbContext);
-            
-        //    var contact = repository.GetAll().First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(1);
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(2);
-        //}
-        
-        //[Test]
-        //public void GetAll_With_Includes_In_Strategy_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfRepository(dbContext);
+        [Test]
+        public void GetAll_Without_Includes_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
+
+            var contact = repository.GetAll().First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(1);
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(2);
+        }
+
+        [Test]
+        public void GetAll_With_Includes_In_Strategy_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
 
 
-        //    var strategy = new GenericFetchStrategy<Contact>();
-        //    strategy.Include(x => x.EmailAddresses);
+            var strategy = new GenericFetchStrategy<Contact>();
+            strategy.Include(x => x.EmailAddresses);
 
-        //    var contact = repository.GetAll(strategy).First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(1);
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(1);
-        //}
+            var contact = repository.GetAll(strategy).First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(1);
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(1);
+        }
 
-        //[Test]
-        //public void GetAll_With_Includes_In_Strategy_String_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfRepository(dbContext);
+        [Test]
+        public void GetAll_With_Includes_In_Strategy_String_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
 
 
-        //    var strategy = new GenericFetchStrategy<Contact>();
-        //    strategy.Include(x => x.EmailAddresses);
+            var strategy = new GenericFetchStrategy<Contact>();
+            strategy.Include(x => x.EmailAddresses);
 
-        //    var contact = repository.GetAll(strategy).First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(1);
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(1);
-        //}
-        
-        //[Test]
-        //public void GetAll_With_Text_Include_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfRepository(dbContext);
+            var contact = repository.GetAll(strategy).First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(1);
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(1);
+        }
 
-        //    var contact = repository.GetAll("EmailAddresses").First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(1);
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(1);
-        //}
+        [Test]
+        public void GetAll_With_Text_Include_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
 
-        //[Test]
-        //public void GetAll_With_Text_Include_And_Pagination_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfRepository(dbContext);
+            var contact = repository.GetAll("EmailAddresses").First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(1);
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(1);
+        }
 
-        //    var pagination = new PagingOptions<Contact>(1, 4, "ContactId");
+        [Test]
+        public void GetAll_With_Text_Include_And_Pagination_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
 
-        //    var contact = repository.GetAll(pagination, "EmailAddresses").First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(2); // first query is count for total records
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(2);
-        //}
-        
-        //[Test]
-        //public void FindAll_With_Include_And_Predicate_In_Specs_LazyLoads_Email()
-        //{
-        //    dbContext.Configuration.LazyLoadingEnabled = true;
-        //    dbContext.Database.Log = sql =>
-        //    {
-        //        if (sql.Contains("SELECT"))
-        //        {
-        //            queries.Add(sql);
-        //        }
-        //    };
-        //    var repository = new MyEfRepository(dbContext);
-            
-        //    var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
-        //            .And(obj => obj.EmailAddresses.Any(m => m.Email == "omar.piani.1@email.com"));
-            
-        //    var specification = new Specification<Contact>(obj => obj.Name == "Test User 1");
+            var pagination = new PagingOptions<Contact>(1, 4, "ContactId");
 
-        //    findAllBySpec.FetchStrategy = new GenericFetchStrategy<Contact>();
-        //    findAllBySpec.FetchStrategy
-        //        .Include(obj => obj.EmailAddresses);
+            var contact = repository.GetAll(pagination, "EmailAddresses").First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(2); // first query is count for total records
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(2);
+        }
 
-        //    // NOTE: This line will erase my FetchStrategy from above
-        //    if (null != specification)
-        //    {
-        //        findAllBySpec = findAllBySpec.And(specification);
-        //    }
+        [Test]
+        public void FindAll_With_Include_And_Predicate_In_Specs_LazyLoads_Email()
+        {
+            //dbContext.Configuration.LazyLoadingEnabled = true;
+            //dbContext.Database.Log = sql =>
+            //{
+            //    if (sql.Contains("SELECT"))
+            //    {
+            //        queries.Add(sql);
+            //    }
+            //};
+            var repository = new MyEfCoreRepository(dbContext);
 
-        //    var contact = repository.FindAll(findAllBySpec).First();
-        //    contact.Name.ShouldBe("Test User 1");
-        //    queries.Count().ShouldBe(1); // first query is count for total records
-        //    contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-        //    queries.Count().ShouldBe(1);
+            var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
+                    .And(obj => obj.EmailAddresses.Any(m => m.Email == "omar.piani.1@email.com"));
 
-        //    repository.FindAll(findAllBySpec).Count().ShouldBe(1);
-        //}
+            var specification = new Specification<Contact>(obj => obj.Name == "Test User 1");
+
+            findAllBySpec.FetchStrategy = new GenericFetchStrategy<Contact>();
+            findAllBySpec.FetchStrategy
+                .Include(obj => obj.EmailAddresses);
+
+            // NOTE: This line will erase my FetchStrategy from above
+            if (null != specification)
+            {
+                findAllBySpec = findAllBySpec.And(specification);
+            }
+
+            var contact = repository.FindAll(findAllBySpec).First();
+            contact.Name.ShouldBe("Test User 1");
+            queries.Count().ShouldBe(1); // first query is count for total records
+            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            queries.Count().ShouldBe(1);
+
+            repository.FindAll(findAllBySpec).Count().ShouldBe(1);
+        }
     }
 }
