@@ -1,13 +1,11 @@
-﻿
-using System.Reflection;
-using NUnit.Framework;
-using SharpRepository.Repository.Caching;
-using SharpRepository.Tests.TestObjects.PrimaryKeys;
-using Shouldly;
-using SharpRepository.EfCoreRepository;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
+using NUnit.Framework;
+using SharpRepository.EfCoreRepository;
+using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
+using Shouldly;
+using System.Reflection;
 
 namespace SharpRepository.Tests.PrimaryKey
 {

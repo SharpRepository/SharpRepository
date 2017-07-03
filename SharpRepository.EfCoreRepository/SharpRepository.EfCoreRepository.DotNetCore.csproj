@@ -5,6 +5,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>netstandard1.6</TargetFramework>
+	<PackageId>SharpRepository.EfCoreRepository</PackageId>
+    <PackageVersion>2.0.0-alpha1</PackageVersion>
+    <Authors>Ben Griswold, Jeff Treuting, Fairway Technologies, Omar Piani, Eivind Gussiås Løkseth</Authors>
+    <Description>Entity Framework Core implementation of SharpRepository repository</Description>
+    <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Ef Core repository</PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) Contoso Corporation. All rights reserved.</Copyright>
+    <PackageTags>SharpRepository Repository</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.0" />

@@ -217,7 +217,7 @@ namespace SharpRepository.Tests.Integration
         {
             for (var i = 1; i <= 3; i++)
             {
-                var contact = new Contact { Name = "Test User " + i, ContactTypeId =i};
+                var contact = new Contact { Name = "Test User " + i, ContactTypeId = i};
                 repository.Add(contact);
             }
 

@@ -43,8 +43,7 @@ namespace SharpRepository.Repository.Caching
         public bool Exists(string key)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-            object value;
-            return Cache.TryGetValue(key, out value);
+            return Cache.TryGetValue(key, out object value);
         }
 
         public bool Get<T>(string key, out T value)
@@ -75,8 +74,7 @@ namespace SharpRepository.Repository.Caching
 
             lock (LockObject)
             {
-                int current;
-                if (!Get(key, out current))
+                if (!Get(key, out int current))
                 {
                     current = defaultValue;
                 }
