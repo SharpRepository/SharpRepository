@@ -20,7 +20,7 @@ namespace SharpRepository.Tests.Caching
         public void Setup()
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            var cache = new MemoryCache(new MemoryCacheOptions());
+            cache = new MemoryCache(new MemoryCacheOptions());
             
             CachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
         }

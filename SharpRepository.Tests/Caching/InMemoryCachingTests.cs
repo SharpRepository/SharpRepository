@@ -6,6 +6,7 @@ using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.TestObjects;
 using Shouldly;
+using System;
 
 namespace SharpRepository.Tests.Caching
 {
@@ -205,6 +206,27 @@ namespace SharpRepository.Tests.Caching
             repos.CacheUsed.ShouldBeTrue();
             items.Count().ShouldBe(1);
             pagingOptions.TotalItems.ShouldBe(4);
+        }
+
+        [Test]
+        public void MemoryCacheTest()
+        {
+            var policy = new MemoryCacheEntryOptions()
+            {
+                Priority = CacheItemPriority.Normal
+            };
+            if (false)
+            {
+                policy.AbsoluteExpiration = DateTime.Now + TimeSpan.FromSeconds(30 * 60);
+            }
+
+
+            var cache = new MemoryCache(new MemoryCacheOptions());
+            var key = "#Repo1-1/SharpRepository.Tests.TestObjects.Contact/Generation";
+            cache.Set(key, "pluto", policy);
+            
+            cache.Get(key).ShouldNotBeNull();
+            cache.Get<string>(key).ShouldBe("pluto");
         }
     }
 }

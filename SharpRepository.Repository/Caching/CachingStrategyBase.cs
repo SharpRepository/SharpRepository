@@ -400,17 +400,16 @@ namespace SharpRepository.Repository.Caching
            if (!(queryOptions is IPagingOptions))
                return true;
 
-           int totalItems;
-           // there is a PagingOptions passed in so we want to make sure that both the results and the queryOptions are in cache
-           //      this is a safety in case the caching provider kicked one of them out
-           if (IsPagingTotalInCache(cacheKey, out totalItems))
-           {
-               ((IPagingOptions)queryOptions).TotalItems = totalItems;
-               return true;
-           }
+            // there is a PagingOptions passed in so we want to make sure that both the results and the queryOptions are in cache
+            //      this is a safety in case the caching provider kicked one of them out
+            if (IsPagingTotalInCache(cacheKey, out int totalItems))
+            {
+                ((IPagingOptions)queryOptions).TotalItems = totalItems;
+                return true;
+            }
 
-           // this was a PagingOptions query but the value wasn't in cache, so return false which will make the entire query be ran again so the results and TotalItems will get cached
-           return false;
+            // this was a PagingOptions query but the value wasn't in cache, so return false which will make the entire query be ran again so the results and TotalItems will get cached
+            return false;
        }
 
        public void ClearAll()
@@ -420,9 +419,8 @@ namespace SharpRepository.Repository.Caching
 
        private int GetCachingPrefixCounter()
        {
-            int counter;
-            return !CachingProvider.Get(GetCachingPrefixCounterKey(), out counter) ? 1 : counter;
-       }
+            return !CachingProvider.Get(GetCachingPrefixCounterKey(), out int counter) ? 1 : counter;
+        }
 
        private string GetCachingPrefixCounterKey()
        {

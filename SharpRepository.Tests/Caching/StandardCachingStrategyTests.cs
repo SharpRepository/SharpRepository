@@ -14,13 +14,11 @@ namespace SharpRepository.Tests.Caching
     public class StandardCachingStrategyTests : TestBase
     {
         protected ICachingStrategy<Contact, int> CachingStrategy;
-        protected MemoryCache cache;
             
         [SetUp]
         public void Setup()
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            var cache = new MemoryCache(new MemoryCacheOptions());
             
             CachingStrategy = new StandardCachingStrategy<Contact, int>() { CachePrefix = "#RepoStandardCache" };
         }
@@ -28,7 +26,6 @@ namespace SharpRepository.Tests.Caching
         [TearDown]
         public void Teardown()
         {
-            cache.Dispose();
         }
 
         [Test]

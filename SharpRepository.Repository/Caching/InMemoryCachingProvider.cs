@@ -10,9 +10,10 @@ namespace SharpRepository.Repository.Caching
     /// </summary>
     public class InMemoryCachingProvider : ICachingProvider
     {
-        private static IMemoryCache Cache
+        protected IMemoryCache Cache;
+        public InMemoryCachingProvider()
         {
-            get { return new MemoryCache(new MemoryCacheOptions()); }
+            Cache = new MemoryCache(new MemoryCacheOptions());
         }
 
         private static readonly object LockObject = new object();
@@ -87,7 +88,7 @@ namespace SharpRepository.Repository.Caching
 
         public void Dispose()
         {
-            // no need to do anything
+            Cache = new MemoryCache(new MemoryCacheOptions());
         }
     }
 }
