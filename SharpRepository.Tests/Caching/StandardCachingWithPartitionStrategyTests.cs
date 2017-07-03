@@ -14,23 +14,20 @@ namespace SharpRepository.Tests.Caching
     public class StandardCachingWithPartitionStrategyTests : TestBase
     {
         protected ICachingStrategy<Contact, int> CachingStrategy;
-        protected MemoryCache cache;
 
         [SetUp]
         public void Setup()
-        {
-            // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            cache = new MemoryCache(new MemoryCacheOptions());
-            
+        {            
             CachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
         }
 
         [TearDown]
         public void Teardown()
         {
-            //Repository = null;
-            cache.Dispose();
         }
+
+
+
 
         [Test]
         public void TryGetResult_First_Call_Should_Return_False()
@@ -47,6 +44,17 @@ namespace SharpRepository.Tests.Caching
             CachingStrategy.SaveGetResult(1, contact);
             CachingStrategy.TryGetResult(1, out Contact result).ShouldBe(true);
 
+            result.ContactId.ShouldBe(contact.ContactId);
+            result.Name.ShouldBe(contact.Name);
+        }
+
+        [Test]
+        public void SaveGetResult_Should_Set_Cache_And_Preserved_If_Reinstantiated()
+        {
+            var contact = new Contact() { ContactId = 1, Name = "Test User" };
+            CachingStrategy.SaveGetResult(1, contact);
+            var localCachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
+            localCachingStrategy.TryGetResult(1, out Contact result).ShouldBe(true);
             result.ContactId.ShouldBe(contact.ContactId);
             result.Name.ShouldBe(contact.Name);
         }
