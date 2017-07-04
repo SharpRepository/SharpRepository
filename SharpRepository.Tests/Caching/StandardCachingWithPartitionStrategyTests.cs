@@ -14,20 +14,22 @@ namespace SharpRepository.Tests.Caching
     public class StandardCachingWithPartitionStrategyTests : TestBase
     {
         protected ICachingStrategy<Contact, int> CachingStrategy;
-
+        protected IMemoryCache Cache;
         [SetUp]
         public void Setup()
-        {            
-            CachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
+        {
+            Cache = new MemoryCache(new MemoryCacheOptions());
+            var cacheProvider = new InMemoryCachingProvider(Cache);
+            CachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(cacheProvider, c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
         }
 
         [TearDown]
         public void Teardown()
         {
+            Cache.Dispose();
+            Cache = null;
         }
-
-
-
+        
 
         [Test]
         public void TryGetResult_First_Call_Should_Return_False()
@@ -49,11 +51,14 @@ namespace SharpRepository.Tests.Caching
         }
 
         [Test]
-        public void SaveGetResult_Should_Set_Cache_And_Preserved_If_Reinstantiated()
+        public void TryGetResult_Should_Get_Value_If_Reinstantiated()
         {
             var contact = new Contact() { ContactId = 1, Name = "Test User" };
             CachingStrategy.SaveGetResult(1, contact);
-            var localCachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
+
+            var cacheProvider = new InMemoryCachingProvider(Cache);
+
+            var localCachingStrategy = new StandardCachingStrategyWithPartition<Contact, int, int>(cacheProvider, c => c.ContactTypeId) { CachePrefix = "#RepoStandardCacheWithPartition" };
             localCachingStrategy.TryGetResult(1, out Contact result).ShouldBe(true);
             result.ContactId.ShouldBe(contact.ContactId);
             result.Name.ShouldBe(contact.Name);

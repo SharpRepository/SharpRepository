@@ -13,25 +13,25 @@ namespace SharpRepository.Tests.Caching
     [TestFixture]
     public class InMemoryCachingTests : TestBase
     {
-        protected MemoryCache cache;
-
+        private ICachingProvider cacheProvider;
+        
         [SetUp]
         public void Setup()
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            cache = new MemoryCache(new MemoryCacheOptions { });
+            cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions { }));
         }
 
         [TearDown]
         public void Teardown()
         {
-            cache.Dispose();
+            cacheProvider.Dispose();
         }
 
         [Test]
         public void ExecuteGetAll_With_Selector_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1"});
             repos.Add(new Contact { Name = "Test2"});
@@ -48,7 +48,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteGetAll_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -65,7 +65,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteFindAll_With_Selector_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -82,7 +82,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteFindAll_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -99,7 +99,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteFind_With_Selector_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -116,7 +116,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteFind_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -133,7 +133,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteGet_With_Selector_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -146,7 +146,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteGet_Should_Use_Cache_After_First_Call()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { Name = "Test1" });
             repos.Add(new Contact { Name = "Test2" });
@@ -159,7 +159,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteFindAll_With_Paging_Should_Save_TotalItems_In_Cache()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { ContactId = 1, Name = "Test1" });
             repos.Add(new Contact { ContactId = 2, Name = "Test2" });
@@ -185,7 +185,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ExecuteGetAll_With_Paging_Should_Save_TotalItems_In_Cache()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.Add(new Contact { ContactId = 1, Name = "Test1" });
             repos.Add(new Contact { ContactId = 2, Name = "Test2" });
@@ -206,27 +206,6 @@ namespace SharpRepository.Tests.Caching
             repos.CacheUsed.ShouldBeTrue();
             items.Count().ShouldBe(1);
             pagingOptions.TotalItems.ShouldBe(4);
-        }
-
-        [Test]
-        public void MemoryCacheTest()
-        {
-            var policy = new MemoryCacheEntryOptions()
-            {
-                Priority = CacheItemPriority.Normal
-            };
-            if (false)
-            {
-                policy.AbsoluteExpiration = DateTime.Now + TimeSpan.FromSeconds(30 * 60);
-            }
-
-
-            var cache = new MemoryCache(new MemoryCacheOptions());
-            var key = "#Repo1-1/SharpRepository.Tests.TestObjects.Contact/Generation";
-            cache.Set(key, "pluto", policy);
-            
-            cache.Get(key).ShouldNotBeNull();
-            cache.Get<string>(key).ShouldBe("pluto");
         }
     }
 }

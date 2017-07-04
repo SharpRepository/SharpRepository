@@ -4,12 +4,21 @@ using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
 using Shouldly;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SharpRepository.Tests.Caching
 {
     [TestFixture]
     public class ClearCacheTests
     {
+        private ICachingProvider cacheProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+        }
+
         [Test]
         public void ClearAllCache_Throws_Exception_WIthout_OutOfBox()
         {
@@ -28,7 +37,7 @@ namespace SharpRepository.Tests.Caching
         {
             Cache.CachePrefixManager = new SingleServerCachePrefixManager();
 
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             var fullCachePrefix = repos.CachingStrategy.FullCachePrefix;
             
@@ -45,7 +54,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ClearCache_Changes_FullCachePrefix()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             var fullCachePrefix = repos.CachingStrategy.FullCachePrefix;
 

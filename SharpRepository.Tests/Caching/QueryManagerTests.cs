@@ -21,8 +21,8 @@ namespace SharpRepository.Tests.Caching
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
             cache = new MemoryCache(new MemoryCacheOptions());
-
-            QueryManager = new QueryManager<Contact, int>(new StandardCachingStrategy<Contact, int>()
+            var provider = new InMemoryCachingProvider(cache);
+            QueryManager = new QueryManager<Contact, int>(new StandardCachingStrategy<Contact, int>(provider)
                                                    {
                                                        CachePrefix =
                                                            "#RepoStandardCache"

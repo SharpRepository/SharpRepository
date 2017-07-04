@@ -34,7 +34,7 @@ namespace SharpRepository.Repository.Caching
        public ICachingProvider CachingProvider
        {
            get { return _cachingProvider; }
-           set { _cachingProvider = value ?? new InMemoryCachingProvider(); }
+           set { _cachingProvider = value; }
        }
 
        public string FullCachePrefix

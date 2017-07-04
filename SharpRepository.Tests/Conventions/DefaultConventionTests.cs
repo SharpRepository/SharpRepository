@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Caching.Memory;
+using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
@@ -9,6 +10,14 @@ namespace SharpRepository.Tests.Conventions
     [TestFixture]
     public class RepositoryConventionTests
     {
+        private ICachingProvider cacheProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+        }
+
         [Test]
         public void Default_PrimaryKeySuffix_Is_Id()
         {
@@ -46,7 +55,7 @@ namespace SharpRepository.Tests.Conventions
         [Test]
         public void Default_CachePrefix()
         {
-            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>());
+            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>(cacheProvider));
             repos.CachingStrategy.FullCachePrefix.ShouldStartWith(DefaultRepositoryConventions.CachePrefix);
         }
 
@@ -56,7 +65,7 @@ namespace SharpRepository.Tests.Conventions
             const string newPrefix = "TestPrefix123";
             DefaultRepositoryConventions.CachePrefix = newPrefix;
 
-            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>());
+            var repos = new InMemoryRepository.InMemoryRepository<Contact>(new StandardCachingStrategy<Contact, int>(cacheProvider));
             repos.CachingStrategy.FullCachePrefix.ShouldStartWith(newPrefix);
         }
 

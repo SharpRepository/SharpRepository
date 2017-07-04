@@ -10,15 +10,6 @@ namespace SharpRepository.Repository.Caching
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey&gt;"/> class.
         /// </summary>
-        public StandardCompoundKeyCachingStrategy()
-            : base()
-        {
-            Partition = null;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey&gt;"/> class.
-        /// </summary>
         /// <param name="cachingProvider">The caching provider to use (e.g. <see cref="InMemoryCachingProvider"/>, <see cref="MemcachedCachingProvider"/>, etc.).  Defaults to <see cref="InMemoryCachingProvider"/>.</param>
         public StandardCompoundKeyCachingStrategy(ICachingProvider cachingProvider)
             : base(null, cachingProvider)

@@ -4,16 +4,25 @@ using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
 using Shouldly;
 using SharpRepository.InMemoryRepository;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SharpRepository.Tests.Caching
 {
     [TestFixture]
     public class TimeoutCachingStrategyTests : TestBase
     {
+        private ICachingProvider cacheProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+        }
+
         [Test]
         public void Second_Get_Call_Should_Get_New_Item_From_Cache()
         {
-            var repository = new InMemoryRepository<Contact, int>(new TimeoutCachingStrategy<Contact, int>(10) { CachePrefix = "#RepoTimeoutCache"});
+            var repository = new InMemoryRepository<Contact, int>(new TimeoutCachingStrategy<Contact, int>(10, cacheProvider) { CachePrefix = "#RepoTimeoutCache"});
 
             repository.Add(new Contact() { Name = "Test User"});
 
@@ -29,7 +38,7 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void Cache_Should_Timeout()
         {
-            var repository = new InMemoryRepository<Contact, int>(new TimeoutCachingStrategy<Contact, int>(2) { CachePrefix = "#RepoTimeoutCache" });
+            var repository = new InMemoryRepository<Contact, int>(new TimeoutCachingStrategy<Contact, int>(2, cacheProvider) { CachePrefix = "#RepoTimeoutCache" });
             repository.Add(new Contact() { Name = "Test User" });
 
             repository.Get(1); 

@@ -1,26 +1,34 @@
-﻿//using System.Data.Entity;
-//using System.Data.Entity.Infrastructure;
-using System.Linq;
-//using Microsoft.WindowsAzure.Storage.Shared.Protocol;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpRepository.InMemoryRepository;
-//using SharpRepository.EfRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
+using Microsoft.Extensions.Caching.Memory;
+using SharpRepository.EfCoreRepository;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
     [TestFixture]
     public class StandardCachingSpikes
     {
+        private ICachingProvider cacheProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+        }
+
         // Tests validate fix for Issue #40 - Find/FindAll results are cached without consideration for predicate values
         // https://github.com/SharpRepository/SharpRepository/issues/40
         [Test]
         public void FindShouldBeCachedWithSinglePredicateValueHash()
         {
-            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>(cacheProvider)); // by default uses InMemoryCache
 
             for (var i = 1; i < 5; i++)
             {
@@ -39,7 +47,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void FindShouldBeCachedWithMultiplePredicateValueHash()
         {
-            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>(cacheProvider)); // by default uses InMemoryCache
 
             for (var i = 1; i < 5; i++)
             {
@@ -58,7 +66,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void FindAllShouldBeCachedWithSinglePredicateValueHash()
         {
-            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>(cacheProvider)); // by default uses InMemoryCache
 
             for (var i = 1; i < 5; i++)
             {
@@ -77,7 +85,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void FindAllShouldBeCachedWithMultiplePredicateValueHash()
         {
-            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>(cacheProvider)); // by default uses InMemoryCache
 
             for (var i = 1; i < 5; i++)
             {
@@ -96,7 +104,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Get_With_Selector_Should_Not_Use_Cache_If_Entity_Updated()
         {
-            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>()); // by default uses InMemoryCache
+            var repository = new InMemoryRepository<Contact, string>(new StandardCachingStrategy<Contact, string>(cacheProvider)); // by default uses InMemoryCache
 
             for (var i = 1; i < 3; i++)
             {
@@ -115,37 +123,54 @@ namespace SharpRepository.Tests.Integration.Spikes
             contactName.ShouldBe("Contact 1 - EDITED");
         }
 
-        //[Test]
-        //public void Delete_With_Cache_And_Ef()
-        //{
-        //    var cachingStrategy = new StandardCachingStrategy<Contact, string>();
-        //    var dbPath = EfDataDirectoryFactory.Build();
+        [Test]
+        public void Delete_With_Cache_And_Ef()
+        {
+            var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
 
-        //    var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
 
-        //    repository.Add(new Contact() { ContactId = "1", Name = "Contact1"});
+            var options = new DbContextOptionsBuilder<TestObjectContext>()
+                .UseSqlite(connection)
+                .Options;
 
-        //    repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
-        //    repository.Get("1");
-        //    repository.CacheUsed.ShouldBeTrue();
-        //    repository.Delete("1");
-        //}
+            var context = new TestObjectContext(options);
+            context.Database.EnsureCreated();
 
-        //[Test]
-        //public void Delete_Loop_With_Cache_And_Ef()
-        //{
-        //    var cachingStrategy = new StandardCachingStrategy<Contact, string>();
-        //    var dbPath = EfDataDirectoryFactory.Build();
-        //    var repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
+            var repository = new EfCoreRepository<Contact, string>(context, cachingStrategy);
+            repository.Add(new Contact() { ContactId = "1", Name = "Contact1" });
 
-        //    repository.Add(new Contact() { ContactId = "1", Name = "Contact1", ContactTypeId = 1});
-        //    repository.Add(new Contact() { ContactId = "2", Name = "Contact2", ContactTypeId = 2});
-        //    repository.Add(new Contact() { ContactId = "3", Name = "Contact3", ContactTypeId = 2});
-        //    repository.FindAll(x => x.ContactTypeId == 2);
+            repository = new EfCoreRepository<Contact, string>(context, cachingStrategy);
+            repository.Get("1");
+            repository.CacheUsed.ShouldBeTrue();
+            repository.Delete("1");
+        }
 
-        //    repository = new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath), cachingStrategy);
-            
-        //    repository.Delete(x => x.ContactTypeId == 2);
-        //}
+        [Test]
+        public void Delete_Loop_With_Cache_And_Ef()
+        {
+            var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<TestObjectContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            var context = new TestObjectContext(options);
+            context.Database.EnsureCreated();
+
+            var repository = new EfCoreRepository<Contact, string>(context, cachingStrategy);
+
+            repository.Add(new Contact() { ContactId = "1", Name = "Contact1", ContactTypeId = 1 });
+            repository.Add(new Contact() { ContactId = "2", Name = "Contact2", ContactTypeId = 2 });
+            repository.Add(new Contact() { ContactId = "3", Name = "Contact3", ContactTypeId = 2 });
+            repository.FindAll(x => x.ContactTypeId == 2);
+
+            repository = new EfCoreRepository<Contact, string>(new TestObjectContext(options), cachingStrategy);
+
+            repository.Delete(x => x.ContactTypeId == 2);
+        }
     }
 }

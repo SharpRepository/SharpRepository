@@ -19,15 +19,6 @@ namespace SharpRepository.Repository.Caching
         {
             Partition = partition;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardCachingStrategyWithPartition&lt;T&gt;"/> class.
-        /// </summary>
-        /// <param name="partition">The property that should be used for partitioning.</param>
-        public StandardCachingStrategyWithPartition(Expression<Func<T, int>> partition)
-        {
-            Partition = partition;
-        }
     }
 
     /// <summary>
@@ -47,15 +38,6 @@ namespace SharpRepository.Repository.Caching
         {
             Partition = partition;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardCachingStrategyWithPartition&lt;T, TKey&gt;"/> class.
-        /// </summary>
-        /// <param name="partition">The property that should be used for partitioning.</param>
-        public StandardCachingStrategyWithPartition(Expression<Func<T, int>> partition)
-        {
-            Partition = partition;
-        }
     }
 
     /// <summary>
@@ -66,15 +48,6 @@ namespace SharpRepository.Repository.Caching
     /// <typeparam name="TPartition">The type of the column that the Generational Cache will be partitioned on.</typeparam>
     public class StandardCachingStrategyWithPartition<T, TKey, TPartition> : StandardCachingStrategyBase<T, TKey, TPartition> where T : class
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardCachingStrategyWithPartition&lt;T, TKey, TPartition&gt;"/> class.
-        /// </summary>
-        /// <param name="partition">The property that should be used for partitioning.</param>
-        public StandardCachingStrategyWithPartition(Expression<Func<T, TPartition>> partition)
-        {
-            Partition = partition;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategyWithPartition&lt;T, TKey, TPartition&gt;"/> class.
         /// </summary>
@@ -96,15 +69,6 @@ namespace SharpRepository.Repository.Caching
     /// <typeparam name="TPartition">The type of the column that the Generational Cache will be partitioned on.</typeparam>
     public class StandardCachingStrategyWithPartition<T, TKey, TKey2, TPartition> : StandardCompoundKeyCachingStrategyBase<T, TKey, TKey2, TPartition> where T : class
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey, TPartition&gt;"/> class.
-        /// </summary>
-        /// <param name="partition">The property that should be used for partitioning.</param>
-        public StandardCachingStrategyWithPartition(Expression<Func<T, TPartition>> partition)
-        {
-            Partition = partition;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardCachingStrategy&lt;T, TKey, TPartition&gt;"/> class.
         /// </summary>

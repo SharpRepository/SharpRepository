@@ -11,9 +11,9 @@ namespace SharpRepository.Repository.Caching
     public class InMemoryCachingProvider : ICachingProvider
     {
         protected IMemoryCache Cache;
-        public InMemoryCachingProvider()
+        public InMemoryCachingProvider(IMemoryCache cache)
         {
-            Cache = new MemoryCache(new MemoryCacheOptions());
+            Cache = cache;
         }
 
         private static readonly object LockObject = new object();

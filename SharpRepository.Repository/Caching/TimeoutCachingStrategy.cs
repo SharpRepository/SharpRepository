@@ -12,7 +12,7 @@
         /// </summary>
         /// <param name="timeoutInSeconds">The timeout in seconds.</param>
         /// <param name="cachingProvider">The caching provider.</param>
-        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider)
             : base(timeoutInSeconds, null, cachingProvider)
         {
             
@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name="timeoutInSeconds">The cache timeout in seconds.</param>
         /// <param name="cachingProvider">The caching provider.</param>
-        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider)
             : base(timeoutInSeconds, null, cachingProvider)
         {
 
@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="timeoutInSeconds">The timeout in seconds.</param>
         /// <param name="cachingProvider">The caching provider.</param>
-        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider)
             : base(timeoutInSeconds, null, cachingProvider)
         {
 
@@ -71,7 +71,7 @@
         /// </summary>
         /// <param name="timeoutInSeconds">The timeout in seconds.</param>
         /// <param name="cachingProvider">The caching provider.</param>
-        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+        public TimeoutCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider)
             : base(timeoutInSeconds, null, cachingProvider)
         {
 
