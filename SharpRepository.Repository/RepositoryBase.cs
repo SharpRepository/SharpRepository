@@ -1743,12 +1743,8 @@ namespace SharpRepository.Repository
             var propertyName = Conventions.GetPrimaryKeyName(type);
 
             if (String.IsNullOrEmpty(propertyName)) return null;
-
-#if NET451
-            var propInfo = type.GetProperty(propertyName);
-#elif NETSTANDARD1_6
+            
             var propInfo = type.GetTypeInfo().GetDeclaredProperty(propertyName);
-#endif
             propInfo = propInfo == null || propInfo.PropertyType != pkType ? null : propInfo;
 
             InternalCache.PrimaryKeyMapping[tupleKey] = propInfo;
@@ -1759,19 +1755,5 @@ namespace SharpRepository.Repository
         {
             RunAspect(aspect => aspect.OnError(new RepositoryActionContext<T, TKey>(this), ex));
         }
-
-//        private static PropertyInfo GetPropertyCaseInsensitive(IReflect type, string propertyName, Type propertyType)
-//        {
-//            // make the property reflection lookup case insensitive
-//            const BindingFlags bindingFlags = BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance;
-//
-//            return type.GetProperty(propertyName, bindingFlags, null, propertyType, new Type[0], new ParameterModifier[0]);
-//        }
-
-//        public abstract IEnumerator<T> GetEnumerator();
-//        IEnumerator IEnumerable.GetEnumerator()
-//        {
-//            return GetEnumerator();
-//        }
     }
 }

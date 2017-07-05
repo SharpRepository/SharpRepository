@@ -209,6 +209,9 @@ namespace SharpRepository.Tests.Integration.Spikes
             //        queries.Add(sql);
             //    }
             //};
+
+            ;
+
             var repository = new MyEfCoreRepository(dbContext);
 
             var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
@@ -228,9 +231,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.FindAll(findAllBySpec).First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(1); // first query is count for total records
+            dbContext.QueryLog.Count(s => s.Contains("QUERY")).ShouldBe(1); // first query is count for total records
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(s => s.Contains("QUERY")).ShouldBe(1);
 
             repository.FindAll(findAllBySpec).Count().ShouldBe(1);
         }

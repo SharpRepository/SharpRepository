@@ -5,6 +5,7 @@ using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
+using System;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -30,12 +31,16 @@ namespace SharpRepository.Tests.Integration
             notUpdated.Name.ShouldBe("Test User 2");
         }
 
-        //[ExecuteForAllRepositories]
-        //[ExpectedException(typeof(Exception))]
-        //public void Update_Should_Throw_Exception_If_Item_Does_Not_Exist()
-        //{
-        //    Repository.Update(new Contact());
-        //}
+        [ExecuteForAllRepositories]
+        public void Update_Should_Throw_Exception_If_Item_Does_Not_Exist(IRepository<Contact, string> repository)
+        {
+            try
+            {
+                repository.Update(new Contact());
+                "Passed update".ShouldBe("Cant pass update");
+            }
+            catch (Exception) { }
+        }
 
         [ExecuteForAllRepositories]
         public void Update_Should_Update_Multiple_Items(IRepository<Contact, string> repository)

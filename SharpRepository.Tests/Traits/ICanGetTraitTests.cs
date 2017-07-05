@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
-using SharpRepository.Repository;
+using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Traits;
 using SharpRepository.Tests.TestObjects;
 using Shouldly;
-using SharpRepository.InMemoryRepository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpRepository.Tests.Traits
 {
@@ -53,16 +52,12 @@ namespace SharpRepository.Tests.Traits
             result.Name.ShouldBe(contact.Name);
         }
 
-      
         private class ContactRepository : InMemoryRepository<Contact, int>, IContactRepository
         {
-         
         }
 
         private interface IContactRepository : ICanGet<Contact, Int32>
-        
         {
-
         }
     }
 }

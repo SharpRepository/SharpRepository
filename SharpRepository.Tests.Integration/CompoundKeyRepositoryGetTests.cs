@@ -85,8 +85,7 @@ namespace SharpRepository.Tests.Integration
             var item = new User { Username = "Test User", Age = 21 };
             repository.Add(item);
 
-            User result;
-            repository.TryGet(item.Username, item.Age, out result).ShouldBeTrue();
+            repository.TryGet(item.Username, item.Age, out User result).ShouldBeTrue();
             result.Username.ShouldBe(item.Username);
             result.Age.ShouldBe(item.Age);
         }
@@ -94,8 +93,7 @@ namespace SharpRepository.Tests.Integration
         [ExecuteForAllCompoundKeyRepositories]
         public void TryGet_Should_Return_False_And_Null_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
         {
-            User result;
-            repository.TryGet(string.Empty, 0, out result).ShouldBeFalse();
+            repository.TryGet(string.Empty, 0, out User result).ShouldBeFalse();
             result.ShouldBeNull();
         }
 

@@ -136,8 +136,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            Contact result;
-            repository.TryFind(new Specification<Contact>(p => p.Name == "Test User 1"), out result).ShouldBeTrue();
+            repository.TryFind(new Specification<Contact>(p => p.Name == "Test User 1"), out Contact result).ShouldBeTrue();
             result.Name.ShouldBe("Test User 1");
         }
 
@@ -150,8 +149,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            Contact result;
-            repository.TryFind(p => p.Name == "Test User 1", out result).ShouldBeTrue();
+            repository.TryFind(p => p.Name == "Test User 1", out Contact result).ShouldBeTrue();
             result.Name.ShouldBe("Test User 1");
         }
 

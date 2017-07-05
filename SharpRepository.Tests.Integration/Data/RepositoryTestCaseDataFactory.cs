@@ -11,7 +11,7 @@ using SharpRepository.Tests.Integration.TestObjects;
 //using SharpRepository.XmlRepository;
 //using SharpRepository.EfRepository;
 //using SharpRepository.RavenDbRepository;
-//using SharpRepository.MongoDbRepository;
+using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.EfCoreRepository;
 //using SharpRepository.CacheRepository;
@@ -65,16 +65,16 @@ namespace SharpRepository.Tests.Integration.Data
             //    yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository Test");
             //}
 
-            //if (includeType.Contains(RepositoryType.MongoDb))
-            //{
-            //    string connectionString = MongoDbConnectionStringFactory.Build("Contact");
+            if (includeType.Contains(RepositoryType.MongoDb))
+            {
+                string connectionString = MongoDbConnectionStringFactory.Build("Contact");
 
-            //    if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
-            //    {
-            //        MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
-            //        yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
-            //    }
-            //}
+                if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
+                {
+                    MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
+                    yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb Test");
+                }
+            }
 
             //if (includeType.Contains(RepositoryType.RavenDb))
             //{

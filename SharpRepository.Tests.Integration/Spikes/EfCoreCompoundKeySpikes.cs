@@ -29,7 +29,6 @@ namespace SharpRepository.Tests.Integration.Spikes
             // Run the test against one instance of the context
             context = new TestObjectContext(options);
             context.Database.EnsureCreated();
-
         }
 
         [TearDown]

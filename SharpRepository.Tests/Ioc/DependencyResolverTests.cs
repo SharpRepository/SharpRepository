@@ -27,8 +27,7 @@ namespace SharpRepository.Tests.Ioc
             
         }
     }
-
-
+    
     public class TestDependencyResolver : BaseRepositoryDependencyResolver
     {
         protected override T ResolveInstance<T>()

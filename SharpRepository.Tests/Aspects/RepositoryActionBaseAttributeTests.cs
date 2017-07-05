@@ -72,6 +72,5 @@ namespace SharpRepository.Tests.Aspects
             //Assert
             Assert.Greater(specificAudit.ExecutedOn, audit.ExecutedOn);
         }
-
     }
 }

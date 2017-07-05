@@ -86,8 +86,7 @@ namespace SharpRepository.Tests.Integration
             var contact = new Contact { Name = "Test User", ContactTypeId = 1 };
             repository.Add(contact);
 
-            Contact result;
-            repository.TryGet(contact.ContactId, out result).ShouldBeTrue();
+            repository.TryGet(contact.ContactId, out Contact result).ShouldBeTrue();
             result.Name.ShouldBe(contact.Name);
             result.ContactTypeId.ShouldBe(contact.ContactTypeId);
         }
@@ -95,8 +94,7 @@ namespace SharpRepository.Tests.Integration
         [ExecuteForAllRepositories]
         public void TryGet_Should_Return_False_And_Null_If_Item_Does_Not_Exists(IRepository<Contact, string> repository)
         {
-            Contact result;
-            repository.TryGet(string.Empty, out result).ShouldBeFalse();
+            repository.TryGet(string.Empty, out Contact result).ShouldBeFalse();
             result.ShouldBeNull();
         }
 

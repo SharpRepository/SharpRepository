@@ -29,17 +29,16 @@ namespace SharpRepository.Tests.Integration
             updated.FullName.ShouldBe("Test User - 22 - Updated");
             notUpdated.FullName.ShouldBe("Test User 2 - 22");
         }
-
-
+        
         [ExecuteForAllCompoundKeyRepositories]
         public void Update_Should_Update_Multiple_Items(ICompoundKeyRepository<User, string, int> repository)
         {
-           var users = new List<User>
-                                        {
-                                            new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
-                                            new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
-                                            new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
-                                        };
+            var users = new List<User>
+            {
+                new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
+                new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
+                new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
+            };
 
             repository.Add(users);
             var items = repository.GetAll().ToList();

@@ -2,6 +2,7 @@
 using SharpRepository.Repository;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
+using Shouldly;
 
 namespace SharpRepository.Tests.Spikes
 {
@@ -23,17 +24,11 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     public class DeleteByKeyConstaintSpike : TestBase
     {
-        //protected IRepository<Int32, Int32> Repository; // Can't be done because of T class constraint.
-        //protected IRepository<Guid, Guid> Repository;  // Can't be done because of T class constraint.
-        //protected IRepository<string, string> Repository; // Okay...
         protected IRepository<Contact, int> Repository;
 
         [SetUp]
         public void Setup()
         {
-            //Repository = new InMemoryRepository<string, Int32>(); // Can't be done because of T new() constaint
-            //Repository = new XmlRepository<string, Int32>(); // Can't be done because of T new() constaint
-            //Repository = new EfRepository<string, Int32>(); // Can't be done because of T new() constaint
             Repository = new InMemoryRepository<Contact, int>(); 
         }
 
@@ -46,29 +41,29 @@ namespace SharpRepository.Tests.Spikes
         [Test]
         public void Delete_Should_Remove_Item()
         {
-            //var contact = new Contact { Name = "Test User" };
-            ////Repository.Add(contact);
+            var contact = new Contact { ContactId = 1, Name = "Test User" };
+            Repository.Add(contact);
 
-            //var result = Repository.Get(contact);
-            //result.ShouldNotBeNull();
+            var result = Repository.Get(contact.ContactId);
+            result.ShouldNotBeNull();
 
-            ////Repository.Delete(contact); // Ambiguous invocation
-            //result = Repository.Get(contact);
-            //result.ShouldBeNull();
+            Repository.Delete(contact);
+            result = Repository.Get(contact.ContactId);
+            result.ShouldBeNull();
         }
 
         [Test]
         public void Delete_Should_Remove_Item_By_Key()
         {
-            //var contact = new Contact { Name = "Test User" };
-            ////Repository.Add(contact);
+            var contact = new Contact { Name = "Test User" };
+            Repository.Add(contact);
 
-            //var result = Repository.Get(contact);
-            //result.ShouldNotBeNull();
+            var result = Repository.Get(contact.ContactId);
+            result.ShouldNotBeNull();
 
-            ////Repository.Delete(contact); // Ambiguous invocation
-            //result = Repository.Get(contact);
-            //result.ShouldBeNull();
+            Repository.Delete(contact.ContactId);
+            result = Repository.Get(contact.ContactId);
+            result.ShouldBeNull();
         }
     }
 }

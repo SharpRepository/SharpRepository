@@ -11,5 +11,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
         public int Age { get; set; }
 
         public string FullName { get; set; }
+
+        public int ContactTypeId { get; set; }
     }
 }
