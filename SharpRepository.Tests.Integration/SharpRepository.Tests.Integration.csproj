@@ -216,6 +216,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj">
