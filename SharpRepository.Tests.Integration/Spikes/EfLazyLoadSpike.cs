@@ -103,9 +103,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.GetAll().First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(3);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(2);
+            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
         }
 
         [Test]
@@ -127,9 +127,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
         }
 
         [Test]

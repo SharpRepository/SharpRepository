@@ -13,7 +13,9 @@ public class TestObjectContext : DbContext
 
     public TestObjectContext(DbContextOptions<TestObjectContext> options)
         : base(options)
-    { }
+    {
+        QueryLog = new List<string>();
+    }
 
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<PhoneNumber> PhoneNumbers { get; set; }
@@ -76,11 +78,6 @@ internal class TestLogger : ILogger
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
     {
-        if (QueryLog == null)
-        {
-            QueryLog = new List<string>();
-        }
-
         QueryLog.Add(formatter(state, exception));
     }
 }
