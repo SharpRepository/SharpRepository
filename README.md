@@ -1,3 +1,5 @@
+![sharp repository logo](https://user-images.githubusercontent.com/6349515/28491141-7b600e46-6eeb-11e7-8c4c-d6139479c18e.png)
+
 What is SharpRepository?
 --------------------------------
 
