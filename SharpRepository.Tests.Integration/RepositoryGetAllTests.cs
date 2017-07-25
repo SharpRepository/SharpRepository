@@ -101,53 +101,5 @@ namespace SharpRepository.Tests.Integration
             queryOptions.TotalItems.ShouldEqual(totalItems);
             result.First().ShouldEqual("Test User 3");
         }
-
-
-        [ExecuteForRepositories(RepositoryType.Ef)]
-        public void GetAll_With_Includes(IRepository<Contact, string> repository)
-        {
-            const int totalItems = 5;
-
-            for (int i = 1; i <= totalItems; i++)
-            {
-                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i, EmailAddresses = new List<EmailAddress>() };
-                for (int j = 1; j <= totalItems; j++)
-                {
-                    var email = new EmailAddress { ContactId = 1, Email = "test.user." + i.ToString() + "@test" + j.ToString() };
-                    contact.EmailAddresses.Add(email);
-                }
-
-                repository.Add(contact);
-            }
-            
-            var result = repository.GetAll("EmailAddresses");
-
-            result.Count().ShouldEqual(totalItems);
-            var firstContact = result.ToList().Single(r => r.ContactId == "1");
-            firstContact.EmailAddresses.Count().ShouldEqual(totalItems);
-            firstContact.EmailAddresses.Single(e => e.Email == "test.user.1@test1").ShouldBeType<EmailAddress>();
-        }
-
-        [ExecuteForRepositories(RepositoryType.Ef)]
-        public void GetAll_Without_Includes(IRepository<Contact, string> repository)
-        {
-            const int totalItems = 5;
-
-            for (int i = 1; i <= totalItems; i++)
-            {
-                var contact = new Contact { Name = "Test User " + i, EmailAddresses = new List<EmailAddress>() };
-                for (int j = 1; j <= totalItems; j++)
-                {
-                    var email = new EmailAddress { ContactId = 1, Email = "test.user." + i.ToString() + "@test" + j.ToString() };
-                    contact.EmailAddresses.Add(email);
-                }
-
-                repository.Add(contact);
-            }
-
-            var result = repository.GetAll().ToList();
-            
-            result.First().EmailAddresses.ShouldBeNull();
-        }
     }
 }
