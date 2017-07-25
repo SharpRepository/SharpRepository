@@ -1,0 +1,15 @@
+﻿{
+  "frameworks": { "net452": {} },
+  "runtimes": {
+    "win10-x64": {},
+    "win": {}
+  },
+  "dependencies": {
+    "Microsoft.AspNet.WebApi.Client": "4.0.30506.0",
+    "Microsoft.AspNet.WebApi.Core": "4.0.30506.0",
+    "Microsoft.AspNet.WebApi.WebHost" : "4.0.30506.0",
+    "Microsoft.Net.Http": "2.0.20710.0",
+    "Microsoft.Web.Infrastructure": "1.0.0.0",
+    "Newtonsoft.Json": "10.0.2"
+  }
+}

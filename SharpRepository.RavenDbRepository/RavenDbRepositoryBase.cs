@@ -14,7 +14,7 @@ namespace SharpRepository.RavenDbRepository
 {
     public class RavenDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class
     {
-        public DocumentStore DocumentStore;
+        public IDocumentStore DocumentStore;
         public  IDocumentSession Session; // TODO: public so we can access it in the AdvancedConfiguration Aspect, not sure I like this
 
         internal RavenDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
@@ -27,12 +27,12 @@ namespace SharpRepository.RavenDbRepository
             Initialize(new DocumentStore { Url = url });
         }
 
-        internal RavenDbRepositoryBase(DocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
+        internal RavenDbRepositoryBase(IDocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {
             Initialize(documentStore);
         }  
 
-        private void Initialize(DocumentStore documentStore = null)
+        private void Initialize(IDocumentStore documentStore = null)
         {
             DocumentStore = documentStore ?? new DocumentStore { Url = "http://localhost:8080"};
             DocumentStore.Initialize();
@@ -66,7 +66,13 @@ namespace SharpRepository.RavenDbRepository
 
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            return typeof(TKey) == typeof(string) ? Session.Load<T>(key as string) : base.GetQuery(key, fetchStrategy);
+            try
+            {
+                return typeof(TKey) == typeof(string) ? Session.Load<T>(key as string) : base.GetQuery(key, fetchStrategy);
+            } catch (ArgumentException)
+            {
+                return null;
+            }
         }
 
         public override IEnumerable<T> GetMany(params TKey[] keys)

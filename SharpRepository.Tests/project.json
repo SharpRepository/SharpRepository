@@ -1,0 +1,34 @@
+﻿{
+  "frameworks": {
+    "net452": {}
+  },
+  "runtimes": {
+    "win10-x64": {},
+    "win": {}
+  },
+  "dependencies": {
+    "castle.core": "4.0.0",
+    "EntityFramework": "6.1.3",
+    "EnyimMemcached": "2.13.0",
+    "log4net": "2.0.8",
+    "microsoft.azure.keyvault.core": "1.0.0",
+    "Microsoft.Bcl.Build": "1.0.21",
+    "Microsoft.Data.Edm": "5.6.4",
+    "Microsoft.Data.OData": "5.6.4",
+    "Microsoft.Data.Services.Client": "5.6.4",
+    "Microsoft.WindowsAzure.ConfigurationManager": "3.2.3",
+    "mongodb.bson": "2.4.3",
+    "mongodb.driver.core": "2.4.3",
+    "moq": "4.7.8",
+    "newtonsoft.json": "10.0.2",
+    "nlog": "2.0.1.2",
+    "nunit": "3.6.1",
+    "servicestack.common": "3.9.28",
+    "servicestack.redis": "3.9.29",
+    "servicestack.text": "3.9.28",
+    "should": "1.1.20",
+    "System.Runtime.InteropServices.RuntimeInformation": "4.0.0",
+    "System.Spatial": "5.6.4",
+    "windowsazure.storage": "7.2.1"
+  }
+}

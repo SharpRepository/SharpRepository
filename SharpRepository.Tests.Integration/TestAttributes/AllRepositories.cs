@@ -10,9 +10,9 @@
                            {
                                RepositoryType.InMemory,
                                RepositoryType.Dbo4,
-                               RepositoryType.RavenDb,
+                               //RepositoryType.RavenDb,
                                RepositoryType.Xml,
-//                               RepositoryType.MongoDb,
+                               RepositoryType.MongoDb,
                                RepositoryType.Ef5,
                                RepositoryType.CouchDb
                            };

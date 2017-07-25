@@ -41,11 +41,11 @@ namespace SharpRepository.Tests.Integration
         public void Update_Should_Update_Multiple_Items(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>
-                                        {
-                                            new Contact {Name = "Contact 1"},
-                                            new Contact {Name = "Contact 2"},
-                                            new Contact {Name = "Contact 3"},
-                                        };
+            {
+                new Contact {Name = "Contact 1"},
+                new Contact {Name = "Contact 2"},
+                new Contact {Name = "Contact 3"},
+            };
 
             repository.Add(contacts);
             var items = repository.GetAll().ToList();

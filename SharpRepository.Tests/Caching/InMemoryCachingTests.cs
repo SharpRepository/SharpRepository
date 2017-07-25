@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using System.Runtime.Caching;
 using SharpRepository.InMemoryRepository;
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.TestObjects;
 using Should;
+using System.Runtime.Caching;
 
 namespace SharpRepository.Tests.Caching
 {

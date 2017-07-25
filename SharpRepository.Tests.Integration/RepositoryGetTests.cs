@@ -115,7 +115,7 @@ namespace SharpRepository.Tests.Integration
             repository.Exists(string.Empty).ShouldBeFalse();
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
         public void GetMany_Params_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 5; i++)
@@ -128,7 +128,7 @@ namespace SharpRepository.Tests.Integration
             items.Count().ShouldEqual(4);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
         public void GetMany_List_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 5; i++)
@@ -141,7 +141,7 @@ namespace SharpRepository.Tests.Integration
             items.Count().ShouldEqual(4);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
         public void GetManyAsDictionary_Params_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 5; i++)
@@ -159,7 +159,7 @@ namespace SharpRepository.Tests.Integration
             items.ContainsKey("5").ShouldBeTrue();
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
         public void GetManyAsDictionary_List_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 5; i++)

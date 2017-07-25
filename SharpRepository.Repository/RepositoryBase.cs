@@ -31,9 +31,8 @@ namespace SharpRepository.Repository
             _typeName = entityType.Name;
 
             _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
-                .Where(x => x.Enabled)
                 .OrderBy(x => x.Order)
-                .ToArray();
+                .ToDictionary(a => a.GetType().FullName, a => a);
 
             _repositoryActionContext = new RepositoryActionContext<T, TKey>(this);
             RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
@@ -49,7 +48,13 @@ namespace SharpRepository.Repository
         public IRepositoryConventions Conventions { get; set; }
 
         private readonly RepositoryActionContext<T, TKey> _repositoryActionContext;
-        private readonly RepositoryActionBaseAttribute[] _aspects;
+        private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
+
+        // For purposes of testing
+        protected IEnumerable<RepositoryActionBaseAttribute> Aspects
+        {
+            get { return _aspects.Values; }
+        }
 
         public Type EntityType
         {
@@ -120,6 +125,31 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
         protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
+
+
+        //Managing aspects
+        protected void DisableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = false;
+        }
+        protected void EnableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = true;
+        }
+        private void ValidateArgument(Type aspectType)
+        {
+            var baseAttribute = typeof(RepositoryActionBaseAttribute);
+
+            if (!baseAttribute.IsAssignableFrom(aspectType))
+                throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
+
+            if (!_aspects.ContainsKey(aspectType.FullName))
+                throw new InvalidOperationException(string.Format("There is no aspect of a type {0}", aspectType.Name));
+        }
 
         public IEnumerable<T> GetAll()
         {
@@ -414,8 +444,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(TKey key)
         {
-            T entity;
-            return TryGet(key, out entity);
+            return TryGet(key, out T entity);
         }
 
         public bool TryGet(TKey key, out T entity)
@@ -520,7 +549,7 @@ namespace SharpRepository.Repository
 
             try
             {
-                return FindAll(new Specification<T>(predicate), queryOptions);
+                return FindAll(CreateSpecification(predicate), queryOptions);
             }
             catch (Exception ex)
             {
@@ -536,7 +565,7 @@ namespace SharpRepository.Repository
 
             try
             {
-                return FindAll(new Specification<T>(predicate), selector, queryOptions);
+                return FindAll(CreateSpecification(predicate), selector, queryOptions);
             }
             catch (Exception ex)
             {
@@ -619,8 +648,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(ISpecification<T> criteria)
         {
-            T entity;
-            return TryFind(criteria, out entity);
+            return TryFind(criteria, out T entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
@@ -671,7 +699,7 @@ namespace SharpRepository.Repository
             {
                 if (predicate == null) throw new ArgumentNullException("predicate");
 
-                return Find(new Specification<T>(predicate), queryOptions);
+                return Find(CreateSpecification(predicate), queryOptions);
             }
             catch (Exception ex)
             {
@@ -687,7 +715,7 @@ namespace SharpRepository.Repository
                 if (predicate == null) throw new ArgumentNullException("predicate");
                 if (selector == null) throw new ArgumentNullException("selector");
 
-                return Find(new Specification<T>(predicate), selector, queryOptions);
+                return Find(CreateSpecification(predicate), selector, queryOptions);
             }
             catch (Exception ex)
             {
@@ -698,8 +726,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -770,7 +797,7 @@ namespace SharpRepository.Repository
 
         public IEnumerable<TResult> GroupBy<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector)
         {
-            return GroupBy(predicate == null ? null : new Specification<T>(predicate), keySelector, resultSelector);
+            return GroupBy(predicate == null ? null : CreateSpecification(predicate), keySelector, resultSelector);
         }
 
         public long LongCount()
@@ -788,7 +815,7 @@ namespace SharpRepository.Repository
 
         public long LongCount(Expression<Func<T, bool>> predicate)
         {
-            return LongCount(predicate == null ? null : new Specification<T>(predicate));
+            return LongCount(predicate == null ? null : CreateSpecification(predicate));
         }
 
         public int Count()
@@ -806,7 +833,7 @@ namespace SharpRepository.Repository
 
         public int Count(Expression<Func<T, bool>> predicate)
         {
-            return Count(predicate == null ? null : new Specification<T>(predicate));
+            return Count(predicate == null ? null : CreateSpecification(predicate));
         }
 
         public int Sum(Expression<Func<T, int>> selector)
@@ -825,7 +852,7 @@ namespace SharpRepository.Repository
 
         public int Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public int? Sum(Expression<Func<T, int?>> selector)
@@ -844,7 +871,7 @@ namespace SharpRepository.Repository
 
         public int? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public long Sum(Expression<Func<T, long>> selector)
@@ -863,7 +890,7 @@ namespace SharpRepository.Repository
 
         public long Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public long? Sum(Expression<Func<T, long?>> selector)
@@ -882,7 +909,7 @@ namespace SharpRepository.Repository
 
         public long? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public decimal Sum(Expression<Func<T, decimal>> selector)
@@ -901,7 +928,7 @@ namespace SharpRepository.Repository
 
         public decimal Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public decimal? Sum(Expression<Func<T, decimal?>> selector)
@@ -920,7 +947,7 @@ namespace SharpRepository.Repository
 
         public decimal? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double Sum(Expression<Func<T, double>> selector)
@@ -939,7 +966,7 @@ namespace SharpRepository.Repository
 
         public double Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double? Sum(Expression<Func<T, double?>> selector)
@@ -958,7 +985,7 @@ namespace SharpRepository.Repository
 
         public double? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public float Sum(Expression<Func<T, float>> selector)
@@ -977,7 +1004,7 @@ namespace SharpRepository.Repository
 
         public float Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public float? Sum(Expression<Func<T, float?>> selector)
@@ -996,7 +1023,7 @@ namespace SharpRepository.Repository
 
         public float? Sum(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
         {
-            return Sum(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Sum(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double Average(Expression<Func<T, int>> selector)
@@ -1015,7 +1042,7 @@ namespace SharpRepository.Repository
 
         public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double? Average(Expression<Func<T, int?>> selector)
@@ -1034,7 +1061,7 @@ namespace SharpRepository.Repository
 
         public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, int?>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double Average(Expression<Func<T, long>> selector)
@@ -1053,7 +1080,7 @@ namespace SharpRepository.Repository
 
         public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double? Average(Expression<Func<T, long?>> selector)
@@ -1072,7 +1099,7 @@ namespace SharpRepository.Repository
 
         public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, long?>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public decimal Average(Expression<Func<T, decimal>> selector)
@@ -1091,7 +1118,7 @@ namespace SharpRepository.Repository
 
         public decimal Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public decimal? Average(Expression<Func<T, decimal?>> selector)
@@ -1110,7 +1137,7 @@ namespace SharpRepository.Repository
 
         public decimal? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, decimal?>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double Average(Expression<Func<T, double>> selector)
@@ -1129,7 +1156,7 @@ namespace SharpRepository.Repository
 
         public double Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public double? Average(Expression<Func<T, double?>> selector)
@@ -1148,7 +1175,7 @@ namespace SharpRepository.Repository
 
         public double? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, double?>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public float Average(Expression<Func<T, float>> selector)
@@ -1167,7 +1194,7 @@ namespace SharpRepository.Repository
 
         public float Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public float? Average(Expression<Func<T, float?>> selector)
@@ -1186,7 +1213,7 @@ namespace SharpRepository.Repository
 
         public float? Average(Expression<Func<T, bool>> predicate, Expression<Func<T, float?>> selector)
         {
-            return Average(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Average(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public TResult Min<TResult>(Expression<Func<T, TResult>> selector)
@@ -1205,7 +1232,7 @@ namespace SharpRepository.Repository
 
         public TResult Min<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
         {
-            return Min(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Min(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public TResult Max<TResult>(Expression<Func<T, TResult>> selector)
@@ -1224,7 +1251,7 @@ namespace SharpRepository.Repository
 
         public TResult Max<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> selector)
         {
-            return Max(predicate == null ? null : new Specification<T>(predicate), selector);
+            return Max(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
@@ -1239,7 +1266,7 @@ namespace SharpRepository.Repository
 
         public IDictionary<TGroupKey, int> GroupCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
         {
-            return GroupCount(predicate == null ? null : new Specification<T>(predicate), selector);
+            return GroupCount(predicate == null ? null : CreateSpecification(predicate), selector);
         }
 
         public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, TGroupKey>> selector)
@@ -1254,18 +1281,25 @@ namespace SharpRepository.Repository
 
         public IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector)
         {
-            return GroupLongCount(predicate == null ? null : new Specification<T>(predicate), selector);
+            return GroupLongCount(predicate == null ? null : CreateSpecification(predicate), selector);
         }
         
 
         private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
         {
-            return _aspects.All(action);
+            return _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order)
+                .All(action);
         }
 
         private void RunAspect(Action<RepositoryActionBaseAttribute> action)
         {
-            foreach (var attribute in _aspects)
+            var aspects = _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order);
+
+            foreach (var attribute in aspects)
             {
                 action(attribute);
             }
@@ -1308,10 +1342,9 @@ namespace SharpRepository.Repository
 
 	    private void NotifyQueryManagerOfAddedEntity(T entity)
 	    {
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemAdded(key, entity);
-	    }
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemAdded(key, entity);
+        }
 
         public void Add(IEnumerable<T> entities)
         {
@@ -1373,10 +1406,9 @@ namespace SharpRepository.Repository
 
 		private void NotifyQueryManagerOfDeletedEntity(T entity)
 		{
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemDeleted(key, entity);
-		}
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemDeleted(key, entity);
+        }
 
         public void Delete(IEnumerable<T> entities)
         {
@@ -1435,7 +1467,7 @@ namespace SharpRepository.Repository
 
         public void Delete(Expression<Func<T, bool>> predicate)
         {
-            Delete(new Specification<T>(predicate));
+            Delete(CreateSpecification(predicate));
         }
 
         public void Delete(ISpecification<T> criteria)
@@ -1480,10 +1512,9 @@ namespace SharpRepository.Repository
 
 	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
 	    {
-			TKey key;
-			if (GetPrimaryKey(entity, out key))
-				QueryManager.OnItemUpdated(key, entity);
-	    }
+            if (GetPrimaryKey(entity, out TKey key))
+                QueryManager.OnItemUpdated(key, entity);
+        }
 
         public void Update(IEnumerable<T> entities)
         {
@@ -1547,8 +1578,7 @@ namespace SharpRepository.Repository
 
         public TKey GetPrimaryKey(T entity)
         {
-            TKey key;
-            if (GetPrimaryKey(entity, out key))
+            if (GetPrimaryKey(entity, out TKey key))
             {
                 return key;
             }
@@ -1597,7 +1627,7 @@ namespace SharpRepository.Repository
                     parameter
                 );
 
-            var spec = new Specification<T>(lambda);
+            var spec = CreateSpecification(lambda);
 
             if (fetchStrategy != null)
             {
@@ -1605,6 +1635,11 @@ namespace SharpRepository.Repository
             }
 
             return spec;
+        }
+
+        protected virtual Specification<T> CreateSpecification(Expression<Func<T, bool>> lambda)
+        {
+            return new Specification<T>(lambda);
         }
 
         protected virtual ISpecification<T> ByMultipleKeysSpecification(IEnumerable<TKey> keys)
@@ -1624,7 +1659,7 @@ namespace SharpRepository.Repository
                     )
                 )
                 .Aggregate<Expression<Func<T, bool>>, ISpecification<T>>(null,
-                    (current, lambda) => current == null ? new Specification<T>(lambda) : current.Or(lambda)
+                    (current, lambda) => current == null ? CreateSpecification(lambda) : current.Or(lambda)
                 );
         }
 

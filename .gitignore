@@ -190,8 +190,8 @@ ClientBin/
 node_modules/
 orleans.codegen.cs
 
-# RIA/Silverlight projects
-Generated_Code/
+# Include dlls if they’re in the NuGet packages directory
+!/packages/*/lib/**/*.dll
 
 # Backup & report files from converting an old project file
 # to a newer Visual Studio version. Backup files are not needed,
@@ -240,3 +240,4 @@ _Pvt_Extensions
 .fake/
 /packages
 /packages
+/nlog.txt

@@ -191,8 +191,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(params object[] keys)
         {
-            T entity;
-            return TryGet(out entity, keys);
+            return TryGet(out T entity, keys);
         }
 
         public bool TryGet(out T entity, params object[] keys)
@@ -292,8 +291,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(ISpecification<T> criteria)
         {
-            T entity;
-            return TryFind(criteria, out entity);
+            return TryFind(criteria, out T entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
@@ -353,8 +351,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -415,8 +412,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            object[] keys;
-            if (GetPrimaryKeys(entity, out keys))
+            if (GetPrimaryKeys(entity, out object[] keys))
                 _queryManager.OnItemAdded(keys, entity);
         }
 
@@ -448,8 +444,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            object[] keys;
-            if (GetPrimaryKeys(entity, out keys))
+            if (GetPrimaryKeys(entity, out object[] keys))
                 _queryManager.OnItemDeleted(keys, entity);
         }
 
@@ -498,8 +493,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            object[] keys;
-            if (GetPrimaryKeys(entity, out keys))
+            if (GetPrimaryKeys(entity, out object[] keys))
                 _queryManager.OnItemUpdated(keys, entity);
         }
 
@@ -777,8 +771,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(TKey key, TKey2 key2)
         {
-            T entity;
-            return TryGet(key, key2, out entity);
+            return TryGet(key, key2, out T entity);
         }
 
         public bool TryGet(TKey key, TKey2 key2, out T entity)
@@ -893,8 +886,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(ISpecification<T> criteria)
         {
-            T entity;
-            return TryFind(criteria, out entity);
+            return TryFind(criteria, out T entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
@@ -954,8 +946,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -1016,9 +1007,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            if (GetPrimaryKey(entity, out key, out key2))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2))
                 _queryManager.OnItemAdded(key, key2, entity);
         }
 
@@ -1050,9 +1039,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            if (GetPrimaryKey(entity, out key, out key2))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2))
                 _queryManager.OnItemDeleted(key, key2, entity);
         }
 
@@ -1101,9 +1088,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            if (GetPrimaryKey(entity, out key, out key2))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2))
                 _queryManager.OnItemUpdated(key, key2, entity);
         }
 
@@ -1381,8 +1366,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(TKey key, TKey2 key2, TKey3 key3)
         {
-            T entity;
-            return TryGet(key, key2, key3, out entity);
+            return TryGet(key, key2, key3, out T entity);
         }
 
         public bool TryGet(TKey key, TKey2 key2, TKey3 key3, out T entity)
@@ -1497,8 +1481,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(ISpecification<T> criteria)
         {
-            T entity;
-            return TryFind(criteria, out entity);
+            return TryFind(criteria, out T entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
@@ -1558,8 +1541,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -1620,10 +1602,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            TKey3 key3;
-            if (GetPrimaryKey(entity, out key, out key2, out key3))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2, out TKey3 key3))
                 _queryManager.OnItemAdded(key, key2, key3, entity);
         }
 
@@ -1655,10 +1634,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            TKey3 key3;
-            if (GetPrimaryKey(entity, out key, out key2, out key3))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2, out TKey3 key3))
                 _queryManager.OnItemDeleted(key, key2, key3, entity);
         }
 
@@ -1707,10 +1683,7 @@ namespace SharpRepository.Repository
 
             Save();
 
-            TKey key;
-            TKey2 key2;
-            TKey3 key3;
-            if (GetPrimaryKey(entity, out key, out key2, out key3))
+            if (GetPrimaryKey(entity, out TKey key, out TKey2 key2, out TKey3 key3))
                 _queryManager.OnItemUpdated(key, key2, key3, entity);
         }
 

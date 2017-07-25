@@ -32,8 +32,7 @@ namespace SharpRepository.EfRepository
         {
             if (typeof(TKey) == typeof(Guid) || typeof(TKey) == typeof(string))
             {
-                TKey id;
-                if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+                if (GetPrimaryKey(entity, out TKey id) && Equals(id, default(TKey)))
                 {
                     id = GeneratePrimaryKey();
                     SetPrimaryKey(entity, id);
@@ -56,9 +55,8 @@ namespace SharpRepository.EfRepository
             {
                 if (entry.State == EntityState.Detached)
                 {
-                    TKey key;
 
-                    if (GetPrimaryKey(entity, out key))
+                    if (GetPrimaryKey(entity, out TKey key))
                     {
                         // check to see if this item is already attached
                         //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
@@ -73,7 +71,7 @@ namespace SharpRepository.EfRepository
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // ignore and try the default behavior
             }

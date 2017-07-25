@@ -1,0 +1,29 @@
+﻿{
+  "version": "1.5.0.2",
+  "title": "SharpRepository with Ninject IoC",
+  "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
+  "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
+  "frameworks": { "net452": {} },
+  "runtimes": {
+    "win10-x64": {},
+    "win": {}
+  },
+  "dependencies": {
+    "SharpRepository.Repository": "1.5.0.2",
+    "Ninject": "3.0.1.10"
+  },
+  "packOptions": {
+    "summary": "SharpRepository: Ninject inversion of control helper for Repository configuration",
+    "tags": [ "SharpRepository", "Repository", "Ninject" ],
+    "releaseNotes": "Version 1.5.0.2: stable consolidated release",
+    "iconUrl": "https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png",
+    "projectUrl": "https://github.com/SharpRepository/SharpRepository",
+    "licenseUrl": "https://raw.githubusercontent.com/SharpRepository/SharpRepository/develop/license.txt",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/SharpRepository/SharpRepository.git"
+    },
+    "owners": [ "jtreuting", "bgriswold" ]
+  }
+}
