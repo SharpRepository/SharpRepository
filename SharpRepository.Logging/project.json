@@ -1,6 +1,6 @@
 ﻿{
   "version": "1.5.0.2",
-  "title": "SharpRepository Logger",
+  "title": "SharpRepository Logging",
   "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
   "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
   "frameworks": { "net452": {} },

@@ -24,6 +24,13 @@
       "type": "git",
       "url": "https://github.com/SharpRepository/SharpRepository.git"
     },
-    "owners": [ "jtreuting", "bgriswold" ]
+    "owners": [ "jtreuting", "bgriswold" ],
+    "files": {
+      "mappings": {
+        "content/app.config.transform": "_nuget/content/config.transform",
+        "content/web.config.transform": "_nuget/content/config.transform",
+        "tools/Install.ps1": "_nuget/tools/Install.ps1"
+      }
+    }
   }
 }

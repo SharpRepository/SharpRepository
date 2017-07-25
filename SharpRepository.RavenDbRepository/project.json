@@ -15,7 +15,7 @@
   },
   "packOptions": {
     "summary": "SharpRepository: XML repository pattern implementation for C#",
-    "tags": [ "SharpRepository", "Repository", "db4o" ],
+    "tags": [ "SharpRepository", "Repository", "Raven", "RavenDB" ],
     "releaseNotes": "Version 1.5.0.2-prerelease: upgraded to .NET Framework 4.5.2 and RavenDB 3.5.3, noticed some issues during tests",
     "iconUrl": "https://cloud.githubusercontent.com/assets/2690653/26342225/79903c5e-3f97-11e7-810b-8bd77ddb4ac3.png",
     "projectUrl": "https://github.com/SharpRepository/SharpRepository",
