@@ -1,0 +1,10 @@
+﻿{
+  "frameworks": { "net452": {} },
+  "runtimes": {
+    "win10-x64": {},
+    "win": {}
+  },
+  "dependencies": {
+    "WindowsAzure.Caching": "1.7.0.0"
+  }
+}

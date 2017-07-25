@@ -1,6 +1,6 @@
 ﻿{
-  "version": "1.5.0.2",
-  "title": "SharpRepository with StructureMap IoC",
+  "version": "1.5.0.2-prerelease",
+  "title": "SharpRepository for XML",
   "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
   "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
   "frameworks": { "net452": {} },
@@ -10,14 +10,14 @@
   },
   "dependencies": {
     "SharpRepository.Repository": "1.5.0.2",
-    "structuremap": "4.0.1.318",
-    "structuremap.web": "4.0.0.315"
+    "Microsoft.CompilerServices.AsyncTargetingPack": "1.0.1",
+    "RavenDB.Client": "3.5.3"
   },
   "packOptions": {
-    "summary": "SharpRepository: StructureMap 4.0 inversion of control helper for Repository configuration",
-    "tags": [ "SharpRepository", "Repository", "StructureMap" ],
-    "releaseNotes": "Version 1.5.0.2: stable consolidated release",
-    "iconUrl": "https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png",
+    "summary": "SharpRepository: XML repository pattern implementation for C#",
+    "tags": [ "SharpRepository", "Repository", "db4o" ],
+    "releaseNotes": "Version 1.5.0.2-prerelease: upgraded to .NET Framework 4.5.2 and RavenDB 3.5.3, noticed some issues during tests",
+    "iconUrl": "https://cloud.githubusercontent.com/assets/2690653/26342225/79903c5e-3f97-11e7-810b-8bd77ddb4ac3.png",
     "projectUrl": "https://github.com/SharpRepository/SharpRepository",
     "licenseUrl": "https://raw.githubusercontent.com/SharpRepository/SharpRepository/develop/license.txt",
     "requireLicenseAcceptance": false,

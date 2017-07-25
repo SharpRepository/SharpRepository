@@ -1,6 +1,6 @@
 ﻿{
   "version": "1.5.0.2",
-  "title": "SharpRepository with StructureMap IoC",
+  "title": "SharpRepository with Windsor IoC",
   "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
   "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
   "frameworks": { "net452": {} },
@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "SharpRepository.Repository": "1.5.0.2",
-    "structuremap": "4.0.1.318",
-    "structuremap.web": "4.0.0.315"
+    "Castle.Core": "4.0.0",
+    "Castle.Windsor": "3.2.1"
   },
   "packOptions": {
-    "summary": "SharpRepository: StructureMap 4.0 inversion of control helper for Repository configuration",
-    "tags": [ "SharpRepository", "Repository", "StructureMap" ],
+    "summary": "SharpRepository: Windsor inversion of control helper for Repository configuration",
+    "tags": [ "SharpRepository", "Repository", "Windsor" ],
     "releaseNotes": "Version 1.5.0.2: stable consolidated release",
     "iconUrl": "https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png",
     "projectUrl": "https://github.com/SharpRepository/SharpRepository",
