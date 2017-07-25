@@ -14,7 +14,6 @@
     "microsoft.data.edm": "5.6.4",
     "Microsoft.Data.OData": "5.6.4",
     "Microsoft.Data.Services.Client": "5.6.4",
-    "microsoft.sqlserver.compact": "4.0.8876.1",
     "Microsoft.WindowsAzure.ConfigurationManager": "3.2.3",
     "mongodb.bson": "2.4.3",
     "mongodb.driver.core": "2.4.3",
