@@ -24,8 +24,7 @@ namespace SharpRepository.InMemoryRepository
         
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            T result;
-            _items.TryGetValue(key, out result);
+            _items.TryGetValue(key, out T result);
 
             return result;
         }
@@ -58,9 +57,7 @@ namespace SharpRepository.InMemoryRepository
 
         protected override void AddItem(T entity)
         {
-            TKey id;
-
-            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out TKey id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
@@ -71,17 +68,14 @@ namespace SharpRepository.InMemoryRepository
 
         protected override void DeleteItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
-            T tmp;
-            _items.TryRemove(pkValue, out tmp);
+            _items.TryRemove(pkValue, out T tmp);
         }
 
         protected override void UpdateItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
             _items[pkValue] = entity;     
         }

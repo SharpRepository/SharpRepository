@@ -309,9 +309,7 @@ namespace SharpRepository.RavenDbRepository
 
         protected override void AddItem(T entity)
         {
-            TKey id;
-            
-            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out TKey id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
