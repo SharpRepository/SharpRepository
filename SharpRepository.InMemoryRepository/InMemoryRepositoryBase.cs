@@ -12,8 +12,9 @@ namespace SharpRepository.InMemoryRepository
     {
         private readonly ConcurrentDictionary<TKey, T> _items = new ConcurrentDictionary<TKey, T>();
 
-        internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
-        {   
+        internal InMemoryRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy)
+        {
+            
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
@@ -59,7 +60,7 @@ namespace SharpRepository.InMemoryRepository
         {
             TKey id;
 
-            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);

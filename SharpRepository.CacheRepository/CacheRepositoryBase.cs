@@ -93,7 +93,7 @@ namespace SharpRepository.CacheRepository
         {
             TKey id;
 
-            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);

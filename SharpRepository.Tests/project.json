@@ -27,6 +27,7 @@
     "servicestack.redis": "3.9.29",
     "servicestack.text": "3.9.28",
     "should": "1.1.20",
+    "System.Runtime": "4.0.0",
     "System.Runtime.InteropServices.RuntimeInformation": "4.0.0",
     "System.Spatial": "5.6.4",
     "windowsazure.storage": "7.2.1"

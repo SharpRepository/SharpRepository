@@ -311,7 +311,7 @@ namespace SharpRepository.RavenDbRepository
         {
             TKey id;
             
-            if (GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
@@ -342,6 +342,20 @@ namespace SharpRepository.RavenDbRepository
 
             if (DocumentStore != null)
                 DocumentStore.Dispose();
+        }
+
+        public override bool GenerateKeyOnAdd
+        {
+            get { return base.GenerateKeyOnAdd; }
+            set
+            {
+                if (value == false)
+                {
+                    throw new NotSupportedException("Raven DB driver always generates key values. SharpRepository can't avoid it.");
+                }
+
+                base.GenerateKeyOnAdd = value;
+            }
         }
 
         private TKey GeneratePrimaryKey()

@@ -19,7 +19,16 @@ namespace SharpRepository.Tests.Integration
             repository.Add(contact);
             contact.ContactId.ShouldNotBeEmpty();
         }
-        
+
+        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, Reason = "Depends on driver to generate a value")]
+        public void Add_Should_Save_But_Not_Assign_New_Id_When_GenerateKeyOnAdd_Is_False(IRepository<Contact, string> repository)
+        {
+            var contact = new Contact { ContactId = string.Empty, Name = "Test User" };
+            repository.GenerateKeyOnAdd = false;
+            repository.Add(contact);
+            contact.ContactId.ShouldBeEmpty();
+        }
+
         [ExecuteForAllRepositories]
         public void Add_Should_Result_In_Proper_Total_Items(IRepository<Contact, string> repository)
         {

@@ -150,6 +150,10 @@
       <Project>{dc40febe-2e39-4cb8-ae11-dfe9f6865bd2}</Project>
       <Name>SharpRepository.MongoDbRepository</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj">
+      <Project>{0d7303b9-3a89-4932-b0f0-73b0c1c0faed}</Project>
+      <Name>SharpRepository.RavenDbRepository</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
       <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
       <Name>SharpRepository.Repository</Name>
