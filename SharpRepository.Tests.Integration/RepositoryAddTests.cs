@@ -6,6 +6,10 @@ using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Should;
+using SharpRepository.Tests.Integration.Data;
+using SharpRepository.EfRepository;
+using SharpRepository.InMemoryRepository;
+using System;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -21,7 +25,7 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, Reason = "Depends on driver to generate a value")]
-        public void Add_Should_Save_But_Not_Assign_New_Id_When_GenerateKeyOnAdd_Is_False(IRepository<Contact, string> repository)
+        public void Add_Should_Save_But_Not_Assign_New_String_Id_When_GenerateKeyOnAdd_Is_False(IRepository<Contact, string> repository)
         {
             var contact = new Contact { ContactId = string.Empty, Name = "Test User" };
             repository.GenerateKeyOnAdd = false;
@@ -29,6 +33,40 @@ namespace SharpRepository.Tests.Integration
             contact.ContactId.ShouldBeEmpty();
         }
 
+        [TestCase]
+        public void Add_Should_Save_And_Assign_1_To_Ef_Int_Id_When_GenerateKeyOnAdd_Is_False()
+        {
+            var dbPath = EfDataDirectoryFactory.Build();
+            var repository = new EfRepository<ContactInt, int>(new TestObjectEntities("Data Source=" + dbPath));
+            var contact = new ContactInt { Name = "Test User" };
+            repository.GenerateKeyOnAdd = false;
+            repository.Add(contact);
+            contact.ContactIntId.ShouldEqual(1);
+        }
+
+        [TestCase]
+        public void Add_Should_Save_And_Assign_1_To_InMemory_Int_Id()
+        {
+            var dbPath = EfDataDirectoryFactory.Build();
+            var repository = new InMemoryRepository<ContactInt, int>();
+            var contact = new ContactInt { Name = "Test User" };
+            
+            repository.Add(contact);
+            contact.ContactIntId.ShouldEqual(1);
+        }
+        
+        [TestCase]
+        public void Add_Should_Save_But_Not_Assign_New_InMemory_Int_Id_When_GenerateKeyOnAdd_Is_False()
+        {
+            var dbPath = EfDataDirectoryFactory.Build();
+            var repository = new InMemoryRepository<ContactInt, int>();
+            var contact = new ContactInt { Name = "Test User" };
+            repository.GenerateKeyOnAdd = false;
+            
+            repository.Add(contact);
+            contact.ContactIntId.ShouldEqual(0);
+        }
+        
         [ExecuteForAllRepositories]
         public void Add_Should_Result_In_Proper_Total_Items(IRepository<Contact, string> repository)
         {
@@ -97,7 +135,6 @@ namespace SharpRepository.Tests.Integration
             using (var trans = new TransactionScope())
             {
                 repository.Add(new Contact { Name = "Contact 1" });
-
                 trans.Complete();
             }
 
