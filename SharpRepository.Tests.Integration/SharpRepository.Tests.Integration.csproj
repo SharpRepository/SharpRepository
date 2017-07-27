@@ -118,6 +118,7 @@
     <Compile Include="Helpers\RelativeDirectory.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestObjects\AspectTestObject.cs" />
+    <Compile Include="TestObjects\ContactInt.cs" />
     <Compile Include="TestObjects\Contact.cs" />
     <Compile Include="TestObjects\ConventionTestItems.cs" />
     <Compile Include="TestObjects\User.cs" />

@@ -153,5 +153,10 @@ namespace SharpRepository.Repository
         string TraceInfo { get; }
 
         TKey GetPrimaryKey(T entity);
+
+        /// <summary>
+        /// Gets or sets whether the repository should generate primary key value automatically when Add is called.
+        /// </summary>
+        bool GenerateKeyOnAdd { get; set; }
     }
 }

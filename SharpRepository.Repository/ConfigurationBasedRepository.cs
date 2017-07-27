@@ -406,6 +406,12 @@ namespace SharpRepository.Repository
             get { return Repository.TraceInfo; }
         }
 
+        public bool GenerateKeyOnAdd
+        {
+            get { return Repository.GenerateKeyOnAdd; }
+            set { Repository.GenerateKeyOnAdd = value; }
+        }
+
         public TKey GetPrimaryKey(T entity)
         {
             return Repository.GetPrimaryKey(entity);

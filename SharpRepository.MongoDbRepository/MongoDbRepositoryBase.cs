@@ -394,6 +394,20 @@ namespace SharpRepository.MongoDbRepository
                 ?? base.GetPrimaryKeyPropertyInfo();
         }
 
+        public override bool GenerateKeyOnAdd
+        {
+            get { return base.GenerateKeyOnAdd; }
+            set
+            {
+                if (value == false)
+                {
+                    throw new NotSupportedException("Mongo DB driver always generates key values. SharpRepository can't avoid it.");
+                }
+
+                base.GenerateKeyOnAdd = value;
+            }
+        }
+
         public override void Dispose()
         {
         }

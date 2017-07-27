@@ -1,12 +1,11 @@
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Should;
-using SharpRepository.EfRepository;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpRepository.Tests.Integration
 {
