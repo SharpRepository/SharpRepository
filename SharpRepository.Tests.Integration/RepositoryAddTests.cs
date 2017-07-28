@@ -1,15 +1,14 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
 using NUnit.Framework;
+using SharpRepository.EfRepository;
+using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
+using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Should;
-using SharpRepository.Tests.Integration.Data;
-using SharpRepository.EfRepository;
-using SharpRepository.InMemoryRepository;
-using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -114,7 +113,7 @@ namespace SharpRepository.Tests.Integration
             added.Count().ShouldEqual(3);
         }
 
-        [ExecuteForRepositories(RepositoryType.Ef5)]
+        [ExecuteForRepositories(RepositoryType.Ef)]
         public void Using_TransactionScope_Without_Complete_Should_Not_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
@@ -127,7 +126,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldEqual(0);
         }
 
-        [ExecuteForRepositories(RepositoryType.Ef5)]
+        [ExecuteForRepositories(RepositoryType.Ef)]
         public void Using_TransactionScope_With_Complete_Should_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
