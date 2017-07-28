@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.5.0.2",
+  "version": "1.5.0.3",
   "title": "SharpRepository for db4o",
   "authors": [ "Ben Griswold", "Jeff Treuting", "Fairway Technologies" ],
   "description": "SharpRepository is a generic repository written in C# which includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits.!",
@@ -9,13 +9,13 @@
     "win": {}
   },
   "dependencies": {
-    "SharpRepository.Repository": "1.5.0.2",
+    "SharpRepository.Repository": "1.5.0.3",
     "db4o-devel": "8.1.184.15492"
   },
   "packOptions": {
     "summary": "SharpRepository: db4o repository pattern implementation for C#",
     "tags": [ "SharpRepository", "Repository", "db4o" ],
-    "releaseNotes": "Version 1.5.0.2: stable consolidating release",
+    "releaseNotes": "Version 1.5.0.3: Added possibility to disable Key generation with GenerateKeyOnAdd option #174",
     "iconUrl": "https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png",
     "projectUrl": "https://github.com/SharpRepository/SharpRepository",
     "licenseUrl": "https://raw.githubusercontent.com/SharpRepository/SharpRepository/develop/license.txt",
