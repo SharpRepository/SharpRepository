@@ -1,6 +1,10 @@
-using System.Data.Entity;
+<<<<<<< HEAD
+﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.ComponentModel.DataAnnotations.Schema;
+=======
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+>>>>>>> EntityFramework nullable partition key caching tests.
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {
@@ -9,6 +13,10 @@ namespace SharpRepository.Tests.Integration.TestObjects
     {
         public TestObjectEntities(string connectionString) : base(connectionString)
         {
+<<<<<<< HEAD
+=======
+
+>>>>>>> EntityFramework nullable partition key caching tests.
         }
 
         public DbSet<ContactInt> ContactInts { get; set; }
