@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -12,11 +13,6 @@ namespace SharpRepository.CacheRepository
     {
         private readonly string _prefix;
         private readonly ICachingProvider _cachingProvider;
-
-        internal CacheCompoundKeyRepositoryBase(string prefix, ICompoundKeyCachingStrategy<T> cachingStrategy = null)
-            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
-        {
-        }
 
         internal CacheCompoundKeyRepositoryBase(string prefix, ICachingProvider cachingProvider, ICompoundKeyCachingStrategy<T> cachingStrategy = null)
             : base(cachingStrategy)
@@ -70,8 +66,8 @@ namespace SharpRepository.CacheRepository
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
 
-            var type = typeof (T);
-            var properties = type.GetProperties();
+            var type = typeof(T);
+            var properties = type.GetTypeInfo().GetProperties();
 
             var clonedList = new List<T>(list.Count);
 
@@ -196,12 +192,7 @@ namespace SharpRepository.CacheRepository
 
         private readonly string _prefix;
         private readonly ICachingProvider _cachingProvider;
-
-        internal CacheCompoundKeyRepositoryBase(string prefix, ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
-            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
-        {
-        }
-
+        
         internal CacheCompoundKeyRepositoryBase(string prefix, ICachingProvider cachingProvider, ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
             : base(cachingStrategy)
         {
@@ -350,12 +341,7 @@ namespace SharpRepository.CacheRepository
 
         private readonly string _prefix;
         private readonly ICachingProvider _cachingProvider;
-
-        internal CacheCompoundKeyRepositoryBase(string prefix, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
-            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
-        {
-        }
-
+        
         internal CacheCompoundKeyRepositoryBase(string prefix, ICachingProvider cachingProvider, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null)
             : base(cachingStrategy)
         {

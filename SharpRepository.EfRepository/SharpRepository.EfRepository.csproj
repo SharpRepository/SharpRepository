@@ -1,81 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E52B3B50-143D-4F85-9E42-7434644EF07F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpRepository.EfRepository</RootNamespace>
-    <AssemblyName>SharpRepository.EfRepository</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net462</TargetFramework>
+	<Authors>Ben Griswold, Jeff Treuting</Authors>
+    <Description>SharpRepository is a generic repository</Description>
+    <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
+	<PackageId>SharpRepository.EfRepository</PackageId>
+    <PackageVersion>2.0.0-alpha2</PackageVersion>
+	<PackageReleaseNotes>2.0.0-alpha2: merge all code</PackageReleaseNotes>
+	<PackageTags>SharpRepository Repository EfRepository EntityFramework Entity Framework EF6</PackageTags>
+	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
+	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
+	<PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Folder Include="Properties\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="EfCompoundKeyRepositoryBase.cs" />
-    <Compile Include="EfConfigRepositoryFactory.cs" />
-    <Compile Include="EfRepository.cs" />
-    <Compile Include="EfRepositoryBase.cs" />
-    <Compile Include="EfRepositoryConfiguration.cs" />
-    <Compile Include="IAmInEfRepository.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="EntityFramework" Version="6.1.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="project.json" />
-    <None Include="_nuget\content\config.transform" />
-    <None Include="_nuget\tools\Install.ps1" />
+    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
-      <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
-      <Name>SharpRepository.Repository</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties project_1json__JSONSchema="" />
-    </VisualStudio>
-  </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

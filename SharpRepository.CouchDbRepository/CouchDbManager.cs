@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace SharpRepository.CouchDbRepository
 {
@@ -15,7 +16,7 @@ namespace SharpRepository.CouchDbRepository
         public static IList<string> GetDatabases(string server)
         {
             return JsonConvert.DeserializeObject<IList<string>>(
-                CouchDbRequest.Execute(server + "/_all_dbs", "GET")
+                CouchDbRequest.Execute(server, "_all_dbs", HttpMethod.Get)
                 );
         }
 
@@ -32,9 +33,9 @@ namespace SharpRepository.CouchDbRepository
         /// </summary>
         public static void CreateDatabase(string server, string db)
         {
-            var result = CouchDbRequest.Execute(server + "/" + db, "PUT");
+            var result = CouchDbRequest.Execute(server, db, HttpMethod.Put);
             if (result.Trim() != "{\"ok\":true}")
-                throw new ApplicationException("Failed to create database: " + result);
+                throw new Exception("Failed to create database: " + result); // was a ApplicationException, will be added back netstandard2.0
         }
 
         /// <summary>
@@ -42,9 +43,9 @@ namespace SharpRepository.CouchDbRepository
         /// </summary>
         public static void DeleteDatabase(string server, string db)
         {
-            var result = CouchDbRequest.Execute(server + "/" + db, "DELETE");
+            var result = CouchDbRequest.Execute(server, db, HttpMethod.Delete);
             if (result.Trim() != "{\"ok\":true}")
-                throw new ApplicationException("Failed to delete database: " + result);
+                throw new Exception("Failed to delete database: " + result); // was a ApplicationException, will be added back netstandard2.0
         }
     }
 }

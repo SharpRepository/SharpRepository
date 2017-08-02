@@ -5,6 +5,7 @@ using System.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
+using System.Reflection;
 
 namespace SharpRepository.CacheRepository
 {
@@ -12,11 +13,6 @@ namespace SharpRepository.CacheRepository
     {
         private readonly string _prefix;
         private readonly ICachingProvider _cachingProvider;
-
-        internal CacheRepositoryBase(string prefix, ICachingStrategy<T, TKey> cachingStrategy = null)
-            : this(prefix, new InMemoryCachingProvider(), cachingStrategy)
-        {
-        }
 
         internal CacheRepositoryBase(string prefix, ICachingProvider cachingProvider, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
@@ -70,8 +66,8 @@ namespace SharpRepository.CacheRepository
             // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
             //  since we can't really put those constraints on T I'm going to do it via reflection
 
-            var type = typeof (T);
-            var properties = type.GetProperties();
+            var type = typeof(T);
+            var properties = type.GetTypeInfo().GetProperties();
 
             var clonedList = new List<T>(list.Count);
 
@@ -91,9 +87,7 @@ namespace SharpRepository.CacheRepository
 
         protected override void AddItem(T entity)
         {
-            TKey id;
-
-            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
+            if (GetPrimaryKey(entity, out TKey id) && GenerateKeyOnAdd && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
@@ -104,29 +98,24 @@ namespace SharpRepository.CacheRepository
 
         protected override void DeleteItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
-            T tmp;
-            Items.TryRemove(pkValue, out tmp);
+            Items.TryRemove(pkValue, out T tmp);
         }
 
         protected override void UpdateItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
             Items[pkValue] = entity;     
         }
 
         protected override void SaveChanges()
         {
-            
         }
 
         public override void Dispose()
         {
-            
         }
 
         private TKey GeneratePrimaryKey()

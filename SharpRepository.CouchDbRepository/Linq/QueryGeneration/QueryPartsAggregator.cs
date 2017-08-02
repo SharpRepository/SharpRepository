@@ -50,7 +50,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 
             if (WhereParts.Count > 0)
             {
-                stringBuilder.AppendFormat("if ({0}) ", SeparatedStringBuilder.Build(" && ", WhereParts));
+                stringBuilder.AppendFormat("if ({0}) ", string.Join(" && ", WhereParts));
             }
 
             stringBuilder.AppendFormat("emit({0}, ", !String.IsNullOrEmpty(OrderBy) ? OrderBy : "doc._id");

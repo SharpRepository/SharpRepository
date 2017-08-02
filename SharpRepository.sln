@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.RavenDbRepository", "SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj", "{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.RavenDbRepository", "SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj", "{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Repository", "SharpRepository.Repository\SharpRepository.Repository.csproj", "{710DEE79-25CE-4F68-B8B1-D08A135AD154}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Repository", "SharpRepository.Repository\SharpRepository.Repository.csproj", "{710DEE79-25CE-4F68-B8B1-D08A135AD154}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.XmlRepository", "SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj", "{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.XmlRepository", "SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj", "{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Tests", "SharpRepository.Tests\SharpRepository.Tests.csproj", "{208B5ECD-8CF5-4B63-BC3E-131D45F23374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Tests", "SharpRepository.Tests\SharpRepository.Tests.csproj", "{208B5ECD-8CF5-4B63-BC3E-131D45F23374}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Tests.Integration", "SharpRepository.Tests.Integration\SharpRepository.Tests.Integration.csproj", "{72E04281-9654-41BE-952D-A18ED24E3ACB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Tests.Integration", "SharpRepository.Tests.Integration\SharpRepository.Tests.Integration.csproj", "{72E04281-9654-41BE-952D-A18ED24E3ACB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Samples", "SharpRepository.Samples\SharpRepository.Samples.csproj", "{85E4FB46-FFB2-47DC-83B5-4ECBD80B66D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Samples", "SharpRepository.Samples\SharpRepository.Samples.csproj", "{85E4FB46-FFB2-47DC-83B5-4ECBD80B66D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests Integration", "Tests Integration", "{307222D2-CC06-4017-9554-E0ED81BA7304}"
 EndProject
@@ -28,11 +28,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.InMemoryRepository", "SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj", "{13AD3FCA-4C9D-4674-B786-F30843638D3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.InMemoryRepository", "SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj", "{13AD3FCA-4C9D-4674-B786-F30843638D3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Db4oRepository", "SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj", "{12DD3830-5A12-484C-98B4-D30811DEC8A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Db4oRepository", "SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj", "{12DD3830-5A12-484C-98B4-D30811DEC8A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.MongoDbRepository", "SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj", "{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.MongoDbRepository", "SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj", "{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Memcached", "SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj", "{06111314-669B-4E35-A0B9-AF67FA3F0FFD}"
 EndProject
@@ -46,7 +46,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching Providers", "Cachin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ioc", "Ioc", "{7D84196E-1183-46E8-944F-C43B0627B931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.StructureMap", "SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj", "{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.StructureMap", "SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj", "{0B4BDC6D-6030-48FD-B22A-F9A9A7A00812}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{9E5BA6B3-50AA-4482-A526-F35F132304B2}"
 EndProject
@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Autofac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Unity", "SharpRepository.Ioc.Unity\SharpRepository.Ioc.Unity.csproj", "{D0218585-6696-4E3D-832F-E596E2903337}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{F3F32398-DBE1-47CB-8A43-97F4362D6672}"
 EndProject
@@ -72,7 +72,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Mvc", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.WebApi", "SharpRepository.Ioc.WebApi\SharpRepository.Ioc.WebApi.csproj", "{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.EfRepository", "SharpRepository.EfRepository\SharpRepository.EfRepository.csproj", "{E52B3B50-143D-4F85-9E42-7434644EF07F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.EfRepository", "SharpRepository.EfRepository\SharpRepository.EfRepository.csproj", "{E52B3B50-143D-4F85-9E42-7434644EF07F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.AzureTableRepository", "SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj", "{EF055B6D-6D7D-4002-91A9-4DED61346457}"
 EndProject
@@ -225,8 +225,8 @@ Global
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Debug|x64.Build.0 = Debug|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|x64.ActiveCfg = Release|x64
-		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|x64.Build.0 = Release|x64
+		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|x64.ActiveCfg = Release|Any CPU
+		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Release|x64.Build.0 = Release|Any CPU
 		{549F87CC-3B00-4B45-94C9-517422556F8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{549F87CC-3B00-4B45-94C9-517422556F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{549F87CC-3B00-4B45-94C9-517422556F8A}.Debug|x64.ActiveCfg = Debug|Any CPU

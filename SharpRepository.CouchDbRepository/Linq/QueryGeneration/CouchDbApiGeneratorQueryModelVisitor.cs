@@ -155,7 +155,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 
         private string GetCouchDbApiExpression(Expression expression)
         {
-            return CouchDbApiGeneratorExpressionTreeVisitor.GetCouchDbApiExpression(expression);
+            return CouchDbApiGeneratorExpressionVisitor.GetCouchDbApiExpression(expression);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Net.Http;
 
 namespace SharpRepository.CouchDbRepository
 {
@@ -61,7 +62,7 @@ namespace SharpRepository.CouchDbRepository
         public int CountDocuments()
         {
             // Get information about the database...
-            var result = CouchDbRequest.Execute(_server + "/" + _database, "GET");
+            var result = CouchDbRequest.Execute(_server, _database, HttpMethod.Get);
 
             var dictionary = JsonConvert.DeserializeObject<IDictionary<string, string>>(result);
 
@@ -75,7 +76,7 @@ namespace SharpRepository.CouchDbRepository
         /// <returns>An array of entitiy instances</returns>
         public IList<T> GetAllDocuments()
         {
-            var json = ExecTempView(_server + "/" + _database + "/_temp_view", "function (doc) {emit(doc._id, doc);}", null);
+            var json = ExecMapReduce(_server, _database + "/_temp_view", "function (doc) {emit(doc._id, doc);}", null);
 
             var res = JObject.Parse(json);
             var rows = res["rows"];
@@ -83,14 +84,14 @@ namespace SharpRepository.CouchDbRepository
             return rows.Select(row => row["value"].ToObject<T>()).ToList();
         }
 
-        public string ExecTempView(string url, string map, string reduce)
+        public string ExecMapReduce(string url, string uri, string map, string reduce)
         {
             var viewdef = "{ \"map\":\"" + map + "\"";
             if (reduce != null)
                 viewdef += ",\"reduce\":\"" + reduce + "\"";
             viewdef += "}";
 
-            return CouchDbRequest.Execute(url, "POST", viewdef, "application/json");
+            return CouchDbRequest.Execute(url, uri, HttpMethod.Post, viewdef, "application/json");
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace SharpRepository.CouchDbRepository
         /// <param name="startkey">The startkey or null not to use</param>
         /// <param name="endkey">The endkey or null not to use</param>
         /// <returns>The result (JSON format)</returns>
-        public string ExecTempView(string map, string reduce ,string startkey,string endkey)
+        public string ExecTempView(string map, string reduce ,string startkey, string endkey)
         {
             // Generate the JSON view definition from the supplied
             // map and optional reduce functions...
@@ -111,18 +112,22 @@ namespace SharpRepository.CouchDbRepository
                 viewdef += ",\"reduce\":\"" + reduce + "\"";
             viewdef += "}";
 
-            var url = _server + "/" + _database + "/_temp_view";
-            if(startkey!=null)
+            var uri = _database + "/_temp_view";
+            if(startkey != null)
             {
-                    url+="?startkey=" + Uri.EscapeDataString(startkey);
+                uri += "?startkey=" + Uri.EscapeDataString(startkey);
             }
-            if(endkey!=null)
+            if(endkey != null)
             {
-                    if(startkey==null) url+="?"; else url+="&";
-                    url+="endkey=" + Uri.EscapeDataString(endkey);
+                if (startkey == null)
+                    uri += "?";
+                else
+                    uri += "&";
+
+                uri += "endkey=" + Uri.EscapeDataString(endkey);
             }
 
-            return CouchDbRequest.Execute(url, "POST", viewdef, "application/json");
+            return CouchDbRequest.Execute(_server, uri, HttpMethod.Post, viewdef, "application/json");
         }
 
         /// <summary>
@@ -141,13 +146,12 @@ namespace SharpRepository.CouchDbRepository
                 item = "{\"_id\":\"" + id + "\"," + item.Substring(1);
             }
 
-            CouchDbRequest.Execute(_server + "/" + _database, "POST", item, "application/json");
+            CouchDbRequest.Execute(_server, _database, HttpMethod.Post, item, "application/json");
         }
 
         public string GetLatestRevision(string id)
         {
             var json = Get(id);
-
             var obj = JObject.Parse(json);
 
             return obj.Value<string>("_rev");
@@ -169,7 +173,7 @@ namespace SharpRepository.CouchDbRepository
             //  this is a crappy way of doing it I think, but just trying to get it to work for now
             item = "{\"_id\":\"" + id + "\",\"_rev\":\"" + rev + "\"," + item.Substring(1);
 
-            CouchDbRequest.Execute(_server + "/" + _database + "/" + id, "PUT", item, "application/json");
+            CouchDbRequest.Execute(_server, _database + "/" + id, HttpMethod.Put, item, "application/json");
         }
 
         /// <summary>
@@ -181,15 +185,17 @@ namespace SharpRepository.CouchDbRepository
         {
             var json = Get(id);
             if (String.IsNullOrEmpty(json))
+            {
                 return null;
+            }
 
             return JsonConvert.DeserializeObject<T>(json);
         }
 
         private string Get(string id)
         {
-            var url = _server + "/" + _database + "/" + id;
-            return CouchDbRequest.Execute(url, "GET");
+            var uri = _database + "/" + id;
+            return CouchDbRequest.Execute(_server, uri, HttpMethod.Get);
         }
 
         /// <summary>
@@ -201,7 +207,7 @@ namespace SharpRepository.CouchDbRepository
             //needs the revision for updates and deletes, this isn't a great way because it's an extra API call, but it is what it is for now, just want to get it working then refactor
             var rev = GetLatestRevision(id);
 
-            CouchDbRequest.Execute(_server + "/" + _database + "/" + id + "?rev=" + rev, "DELETE");
+            CouchDbRequest.Execute(_server, _database + "/" + id + "?rev=" + rev, HttpMethod.Delete);
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
+using System.Net.Http;
 
 namespace SharpRepository.CouchDbRepository
 {
@@ -10,15 +12,12 @@ namespace SharpRepository.CouchDbRepository
             try
             {
                 var url = String.Format("http://{0}:{1}", host, port);
-
-                // Send a HEAD request to the url
-                var request = (HttpWebRequest)WebRequest.Create(url);
-                request.Timeout = 2000;
-                request.Method = WebRequestMethods.Http.Get;
-
-                // this line throws a WebException if there is a problematic status code
-                request.GetResponse();
-
+                
+                using (var client = new HttpClient())
+                {
+                    var message = client.GetAsync(url).Result;
+                    var result = message.Content.ReadAsStringAsync().Result; // Wrong connection will throw exception
+                }
             }
             catch
             {

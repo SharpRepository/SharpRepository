@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using SharpRepository.CouchDbRepository.Linq.QueryGeneration;
+using System.Net.Http;
 
 namespace SharpRepository.CouchDbRepository.Linq
 {
@@ -47,9 +48,9 @@ namespace SharpRepository.CouchDbRepository.Linq
             if (_queryParts.OrderByIsDescending)
                 querystring += "descending=true&";
 
-            var fullUrl = _url + "/" + _databaseName + "/_temp_view?" + querystring;
+            var fullUri =  _databaseName + "/_temp_view?" + querystring;
 
-            var json = CouchDbRequest.Execute(fullUrl, "POST", _queryParts.BuildCouchDbApiPostData(), "application/json");
+            var json = CouchDbRequest.Execute(_url, fullUri, HttpMethod.Post, _queryParts.BuildCouchDbApiPostData(), "application/json");
 
             JObject res;
             // check for Count() [Int32] and LongCOunt() [Int64]

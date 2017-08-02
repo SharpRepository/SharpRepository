@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Remotion.Linq.Clauses.Expressions;
+using Remotion.Linq.Parsing;
+using System;
 using System.Linq.Expressions;
 using System.Text;
-using Remotion.Linq.Clauses.ExpressionTreeVisitors;
-using Remotion.Linq.Clauses.Expressions;
-using Remotion.Linq.Parsing;
 
 namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
 {
-    public class CouchDbApiGeneratorExpressionTreeVisitor : ThrowingExpressionTreeVisitor
+    public class CouchDbApiGeneratorExpressionVisitor : ThrowingExpressionVisitor
     {
         public static string GetCouchDbApiExpression (Expression linqExpression)
         {
-          var visitor = new CouchDbApiGeneratorExpressionTreeVisitor ();
-          visitor.VisitExpression (linqExpression);
+          var visitor = new CouchDbApiGeneratorExpressionVisitor ();
+          visitor.Visit(linqExpression);
           return visitor.GetCouchDbApiExpression();
         }
 
         private readonly StringBuilder _expression = new StringBuilder ();
 
-        private CouchDbApiGeneratorExpressionTreeVisitor()
+        private CouchDbApiGeneratorExpressionVisitor()
         {
         }
 
@@ -28,19 +26,19 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
           return _expression.ToString ();
         }
 
-        protected override Expression VisitQuerySourceReferenceExpression (QuerySourceReferenceExpression expression)
+        protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
             _expression.Append("doc"); // not sure if this will always be static like this, need to check for joins
             //_expression.Append (expression.ReferencedQuerySource.ItemName);
             return expression;
         }
 
-        protected override Expression VisitSubQueryExpression(SubQueryExpression expression)
+        protected override Expression VisitSubQuery(SubQueryExpression expression)
         {
-            return base.VisitSubQueryExpression(expression);
+            return base.VisitSubQuery(expression);
         }
 
-        protected override Expression VisitBinaryExpression (BinaryExpression expression)
+        protected override Expression VisitBinary(BinaryExpression expression)
         {
             _expression.Append ("(");
 
@@ -52,7 +50,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                 _expression.Append("new Date(");
             }
 
-            VisitExpression (expression.Left);
+            Visit(expression.Left);
 
             if (isLeftDateMember)
             {
@@ -117,7 +115,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                     break;
 
                 default:
-                    base.VisitBinaryExpression (expression);
+                    base.VisitBinary(expression);
                     break;
             }
 
@@ -127,7 +125,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                 _expression.Append("new Date(");
             }
 
-            VisitExpression (expression.Right);
+            Visit(expression.Right);
 
             if (isRightDateMember)
             {
@@ -139,15 +137,15 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             return expression;
         }
 
-        protected override Expression VisitMemberExpression (MemberExpression expression)
+        protected override Expression VisitMember(MemberExpression expression)
         {
-            VisitExpression(expression.Expression);
+            Visit(expression.Expression);
             _expression.AppendFormat(".{0}", expression.Member.Name);
 
             return expression;
         }
 
-        protected override Expression VisitConstantExpression (ConstantExpression expression)
+        protected override Expression VisitConstant(ConstantExpression expression)
         {           
             // check to see if we don't need the quotes
             var quotes = "'";
@@ -174,7 +172,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
           return expression;
         }
 
-        protected override Expression VisitNewExpression(NewExpression expression)
+        protected override Expression VisitNew(NewExpression expression)
         {
             // for new { c.Name, c.Title, c.TItle.Length }
 
@@ -193,7 +191,7 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
                     _expression.Append(",");
 
                 _expression.AppendFormat("{0}: ", expression.Members[i].Name);
-                VisitExpression(arg);
+                Visit(arg);
                 i++;
             }
             _expression.Append("}");
@@ -202,69 +200,69 @@ namespace SharpRepository.CouchDbRepository.Linq.QueryGeneration
             return expression;
         }
 
-        protected override Expression VisitMethodCallExpression (MethodCallExpression expression)
+        protected override Expression VisitMethodCall(MethodCallExpression expression)
         {
           // In production code, handle this via method lookup tables.
 
             if (expression.Method.Name == "Contains")
             {
-                VisitExpression (expression.Object);
+                Visit(expression.Object);
                 _expression.Append (".indexOf(");
-                VisitExpression (expression.Arguments[0]);
+                Visit(expression.Arguments[0]);
                 _expression.Append (") != -1");
                 return expression;
             }
 
             if (expression.Method.Name == "StartsWith")
             {
-                VisitExpression(expression.Object);
+                Visit(expression.Object);
                 _expression.Append(".indexOf(");
-                VisitExpression(expression.Arguments[0]);
+                Visit(expression.Arguments[0]);
                 _expression.Append(") == 0");
                 return expression;
             }
 
             if (expression.Method.Name == "EndsWith")
             {
-                VisitExpression(expression.Object);
+                Visit(expression.Object);
                 _expression.Append(".indexOf(");
-                VisitExpression(expression.Arguments[0]);
+                Visit(expression.Arguments[0]);
                 _expression.Append(", ");
-                VisitExpression(expression.Object);
+                Visit(expression.Object);
                 _expression.Append(".length - '");
-                VisitExpression(expression.Arguments[0]);
+                Visit(expression.Arguments[0]);
                 _expression.Append("'.length) != -1");
                 return expression;
             }
 
             if (expression.Method.Name == "ToLower")
-            {                
-                VisitExpression(expression.Object);
+            {
+                Visit(expression.Object);
                 _expression.Append(".toLowerCase()");
                 return expression;
             }
             if (expression.Method.Name == "ToUpper")
             {
-                VisitExpression(expression.Object);
+                Visit(expression.Object);
                 _expression.Append(".toUpperCase()");
                 return expression;
             }
 
-            return base.VisitMethodCallExpression (expression); // throws
+            return base.VisitMethodCall(expression); // throws
         }
 
         // Called when a LINQ expression type is not handled above.
         protected override Exception CreateUnhandledItemException<T>(T unhandledItem, string visitMethod)
         {
-          string itemText = FormatUnhandledItem(unhandledItem);
-          var message = string.Format ("The expression '{0}' (type: {1}) is not supported by this LINQ provider.", itemText, typeof (T));
-          return new NotSupportedException (message);
+            string itemText = FormatUnhandledItem(unhandledItem);
+            var message = string.Format ("The expression '{0}' (type: {1}) is not supported by this LINQ provider.", itemText, typeof (T));
+            return new NotSupportedException (message);
         }
 
         private static string FormatUnhandledItem<T>(T unhandledItem)
         {
           var itemAsExpression = unhandledItem as Expression;
-          return itemAsExpression != null ? FormattingExpressionTreeVisitor.Format (itemAsExpression) : unhandledItem.ToString ();
+          return itemAsExpression != null ? itemAsExpression.ToString() : unhandledItem.ToString();
         }
     }
 }

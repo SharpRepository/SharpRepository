@@ -4,7 +4,20 @@
     <RootNamespace>SharpRepository.InMemoryRepository</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard1.5</TargetFramework>
+	<Authors>Ben Griswold, Jeff Treuting</Authors>
+    <Description>SharpRepository is a generic repository</Description>
+    <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
+	<PackageId>SharpRepository.InMemoryRepository</PackageId>
+    <PackageVersion>2.0.0-alpha2</PackageVersion>
+	<PackageReleaseNotes>2.0.0-alpha2: merge all code</PackageReleaseNotes>
+	<PackageTags>SharpRepository Repository InMemoryRepositoryRepository InMemory Memory</PackageTags>
+	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
+	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
+	<PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="1.1.0" />

@@ -1,48 +1,54 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 
 namespace SharpRepository.CouchDbRepository
 {
     public static class CouchDbRequest
     {
-        public static string Execute(string url, string method, string postdata=null, string contenttype=null)
+        public static string Execute(string url, string uri, HttpMethod method, string postData = null, string contentType = null)
         {
-            var req = WebRequest.Create(url) as HttpWebRequest;
-            req.Method = method;
-            // Yuk - set an infinite timeout on this for now, because
-            // executing a temporary view (for example) can take a very
-            // long time...
-            req.Timeout = System.Threading.Timeout.Infinite;
-            if (contenttype != null)
-                req.ContentType = contenttype;
-
-            if (postdata != null)
+            //var req = WebRequest.Create(url) as HttpWebRequest;
+            //req.Method = method;
+            using (var client = new HttpClient())
             {
-                var bytes = Encoding.UTF8.GetBytes(postdata);
-                req.ContentLength = bytes.Length;
-                using (var ps = req.GetRequestStream())
+                client.BaseAddress = new Uri(url);
+               
+                if (contentType != null)
                 {
-                    ps.Write(bytes, 0, bytes.Length);
+                    client.DefaultRequestHeaders
+                     .Accept
+                     .Add(new MediaTypeWithQualityHeaderValue(contentType));
+                }
+
+                HttpRequestMessage request = new HttpRequestMessage(method, uri);
+
+                if (postData != null)
+                {
+                    var bytes = Encoding.UTF8.GetBytes(postData);
+                    request.Content = new ByteArrayContent(bytes);
+                }
+
+                try
+                {
+                    var resp = client.SendAsync(request).Result;
+                    string result;
+                    using (var reader = new StreamReader(resp.Content.ReadAsStreamAsync().Result))
+                    {
+                        result = reader.ReadToEnd();
+                    }
+
+                    return result;
+                }
+                catch (Exception)
+                {
+                    return null;
                 }
             }
-
-            try
-            {
-                var resp = req.GetResponse() as HttpWebResponse;
-                string result;
-                using (var reader = new StreamReader(resp.GetResponseStream()))
-                {
-                    result = reader.ReadToEnd();
-                }
-                return result;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-            
         }
     }
 }
