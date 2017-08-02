@@ -1,200 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{72E04281-9654-41BE-952D-A18ED24E3ACB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>    
+    <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>    
     <RootNamespace>SharpRepository.Tests.Integration</RootNamespace>
-    <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Compile Remove="Spikes\RavenDbEmbeddedTests.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
-    <Compile Include="CompoundKeyRepositoryAddTests.cs" />
-    <Compile Include="CompoundKeyRepositoryDeleteTests.cs" />
-    <Compile Include="CompoundKeyRepositoryFindAllTests.cs" />
-    <Compile Include="CompoundKeyRepositoryFindTests.cs" />
-    <Compile Include="CompoundKeyRepositoryGetAllTests.cs" />
-    <Compile Include="CompoundKeyRepositoryGetTests.cs" />
-    <Compile Include="CompoundKeyRepositoryJoinTests.cs" />
-    <Compile Include="CompoundKeyRepositoryUpdateTests.cs" />
-    <Compile Include="Data\CachePrefixFactory.cs" />
-    <Compile Include="Data\CompoundKeyRepositoryTestCaseDataFactory.cs" />
-    <Compile Include="Data\CouchDbDatabaseNameFactory.cs" />
-    <Compile Include="Data\CouchDbUrl.cs" />
-    <Compile Include="Data\DataDirectoryHelper.cs" />
-    <Compile Include="Data\Db4oDataDirectoryFactory.cs" />
-    <Compile Include="Data\EfDataDirectoryFactory.cs" />
-    <Compile Include="Data\MongoDbConnectionStringFactory.cs" />
-    <Compile Include="Helpers\CurrentDirectory.cs" />
-    <Compile Include="AggregateQueriesTests.cs" />
-    <Compile Include="RepositoryRunningTest.cs" />
-    <Compile Include="Spikes\AspectSpikes.cs" />
-    <Compile Include="Spikes\ConventionSpikes.cs" />
-    <Compile Include="Spikes\EfNullablePartitionKeyCacheSpikes.cs" />
-    <Compile Include="Spikes\EfCompoundKeySpikes.cs" />
-    <Compile Include="Spikes\EfLazyLoadSpike.cs" />
-    <Compile Include="Spikes\MongoRepositorySpikes.cs" />
-    <Compile Include="RepositoryJoinTests.cs" />
-    <Compile Include="Spikes\RepositoryDependencySpikes.cs" />
-    <Compile Include="Spikes\StandardCachingSpikes.cs" />
-    <Compile Include="TestAttributes\AllRepositories.cs" />
-    <Compile Include="TestAttributes\ExecuteForCompoundKeyRepositoriesAttribute.cs" />
-    <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesAttribute.cs" />
-    <Compile Include="TestAttributes\ExecuteForAllCompoundKeyRepositoriesExcept.cs" />
-    <Compile Include="TestAttributes\ExecuteForAllRepositoriesAttribute.cs" />
-    <Compile Include="TestAttributes\ExecuteForAllRepositoriesExcept.cs" />
-    <Compile Include="TestAttributes\ExecuteForRepositoriesAttribute.cs" />
-    <Compile Include="RepositoryAddTests.cs" />
-    <Compile Include="RepositoryDeleteTests.cs" />
-    <Compile Include="RepositoryFindAllTests.cs" />
-    <Compile Include="RepositoryFindTests.cs" />
-    <Compile Include="RepositoryGetAllTests.cs" />
-    <Compile Include="RepositoryGetTests.cs" />
-    <Compile Include="Data\RepositoryTestCaseDataFactory.cs" />
-    <Compile Include="RepositoryType.cs" />
-    <Compile Include="RepositoryUpdateTests.cs" />
-    <Compile Include="Data\XmlDataDirectoryFactory.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\RelativeDirectory.cs" />
-    <Compile Include="TestBase.cs" />
-    <Compile Include="TestObjects\AspectTestObject.cs" />
-    <Compile Include="TestObjects\ContactInt.cs" />
-    <Compile Include="TestObjects\Contact.cs" />
-    <Compile Include="TestObjects\ConventionTestItems.cs" />
-    <Compile Include="TestObjects\Node.cs" />
-    <Compile Include="TestObjects\User.cs" />
-    <Compile Include="TestObjects\ContactType.cs" />
-    <Compile Include="TestObjects\EmailAddress.cs" />
-    <Compile Include="TestObjects\PhoneNumber.cs" />
-    <Compile Include="TestObjects\TestObjectEntities.cs" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="Moq" Version="4.7.63" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
+    <PackageReference Include="Shouldly" Version="2.8.3" />
+    <PackageReference Include="StructureMap" Version="4.5.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.105.2" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="project.json" />
+    <Folder Include="Properties\" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj">
-      <Project>{42e07863-9017-4b56-9d20-1ea35af1f501}</Project>
-      <Name>SharpRepository.CacheRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj">
-      <Project>{aea6d95f-1d69-433d-8185-dffca871fc8d}</Project>
-      <Name>SharpRepository.CouchDbRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj">
-      <Project>{12DD3830-5A12-484C-98B4-D30811DEC8A9}</Project>
-      <Name>SharpRepository.Db4oRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
-      <Project>{e52b3b50-143d-4f85-9e42-7434644ef07f}</Project>
-      <Name>SharpRepository.EfRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
-      <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
-      <Name>SharpRepository.InMemoryRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj">
-      <Project>{0b4bdc6d-6030-48fd-b22a-f9a9a7a00812}</Project>
-      <Name>SharpRepository.Ioc.StructureMap</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
-      <Project>{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}</Project>
-      <Name>SharpRepository.MongoDbRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj">
-      <Project>{0d7303b9-3a89-4932-b0f0-73b0c1c0faed}</Project>
-      <Name>SharpRepository.RavenDbRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
-      <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
-      <Name>SharpRepository.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj">
-      <Project>{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}</Project>
-      <Name>SharpRepository.XmlRepository</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />
+    <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Data\Db4o\README.txt" />
-    <Content Include="Data\Ef\README.txt" />
-    <Content Include="Data\Xml\README.txt" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

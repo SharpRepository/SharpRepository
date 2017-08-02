@@ -9,14 +9,9 @@ namespace SharpRepository.Repository.Configuration
         public static void CheckForInterface(Type type, Type interfaceType)
         {
             if (type == null || interfaceType == null) return;
-
-#if NET451
-            if (Array.IndexOf<Type>(type.GetInterfaces(), interfaceType) == -1)
-                throw new System.Configuration.ConfigurationErrorsException("The type " + type.AssemblyQualifiedName + " must implement " + interfaceType.AssemblyQualifiedName);
-#elif NETSTANDARD1_6
+            
             if (type.GetTypeInfo().GetRuntimeInterfaceMap(interfaceType).InterfaceType == interfaceType)
                 throw new Exception("The type " + type.AssemblyQualifiedName + " must implement " + interfaceType.AssemblyQualifiedName);
-#endif
         }
 
         public static IRepository<T> GetInstance<T>(ISharpRepositoryConfiguration configuration, string repositoryName) where T : class, new()

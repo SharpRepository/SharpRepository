@@ -44,10 +44,12 @@ namespace SharpRepository.XmlRepository
         {
             if (!File.Exists(_storagePath)) return;
 
-            var reader = new StreamReader(_storagePath);
-            var serializer = new XmlSerializer(typeof(List<T>));
-            _items = (List<T>)serializer.Deserialize(reader);
-            reader.Close();
+            using (var stream = new FileStream(_storagePath, FileMode.Open))
+            using (var reader = new StreamReader(stream))
+            {
+                var serializer = new XmlSerializer(typeof(List<T>));
+                _items = (List<T>)serializer.Deserialize(reader);
+            }
         }
 
         protected List<T> Items
@@ -133,21 +135,21 @@ namespace SharpRepository.XmlRepository
         // need to match on primary key instead of using Equals() since the objects are not the same
         private bool MatchOnPrimaryKey(T item, TKey keyValue)
         {
-            TKey value;
-            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
+            return GetPrimaryKey(item, out TKey value) && keyValue.Equals(value);
         }
 
         protected override void SaveChanges()
         {
-            var writer = new StreamWriter(_storagePath, false);
-            var serializer = new XmlSerializer(typeof(List<T>));
-            serializer.Serialize(writer, Items);
-            writer.Close();
+            using (var stream = new FileStream(_storagePath, FileMode.Open))
+            using (var writer = new StreamWriter(stream))
+            {
+                var serializer = new XmlSerializer(typeof(List<T>));
+                serializer.Serialize(writer, Items);
+            }
         }
 
         public override void Dispose()
         {
-            
         }
 
         private TKey GeneratePrimaryKey()

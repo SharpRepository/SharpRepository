@@ -30,11 +30,7 @@ namespace SharpRepository.Repository.Helpers
         public static string CalculateMd5(string input)
         {
             // That's just a shortcut to the base method
-#if NET451
-            var defaultEncoding = Encoding.Default;
-#elif NETSTANDARD1_6
             var defaultEncoding = Encoding.GetEncoding(0);
-#endif
             return CalculateMd5(input, defaultEncoding);
         }
     }

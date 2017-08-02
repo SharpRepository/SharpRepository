@@ -1,177 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{208B5ECD-8CF5-4B63-BC3E-131D45F23374}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>    
+    <AssemblyName>SharpRepository.Tests</AssemblyName>    
     <RootNamespace>SharpRepository.Tests</RootNamespace>
-    <AssemblyName>SharpRepository.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Compile Remove="PrimaryKey\Ef5PrimaryKeyTests.cs" />
+    <Compile Remove="Spikes\AzureBlobSpikes.cs" />
+    <Compile Remove="Spikes\AzureTableSpikes.cs" />
+    <Compile Remove="Spikes\CacheRepositorySpikes.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\CommonAssembly.cs">
-      <Link>Properties\CommonAssembly.cs</Link>
-    </Compile>
-    <Compile Include="Batch\BatchTests.cs" />
-    <Compile Include="Caching\ClearCacheTests.cs" />
-    <Compile Include="Caching\DisabledCacheTests.cs" />
-    <Compile Include="Caching\HashGeneratorTests.cs" />
-    <Compile Include="Caching\InMemoryCachingTests.cs" />
-    <Compile Include="Caching\QueryManagerTests.cs" />
-    <Compile Include="Caching\StandardCachingWithPartitionStrategyTests.cs" />
-    <Compile Include="Caching\StandardCachingStrategyTests.cs" />
-    <Compile Include="Caching\TimeoutCachingStrategyTests.cs" />
-    <Compile Include="Configuration\ConfigurationTests.cs" />
-    <Compile Include="Conventions\DefaultConventionTests.cs" />
-    <Compile Include="Aspects\RepositoryActionBaseAttributeTests.cs" />
-    <Compile Include="FetchStrategies\FetchStrategyTests.cs" />
-    <Compile Include="Ioc\DependencyResolverTests.cs" />
-    <Compile Include="Ioc\RepositoryDependencyResolverExceptionTests.cs" />
-    <Compile Include="Misc\MiscTests.cs" />
-    <Compile Include="PrimaryKey\Ef5PrimaryKeyTests.cs" />
-    <Compile Include="PrimaryKey\MongoDbPrimaryKeyTests.cs" />
-    <Compile Include="PrimaryKey\RepositoryPrimaryKeyAttributeTests.cs" />
-    <Compile Include="QueryOptions\PagingOptionsTests.cs" />
-    <Compile Include="QueryOptions\SortingOptionsTests.cs" />
-    <Compile Include="ReflectionExtensions.cs" />
-    <Compile Include="RelativePath.cs" />
-    <Compile Include="Specifications\SpecificationTests.cs" />
-    <Compile Include="Spikes\AzureTableSpikes.cs" />
-    <Compile Include="Spikes\BatchSpike.cs" />
-    <Compile Include="Spikes\CacheEnabledSpike.cs" />
-    <Compile Include="Spikes\CacheRepositorySpikes.cs" />
-    <Compile Include="Spikes\CompoundKeySpikes.cs" />
-    <Compile Include="Spikes\AzureBlobSpikes.cs" />
-    <Compile Include="Spikes\DeleteByKeyConstaintSpike.cs" />
-    <Compile Include="Spikes\ExpressionParsingSpike.cs" />
-    <Compile Include="Spikes\GenericClassInheritanceSpikes.cs" />
-    <Compile Include="Spikes\LoggingSpikes.cs" />
-    <Compile Include="TestBase.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestObjects\AuditAttributeMock.cs" />
-    <Compile Include="TestObjects\PrimaryKeys\TripleObjectKeys.cs" />
-    <Compile Include="TestObjects\TripleCompoundKeyItem.cs" />
-    <Compile Include="TestObjects\CompoundKeyItem.cs" />
-    <Compile Include="TestObjects\Contact.cs" />
-    <Compile Include="TestObjects\ContactType.cs" />
-    <Compile Include="TestObjects\EmailAddress.cs" />
-    <Compile Include="TestObjects\PhoneNumber.cs" />
-    <Compile Include="TestObjects\Product.cs" />
-    <Compile Include="TestObjects\PrimaryKeys\ObjectKeys.cs" />
-    <Compile Include="TestObjects\TestObjectEntities.cs" />
-    <Compile Include="Traits\ICanGetTraitTests.cs" />
-    <Compile Include="Traits\ICanUpdateTraitTests.cs" />
-    <Compile Include="Traits\ICanAddTraitTests.cs" />
-    <Compile Include="Traits\ICanBatchTraitTests.cs" />
-    <Compile Include="Traits\ICanDeleteTraitTests.cs" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
+    <PackageReference Include="Moq" Version="4.7.63" />
+    <PackageReference Include="NUnit" Version="3.7.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
+    <PackageReference Include="Shouldly" Version="2.8.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="project.json" />
+    <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj">
-      <Project>{f766cc4f-b69c-444c-a89f-01e2e8b172a8}</Project>
-      <Name>SharpRepository.AzureBlobRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj">
-      <Project>{ef055b6d-6d7d-4002-91a9-4ded61346457}</Project>
-      <Name>SharpRepository.AzureTableRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj">
-      <Project>{42e07863-9017-4b56-9d20-1ea35af1f501}</Project>
-      <Name>SharpRepository.CacheRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj">
-      <Project>{06111314-669b-4e35-a0b9-af67fa3f0ffd}</Project>
-      <Name>SharpRepository.Caching.Memcached</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj">
-      <Project>{1174f5b3-d3be-453d-bd9f-d54eefb0adfe}</Project>
-      <Name>SharpRepository.Caching.Redis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj">
-      <Project>{e52b3b50-143d-4f85-9e42-7434644ef07f}</Project>
-      <Name>SharpRepository.EfRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
-      <Project>{13AD3FCA-4C9D-4674-B786-F30843638D3B}</Project>
-      <Name>SharpRepository.InMemoryRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Logging\SharpRepository.Logging.csproj">
-      <Project>{5301085f-dbcc-4786-b6f7-7dc83d93fba6}</Project>
-      <Name>SharpRepository.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj">
-      <Project>{dc40febe-2e39-4cb8-ae11-dfe9f6865bd2}</Project>
-      <Name>SharpRepository.MongoDbRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj">
-      <Project>{0d7303b9-3a89-4932-b0f0-73b0c1c0faed}</Project>
-      <Name>SharpRepository.RavenDbRepository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
-      <Project>{710DEE79-25CE-4F68-B8B1-D08A135AD154}</Project>
-      <Name>SharpRepository.Repository</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj">
-      <Project>{CA482895-A2F4-4C69-9D39-8AD1CFB1B877}</Project>
-      <Name>SharpRepository.XmlRepository</Name>
-    </ProjectReference>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

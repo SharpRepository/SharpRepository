@@ -584,11 +584,7 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
-#if NET451
-            var properties = type.GetProperties();
-#elif NETSTANDARD1_6
             var properties = type.GetTypeInfo().DeclaredProperties;
-#endif
 
             return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
@@ -1186,11 +1182,7 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
-#if NET451
-            var properties = type.GetProperties();
-#elif NETSTANDARD1_6
             var properties = type.GetTypeInfo().DeclaredProperties;
-#endif
 
             return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
@@ -1800,11 +1792,7 @@ namespace SharpRepository.Repository
         protected virtual PropertyInfo[] GetPrimaryKeyPropertyInfo()
         {
             var type = typeof(T);
-#if NET451
-            var properties = type.GetProperties();
-#elif NETSTANDARD1_6
             var properties = type.GetTypeInfo().DeclaredProperties;
-#endif
             return properties.Where(x => x.HasAttribute<RepositoryPrimaryKeyAttribute>()).OrderBy(x => x.GetOneAttribute<RepositoryPrimaryKeyAttribute>().Order).ToArray();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
-using System.Configuration;
 
 namespace SharpRepository.XmlRepository
 {

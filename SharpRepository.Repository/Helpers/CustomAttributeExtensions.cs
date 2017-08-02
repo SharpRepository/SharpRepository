@@ -16,18 +16,6 @@ namespace SharpRepository.Repository.Helpers
                 return attributes[0];
         }
 
-#if NET45
-        public static T GetOneAttribute<T>(this Module module, bool inherit) where T : Attribute
-        {
-            T[] attributes = module.GetCustomAttributes(typeof(T), inherit) as T[];
-
-            if ((attributes == null) || (attributes.Length == 0))
-                return null;
-            else
-                return attributes[0];
-        }
-#endif
-
         public static T GetOneAttribute<T>(this Module module) where T : Attribute
         {
             T[] attributes = GetAllAttributes<T>(module);

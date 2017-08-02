@@ -2,7 +2,6 @@
 
 namespace SharpRepository.Repository.Configuration
 {
-#if NETSTANDARD1_6
     public class ConfigurationErrorsException : Exception
     {
         public ConfigurationErrorsException()
@@ -17,5 +16,4 @@ namespace SharpRepository.Repository.Configuration
             : base(message, innerException)
         { }
     }
-#endif
 }

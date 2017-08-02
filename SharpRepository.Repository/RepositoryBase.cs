@@ -30,11 +30,7 @@ namespace SharpRepository.Repository
 
             var entityType = typeof(T);
             _typeName = entityType.Name;
-#if NET451
-            _aspects = entityType.GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
-#elif NETSTANDARD1_6
             _aspects = entityType.GetTypeInfo().GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
-#endif
                 .OrderBy(x => x.Order)
                 .ToDictionary(a => a.GetType().FullName, a => a);
 
@@ -129,8 +125,7 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
         protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
-
-
+        
         //Managing aspects
         protected void DisableAspect(Type aspectType)
         {
@@ -138,21 +133,19 @@ namespace SharpRepository.Repository
             var aspect = _aspects[aspectType.FullName];
             aspect.Enabled = false;
         }
+
         protected void EnableAspect(Type aspectType)
         {
             ValidateArgument(aspectType);
             var aspect = _aspects[aspectType.FullName];
             aspect.Enabled = true;
         }
+
         private void ValidateArgument(Type aspectType)
         {
             var baseAttribute = typeof(RepositoryActionBaseAttribute);
-
-#if NET451
-            if (!baseAttribute.IsAssignableFrom(aspectType))
-#elif NETSTANDARD1_6
+            
             if (!baseAttribute.GetTypeInfo().IsAssignableFrom(aspectType.GetTypeInfo()))
-#endif
                 throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
 
             if (!_aspects.ContainsKey(aspectType.FullName))
