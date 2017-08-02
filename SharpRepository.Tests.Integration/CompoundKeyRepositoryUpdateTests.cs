@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -26,24 +26,23 @@ namespace SharpRepository.Tests.Integration
             var updated = repository.Get(item.Username, item.Age);
             var notUpdated = repository.Get(item2.Username, item2.Age);
 
-            updated.FullName.ShouldEqual("Test User - 22 - Updated");
-            notUpdated.FullName.ShouldEqual("Test User 2 - 22");
+            updated.FullName.ShouldBe("Test User - 22 - Updated");
+            notUpdated.FullName.ShouldBe("Test User 2 - 22");
         }
-
-
+        
         [ExecuteForAllCompoundKeyRepositories]
         public void Update_Should_Update_Multiple_Items(ICompoundKeyRepository<User, string, int> repository)
         {
-           var users = new List<User>
-                                        {
-                                            new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
-                                            new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
-                                            new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
-                                        };
+            var users = new List<User>
+            {
+                new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
+                new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
+                new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
+            };
 
             repository.Add(users);
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             foreach (var user in users.Take(2))
             {
@@ -52,7 +51,7 @@ namespace SharpRepository.Tests.Integration
 
             repository.Update(users);
             items = repository.GetAll().ToList();
-            items.Count(x => x.FullName.EndsWith("UPDATED")).ShouldEqual(2);
+            items.Count(x => x.FullName.EndsWith("UPDATED")).ShouldBe(2);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using SharpRepository.EfRepository;
+using SharpRepository.EfCoreRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
@@ -41,7 +41,7 @@ namespace SharpRepository.Tests.Configuration
         {
             var repos = RepositoryFactory.GetInstance<Contact, string>("efRepos");
 
-            if (!(repos is EfRepository<Contact, string>))
+            if (!(repos is EfCoreRepository<Contact, string>))
             {
                 throw new Exception("Not EfRepository");
             }
@@ -53,7 +53,7 @@ namespace SharpRepository.Tests.Configuration
         {
             var repos = RepositoryFactory.GetInstance<Contact, string>("sharpRepository2", null);
 
-            if (!(repos is EfRepository<Contact, string>))
+            if (!(repos is EfCoreRepository<Contact, string>))
             {
                 throw new Exception("Not EfRepository");
             }
@@ -111,10 +111,10 @@ namespace SharpRepository.Tests.Configuration
         public void LoadEfRepositoryFromConfigurationObject()
         {
             var config = new SharpRepositoryConfiguration();
-            config.AddRepository(new EfRepositoryConfiguration("default", "DefaultConnection", typeof(TestObjectEntities)));
+            config.AddRepository(new EfCoreRepositoryConfiguration("default", "DefaultConnection", typeof(TestObjectContext)));
             var repos = RepositoryFactory.GetInstance<Contact, string>(config);
 
-            if (!(repos is EfRepository<Contact, string>))
+            if (!(repos is EfCoreRepository<Contact, string>))
             {
                 throw new Exception("Not InMemoryRepository");
             }
@@ -130,7 +130,7 @@ namespace SharpRepository.Tests.Configuration
         {
             var config = new SharpRepositoryConfiguration();
             config.AddRepository(new InMemoryRepositoryConfiguration("inMemory", "timeout"));
-            config.AddRepository(new EfRepositoryConfiguration("ef5", "DefaultConnection", typeof(TestObjectEntities), "standard", "inMemoryProvider"));
+            config.AddRepository(new EfCoreRepositoryConfiguration("ef5", "DefaultConnection", typeof(TestObjectContext), "standard", "inMemoryProvider"));
             config.DefaultRepository = "ef5";
 
             config.AddCachingStrategy(new StandardCachingStrategyConfiguration("standard"));
@@ -141,7 +141,7 @@ namespace SharpRepository.Tests.Configuration
 
             var repos = RepositoryFactory.GetInstance<Contact, string>(config);
 
-            if (!(repos is EfRepository<Contact, string>))
+            if (!(repos is EfCoreRepository<Contact, string>))
             {
                 throw new Exception("Not InMemoryRepository");
             }

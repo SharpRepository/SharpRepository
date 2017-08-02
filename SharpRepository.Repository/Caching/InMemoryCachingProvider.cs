@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace SharpRepository.Repository.Caching
 {
@@ -9,18 +10,19 @@ namespace SharpRepository.Repository.Caching
     /// </summary>
     public class InMemoryCachingProvider : ICachingProvider
     {
-        private static ObjectCache Cache
+        protected IMemoryCache Cache;
+        public InMemoryCachingProvider(IMemoryCache cache)
         {
-            get { return MemoryCache.Default; }
+            Cache = cache;
         }
 
         private static readonly object LockObject = new object();
 
-        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Default, int? cacheTime = null)
+        public void Set<T>(string key, T value, CacheItemPriority priority = CacheItemPriority.Normal, int? cacheTime = null)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
-            var policy = new CacheItemPolicy
+            var policy = new MemoryCacheEntryOptions()
                              {
                                  Priority = priority
                              };
@@ -42,8 +44,7 @@ namespace SharpRepository.Repository.Caching
         public bool Exists(string key)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
-
-            return Cache.Any(x => x.Key == key);
+            return Cache.TryGetValue(key, out object value);
         }
 
         public bool Get<T>(string key, out T value)
@@ -57,7 +58,7 @@ namespace SharpRepository.Repository.Caching
                 if (!Exists(key))
                     return false;
 
-                value = (T) Cache[key];
+                value = Cache.Get<T>(key);
             }
             catch (Exception)
             {
@@ -68,14 +69,13 @@ namespace SharpRepository.Repository.Caching
             return true;
         }
 
-        public int Increment(string key, int defaultValue, int incrementValue, CacheItemPriority priority = CacheItemPriority.Default)
+        public int Increment(string key, int defaultValue, int incrementValue, CacheItemPriority priority = CacheItemPriority.Normal)
         {
             if (String.IsNullOrEmpty(key)) throw new ArgumentNullException("key");
 
             lock (LockObject)
             {
-                int current;
-                if (!Get(key, out current))
+                if (!Get(key, out int current))
                 {
                     current = defaultValue;
                 }
@@ -88,7 +88,7 @@ namespace SharpRepository.Repository.Caching
 
         public void Dispose()
         {
-            // no need to do anything
+            Cache = new MemoryCache(new MemoryCacheOptions());
         }
     }
 }

@@ -9,6 +9,7 @@
                 return new[]
                 {
                     RepositoryType.InMemory,
+                    RepositoryType.EfCore,
                     RepositoryType.Dbo4,
                     //RepositoryType.RavenDb,
                     RepositoryType.Xml,
@@ -26,6 +27,7 @@
                 {
                     RepositoryType.InMemory,
                     RepositoryType.Ef,
+                    RepositoryType.EfCore,
                     RepositoryType.Cache
                 };
             }

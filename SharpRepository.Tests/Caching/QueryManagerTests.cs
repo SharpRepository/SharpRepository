@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+
 using NUnit.Framework;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.TestObjects;
-using Should;
-using System.Runtime.Caching;
+using Shouldly;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SharpRepository.Tests.Caching
 {
@@ -13,18 +14,15 @@ namespace SharpRepository.Tests.Caching
     public class QueryManagerTests : TestBase
     {
         protected QueryManager<Contact, int> QueryManager;
+        protected MemoryCache cache;
 
         [SetUp]
         public void Setup()
         {
             // need to clear out the InMemory cache before each test is run so that each is independent and won't effect the next one
-            var cache = MemoryCache.Default;
-            foreach (var item in cache)
-            {
-                cache.Remove(item.Key);
-            }
-
-            QueryManager = new QueryManager<Contact, int>(new StandardCachingStrategy<Contact, int>()
+            cache = new MemoryCache(new MemoryCacheOptions());
+            var provider = new InMemoryCachingProvider(cache);
+            QueryManager = new QueryManager<Contact, int>(new StandardCachingStrategy<Contact, int>(provider)
                                                    {
                                                        CachePrefix =
                                                            "#RepoStandardCache"
@@ -35,6 +33,7 @@ namespace SharpRepository.Tests.Caching
         public void Teardown()
         {
             //Repository = null;
+            cache.Dispose();
         }
 
         [Test]

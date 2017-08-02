@@ -41,12 +41,10 @@ namespace SharpRepository.Tests.Traits
 
         private class ContactRepository : InMemoryRepository<Contact, int>, IContactRepository
         {
-         
         }
 
         private interface IContactRepository : ICanDelete<Contact, Int32>
         {
-
         }
     }
 }

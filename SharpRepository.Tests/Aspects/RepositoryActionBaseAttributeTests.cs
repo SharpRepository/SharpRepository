@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using ServiceStack.Common.Extensions;
+// using ServiceStack.Common.Extensions;
 using SharpRepository.Repository.Aspects;
 using SharpRepository.Tests.PrimaryKey;
 using SharpRepository.Tests.TestObjects;
@@ -72,6 +72,5 @@ namespace SharpRepository.Tests.Aspects
             //Assert
             Assert.Greater(specificAudit.ExecutedOn, audit.ExecutedOn);
         }
-
     }
 }

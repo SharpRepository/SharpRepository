@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using SharpRepository.Repository;
+using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Traits;
 using SharpRepository.Tests.TestObjects;
-using Should;
-using SharpRepository.InMemoryRepository;
+using Shouldly;
 
 namespace SharpRepository.Tests.Traits
 {
@@ -18,18 +15,16 @@ namespace SharpRepository.Tests.Traits
             var repo = new ContactRepository();
             using (var batch = repo.BeginBatch())
             {
-                batch.BatchActions.Count.ShouldEqual(0);
+                batch.BatchActions.Count.ShouldBe(0);
             }
         }
 
         private class ContactRepository : InMemoryRepository<Contact, int>, IContactRepository
         {
-         
         }
 
         private interface IContactRepository : ICanBatch<Contact>
         {
-
         }
     }
 }

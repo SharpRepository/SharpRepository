@@ -1,16 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+#if NET451
 using System.Configuration;
+#endif
 using System.Linq;
 
 namespace SharpRepository.Repository.Configuration
 {
+#if NET451
     public class SharpRepositorySection : ConfigurationSection, ISharpRepositoryConfiguration
+#elif NETSTANDARD1_6
+    public class SharpRepositorySection : ISharpRepositoryConfiguration
+#endif
     {
+#if NET451
         [ConfigurationProperty("repositories", IsRequired = true)]
+#endif
         public RepositoriesCollection Repositories
         {
+#if NET451
             get { return (RepositoriesCollection)this["repositories"]; }
+#elif NETSTANDARD1_6
+            get;
+            private set;
+#endif
         }
 
         public bool HasRepository
@@ -62,10 +75,17 @@ namespace SharpRepository.Repository.Configuration
             return repositoryConfiguration;
         }
 
+#if NET451
         [ConfigurationProperty("cachingStrategies")]
+#endif
         public CachingStrategyCollection CachingStrategies
         {
+#if NET451
             get { return (CachingStrategyCollection)this["cachingStrategies"]; }
+#elif NETSTANDARD1_6
+            get;
+            private set;
+#endif
         }
 
         public bool HasCachingStrategies
@@ -100,10 +120,17 @@ namespace SharpRepository.Repository.Configuration
             return strategyConfiguration;
         }
 
+#if NET451
         [ConfigurationProperty("cachingProviders")]
+#endif
         public CachingProviderCollection CachingProviders
         {
+#if NET451
             get { return (CachingProviderCollection)this["cachingProviders"]; }
+#elif NETSTANDARD1_6
+            get;
+            private set;
+#endif
         }
 
         public bool HasCachingProviders

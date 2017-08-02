@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+//using System.Data.Entity;
+//using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
 using Raven.Client.Document;
@@ -10,6 +10,7 @@ using SharpRepository.Db4oRepository;
 using SharpRepository.Tests.Integration.TestObjects;
 using SharpRepository.XmlRepository;
 using SharpRepository.EfRepository;
+using SharpRepository.EfCoreRepository;
 using SharpRepository.RavenDbRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
@@ -41,6 +42,20 @@ namespace SharpRepository.Tests.Integration.Data
                     new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
+            if (includeType.Contains(RepositoryType.EfCore))
+            {
+                var connection = new SqliteConnection("DataSource=:memory:");
+                connection.Open();
+
+                var options = new DbContextOptionsBuilder<TestObjectContext>()
+                     .UseSqlite(connection)
+                     .Options;
+
+                // Create the schema in the database
+                var context = new TestObjectContext(options);
+                context.Database.EnsureCreated();
+                yield return new TestCaseData(new EfCoreRepository<Contact, string>(context)).SetName("EfCoreRepository Test");
+            }
             if (includeType.Contains(RepositoryType.Dbo4))
             {
                 var dbPath = Db4oDataDirectoryFactory.Build("Contact");

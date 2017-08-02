@@ -2,7 +2,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using System.Linq;
 using SharpRepository.Repository.Transactions;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -96,12 +96,12 @@ namespace SharpRepository.Samples
             {
                 batch.Add(new Order { Name = "Order 1" });
                 batch.Add(new Order { Name = "Order 2" });
-                repo.GetAll().Count().ShouldEqual(0);
+                repo.GetAll().Count().ShouldBe(0);
 
                 batch.Commit();
             }
 
-            repo.GetAll().Count().ShouldEqual(2);
+            repo.GetAll().Count().ShouldBe(2);
         }
         
         [Test]
@@ -110,7 +110,7 @@ namespace SharpRepository.Samples
             var repo = new InMemoryRepository<Order, int>();
             repo.Add(new Order { Name = "Order 1" });
             repo.Add(new Order { Name = "Order 2" });
-            repo.GetAll().Count().ShouldEqual(2);
+            repo.GetAll().Count().ShouldBe(2);
 
             using (var batch = repo.BeginBatch())
             {
@@ -120,14 +120,14 @@ namespace SharpRepository.Samples
                     batch.Update(order);
                 }
                 
-                repo.GetAll().Count().ShouldEqual(2);
-                repo.GetAll().Count(x => x.Name.StartsWith("Update")).ShouldEqual(0);
+                repo.GetAll().Count().ShouldBe(2);
+                repo.GetAll().Count(x => x.Name.StartsWith("Update")).ShouldBe(0);
 
                 batch.Commit();
             }
 
-            repo.GetAll().Count().ShouldEqual(2);
-            repo.GetAll().Count(x => x.Name.StartsWith("Update")).ShouldEqual(2);
+            repo.GetAll().Count().ShouldBe(2);
+            repo.GetAll().Count(x => x.Name.StartsWith("Update")).ShouldBe(2);
         }
         
         [Test]
@@ -138,7 +138,7 @@ namespace SharpRepository.Samples
             repo.Add(new Order { Name = "Order 1" });
             repo.Add(new Order { Name = "Order 2" });
 
-            repo.GetAll().Count().ShouldEqual(2);
+            repo.GetAll().Count().ShouldBe(2);
 
             using (var batch = repo.BeginBatch())
             {
@@ -147,11 +147,11 @@ namespace SharpRepository.Samples
                     batch.Delete(order);
                 }
 
-                repo.GetAll().Count().ShouldEqual(2);
+                repo.GetAll().Count().ShouldBe(2);
                 batch.Commit();
             }
 
-            repo.GetAll().Count().ShouldEqual(0);
+            repo.GetAll().Count().ShouldBe(0);
         }
 
         /*
@@ -166,12 +166,12 @@ namespace SharpRepository.Samples
             {
                 batch.Add(new Order { Name = "Order 1" });
                 batch.Add(new Order { Name = "Order 2" });
-                repo.GetAll().Count().ShouldEqual(0);
+                repo.GetAll().Count().ShouldBe(0);
                 batch.Rollback();
                 batch.Commit();
             }
 
-            repo.GetAll().Count().ShouldEqual(0);
+            repo.GetAll().Count().ShouldBe(0);
         }
 
         /*
@@ -189,7 +189,7 @@ namespace SharpRepository.Samples
                 batch.Add(new Order { Name = "Order 2" });
             }
 
-            repo.GetAll().Count().ShouldEqual(0);
+            repo.GetAll().Count().ShouldBe(0);
         }
     }
 }

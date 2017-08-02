@@ -10,7 +10,7 @@ namespace SharpRepository.Tests
 
         public RelativeDirectory()
         {
-            _dirInfo = new DirectoryInfo(Environment.CurrentDirectory);
+            _dirInfo = new DirectoryInfo(AppContext.BaseDirectory);
         }
 
         public RelativeDirectory(string absoluteDir)

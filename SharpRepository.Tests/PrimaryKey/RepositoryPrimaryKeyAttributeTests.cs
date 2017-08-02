@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Aspects;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.PrimaryKey
 {
@@ -24,8 +24,8 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestRepository<IdPrimaryKeyObject, int>();
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo.PropertyType.ShouldEqual(typeof(int));
-            propInfo.Name.ShouldEqual("Id");
+            propInfo.PropertyType.ShouldBe(typeof(int));
+            propInfo.Name.ShouldBe("Id");
         }
 
         [Test]
@@ -43,8 +43,8 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestRepository<ClassNameIdPrimaryKeyObject, int>();
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo.PropertyType.ShouldEqual(typeof(int));
-            propInfo.Name.ShouldEqual("ClassNameIdPrimaryKeyObjectId");
+            propInfo.PropertyType.ShouldBe(typeof(int));
+            propInfo.Name.ShouldBe("ClassNameIdPrimaryKeyObjectId");
         }
 
         [Test]
@@ -62,8 +62,8 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestRepository<UseAttributePrimaryKeyObject, int>();
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo.PropertyType.ShouldEqual(typeof(int));
-            propInfo.Name.ShouldEqual("SomeRandomName");
+            propInfo.PropertyType.ShouldBe(typeof(int));
+            propInfo.Name.ShouldBe("SomeRandomName");
         }
 
         [Test]

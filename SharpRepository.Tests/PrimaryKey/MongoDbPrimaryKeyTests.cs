@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using NUnit.Framework;
 using SharpRepository.Tests.TestObjects.PrimaryKeys;
-using Should;
+using Shouldly;
 using SharpRepository.MongoDbRepository;
 using MongoDB.Driver;
 
@@ -20,8 +20,8 @@ namespace SharpRepository.Tests.PrimaryKey
             var repos = new TestMongoDbRepository<ObjectKeys, int>();
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
-            propInfo.PropertyType.ShouldEqual(typeof(int));
-            propInfo.Name.ShouldEqual("KeyInt1");
+            propInfo.PropertyType.ShouldBe(typeof(int));
+            propInfo.Name.ShouldBe("KeyInt1");
         }
     }
 

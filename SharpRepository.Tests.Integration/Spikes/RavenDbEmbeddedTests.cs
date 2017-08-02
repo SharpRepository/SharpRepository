@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Raven.Client.Embedded;
 using SharpRepository.RavenDbRepository;
-using Should;
+using Shouldly;
 using Raven.Client.Document;
 using Raven.Client;
 
@@ -22,11 +22,11 @@ namespace SharpRepository.Tests.Integration.Spikes
 
                 var items = repos.GetAll().ToList();
 
-                items.Count.ShouldEqual(2);
+                items.Count.ShouldBe(2);
 
                 var item2 = repos.Get("RavenTestStringKeys/2");
                     // is there a way we could allow them to just pass in 2 or the full string, or is that a bad idea
-                item2.Name.ShouldEqual("Ben");
+                item2.Name.ShouldBe("Ben");
             }
         }
 
@@ -41,14 +41,14 @@ namespace SharpRepository.Tests.Integration.Spikes
 
                 var items = repos.GetAll().ToList();
 
-                items.Count.ShouldEqual(2);
+                items.Count.ShouldBe(2);
 
                 // this works but won't work if the primary key is [ClassName]Id instead of just Id
                 var item1 = repos.Get(1);
-                item1.Name.ShouldEqual("Jeff");
+                item1.Name.ShouldBe("Jeff");
 
                 var item2 = repos.Get(2);
-                item2.Name.ShouldEqual("Ben");
+                item2.Name.ShouldBe("Ben");
             }
         }
 
@@ -63,14 +63,14 @@ namespace SharpRepository.Tests.Integration.Spikes
 
                 var items = repos.GetAll().ToList();
 
-                items.Count.ShouldEqual(2);
+                items.Count.ShouldBe(2);
 
                 // this works but won't work if the primary key is [ClassName]Id instead of just Id
                 var item1 = repos.Get(1);
-                item1.Name.ShouldEqual("Jeff");
+                item1.Name.ShouldBe("Jeff");
 
                 var item2 = repos.Get(2);
-                item2.Name.ShouldEqual("Ben");
+                item2.Name.ShouldBe("Ben");
             }
         }
 
@@ -89,14 +89,14 @@ namespace SharpRepository.Tests.Integration.Spikes
 //
 //                var items = repos.GetAll().ToList();
 //
-//                items.Count.ShouldEqual(2);
+//                items.Count.ShouldBe(2);
 //
 //                // this works but won't work if the primary key is [ClassName]Id instead of just Id
 //                var item1 = repos.Get(1);
-//                item1.Name.ShouldEqual("Jeff");
+//                item1.Name.ShouldBe("Jeff");
 //
 //                var item2 = repos.Get(2);
-//                item2.Name.ShouldEqual("Ben");
+//                item2.Name.ShouldBe("Ben");
 //            }
 //        }
 

@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using NUnit.Framework;
-using SharpRepository.Repository;
+using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Traits;
 using SharpRepository.Tests.TestObjects;
-using SharpRepository.InMemoryRepository;
+using System.Collections.Generic;
 
 namespace SharpRepository.Tests.Traits
 {
@@ -43,16 +42,13 @@ namespace SharpRepository.Tests.Traits
 
             repo.Update(contacts);
         }
-
        
         private class ContactRepository : InMemoryRepository<Contact, int>, IContactRepository
         {
-         
         }
 
         private interface IContactRepository : ICanUpdate<Contact>
         {
-
         }
     }
 }

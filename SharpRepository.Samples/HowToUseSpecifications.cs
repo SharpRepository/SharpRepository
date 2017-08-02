@@ -2,7 +2,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Specifications;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -121,16 +121,16 @@ namespace SharpRepository.Samples
             }
 
             var order1 = repo.Find(new OrderByIdSpecification(1));
-            order1.OrderId.ShouldEqual(1);
+            order1.OrderId.ShouldBe(1);
 
             var order2 = repo.Find(new OrderByNameSpecification("Order2"));
-            order2.Name.ShouldEqual("Order2");
+            order2.Name.ShouldBe("Order2");
             
             var spec = new OrderByIdSpecification(3).And(new OrderByNameSpecification("Order3"));
 
             var order3 = repo.Find(spec);
-            order3.OrderId.ShouldEqual(3);
-            order3.Name.ShouldEqual("Order3");
+            order3.OrderId.ShouldBe(3);
+            order3.Name.ShouldBe("Order3");
         }
 
         [Test]
@@ -144,16 +144,16 @@ namespace SharpRepository.Samples
             }
 
             var order1 = repo.FindAll(new OrderByIdSpecification(1));
-            order1.First().OrderId.ShouldEqual(1);
+            order1.First().OrderId.ShouldBe(1);
 
             var order2 = repo.FindAll(new OrderByNameSpecification("Order2"));
-            order2.First().Name.ShouldEqual("Order2");
+            order2.First().Name.ShouldBe("Order2");
 
             var spec = new OrderByIdSpecification(3).And(new OrderByNameSpecification("Order3"));
 
             var order3 = repo.FindAll(spec);
-            order3.First().OrderId.ShouldEqual(3);
-            order3.First().Name.ShouldEqual("Order3");
+            order3.First().OrderId.ShouldBe(3);
+            order3.First().Name.ShouldBe("Order3");
         }
     }
 }

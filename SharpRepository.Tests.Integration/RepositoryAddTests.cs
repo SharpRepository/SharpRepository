@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Transactions;
 using NUnit.Framework;
 using SharpRepository.EfRepository;
 using SharpRepository.InMemoryRepository;
@@ -5,10 +8,7 @@ using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
-using System.Collections.Generic;
-using System.Linq;
-using System.Transactions;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -72,7 +72,7 @@ namespace SharpRepository.Tests.Integration
             repository.Add(new Contact { Name = "Test User" });
             
             var result = repository.GetAll();
-            result.Count().ShouldEqual(1);
+            result.Count().ShouldBe(1);
         }
 
         [ExecuteForAllRepositories]
@@ -82,16 +82,16 @@ namespace SharpRepository.Tests.Integration
             {
                 batch.Add(new Contact { Name = "Test User 1" });
 
-                repository.GetAll().Count().ShouldEqual(0); // shouldn't have really been added yet
+                repository.GetAll().Count().ShouldBe(0); // shouldn't have really been added yet
 
                 batch.Add(new Contact { Name = "Test User 2" });
 
-                repository.GetAll().Count().ShouldEqual(0); // shouldn't have really been added yet
+                repository.GetAll().Count().ShouldBe(0); // shouldn't have really been added yet
 
                 batch.Commit();
             }
 
-            repository.GetAll().Count().ShouldEqual(2);
+            repository.GetAll().Count().ShouldBe(2);
         }
 
         [ExecuteForAllRepositories]
@@ -110,7 +110,7 @@ namespace SharpRepository.Tests.Integration
             contacts.First().ShouldNotBeSameAs(contacts.Last().ContactId);
             
             var added = repository.GetAll();
-            added.Count().ShouldEqual(3);
+            added.Count().ShouldBe(3);
         }
 
         [ExecuteForRepositories(RepositoryType.Ef)]

@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Extensions.Caching.Memory;
+using NUnit.Framework;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Caching
 {
@@ -12,7 +13,8 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void Using_DisableCaching_Should_Disable_Cache_Inside_Using_Block()
         {
-            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>());
+            var cacheProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+            var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
             repos.CachingEnabled.ShouldBeTrue();
 

@@ -2,7 +2,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -16,8 +16,8 @@ namespace SharpRepository.Tests.Integration
             repository.Add(item);
 
             var result = repository.Get(item.Username, item.Age);
-            result.Username.ShouldEqual(item.Username);
-            result.Age.ShouldEqual(item.Age);
+            result.Username.ShouldBe(item.Username);
+            result.Age.ShouldBe(item.Age);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -34,7 +34,7 @@ namespace SharpRepository.Tests.Integration
             repository.Add(item);
 
             var result = repository.Get(item.Username, item.Age, c => c.Username);
-            result.ShouldEqual("Test User");
+            result.ShouldBe("Test User");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -44,7 +44,7 @@ namespace SharpRepository.Tests.Integration
             repository.Add(item);
 
             var result = repository.Get(item.Username, item.Age, c => c.Age);
-            result.ShouldEqual(21);
+            result.ShouldBe(21);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -54,22 +54,22 @@ namespace SharpRepository.Tests.Integration
             repository.Add(item);
 
             var result = repository.Get(item.Username, item.Age, c => new { c.Age, c.Username });
-            result.Age.ShouldEqual(21);
-            result.Username.ShouldEqual("Test User");
+            result.Age.ShouldBe(21);
+            result.Username.ShouldBe("Test User");
         }
 
         [ExecuteForAllCompoundKeyRepositories]
         public void Get_With_String_Selector_Should_Return_Default_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
         {
             var result = repository.Get(string.Empty, 0, c => c.Username);
-            result.ShouldEqual(default(string));
+            result.ShouldBe(default(string));
         }
 
         [ExecuteForAllCompoundKeyRepositories]
         public void Get_With_Int_Selector_Should_Return_Default_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
         {
             var result = repository.Get(string.Empty, 0, c => c.Age);
-            result.ShouldEqual(default(int));
+            result.ShouldBe(default(int));
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -85,17 +85,15 @@ namespace SharpRepository.Tests.Integration
             var item = new User { Username = "Test User", Age = 21 };
             repository.Add(item);
 
-            User result;
-            repository.TryGet(item.Username, item.Age, out result).ShouldBeTrue();
-            result.Username.ShouldEqual(item.Username);
-            result.Age.ShouldEqual(item.Age);
+            repository.TryGet(item.Username, item.Age, out User result).ShouldBeTrue();
+            result.Username.ShouldBe(item.Username);
+            result.Age.ShouldBe(item.Age);
         }
 
         [ExecuteForAllCompoundKeyRepositories]
         public void TryGet_Should_Return_False_And_Null_If_Item_Does_Not_Exists(ICompoundKeyRepository<User, string, int> repository)
         {
-            User result;
-            repository.TryGet(string.Empty, 0, out result).ShouldBeFalse();
+            repository.TryGet(string.Empty, 0, out User result).ShouldBeFalse();
             result.ShouldBeNull();
         }
 

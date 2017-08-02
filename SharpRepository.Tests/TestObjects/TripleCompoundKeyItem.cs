@@ -1,4 +1,5 @@
 ﻿using SharpRepository.Repository;
+using System.ComponentModel.DataAnnotations;
 
 namespace SharpRepository.Tests.TestObjects
 {

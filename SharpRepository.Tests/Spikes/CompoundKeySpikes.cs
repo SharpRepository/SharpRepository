@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Spikes
 {
@@ -21,11 +21,11 @@ namespace SharpRepository.Tests.Spikes
             repository.Add(new CompoundKeyItemInts { SomeId = 2, AnotherId = 2, Title = "2-2"});
             repository.Add(new CompoundKeyItemInts { SomeId = 2, AnotherId = 3, Title = "2-3"});
 
-            repository.Get(1, 1).Title.ShouldEqual("1-1");
-            repository.Get(2, 1).Title.ShouldEqual("2-1");
-            repository.Get(1, 2).Title.ShouldEqual("1-2");
+            repository.Get(1, 1).Title.ShouldBe("1-1");
+            repository.Get(2, 1).Title.ShouldBe("2-1");
+            repository.Get(1, 2).Title.ShouldBe("1-2");
 
-            repository.FindAll(x => x.SomeId == 1).Count().ShouldEqual(3);
+            repository.FindAll(x => x.SomeId == 1).Count().ShouldBe(3);
         }
 
         [Test]
@@ -40,11 +40,11 @@ namespace SharpRepository.Tests.Spikes
             repository.Add(new CompoundKeyItemInts { SomeId = 2, AnotherId = 2, Title = "2-2" });
             repository.Add(new CompoundKeyItemInts { SomeId = 2, AnotherId = 3, Title = "2-3" });
 
-            repository.Get(1, 1).Title.ShouldEqual("1-1");
-            repository.Get(2, 1).Title.ShouldEqual("2-1");
-            repository.Get(1, 2).Title.ShouldEqual("1-2");
+            repository.Get(1, 1).Title.ShouldBe("1-1");
+            repository.Get(2, 1).Title.ShouldBe("2-1");
+            repository.Get(1, 2).Title.ShouldBe("1-2");
 
-            repository.FindAll(x => x.SomeId == 1).Count().ShouldEqual(3);
+            repository.FindAll(x => x.SomeId == 1).Count().ShouldBe(3);
         }
         
         [Test]
@@ -59,11 +59,11 @@ namespace SharpRepository.Tests.Spikes
             repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
             repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
 
-            repository.Get(1, 1, 10).Title.ShouldEqual("1-1-10");
-            repository.Get(2, 1, 11).Title.ShouldEqual("2-1-11");
-            repository.Get(1, 2, 11).Title.ShouldEqual("1-2-11");
+            repository.Get(1, 1, 10).Title.ShouldBe("1-1-10");
+            repository.Get(2, 1, 11).Title.ShouldBe("2-1-11");
+            repository.Get(1, 2, 11).Title.ShouldBe("1-2-11");
 
-            repository.FindAll(x => x.LastId == 11).Count().ShouldEqual(3);
+            repository.FindAll(x => x.LastId == 11).Count().ShouldBe(3);
         }
 
         [Test]
@@ -78,11 +78,11 @@ namespace SharpRepository.Tests.Spikes
             repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
             repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
 
-            repository.Get(1, 1, 10).Title.ShouldEqual("1-1-10");
-            repository.Get(2, 1, 11).Title.ShouldEqual("2-1-11");
-            repository.Get(1, 2, 11).Title.ShouldEqual("1-2-11");
+            repository.Get(1, 1, 10).Title.ShouldBe("1-1-10");
+            repository.Get(2, 1, 11).Title.ShouldBe("2-1-11");
+            repository.Get(1, 2, 11).Title.ShouldBe("1-2-11");
 
-            repository.FindAll(x => x.LastId == 11).Count().ShouldEqual(3);
+            repository.FindAll(x => x.LastId == 11).Count().ShouldBe(3);
         }
     }
 }

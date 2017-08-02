@@ -1,12 +1,11 @@
+using NUnit.Framework;
+using SharpRepository.InMemoryRepository;
+using SharpRepository.Repository.Traits;
+using SharpRepository.Tests.TestObjects;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using SharpRepository.Repository;
-using SharpRepository.Repository.Traits;
-using SharpRepository.Tests.TestObjects;
-using Should;
-using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Traits
 {
@@ -22,8 +21,8 @@ namespace SharpRepository.Tests.Traits
             repo.Add(contact);
 
             var result = repo.Get(contact.ContactId);
-            result.Name.ShouldEqual(contact.Name);
-            result.ContactTypeId.ShouldEqual(contact.ContactTypeId);
+            result.Name.ShouldBe(contact.Name);
+            result.ContactTypeId.ShouldBe(contact.ContactTypeId);
         }
 
         [Test]
@@ -38,7 +37,7 @@ namespace SharpRepository.Tests.Traits
             }
 
             IEnumerable<Contact> result = repo.GetAll().ToList();
-            result.Count().ShouldEqual(5);
+            result.Count().ShouldBe(5);
         }
 
         [Test]
@@ -50,19 +49,15 @@ namespace SharpRepository.Tests.Traits
             repo.Add(contact);
 
             var result = repo.Get(1, x => new { contact.ContactId, contact.Name });
-            result.Name.ShouldEqual(contact.Name);
+            result.Name.ShouldBe(contact.Name);
         }
 
-      
         private class ContactRepository : InMemoryRepository<Contact, int>, IContactRepository
         {
-         
         }
 
         private interface IContactRepository : ICanGet<Contact, Int32>
-        
         {
-
         }
     }
 }

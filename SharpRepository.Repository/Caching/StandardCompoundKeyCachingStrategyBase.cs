@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Caching;
+using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
+using System.Reflection;
 
 // References that were helpful in developing the Write Through Caching and Generational Caching logic
 //  http://www.regexprn.com/2011/06/web-application-caching-strategies.html
@@ -20,12 +21,7 @@ namespace SharpRepository.Repository.Caching
         public bool WriteThroughCachingEnabled { get; set; }
         public bool GenerationalCachingEnabled { get; set; }
         public Expression<Func<T, TPartition>> Partition { get; set; }
-
-        internal StandardCompoundKeyCachingStrategyBase()
-            : this(null, new InMemoryCachingProvider())
-        {
-        }
-
+           
         internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
             : base(maxResults, cachingProvider)
         {
@@ -143,8 +139,7 @@ namespace SharpRepository.Repository.Caching
         {
             // TODO: right noow this is called mutliple times in Batchmode even if 3 in a row are for the same partition
             //  this should batch up the calls to IncrementPartitionGeneration and only call once if there are 3 of the same partition values in the same batch
-            TPartition partition;
-            if (TryPartitionValue(result, out partition))
+            if (TryPartitionValue(result, out TPartition partition))
             {
                 IncrementPartitionGeneration(partition);
             }
@@ -166,7 +161,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_6
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
@@ -322,8 +321,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -333,8 +331,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -346,13 +343,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetGenerationKey(), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetGenerationKey(), out int generation) ? 1 : generation;
         }
 
         private int IncrementGeneration()
         {
-            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
+            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NeverRemove);
 
             return generation;
         }
@@ -366,13 +362,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out int generation) ? 1 : generation;
         }
 
         private int IncrementPartitionGeneration(TPartition partition)
         {
-            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NotRemovable);
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NeverRemove);
         }
 
         protected string GetPartitionGenerationKey(TPartition partition)
@@ -386,11 +381,7 @@ namespace SharpRepository.Repository.Caching
         public bool WriteThroughCachingEnabled { get; set; }
         public bool GenerationalCachingEnabled { get; set; }
         public Expression<Func<T, TPartition>> Partition { get; set; }
-
-        internal StandardCompoundKeyCachingStrategyBase()
-            : this(null, new InMemoryCachingProvider())
-        {
-        }
+        
 
         internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
             : base(maxResults, cachingProvider)
@@ -508,8 +499,7 @@ namespace SharpRepository.Repository.Caching
         {
             // TODO: right noow this is called mutliple times in Batchmode even if 3 in a row are for the same partition
             //  this should batch up the calls to IncrementPartitionGeneration and only call once if there are 3 of the same partition values in the same batch
-            TPartition partition;
-            if (TryPartitionValue(result, out partition))
+            if (TryPartitionValue(result, out TPartition partition))
             {
                 IncrementPartitionGeneration(partition);
             }
@@ -531,7 +521,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_6
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
@@ -687,8 +681,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -698,8 +691,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -711,13 +703,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetGenerationKey(), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetGenerationKey(), out int generation) ? 1 : generation;
         }
 
         private int IncrementGeneration()
         {
-            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
+            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NeverRemove);
             
             return generation;
         }
@@ -731,13 +722,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out int generation) ? 1 : generation;
         }
 
         private int IncrementPartitionGeneration(TPartition partition)
         {
-            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NotRemovable);
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NeverRemove);
         }
 
         protected string GetPartitionGenerationKey(TPartition partition)
@@ -751,12 +741,7 @@ namespace SharpRepository.Repository.Caching
         public bool WriteThroughCachingEnabled { get; set; }
         public bool GenerationalCachingEnabled { get; set; }
         public Expression<Func<T, TPartition>> Partition { get; set; }
-
-        internal StandardCompoundKeyCachingStrategyBase()
-            : this(null, new InMemoryCachingProvider())
-        {
-        }
-
+        
         internal StandardCompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
             : base(maxResults, cachingProvider)
         {
@@ -873,8 +858,7 @@ namespace SharpRepository.Repository.Caching
         {
             // TODO: right noow this is called mutliple times in Batchmode even if 3 in a row are for the same partition
             //  this should batch up the calls to IncrementPartitionGeneration and only call once if there are 3 of the same partition values in the same batch
-            TPartition partition;
-            if (TryPartitionValue(result, out partition))
+            if (TryPartitionValue(result, out TPartition partition))
             {
                 IncrementPartitionGeneration(partition);
             }
@@ -896,7 +880,11 @@ namespace SharpRepository.Repository.Caching
 
             // use the partition name (which is a property) and reflection to get the value
             var type = typeof(T);
+#if NET451
             var propInfo = type.GetProperty(partitionName, typeof(TPartition));
+#elif NETSTANDARD1_6
+            var propInfo = type.GetRuntimeProperties().Where(p => p.Name == partitionName && p.PropertyType == typeof(TPartition)).FirstOrDefault();
+#endif
 
             if (propInfo == null)
                 return false;
@@ -1052,8 +1040,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindAllCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "FindAll", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -1063,8 +1050,7 @@ namespace SharpRepository.Repository.Caching
 
         protected override string FindCacheKey<TResult>(ISpecification<T> criteria, IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {
-            TPartition partition;
-            if (TryPartitionValue(criteria, out partition))
+            if (TryPartitionValue(criteria, out TPartition partition))
             {
                 return String.Format("{0}/{1}/p:{2}/{3}/{4}/{5}", CachePrefix, TypeFullName, partition, GetPartitionGeneration(partition), "Find", Md5Helper.CalculateMd5(criteria + "::" + (queryOptions != null ? queryOptions.ToString() : "null") + "::" + (selector != null ? selector.ToString() : "null")));
             }
@@ -1076,13 +1062,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetGenerationKey(), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetGenerationKey(), out int generation) ? 1 : generation;
         }
 
         private int IncrementGeneration()
         {
-            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NotRemovable);
+            var generation = !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetGenerationKey(), 1, 1, CacheItemPriority.NeverRemove);
             
             return generation;
         }
@@ -1096,13 +1081,12 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            int generation;
-            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out generation) ? 1 : generation;
+            return !CachingProvider.Get(GetPartitionGenerationKey(partition), out int generation) ? 1 : generation;
         }
 
         private int IncrementPartitionGeneration(TPartition partition)
         {
-            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NotRemovable);
+            return !GenerationalCachingEnabled ? 1 : CachingProvider.Increment(GetPartitionGenerationKey(partition), 1, 1, CacheItemPriority.NeverRemove);
         }
 
         protected string GetPartitionGenerationKey(TPartition partition)

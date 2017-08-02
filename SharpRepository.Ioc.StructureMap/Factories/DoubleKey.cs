@@ -3,6 +3,7 @@ using SharpRepository.Repository.Configuration;
 using StructureMap.Building;
 using StructureMap.Pipeline;
 using System;
+using System.Reflection;
 
 namespace SharpRepository.Ioc.StructureMap.Factories
 {

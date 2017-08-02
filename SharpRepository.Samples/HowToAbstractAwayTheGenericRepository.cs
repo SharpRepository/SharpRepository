@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SharpRepository.Repository;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples

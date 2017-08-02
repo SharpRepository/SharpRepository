@@ -103,6 +103,9 @@ namespace SharpRepository.Repository
 
             var innerType = innerRepository.GetType();
             var outerType = GetType();
+            var outerKeySelectorFunc = outerKeySelector.Compile();
+            var innerKeySelectorFunc = innerKeySelector.Compile();
+            var resultSelectorFunc = resultSelector.Compile();
 
             // if these are 2 different Repository types then let's bring down each query into memory so that they can be joined
             // if they are the same type then they will use the native IQueryable and take advantage of the back-end side join if possible
@@ -111,10 +114,9 @@ namespace SharpRepository.Repository
                 innerQuery = innerQuery.ToList().AsQueryable();
                 outerQuery = outerQuery.ToList().AsQueryable();
             }
-            var query = outerQuery.Join(innerQuery, outerKeySelector, innerKeySelector, resultSelector);
 
+            var query = outerQuery.Join(innerQuery, outerKeySelectorFunc, innerKeySelectorFunc, resultSelectorFunc).AsQueryable();
             SetTraceInfo("Join", query);
-
             return new CompositeRepository<TResult>(query);
         }
     }

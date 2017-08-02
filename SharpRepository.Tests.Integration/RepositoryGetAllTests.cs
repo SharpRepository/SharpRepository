@@ -3,9 +3,8 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
-using System.Collections.Generic;
-using System.Linq;
+using Shouldly;
+using SharpRepository.EfRepository;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -22,7 +21,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             IEnumerable<Contact> result = repository.GetAll().ToList();
-            result.Count().ShouldEqual(5);
+            result.Count().ShouldBe(5);
         }
 
         [ExecuteForAllRepositories]
@@ -41,9 +40,9 @@ namespace SharpRepository.Tests.Integration
             }
 
             IEnumerable<Contact> result = repository.GetAll(queryOptions).ToList();
-            result.Count().ShouldEqual(pageSize);
-            queryOptions.TotalItems.ShouldEqual(totalItems);
-            result.First().Name.ShouldEqual("Test User 3");
+            result.Count().ShouldBe(pageSize);
+            queryOptions.TotalItems.ShouldBe(totalItems);
+            result.First().Name.ShouldBe("Test User 3");
         }
 
         [ExecuteForAllRepositories]
@@ -56,7 +55,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(c => c.Name);
-            result.Count().ShouldEqual(5);
+            result.Count().ShouldBe(5);
         }
 
         [ExecuteForAllRepositories]
@@ -77,7 +76,7 @@ namespace SharpRepository.Tests.Integration
                 total++;
             }
 
-            total.ShouldEqual(5);
+            total.ShouldBe(5);
         }
 
         [ExecuteForAllRepositories]
@@ -96,9 +95,9 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.GetAll(c => c.Name, queryOptions).ToList();
-            result.Count().ShouldEqual(pageSize);
-            queryOptions.TotalItems.ShouldEqual(totalItems);
-            result.First().ShouldEqual("Test User 3");
+            result.Count().ShouldBe(pageSize);
+            queryOptions.TotalItems.ShouldBe(totalItems);
+            result.First().ShouldBe("Test User 3");
         }
     }
 }

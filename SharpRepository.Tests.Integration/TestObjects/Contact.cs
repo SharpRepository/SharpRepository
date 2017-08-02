@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {
-    public class Contact : ICloneable
+    public class Contact
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

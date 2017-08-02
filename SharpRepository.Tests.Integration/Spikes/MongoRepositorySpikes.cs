@@ -9,7 +9,7 @@ using MongoDB.Driver.Linq;
 using NUnit.Framework;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -24,7 +24,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         public string Name { get; set; }
         public string Title { get; set; }
         public int ContactTypeId { get; set; } // for partitioning on 
-
         public List<EmailAddress> EmailAddresses { get; set; }
         public List<PhoneNumber> PhoneNumbers { get; set; }
     }
@@ -66,7 +65,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             
             var filter = Builders<Order>.Filter.Eq(o => o.OrderId, create.OrderId);
             var read = orders.Find(filter).ToList().FirstOrDefault();
-            read.Name.ShouldEqual(create.Name);
+            read.Name.ShouldBe(create.Name);
             
             Console.WriteLine("* UPDATE *");
             
@@ -79,8 +78,8 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
             
             var read_updated = orders.Find(filter).ToList().FirstOrDefault();
-            read_updated.OrderId.ShouldEqual(read.OrderId);
-            read_updated.Name.ShouldEqual("Really big sale");
+            read_updated.OrderId.ShouldBe(read.OrderId);
+            read_updated.Name.ShouldBe("Really big sale");
 
             Console.WriteLine("* DELETE *");
 
@@ -91,7 +90,7 @@ namespace SharpRepository.Tests.Integration.Spikes
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
 
-            orders.Count(filter).ShouldEqual(0);
+            orders.Count(filter).ShouldBe(0);
 
             Console.WriteLine("* DELETE ALL *");
             orders.DeleteMany(new BsonDocument());
@@ -101,7 +100,7 @@ namespace SharpRepository.Tests.Integration.Spikes
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
 
-            orders.AsQueryable().Count().ShouldEqual(0);
+            orders.AsQueryable().Count().ShouldBe(0);
 
             cli.DropDatabase("Order");
         }
@@ -124,7 +123,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             
             // Read 
             var read = repo.Get(create.OrderId);
-            read.Name.ShouldEqual(create.Name);
+            read.Name.ShouldBe(create.Name);
             
             // Update
             read.Name = "Really big sale";
@@ -133,8 +132,8 @@ namespace SharpRepository.Tests.Integration.Spikes
             var all = repo.GetAll();
             
             var update = repo.Get(read.OrderId);
-            update.OrderId.ShouldEqual(read.OrderId);
-            update.Name.ShouldEqual(read.Name);
+            update.OrderId.ShouldBe(read.OrderId);
+            update.Name.ShouldBe(read.Name);
 
             // Delete
             repo.Delete(update);

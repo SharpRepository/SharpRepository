@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Samples
@@ -62,11 +62,11 @@ namespace SharpRepository.Samples
 
             // normal Get method
             var order = repo.Get(1);
-            order.OrderId.ShouldEqual(1);
+            order.OrderId.ShouldBe(1);
 
             // in this case we only need the order name
             var orderName = repo.Get(1, x => x.Name);
-            orderName.ShouldEqual("Order 1");
+            orderName.ShouldBe("Order 1");
 
             // we can also bring back an anonymous type if needed
             var anonymousType = repo.Get(1, x => new { Name = x.Name, IsExpensiveOrder = x.Total > 100.0 });
@@ -78,24 +78,24 @@ namespace SharpRepository.Samples
 
             // We have the same options with the GetAll, Find and FindAll as well
             orderName = repo.Find(x => x.OrderId == 2, x => x.Name);
-            orderName.ShouldEqual("Order 2");
+            orderName.ShouldBe("Order 2");
 
             // we can also bring back an anonymous type if needed
             var anonymousTypes = repo.GetAll(x => new { Name = x.Name, IsExpensiveOrder = x.Total > 100.0 }).ToList();
-            anonymousTypes.Count.ShouldEqual(2);
-            anonymousTypes.First().Name.ShouldEqual("Order 1");
+            anonymousTypes.Count.ShouldBe(2);
+            anonymousTypes.First().Name.ShouldBe("Order 1");
             anonymousTypes.First().IsExpensiveOrder.ShouldBeTrue();
             
-            anonymousTypes.Last().Name.ShouldEqual("Order 2");
+            anonymousTypes.Last().Name.ShouldBe("Order 2");
             anonymousTypes.Last().IsExpensiveOrder.ShouldBeFalse();
             
             // or we can map it to a specific type we have defined like a ViewModel
             var viewModels = repo.FindAll(x => x.OrderId < 5, x => new OrderViewModel() { Name = x.Name, IsExpensiveOrder = x.Total > 100.0 }).ToList();
-            viewModels.Count.ShouldEqual(2);
-            viewModels.First().Name.ShouldEqual("Order 1");
+            viewModels.Count.ShouldBe(2);
+            viewModels.First().Name.ShouldBe("Order 1");
             viewModels.First().IsExpensiveOrder.ShouldBeTrue();
 
-            viewModels.Last().Name.ShouldEqual("Order 2");
+            viewModels.Last().Name.ShouldBe("Order 2");
             viewModels.Last().IsExpensiveOrder.ShouldBeFalse();
         }
     }

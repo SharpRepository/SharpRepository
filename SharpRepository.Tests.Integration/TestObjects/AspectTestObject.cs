@@ -7,9 +7,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
     {
         public override bool OnAddExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
-            var tmp = entity as IAuditable;
-
-            if (tmp != null)
+            if (entity is IAuditable tmp)
             {
                 tmp.Created = DateTime.UtcNow;
             }
@@ -19,9 +17,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
 
         public override bool OnUpdateExecuting<T, TKey>(T entity, RepositoryActionContext<T, TKey> context)
         {
-            var tmp = entity as IAuditable;
-
-            if (tmp != null)
+            if (entity is IAuditable tmp)
             {
                 tmp.Modified = DateTime.UtcNow;
             }

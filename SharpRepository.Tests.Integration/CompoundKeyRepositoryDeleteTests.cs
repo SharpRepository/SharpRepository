@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -17,12 +17,12 @@ namespace SharpRepository.Tests.Integration
             var item = new User {Username = "Test User", Age = 11, FullName = "Test User - 11"};
             repository.Add(item);
 
-            //var result = repository.Get(contact.ContactId);
-            //result.ShouldNotBeNull();
+            var result = repository.Get("Test User", 11);
+            result.ShouldNotBeNull();
 
             repository.Delete(item);
-            //result = repository.Get(contact.ContactId);
-            //result.ShouldBeNull();
+            result = repository.Get("Test User", 11);
+            result.ShouldBeNull();
         }
 
         [ExecuteForAllCompoundKeyRepositories]
@@ -67,20 +67,20 @@ namespace SharpRepository.Tests.Integration
         public void Delete_Should_Remove_Multiple_Items(ICompoundKeyRepository<User, string, int> repository)
         {
             IList<User> users = new List<User>
-                                        {
-                                            new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
-                                            new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
-                                            new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
-                                        };
+            {
+                new User { Username = "Test User", Age = 11, FullName = "Test User - 11" },
+                new User { Username = "Test User", Age = 21, FullName = "Test User - 21" },
+                new User { Username = "Test User 2", Age = 11, FullName = "Test User  2- 11" },
+            };
 
             repository.Add(users);
             var items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(3);
+            items.Count().ShouldBe(3);
 
             repository.Delete(users.Take(2));
             items = repository.GetAll().ToList();
-            items.Count().ShouldEqual(1);
-            items.First().Username.ShouldEqual("Test User 2");
+            items.Count().ShouldBe(1);
+            items.First().Username.ShouldBe("Test User 2");
         }
     }
 }

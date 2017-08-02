@@ -2,7 +2,7 @@
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -21,7 +21,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.Add(item);
 
             // The PK should have been found and updated so it's not zero anymore
-            item.ConventionTestItem1Key.ShouldNotEqual(0);
+            item.ConventionTestItem1Key.ShouldNotBe(0);
 
             // reset convention to the default orig for the rest of the tests
             DefaultRepositoryConventions.PrimaryKeySuffix = origSuffix;
@@ -39,7 +39,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.Add(item);
 
             // The PK should have been found and updated so it's not zero anymore
-            item.ConventionTestItem1Key.ShouldNotEqual(0);
+            item.ConventionTestItem1Key.ShouldNotBe(0);
 
             // reset convention to the default orig for the rest of the tests
             DefaultRepositoryConventions.GetPrimaryKeyName = origConvention;
@@ -55,7 +55,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.Add(item);
 
             // The PK should have been found and updated so it's not zero anymore
-            item.Key.ShouldNotEqual(0);
+            item.Key.ShouldNotBe(0);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.Add(item);
 
             // The PK should have been found and updated so it's not zero anymore
-            item.SomeRandomPrimaryKeyProperty.ShouldNotEqual(0);
+            item.SomeRandomPrimaryKeyProperty.ShouldNotBe(0);
         }
     }
 }

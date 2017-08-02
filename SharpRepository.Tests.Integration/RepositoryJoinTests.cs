@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 using SharpRepository.InMemoryRepository;
 
 namespace SharpRepository.Tests.Integration
@@ -29,10 +29,10 @@ namespace SharpRepository.Tests.Integration
 
             var all = compositeRepos.GetAll().ToList();
 
-            all.Count.ShouldEqual(5);
+            all.Count.ShouldBe(5);
 
             //IEnumerable<Contact> result = repository.GetAll().ToList();
-            //result.Count().ShouldEqual(5);
+            //result.Count().ShouldBe(5);
         }
     }
 }

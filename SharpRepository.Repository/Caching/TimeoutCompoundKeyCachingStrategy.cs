@@ -12,7 +12,7 @@ namespace SharpRepository.Repository.Caching
         /// </summary>
         /// <param name="timeoutInSeconds">The timeout in seconds.</param>
         /// <param name="cachingProvider">The caching provider.</param>
-        public TimeoutCompoundKeyCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider = null)
+        public TimeoutCompoundKeyCachingStrategy(int timeoutInSeconds, ICachingProvider cachingProvider)
             : base(timeoutInSeconds, null, cachingProvider)
         {
 

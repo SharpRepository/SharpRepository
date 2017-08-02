@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Tests.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.FetchStrategies
 {
@@ -18,7 +18,7 @@ namespace SharpRepository.Tests.FetchStrategies
 
             strategy.IncludePaths.ShouldContain("EmailAddresses");
             strategy.IncludePaths.ShouldContain("PhoneNumbers");
-            strategy.IncludePaths.Count().ShouldEqual(2);
+            strategy.IncludePaths.Count().ShouldBe(2);
         }
 
         [Test]
@@ -31,7 +31,7 @@ namespace SharpRepository.Tests.FetchStrategies
 
             strategy.IncludePaths.ShouldContain("EmailAddresses");
             strategy.IncludePaths.ShouldContain("PhoneNumbers");
-            strategy.IncludePaths.Count().ShouldEqual(2);
+            strategy.IncludePaths.Count().ShouldBe(2);
         }
 
         [Test]

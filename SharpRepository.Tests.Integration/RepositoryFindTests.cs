@@ -4,7 +4,7 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -21,7 +21,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<Contact>(p => p.Name == "Test User 1"));
-            result.Name.ShouldEqual("Test User 1");
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -34,7 +34,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Name == "Test User 1");
-            result.Name.ShouldEqual("Test User 1");
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -47,7 +47,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<Contact>(p => p.Name == "Test User 1").OrElse(new Specification<Contact>(p => p.Name == "Test User 1000")));
-            result.Name.ShouldEqual("Test User 1");
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -60,7 +60,7 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Name == "Test User 1" || p.Name == "Test User 1000");
-            result.Name.ShouldEqual("Test User 1");
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -73,10 +73,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<Contact>(p => p.Name.StartsWith("Test")), new SortingOptions<Contact>("Name", true));
-            result.Name.ShouldEqual("Test User 3");
+            result.Name.ShouldBe("Test User 3");
 
             var result2 = repository.Find(new Specification<Contact>(p => p.Name.StartsWith("Test")), new SortingOptions<Contact>("Name", false));
-            result2.Name.ShouldEqual("Test User 1");
+            result2.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -89,10 +89,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Name.StartsWith("Test"), new SortingOptions<Contact>("Name", true));
-            result.Name.ShouldEqual("Test User 3");
+            result.Name.ShouldBe("Test User 3");
 
             var result2 = repository.Find(p => p.Name.StartsWith("Test"), new SortingOptions<Contact>("Name", false));
-            result2.Name.ShouldEqual("Test User 1");
+            result2.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -105,10 +105,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(new Specification<Contact>(p => p.Name.StartsWith("Test")), new SortingOptions<Contact, string>(c => c.Name, true));
-            result.Name.ShouldEqual("Test User 3");
+            result.Name.ShouldBe("Test User 3");
 
             var result2 = repository.Find(new Specification<Contact>(p => p.Name.StartsWith("Test")), new SortingOptions<Contact, string>(c => c.Name, false));
-            result2.Name.ShouldEqual("Test User 1");
+            result2.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -121,10 +121,10 @@ namespace SharpRepository.Tests.Integration
             }
 
             var result = repository.Find(p => p.Name.StartsWith("Test"), new SortingOptions<Contact, string>(c => c.Name, true));
-            result.Name.ShouldEqual("Test User 3");
+            result.Name.ShouldBe("Test User 3");
 
             var result2 = repository.Find(p => p.Name.StartsWith("Test"), new SortingOptions<Contact, string>(c => c.Name, false));
-            result2.Name.ShouldEqual("Test User 1");
+            result2.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -136,9 +136,8 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            Contact result;
-            repository.TryFind(new Specification<Contact>(p => p.Name == "Test User 1"), out result).ShouldBeTrue();
-            result.Name.ShouldEqual("Test User 1");
+            repository.TryFind(new Specification<Contact>(p => p.Name == "Test User 1"), out Contact result).ShouldBeTrue();
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
@@ -150,9 +149,8 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(contact);
             }
 
-            Contact result;
-            repository.TryFind(p => p.Name == "Test User 1", out result).ShouldBeTrue();
-            result.Name.ShouldEqual("Test User 1");
+            repository.TryFind(p => p.Name == "Test User 1", out Contact result).ShouldBeTrue();
+            result.Name.ShouldBe("Test User 1");
         }
 
         [ExecuteForAllRepositories]
