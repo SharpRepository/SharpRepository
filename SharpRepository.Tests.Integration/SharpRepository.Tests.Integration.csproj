@@ -8,12 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="Moq" Version="4.7.63" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Moq" Version="4.7.99" />
     <PackageReference Include="NUnit" Version="3.7.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+    <PackageReference Include="RavenDB.Embedded" Version="3.5.4" />
     <PackageReference Include="Shouldly" Version="2.8.3" />
-    <PackageReference Include="StructureMap" Version="4.5.0" />
+    <PackageReference Include="StructureMap" Version="4.5.1" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.105.2" />
   </ItemGroup>
 
@@ -22,6 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
+	<ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj" />
+	<ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
+	<ProjectReference Include="..\SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj" />
+	<ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj" />
+	<ProjectReference Include="..\SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />

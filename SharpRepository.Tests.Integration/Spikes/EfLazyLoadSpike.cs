@@ -32,7 +32,7 @@ namespace SharpRepository.Tests.Integration.Spikes
     [TestFixture]
     public class EfLazyLoadSpike
     {
-        private TestObjectContext dbContext;
+        private TestObjectContextCore dbContext;
         private List<string> queries;
 
         [SetUp]
@@ -44,14 +44,14 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
             // Create the schema in the database
-            var context = new TestObjectContext(options);
+            var context = new TestObjectContextCore(options);
             
-            dbContext = new TestObjectContext(options);
+            dbContext = new TestObjectContextCore(options);
             dbContext.Database.EnsureCreated();
             const int totalItems = 5;
 

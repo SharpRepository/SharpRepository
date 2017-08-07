@@ -1,24 +1,26 @@
 ﻿using System;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
+using Microsoft.Extensions.Logging;
+using Enyim.Caching.Configuration;
 
 namespace SharpRepository.Caching.Memcached
 {
     public class MemCachedConfigCachingProviderFactory : ConfigCachingProviderFactory
     {
-        public MemCachedConfigCachingProviderFactory(ICachingProviderConfiguration config)
+        ILoggerFactory LoggerFactory { get; set; }
+        IMemcachedClientConfiguration ClientConfiguration { get; set; }
+
+        public MemCachedConfigCachingProviderFactory(ICachingProviderConfiguration config, ILoggerFactory loggerFactory)
             : base(config)
         {
+            LoggerFactory = loggerFactory;
         }
 
         public override ICachingProvider GetInstance()
         {
-            if (String.IsNullOrEmpty(CachingProviderConfiguration["sectionName"]))
-            {
-                throw new ArgumentException("sectionName is required to load the MemCachedCachingProvider");
-            }
-
-            return new MemcachedCachingProvider(CachingProviderConfiguration["sectionName"]);
+            
+            return new MemcachedCachingProvider(LoggerFactory, ClientConfiguration);
         }
     }
 }

@@ -36,11 +36,11 @@ namespace SharpRepository.Tests.Integration
         public void Add_Should_Save_And_Assign_1_To_Ef_Int_Id_When_GenerateKeyOnAdd_Is_False()
         {
             var dbPath = EfDataDirectoryFactory.Build();
-            var repository = new EfRepository<ContactInt, int>(new TestObjectEntities("Data Source=" + dbPath));
+            var repository = new EfRepository<ContactInt, int>(new TestObjectContext("Data Source=" + dbPath));
             var contact = new ContactInt { Name = "Test User" };
             repository.GenerateKeyOnAdd = false;
             repository.Add(contact);
-            contact.ContactIntId.ShouldEqual(1);
+            contact.ContactIntId.ShouldBe(1);
         }
 
         [TestCase]
@@ -51,7 +51,7 @@ namespace SharpRepository.Tests.Integration
             var contact = new ContactInt { Name = "Test User" };
             
             repository.Add(contact);
-            contact.ContactIntId.ShouldEqual(1);
+            contact.ContactIntId.ShouldBe(1);
         }
         
         [TestCase]
@@ -63,7 +63,7 @@ namespace SharpRepository.Tests.Integration
             repository.GenerateKeyOnAdd = false;
             
             repository.Add(contact);
-            contact.ContactIntId.ShouldEqual(0);
+            contact.ContactIntId.ShouldBe(0);
         }
         
         [ExecuteForAllRepositories]
@@ -123,7 +123,7 @@ namespace SharpRepository.Tests.Integration
                 repository.Add(new Contact {Name = "Contact 1"});
             }
 
-            repository.GetAll().Count().ShouldEqual(0);
+            repository.GetAll().Count().ShouldBe(0);
         }
 
         [ExecuteForRepositories(RepositoryType.Ef)]
@@ -137,7 +137,7 @@ namespace SharpRepository.Tests.Integration
                 trans.Complete();
             }
 
-            repository.GetAll().Count().ShouldEqual(1);
+            repository.GetAll().Count().ShouldBe(1);
         }
     }
 }

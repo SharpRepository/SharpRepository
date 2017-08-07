@@ -131,11 +131,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
-            var context = new TestObjectContext(options);
+            var context = new TestObjectContextCore(options);
             context.Database.EnsureCreated();
 
             var repository = new EfCoreRepository<Contact, string>(context, cachingStrategy);
@@ -154,11 +154,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
-            var context = new TestObjectContext(options);
+            var context = new TestObjectContextCore(options);
             context.Database.EnsureCreated();
 
             var repository = new EfCoreRepository<Contact, string>(context, cachingStrategy);
@@ -168,7 +168,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             repository.Add(new Contact() { ContactId = "3", Name = "Contact3", ContactTypeId = 2 });
             repository.FindAll(x => x.ContactTypeId == 2);
 
-            repository = new EfCoreRepository<Contact, string>(new TestObjectContext(options), cachingStrategy);
+            repository = new EfCoreRepository<Contact, string>(new TestObjectContextCore(options), cachingStrategy);
 
             repository.Delete(x => x.ContactTypeId == 2);
         }

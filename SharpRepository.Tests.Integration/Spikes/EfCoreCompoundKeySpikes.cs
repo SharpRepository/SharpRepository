@@ -22,12 +22,12 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
             
             // Run the test against one instance of the context
-            context = new TestObjectContext(options);
+            context = new TestObjectContextCore(options);
             context.Database.EnsureCreated();
         }
 

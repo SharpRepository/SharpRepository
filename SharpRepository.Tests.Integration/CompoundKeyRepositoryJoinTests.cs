@@ -31,12 +31,12 @@ namespace SharpRepository.Tests.Integration
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                     .UseSqlite(connection)
                     .Options;
 
             // Create the schema in the database
-            var context = new TestObjectContext(options);
+            var context = new TestObjectContextCore(options);
             context.Database.EnsureCreated();
             var efCoreRepository = new EfCoreRepository<User, string, int>(context);
             Join_GetAll_Should_Return_All_Items(efCoreRepository);

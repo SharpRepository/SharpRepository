@@ -24,7 +24,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                  .UseSqlite(connection)
                  .Options;
 
@@ -41,7 +41,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void EfConfigRepositoryFactory_Using_Ioc_Should_Not_Require_ConnectionString()
         {
-            var config = new EfCoreRepositoryConfiguration("TestConfig", null, typeof (TestObjectContext));
+            var config = new EfCoreRepositoryConfiguration("TestConfig", null, typeof (TestObjectContextCore));
             var factory = new EfCoreConfigRepositoryFactory(config);
 
             factory.GetInstance<Contact, string>();
@@ -56,14 +56,14 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repos = factory.GetInstance<Contact, string>();
 
             var propInfo = repos.GetType().GetProperty("Context", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            var dbContext = (TestObjectContext)propInfo.GetValue(repos, null);
-            dbContext.ShouldBeOfType<TestObjectContext>();
+            var dbContext = (TestObjectContextCore)propInfo.GetValue(repos, null);
+            dbContext.ShouldBeOfType<TestObjectContextCore>();
         }
 
         [Test]
         public void EfConfigRepositoryFactory_Using_Ioc_Should_Share_DbContext()
         {
-            var config = new EfCoreRepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectContext));
+            var config = new EfCoreRepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectContextCore));
             var factory = new EfCoreConfigRepositoryFactory(config);
 
             var repos1 = factory.GetInstance<Contact, string>();
@@ -71,9 +71,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             // use reflecton to get the protected Context property
             var propInfo1 = repos1.GetType().GetProperty("Context", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            var dbContext1 = (TestObjectContext)propInfo1.GetValue(repos1, null);
+            var dbContext1 = (TestObjectContextCore)propInfo1.GetValue(repos1, null);
             var propInfo2 = repos2.GetType().GetProperty("Context", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            var dbContext2 = (TestObjectContext)propInfo2.GetValue(repos2, null);
+            var dbContext2 = (TestObjectContextCore)propInfo2.GetValue(repos2, null);
 
             dbContext1.ShouldBe(dbContext2);
         }
@@ -116,7 +116,7 @@ namespace SharpRepository.Tests.Integration.Spikes
 
     public class StructureMapRegistry : Registry
     {
-        public StructureMapRegistry(DbContextOptions<TestObjectContext> options)
+        public StructureMapRegistry(DbContextOptions<TestObjectContextCore> options)
         {
             Scan(scanner =>
             {
@@ -125,12 +125,12 @@ namespace SharpRepository.Tests.Integration.Spikes
             });
 
             For<DbContext>()
-                .Use<TestObjectContext>()
-                .Ctor<DbContextOptions<TestObjectContext>>("options").Is(options);
+                .Use<TestObjectContextCore>()
+                .Ctor<DbContextOptions<TestObjectContextCore>>("options").Is(options);
 
-            For<TestObjectContext>()
-                .Use<TestObjectContext>()
-                .Ctor<DbContextOptions<TestObjectContext>>("options").Is(options);
+            For<TestObjectContextCore>()
+                .Use<TestObjectContextCore>()
+                .Ctor<DbContextOptions<TestObjectContextCore>>("options").Is(options);
         }
     }
 }

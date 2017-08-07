@@ -15,7 +15,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Use_Raven_Db_Embedded_For_Tests()
         {
             IDocumentStore documentStore = new EmbeddableDocumentStore() {RunInMemory = true};
-            using (var repos = new RavenDbRepository<RavenTestStringKey>(documentStore))
+            using (var repos = new RavenDbRepository<RavenTestStringKey>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestStringKey() {Name = "Jeff", Age = 33});
                 repos.Add(new RavenTestStringKey() {Name = "Ben", Age = 53}); // :)
@@ -34,7 +34,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Use_Raven_Db_Embedded_For_Tests_With_Int_Key()
         {
             var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
-            using (var repos = new RavenDbRepository<RavenTestIntKey, int>(documentStore))
+            using (var repos = new RavenDbRepository<RavenTestIntKey, int>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestIntKey() {Name = "Jeff", Age = 33});
                 repos.Add(new RavenTestIntKey() {Name = "Ben", Age = 53}); // :)
@@ -56,7 +56,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Use_Raven_Db_Embedded_For_Tests_With_Custom_Int_Key()
         {
             var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
-            using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore))
+            using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestCustomIntKey() { Name = "Jeff", Age = 33 });
                 repos.Add(new RavenTestCustomIntKey() { Name = "Ben", Age = 53 }); // :)
@@ -74,31 +74,31 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
         }
 
-//        [Test]
-//        public void Use_Raven_Advanced_Configuration_Aspect()
-//        {
-//            var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
-//            using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore))
-//            {
-//                repos.Aspects.Add(new AdvancedConfiguration<RavenTestCustomIntKey, int>(true));
-//                repos.Aspects.Add(new NLogRepositoryLogger<RavenTestCustomIntKey, int>());
-//                repos.Aspects.OnInitialize(repos); // TODO: this is a hack since right now it's not calling OnIntitialize properly
-//
-//                repos.Add(new RavenTestCustomIntKey() { Name = "Jeff", Age = 33 });
-//                repos.Add(new RavenTestCustomIntKey() { Name = "Ben", Age = 53 }); // :)
-//
-//                var items = repos.GetAll().ToList();
-//
-//                items.Count.ShouldBe(2);
-//
-//                // this works but won't work if the primary key is [ClassName]Id instead of just Id
-//                var item1 = repos.Get(1);
-//                item1.Name.ShouldBe("Jeff");
-//
-//                var item2 = repos.Get(2);
-//                item2.Name.ShouldBe("Ben");
-//            }
-//        }
+        //[Test]
+        //public void Use_Raven_Advanced_Configuration_Aspect()
+        //{
+        //    var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
+        //    using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore: documentStore))
+        //    {
+        //        repos.Aspects.Add(new AdvancedConfiguration<RavenTestCustomIntKey, int>(true));
+        //        repos.Aspects.Add(new NLogRepositoryLogger<RavenTestCustomIntKey, int>());
+        //        repos.Aspects.OnInitialize(repos); // TODO: this is a hack since right now it's not calling OnIntitialize properly
+
+        //        repos.Add(new RavenTestCustomIntKey() { Name = "Jeff", Age = 33 });
+        //        repos.Add(new RavenTestCustomIntKey() { Name = "Ben", Age = 53 }); // :)
+
+        //        var items = repos.GetAll().ToList();
+
+        //        items.Count.ShouldBe(2);
+
+        //        // this works but won't work if the primary key is [ClassName]Id instead of just Id
+        //        var item1 = repos.Get(1);
+        //        item1.Name.ShouldBe("Jeff");
+
+        //        var item2 = repos.Get(2);
+        //        item2.Name.ShouldBe("Ben");
+        //    }
+        //}
 
     }
 

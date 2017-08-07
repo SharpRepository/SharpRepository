@@ -1,83 +1,44 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using SharpRepository.Tests.Integration.TestObjects;
-using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class TestObjectContext : DbContext
+namespace SharpRepository.Tests.Integration.TestObjects
 {
-    public TestObjectContext()
-    { }
-
-    public TestObjectContext(DbContextOptions<TestObjectContext> options)
-        : base(options)
+    [DbConfigurationType(typeof(TestConfiguration))]
+    public class TestObjectContext : DbContext
     {
-        QueryLog = new List<string>();
+        public TestObjectContext(string connectionString) : base(connectionString)
+        {
+        }
+
+        public DbSet<ContactInt> ContactInts { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
+        public DbSet<EmailAddress> EmailAddresses { get; set; }
+        public DbSet<Node> Nodes { get; set; }
+
+        // set the Compound Key for the User object
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasKey(u => new {u.Username, u.Age});
+
+            modelBuilder.Entity<Node>()
+                .HasKey(n => n.Id)
+                .Property(n => n.Id)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<Node>()
+                .HasOptional(n => n.Parent)
+                .WithMany()
+                .HasForeignKey(n => n.ParentId);
+        }
     }
 
-    public DbSet<Contact> Contacts { get; set; }
-    public DbSet<PhoneNumber> PhoneNumbers { get; set; }
-    public DbSet<EmailAddress> EmailAddresses { get; set; }
-
-    public ICollection<string> QueryLog;
-
-    // set the Compound Key for the User object
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class TestConfiguration : DbConfiguration
     {
-        modelBuilder.Entity<User>().HasKey(u => new { u.Username, u.Age });
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var lf = new LoggerFactory();
-        lf.AddProvider(new TestLoggerProvider(ref QueryLog));
-        optionsBuilder.UseLoggerFactory(lf);
-    }
-}
-
-internal class TestLoggerProvider : ILoggerProvider
-{
-    public ICollection<string> QueryLog;
-
-    public TestLoggerProvider(ref ICollection<string> queryLog)
-    {
-        QueryLog = queryLog;
-    }
-
-    public ILogger CreateLogger(string categoryName)
-    {
-        return new TestLogger(ref QueryLog);
-    }
-
-    public void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-}
-
-internal class TestLogger : ILogger
-{
-    public TestLogger(ref ICollection<string> queryLog)
-    {
-        QueryLog = queryLog;
-    }
-
-    public ICollection<string> QueryLog { get; private set; }
-
-    public IDisposable BeginScope<TState>(TState state)
-    {
-        return null;
-    }
-
-    public bool IsEnabled(LogLevel logLevel)
-    {
-        return true;
-    }
-
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-    {
-        QueryLog.Add(formatter(state, exception));
+        public TestConfiguration()
+        {
+            SetDefaultConnectionFactory(new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0"));
+        }
     }
 }

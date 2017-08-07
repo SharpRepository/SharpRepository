@@ -38,11 +38,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Db4oReposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.MongoDbRepository", "SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj", "{DC40FEBE-2E39-4CB8-AE11-DFE9F6865BD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Memcached", "SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj", "{06111314-669B-4E35-A0B9-AF67FA3F0FFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Caching.Memcached", "SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj", "{06111314-669B-4E35-A0B9-AF67FA3F0FFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.AppFabric", "SharpRepository.Caching.AppFabric\SharpRepository.Caching.AppFabric.csproj", "{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Caching.AppFabric", "SharpRepository.Caching.AppFabric\SharpRepository.Caching.AppFabric.csproj", "{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Caching.Redis", "SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj", "{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Caching.Redis", "SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj", "{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Caching.WindowsAzure", "SharpRepository.Caching.WindowsAzure\SharpRepository.Caching.WindowsAzure.csproj", "{F025C038-9F9A-4730-9A03-3E3E6101E249}"
 EndProject
@@ -54,17 +54,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Structu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{9E5BA6B3-50AA-4482-A526-F35F132304B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Benchmarks.Configuration", "SharpRepository.Benchmarks.Configuration\SharpRepository.Benchmarks.Configuration.csproj", "{4C4F3977-7327-4BBF-90ED-0C61172A48D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Benchmarks.Configuration", "SharpRepository.Benchmarks.Configuration\SharpRepository.Benchmarks.Configuration.csproj", "{4C4F3977-7327-4BBF-90ED-0C61172A48D4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.CacheRepository", "SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj", "{42E07863-9017-4B56-9D20-1EA35AF1F501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Ninject", "SharpRepository.Ioc.Ninject\SharpRepository.Ioc.Ninject.csproj", "{549F87CC-3B00-4B45-94C9-517422556F8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Ninject", "SharpRepository.Ioc.Ninject\SharpRepository.Ioc.Ninject.csproj", "{549F87CC-3B00-4B45-94C9-517422556F8A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Windsor", "SharpRepository.Ioc.Windsor\SharpRepository.Ioc.Windsor.csproj", "{792FCCD7-8509-4477-9672-10C178D690F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Autofac", "SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj", "{14E6AF4A-B613-418F-B046-D84074963C0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Autofac", "SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj", "{14E6AF4A-B613-418F-B046-D84074963C0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Unity", "SharpRepository.Ioc.Unity\SharpRepository.Ioc.Unity.csproj", "{D0218585-6696-4E3D-832F-E596E2903337}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Unity", "SharpRepository.Ioc.Unity\SharpRepository.Ioc.Unity.csproj", "{D0218585-6696-4E3D-832F-E596E2903337}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.CouchDbRepository", "SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj", "{AEA6D95F-1D69-433D-8185-DFFCA871FC8D}"
 EndProject
@@ -72,7 +72,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{F3F3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Logging", "SharpRepository.Logging\SharpRepository.Logging.csproj", "{5301085F-DBCC-4786-B6F7-7DC83D93FBA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.Mvc", "SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj", "{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Mvc", "SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj", "{1AA81ACD-74D6-4619-AC34-B3ED8B2035A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.WebApi", "SharpRepository.Ioc.WebApi\SharpRepository.Ioc.WebApi.csproj", "{3FB341F4-2DC0-4605-B49A-4F0C48DB84B5}"
 EndProject
@@ -82,14 +82,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.AzureTableR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.AzureBlobRepository", "SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj", "{F766CC4F-B69C-444C-A89F-01E2E8B172A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Ioc.SimpleInjector", "SharpRepository.Ioc.SimpleInjector\SharpRepository.Ioc.SimpleInjector.csproj", "{772C205D-D4DC-4581-9B77-C672D54F2558}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{01F28A0C-4CD6-40EB-B239-B7B2B87D9503}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		..\..\..\Downloads\nuget.exe = ..\..\..\Downloads\nuget.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.SimpleInjector", "SharpRepository.Ioc.SimpleInjector\SharpRepository.Ioc.SimpleInjector.csproj", "{772C205D-D4DC-4581-9B77-C672D54F2558}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.AzureDocumentDb", "SharpRepository.AzureDocumentDb\SharpRepository.AzureDocumentDb.csproj", "{70A9256C-564B-45CC-B9C7-BE81D690735D}"
 EndProject
@@ -181,24 +174,24 @@ Global
 		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Debug|x64.Build.0 = Debug|Any CPU
 		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|x64.ActiveCfg = Release|x64
-		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|x64.Build.0 = Release|x64
+		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|x64.ActiveCfg = Release|Any CPU
+		{06111314-669B-4E35-A0B9-AF67FA3F0FFD}.Release|x64.Build.0 = Release|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Debug|x64.Build.0 = Debug|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|x64.ActiveCfg = Release|x64
-		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|x64.Build.0 = Release|x64
+		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|x64.ActiveCfg = Release|Any CPU
+		{3583AEBE-F1B5-44D9-A0D2-4F6FA1F459CA}.Release|x64.Build.0 = Release|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Debug|x64.Build.0 = Debug|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|x64.ActiveCfg = Release|x64
-		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|x64.Build.0 = Release|x64
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|x64.ActiveCfg = Release|Any CPU
+		{1174F5B3-D3BE-453D-BD9F-D54EEFB0ADFE}.Release|x64.Build.0 = Release|Any CPU
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F025C038-9F9A-4730-9A03-3E3E6101E249}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -221,8 +214,8 @@ Global
 		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Debug|x64.Build.0 = Debug|Any CPU
 		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|x64.ActiveCfg = Release|x64
-		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|x64.Build.0 = Release|x64
+		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C4F3977-7327-4BBF-90ED-0C61172A48D4}.Release|x64.Build.0 = Release|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E07863-9017-4B56-9D20-1EA35AF1F501}.Debug|x64.ActiveCfg = Debug|Any CPU

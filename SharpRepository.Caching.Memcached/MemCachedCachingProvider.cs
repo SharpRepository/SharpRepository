@@ -4,6 +4,8 @@ using Enyim.Caching.Configuration;
 using Enyim.Caching.Memcached;
 using SharpRepository.Repository.Caching;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace SharpRepository.Caching.Memcached
 {
@@ -13,46 +15,22 @@ namespace SharpRepository.Caching.Memcached
     public class MemcachedCachingProvider : ICachingProvider
     {
         protected MemcachedClient Client { get; set; }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="MemcachedCachingProvider"/> class with the default settings based on the configuration file default section.
         /// </summary>
-        public MemcachedCachingProvider()
+        public MemcachedCachingProvider(ILoggerFactory loggerFactory, IMemcachedClientConfiguration configuration)
         {
-            Client = new MemcachedClient();
+            Client = new MemcachedClient(loggerFactory, configuration);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MemcachedCachingProvider"/> class from a specific configuration section settings
-        /// </summary>
-        /// <param name="configSectionName">Name of the configuration file section.</param>
-        public MemcachedCachingProvider(string configSectionName)
-        {
-            if (String.IsNullOrEmpty(configSectionName)) throw new ArgumentNullException("configSectionName");
-
-            Client = new MemcachedClient(configSectionName);
-        }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="MemcachedCachingProvider"/> class with an already instantiated <see cref="MemcachedClient"/>.
         /// </summary>
         /// <param name="memcachedClient">Instantiated client already configured</param>
         public MemcachedCachingProvider(MemcachedClient memcachedClient)
         {
-            if (memcachedClient == null) throw new ArgumentNullException("memcachedClient");
-
-            Client = memcachedClient;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MemcachedCachingProvider"/> class with a custom configuration provided.
-        /// </summary>
-        /// <param name="configuration">Memcached configuration object</param>
-        public MemcachedCachingProvider(IMemcachedClientConfiguration configuration)
-        {
-            if (configuration == null) throw new ArgumentNullException("configuration");
-
-            Client = new MemcachedClient(configuration);
+            Client = memcachedClient ?? throw new ArgumentNullException("memcachedClient");
         }
 
         /// <summary>
@@ -63,14 +41,13 @@ namespace SharpRepository.Caching.Memcached
         /// <param name="username">Provide username if authentication is needed</param>
         /// <param name="password">Provide password if authentication is needed</param>
         /// <param name="authenticationType">Defaults to typeof (PlainTextAuthenticator) if username or password provided</param>
-        public MemcachedCachingProvider(string host, int port, string username = null, string password = null, Type authenticationType = null)
+        public MemcachedCachingProvider(ILoggerFactory loggerFactory, string host, int port, string username = null, string password = null, Type authenticationType = null)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
-            var config = new MemcachedClientConfiguration
-                             {
-                                 Protocol = MemcachedProtocol.Binary
-                             };
+            IOptions<MemcachedClientOptions> options = Options.Create(new RuntimeOptions());
+            var config = new MemcachedClientConfiguration(loggerFactory, options);
+            config.Protocol = MemcachedProtocol.Binary;
             config.AddServer(host, port);
 
             if (!String.IsNullOrEmpty(username) || !String.IsNullOrEmpty(password))
@@ -80,7 +57,7 @@ namespace SharpRepository.Caching.Memcached
                 config.Authentication.Parameters["password"] = password;
             }
          
-            Client = new MemcachedClient(config);
+            Client = new MemcachedClient(loggerFactory, config);
         }
 
         /// <summary>

@@ -16,6 +16,11 @@ using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.CacheRepository;
 using System;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using SharpRepository.Repository.Caching;
+using Microsoft.Extensions.Caching.Memory;
+using Raven.Client;
 
 namespace SharpRepository.Tests.Integration.Data
 {
@@ -39,7 +44,7 @@ namespace SharpRepository.Tests.Integration.Data
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 yield return
-                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectEntities("Data Source=" + dbPath))).SetName("EfRepository Test");
+                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectContext("Data Source=" + dbPath))).SetName("EfRepository Test");
             }
 
             if (includeType.Contains(RepositoryType.EfCore))
@@ -47,12 +52,12 @@ namespace SharpRepository.Tests.Integration.Data
                 var connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();
 
-                var options = new DbContextOptionsBuilder<TestObjectContext>()
+                var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                      .UseSqlite(connection)
                      .Options;
 
                 // Create the schema in the database
-                var context = new TestObjectContext(options);
+                var context = new TestObjectContextCore(options);
                 context.Database.EnsureCreated();
                 yield return new TestCaseData(new EfCoreRepository<Contact, string>(context)).SetName("EfCoreRepository Test");
             }
@@ -84,13 +89,15 @@ namespace SharpRepository.Tests.Integration.Data
                 {
                     documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
                 }
-                
-                yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore)).SetName("RavenDbRepository Test");
+
+                IDocumentStore x = new EmbeddableDocumentStore();
+                yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore: documentStore)).SetName("RavenDbRepository Test");
             }
 
             if (includeType.Contains(RepositoryType.Cache))
             {
-                yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build())).SetName("CacheRepository Test");
+                var cachingProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
+                yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build(), cachingProvider)).SetName("CacheRepository Test");
             }
 
             if (includeType.Contains(RepositoryType.CouchDb))

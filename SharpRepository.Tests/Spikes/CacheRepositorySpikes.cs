@@ -45,7 +45,7 @@ namespace SharpRepository.Tests.Spikes
                        };
             _repository.Add(list);
 
-            _repository.GetAll().Count().ShouldEqual(3);
+            _repository.GetAll().Count().ShouldBe(3);
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace SharpRepository.Tests.Spikes
                        };
             _repository.Add(list);
 
-            _repository.GetAll().Count().ShouldEqual(2);
+            _repository.GetAll().Count().ShouldBe(2);
         }
     }
 
