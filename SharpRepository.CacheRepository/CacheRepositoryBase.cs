@@ -55,8 +55,7 @@ namespace SharpRepository.CacheRepository
 
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            T result;
-            Items.TryGetValue(key, out result);
+            Items.TryGetValue(key, out T result);
 
             return result;
         }

@@ -1,4 +1,3 @@
-using Microsoft.Azure.Documents;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.AzureDocumentDb

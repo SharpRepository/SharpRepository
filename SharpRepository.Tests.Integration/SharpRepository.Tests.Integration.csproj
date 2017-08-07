@@ -1,14 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>    
-    <TargetFramework>netcoreapp1.1</TargetFramework>    
+    <TargetFramework>net462</TargetFramework>    
     <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>    
     <RootNamespace>SharpRepository.Tests.Integration</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Spikes\RavenDbEmbeddedTests.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="1.1.2" />

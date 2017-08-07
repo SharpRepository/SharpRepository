@@ -3,17 +3,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Documents.Linq;
 using Newtonsoft.Json;
-using Nito.AsyncEx.Synchronous;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Specifications;
+using Nito.AsyncEx.Synchronous;
 
 namespace SharpRepository.AzureDocumentDb
 {

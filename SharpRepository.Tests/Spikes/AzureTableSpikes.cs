@@ -1,21 +1,21 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using NUnit.Framework;
 using SharpRepository.AzureTableRepository;
-using Should;
+using Shouldly;
 
 namespace SharpRepository.Tests.Spikes
 {
     [TestFixture]
     public class AzureTableSpikes
     {
-//        [Test]
-//        public void TestAzureTableGet()
-//        {
-//            var repo = new AzureTableRepository<PoisonMessage>("UseDevelopmentStorage=true");
-//            var item = repo.Get("QueueEmailModel", "3b80be6f-f28f-4768-99f1-6c181505ce86");
-//
-//            item.ShouldNotBeNull();
-//        }
+        [Test]
+        public void TestAzureTableGet()
+        {
+            var repo = new AzureTableRepository<PoisonMessage>("UseDevelopmentStorage=true");
+            var item = repo.Get("QueueEmailModel", "3b80be6f-f28f-4768-99f1-6c181505ce86");
+
+            item.ShouldNotBeNull();
+        }
     }
 
     public class PoisonMessage : TableEntity

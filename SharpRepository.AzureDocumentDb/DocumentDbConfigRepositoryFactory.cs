@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 

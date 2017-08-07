@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharpRepository.Repository;
+﻿using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using SimpleInjector;
+using System.Reflection;
 
 namespace SharpRepository.Ioc.SimpleInjector
 {
@@ -16,9 +12,9 @@ namespace SharpRepository.Ioc.SimpleInjector
             container.ResolveUnregisteredType += (s, e) =>
             {
                 var type = e.UnregisteredServiceType;
-                if (type.IsGenericType)
+                if (type.GetTypeInfo().IsGenericType)
                 {
-                    var args = type.GetGenericArguments();
+                    var args = type.GetTypeInfo().GetGenericArguments();
                     var typedef = type.GetGenericTypeDefinition();
                     if (typedef == typeof (IRepository<>))
                     {
@@ -42,7 +38,7 @@ namespace SharpRepository.Ioc.SimpleInjector
             container.ResolveUnregisteredType += (s, e) =>
             {
                 var type = e.UnregisteredServiceType;
-                if (type.IsGenericType)
+                if (type.GetTypeInfo().IsGenericType)
                 {
                     var args = type.GetGenericArguments();
                     var typedef = type.GetGenericTypeDefinition();

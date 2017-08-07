@@ -31,13 +31,13 @@ namespace SharpRepository.AzureTableRepository
 
             if (createIfNotExists)
             {
-                Table.CreateIfNotExists();
+                Table.CreateIfNotExistsAsync();
             }
         }
 
         protected override T GetQuery(string key, string key2)
         {
-            var result = Table.Execute(TableOperation.Retrieve<T>(key, key2));
+            var result = Table.ExecuteAsync(TableOperation.Retrieve<T>(key, key2)).Result;
            return result.Result as T;
         }
 
@@ -48,19 +48,19 @@ namespace SharpRepository.AzureTableRepository
 
         protected override void AddItem(T entity)
         {
-            Table.Execute(TableOperation.InsertOrReplace(entity));
+            Table.ExecuteAsync(TableOperation.InsertOrReplace(entity));
         }
 
         // TODO: override Add(IEnumerable<T> entities) to use the TableSet.Add(entities) isntead of looping ourselves and having AddItem() called multiple times
 
         protected override void DeleteItem(T entity)
         {
-            Table.Execute(TableOperation.Delete(entity));
+            Table.ExecuteAsync(TableOperation.Delete(entity));
         }
 
         protected override void UpdateItem(T entity)
         {
-            Table.Execute(TableOperation.Replace(entity));
+            Table.ExecuteAsync(TableOperation.Replace(entity));
         }
 
         protected override void SaveChanges()

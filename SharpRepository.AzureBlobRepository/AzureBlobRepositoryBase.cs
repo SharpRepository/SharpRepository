@@ -40,7 +40,7 @@ namespace SharpRepository.AzureBlobRepository
 
             if (CreateIfNotExists)
             {
-                BlobContainer.CreateIfNotExists();
+                BlobContainer.CreateIfNotExistsAsync();
             }
         }
 
@@ -50,7 +50,7 @@ namespace SharpRepository.AzureBlobRepository
             {
                 var blob = BlobContainer.GetBlockBlobReference(key.ToString());
 
-                return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadText());
+                return blob == null ? null : JsonConvert.DeserializeObject<T>(blob.DownloadTextAsync().Result);
             }
             catch (StorageException storageException)
             {
@@ -72,8 +72,7 @@ namespace SharpRepository.AzureBlobRepository
 
         protected virtual CloudBlockBlob GetBlobReference(T entity)
         {
-            TKey key;
-            GetPrimaryKey(entity, out key);
+            GetPrimaryKey(entity, out TKey key);
 
             return BlobContainer.GetBlockBlobReference(key.ToString());
         }
@@ -86,7 +85,7 @@ namespace SharpRepository.AzureBlobRepository
         protected override void DeleteItem(T entity)
         {
             var blob = GetBlobReference(entity);
-            blob.DeleteIfExists();
+            blob.DeleteIfExistsAsync();
         }
 
         protected override void UpdateItem(T entity)
@@ -97,7 +96,7 @@ namespace SharpRepository.AzureBlobRepository
         protected virtual void AddOrUpdateItem(T entity)
         {
             var blob = GetBlobReference(entity);
-            blob.UploadText(JsonConvert.SerializeObject(entity));
+            blob.UploadTextAsync(JsonConvert.SerializeObject(entity));
         }
 
         protected override void SaveChanges()
