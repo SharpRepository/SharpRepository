@@ -131,7 +131,13 @@ namespace SharpRepository.Benchmarks.Configuration
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void CustomRepositoryFromConfig()
         {
-            new UserFromConfigRepository();
+            
+            var config = new SharpRepositoryConfiguration();
+            var repoConf = new RepositoryConfiguration("inMemory");
+            repoConf.Factory = typeof(InMemoryConfigRepositoryFactory);
+            config.AddRepository(repoConf);
+            var option = new SharpRepositoryOptions(config);
+            new UserFromConfigRepository(option);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

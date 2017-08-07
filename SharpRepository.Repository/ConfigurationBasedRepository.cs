@@ -142,8 +142,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            T entity;
-            return TryFind(predicate, out entity);
+            return TryFind(predicate, out T entity);
         }
 
         public bool TryFind(Expression<Func<T, bool>> predicate, out T entity)
@@ -309,8 +308,7 @@ namespace SharpRepository.Repository
 
         public bool Exists(TKey key)
         {
-            T entity;
-            return TryGet(key, out entity);
+            return TryGet(key, out T entity);
         }
 
         public bool TryGet(TKey key, out T entity)
