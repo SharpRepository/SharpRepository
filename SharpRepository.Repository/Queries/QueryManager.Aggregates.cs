@@ -10,8 +10,7 @@ namespace SharpRepository.Repository.Queries
     {
         public int ExecuteCount(Func<int> query, ISpecification<T> criteria)
         {
-            int result;
-            if (CacheEnabled && _cachingStrategy.TryCountResult(criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryCountResult(criteria, out int result))
             {
                 CacheUsed = true;
                 return result;
@@ -27,8 +26,7 @@ namespace SharpRepository.Repository.Queries
 
         public long ExecuteLongCount(Func<long> query, ISpecification<T> criteria)
         {
-            long result;
-            if (CacheEnabled && _cachingStrategy.TryLongCountResult(criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryLongCountResult(criteria, out long result))
             {
                 CacheUsed = true;
                 return result;
@@ -44,8 +42,7 @@ namespace SharpRepository.Repository.Queries
 
         public IEnumerable<TResult> ExecuteGroup<TGroupKey, TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TGroupKey>> keySelector, Expression<Func<IGrouping<TGroupKey, T>, TResult>> resultSelector, ISpecification<T> criteria)
         {
-            IEnumerable<TResult> result;
-            if (CacheEnabled && _cachingStrategy.TryGroupResult(keySelector, resultSelector, criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryGroupResult(keySelector, resultSelector, criteria, out IEnumerable<TResult> result))
             {
                 CacheUsed = true;
                 return result;
@@ -61,8 +58,7 @@ namespace SharpRepository.Repository.Queries
 
         public TResult ExecuteSum<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TrySumResult(selector, criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TrySumResult(selector, criteria, out TResult result))
             {
                 CacheUsed = true;
                 return result;
@@ -78,8 +74,7 @@ namespace SharpRepository.Repository.Queries
 
         public TResult ExecuteAverage<TSelector, TResult>(Func<TResult> query, Expression<Func<T, TSelector>> selector, ISpecification<T> criteria)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TryAverageResult(selector, criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryAverageResult(selector, criteria, out TResult result))
             {
                 CacheUsed = true;
                 return result;
@@ -95,8 +90,7 @@ namespace SharpRepository.Repository.Queries
 
         public TResult ExecuteMin<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TryMinResult(selector, criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryMinResult(selector, criteria, out TResult result))
             {
                 CacheUsed = true;
                 return result;
@@ -112,8 +106,7 @@ namespace SharpRepository.Repository.Queries
 
         public TResult ExecuteMax<TResult>(Func<TResult> query, Expression<Func<T, TResult>> selector, ISpecification<T> criteria)
         {
-            TResult result;
-            if (CacheEnabled && _cachingStrategy.TryMaxResult(selector, criteria, out result))
+            if (CacheEnabled && _cachingStrategy.TryMaxResult(selector, criteria, out TResult result))
             {
                 CacheUsed = true;
                 return result;

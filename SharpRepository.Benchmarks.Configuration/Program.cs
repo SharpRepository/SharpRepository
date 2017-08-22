@@ -100,11 +100,11 @@ namespace SharpRepository.Benchmarks.Configuration
 
     public class Benchmarks
     {
-        public Container container { get; set; }
+        public IContainer StructureMapContainer { get; set; }
 
         public Benchmarks()
         {
-            container = new Container(x =>
+            StructureMapContainer = new Container(x =>
             {
                 x.Scan(scan =>
                 {
@@ -133,8 +133,10 @@ namespace SharpRepository.Benchmarks.Configuration
         {
             
             var config = new SharpRepositoryConfiguration();
-            var repoConf = new RepositoryConfiguration("inMemory");
-            repoConf.Factory = typeof(InMemoryConfigRepositoryFactory);
+            var repoConf = new RepositoryConfiguration("inMemory")
+            {
+                Factory = typeof(InMemoryConfigRepositoryFactory)
+            };
             config.AddRepository(repoConf);
             var option = new SharpRepositoryOptions(config);
             new UserFromConfigRepository(option);
@@ -149,7 +151,7 @@ namespace SharpRepository.Benchmarks.Configuration
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void DirectFromStructureMap()
         {
-            container.GetInstance<IRepository<User, int>>();
+            StructureMapContainer.GetInstance<IRepository<User, int>>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

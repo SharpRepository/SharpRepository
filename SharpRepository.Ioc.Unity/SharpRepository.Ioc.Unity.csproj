@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
 	<Product>SharpRepository Ioc Unity</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
