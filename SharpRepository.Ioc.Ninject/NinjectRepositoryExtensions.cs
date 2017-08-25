@@ -11,14 +11,14 @@ namespace SharpRepository.Ioc.Ninject
         {
             kernel.Bind(typeof (IRepository<>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.Service.GetTypeInfo().GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], repositoryName);
                 });
 
             kernel.Bind(typeof(IRepository<,>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.Service.GetTypeInfo().GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], repositoryName);
                 });
@@ -35,21 +35,21 @@ namespace SharpRepository.Ioc.Ninject
         {
             kernel.Bind(typeof (IRepository<>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.Service.GetTypeInfo().GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], configuration);
                 });
 
             kernel.Bind(typeof(IRepository<,>)).ToMethod(context =>
                 {
-                    var genericArgs = context.Request.Service.GetTypeInfo().GetGenericArguments();
+                    var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
                     return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], configuration);
                 });
 
             kernel.Bind(typeof(ICompoundKeyRepository<,,>)).ToMethod(context =>
             {
-                var genericArgs = context.Request.Service.GetTypeInfo().GetGenericArguments();
+                var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
                 return RepositoryFactory.GetInstance(genericArgs[0], genericArgs[1], genericArgs[2], configuration);
             });

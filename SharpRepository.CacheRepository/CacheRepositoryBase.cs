@@ -66,7 +66,7 @@ namespace SharpRepository.CacheRepository
             //  since we can't really put those constraints on T I'm going to do it via reflection
 
             var type = typeof(T);
-            var properties = type.GetTypeInfo().GetProperties();
+            var properties = type.GetTypeInfo().DeclaredProperties;
 
             var clonedList = new List<T>(list.Count);
 

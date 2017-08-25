@@ -14,6 +14,7 @@
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
+	<Version>2.0.0-alpha2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ServerAppFabric.Client" Version="1.1.2106.32" />

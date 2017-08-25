@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFrameworks>netstandard1.3;netstandard1.5;netstandard1.6;netstandard2.0</TargetFrameworks>
 	<Product>SharpRepository Logging</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
@@ -23,7 +23,6 @@
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

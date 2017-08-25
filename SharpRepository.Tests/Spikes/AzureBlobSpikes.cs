@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage;
 using NUnit.Framework;
 using SharpRepository.AzureBlobRepository;
 using Shouldly;
+using System;
 
 namespace SharpRepository.Tests.Spikes
 {
@@ -21,7 +21,7 @@ namespace SharpRepository.Tests.Spikes
 
             item.ShouldNotBeNull();
 
-            var storageAccount = Microsoft.WindowsAzure.Storage.CloudStorageAccount.Parse("UseDevelopmentStorage=true");
+            var storageAccount = CloudStorageAccount.Parse("UseDevelopmentStorage=true");
             var blobClient = storageAccount.CreateCloudBlobClient();
             var container = blobClient.GetContainerReference("course2015");
 

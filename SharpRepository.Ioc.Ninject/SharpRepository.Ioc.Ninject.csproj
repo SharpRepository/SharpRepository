@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.5;netstandard1.3</TargetFrameworks>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
@@ -14,6 +14,7 @@
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
+	<Version>2.0.0-alpha2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ninject" Version="4.0.0-beta-0134" />

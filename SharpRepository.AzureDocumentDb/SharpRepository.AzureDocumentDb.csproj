@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFrameworks>netstandard1.5;netstandard1.6;netstandard2.0</TargetFrameworks>
 	<Product>SharpRepository for AzureDocumentDb</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
@@ -17,14 +17,11 @@
 	<RepositoryType>git</RepositoryType>
 	<Version>2.0.0-alpha2</Version>
 	<FileVersion>2.0.0.0</FileVersion>
-	
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
-    <Folder Include="Properties\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFrameworks>netstandard1.5;netstandard1.6;netstandard2.0</TargetFrameworks>
 	<Product>SharpRepository for AzureTable</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
@@ -17,19 +17,17 @@
 	<RepositoryType>git</RepositoryType>
 	<Version>2.0.0-alpha2</Version>
 	<FileVersion>2.0.0.0</FileVersion>
-	
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.KeyVault" Version="2.3.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.4.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Remotion.Linq" Version="2.1.2" />
-    <PackageReference Include="WindowsAzure.Storage" Version="8.2.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
     <Folder Include="Properties\" />
   </ItemGroup>
 </Project>
