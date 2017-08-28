@@ -13,10 +13,10 @@ namespace SharpRepository.Benchmarks.Configuration.Repositories
 
     public class UserFromConfigRepository : ConfigurationBasedRepository<User, int>, IUserRepository
     {
-        public UserFromConfigRepository(IOptions<SharpRepositoryConfiguration> configuration) : base(configuration)
+        public UserFromConfigRepository(ISharpRepositoryConfiguration configuration, string repositoryName = null) : base(configuration, repositoryName)
         {
         }
-        
+
         public User GetAdminUser()
         {
             return Find(x => x.Email == "admin@admin.com");

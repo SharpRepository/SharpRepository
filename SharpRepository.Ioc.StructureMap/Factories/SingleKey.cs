@@ -11,15 +11,11 @@ namespace SharpRepository.Ioc.StructureMap.Factories
     {
         protected string repositoryName;
         protected ISharpRepositoryConfiguration configuration;
-
-        public RepositorySingleKeyInstanceFactory(string repositoryName)
-        {
-            this.repositoryName = repositoryName;
-        }
-
-        public RepositorySingleKeyInstanceFactory(ISharpRepositoryConfiguration configuration)
+        
+        public RepositorySingleKeyInstanceFactory(ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
             this.configuration = configuration;
+            this.repositoryName = repositoryName;
         }
 
         public override string Description
@@ -61,13 +57,8 @@ namespace SharpRepository.Ioc.StructureMap.Factories
 
     public class RepositoryInstance<T, TKey> : LambdaInstance<IRepository<T, TKey>> where T : class, new()
     {
-        public RepositoryInstance(string repositoryName)
-            : base(() => RepositoryFactory.GetInstance<T, TKey>(repositoryName))
-        {
-        }
-
-        public RepositoryInstance(ISharpRepositoryConfiguration configuration)
-         : base(() => RepositoryFactory.GetInstance<T, TKey>(configuration, null))
+        public RepositoryInstance(ISharpRepositoryConfiguration configuration, string repositoryName = null)
+         : base(() => RepositoryFactory.GetInstance<T, TKey>(configuration, repositoryName))
         {
         }
     }

@@ -11,22 +11,14 @@ namespace SharpRepository.Ioc.StructureMap.Factories
     {
         protected string repositoryName;
         protected ISharpRepositoryConfiguration configuration;
-
-        public RepositoryTripleKeyInstanceFactory(string repositoryName)
+        
+        public RepositoryTripleKeyInstanceFactory(ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
+            this.configuration = configuration;
             this.repositoryName = repositoryName;
         }
 
-        public RepositoryTripleKeyInstanceFactory(ISharpRepositoryConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
-        public override string Description {
-            get {
-                return "Repository factory for class with triple compound key";
-            }
-        }
+        public override string Description => "Repository factory for class with triple compound key";
 
         public override Type ReturnedType
         {
@@ -57,13 +49,8 @@ namespace SharpRepository.Ioc.StructureMap.Factories
 
     public class RepositoryInstance<T, TKey, TKey2, TKey3> : LambdaInstance<ICompoundKeyRepository<T, TKey, TKey2, TKey3>> where T : class, new()
     {
-        public RepositoryInstance(string repositoryName)
-            : base(() => RepositoryFactory.GetInstance<T, TKey, TKey2, TKey3>( repositoryName))
-        {
-        }
-
-        public RepositoryInstance(ISharpRepositoryConfiguration configuration)
-         : base(() => RepositoryFactory.GetInstance<T, TKey, TKey2, TKey3>(configuration, null))
+        public RepositoryInstance(ISharpRepositoryConfiguration configuration, string repositoryName = null)
+         : base(() => RepositoryFactory.GetInstance<T, TKey, TKey2, TKey3>(configuration, repositoryName))
         {
         }
     }

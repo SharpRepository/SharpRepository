@@ -22,11 +22,6 @@ namespace SharpRepository.Repository
     {
         protected readonly IRepository<T, TKey> Repository;
         
-        public ConfigurationBasedRepository(IOptions<SharpRepositoryConfiguration> configuration, string repositoryName = null)
-        {
-            Repository = RepositoryFactory.GetInstance<T, TKey>(configuration, repositoryName);
-        }
-
         public ConfigurationBasedRepository(ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
             Repository = RepositoryFactory.GetInstance<T, TKey>(configuration, repositoryName);

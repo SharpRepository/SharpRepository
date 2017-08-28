@@ -6,18 +6,38 @@ using SharpRepository.Repository.Configuration;
 using SharpRepository.Tests.TestObjects;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace SharpRepository.Tests.Configuration
 {
-    
-
     [TestFixture]
     public class ConfigurationTests
     {
+        RepositoryFactory factory;
+
+        [SetUp]
+        public void Setup()
+        {
+            var config = new ConfigurationBuilder()
+               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .AddJsonFile("appsettings.json")
+               .Build();
+
+            var sectionName = "sharpRepository";
+
+            IConfigurationSection sharpRepoConfig = config.GetSection(sectionName);
+            
+            if (sharpRepoConfig == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            factory = new RepositoryFactory(sharpRepoConfig);
+        }
+
         [Test]
         public void InMemoryConfigurationNoParametersNoKeyTypes()
         {
-            var repos = RepositoryFactory.GetInstance<Contact>();
+            var repos = factory.GetInstance<Contact>();
 
             if (!(repos is InMemoryRepository<Contact, int>))
             {
@@ -28,7 +48,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void InMemoryConfigurationNoParameters()
         {
-            var repos = RepositoryFactory.GetInstance<Contact, string>();
+            var repos = factory.GetInstance<Contact, string>();
 
             if (!(repos is InMemoryRepository<Contact, string>))
             {
@@ -39,19 +59,36 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void LoadConfigurationRepositoryByName()
         {
-            var repos = RepositoryFactory.GetInstance<Contact, string>("efRepos");
+            var sectionName = "sharpRepository2";
+            var config = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddXmlFile("app.config")
+               .Build();
+            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
+            if (sharpRepoConfig2 == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, "efRepos");
 
             if (!(repos is EfCoreRepository<Contact, string>))
             {
                 throw new Exception("Not EfRepository");
             }
-
         }
 
         [Test]
         public void LoadConfigurationRepositoryBySectionName()
         {
-            var repos = RepositoryFactory.GetInstance<Contact, string>("sharpRepository2", null);
+            var sectionName = "sharpRepository2";
+            var config = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddXmlFile("app.config")
+               .Build();
+            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
+            if (sharpRepoConfig2 == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, null);
 
             if (!(repos is EfCoreRepository<Contact, string>))
             {
@@ -62,7 +99,18 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void LoadConfigurationRepositoryBySectionAndRepositoryName()
         {
-            var repos = RepositoryFactory.GetInstance<Contact, string>("sharpRepository2", "inMem");
+            var config = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddXmlFile("app.config")
+               .Build();
+
+            var sectionName = "sharpRepository2";
+
+            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
+            if (sharpRepoConfig2 == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, "inMem");
 
             if (!(repos is InMemoryRepository<Contact, string>))
             {
@@ -73,14 +121,26 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void LoadRepositoryDefaultStrategyAndOverrideNone()
         {
-            var repos = RepositoryFactory.GetInstance<Contact, string>();
+            var repos = factory.GetInstance<Contact, string>();
 
             if (!(repos.CachingStrategy is StandardCachingStrategy<Contact, string>))
             {
                 throw new Exception("Not standard caching default");
             }
 
-            repos = RepositoryFactory.GetInstance<Contact, string>("inMemoryNoCaching");
+            var config = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddXmlFile("app.config")
+               .Build();
+
+            var sectionName = "inMemoryNoCaching";
+
+            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
+            if (sharpRepoConfig2 == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+
+            repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2);
 
             if (!(repos.CachingStrategy is NoCachingStrategy<Contact, string>))
             {
@@ -155,7 +215,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void TestFactoryOverloadMethod()
         {
-            var repos = RepositoryFactory.GetInstance(typeof (Contact), typeof (string));
+            var repos = factory.GetInstance(typeof(Contact), typeof(string));
 
             if (!(repos is InMemoryRepository<Contact, string>))
             {
@@ -166,7 +226,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void TestFactoryOverloadMethodForCompoundKey()
         {
-            var repos = RepositoryFactory.GetInstance(typeof (Contact), typeof (string), typeof(string));
+            var repos = factory.GetInstance(typeof (Contact), typeof (string), typeof(string));
 
             if (!(repos is InMemoryRepository<Contact, string, string>))
             {
@@ -177,7 +237,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void TestFactoryOverloadMethodForTripleCompoundKey()
         {
-            var repos = RepositoryFactory.GetInstance(typeof(Contact), typeof(string), typeof(string), typeof(string));
+            var repos = factory.GetInstance(typeof(Contact), typeof(string), typeof(string), typeof(string));
 
             if (!(repos is InMemoryRepository<Contact, string, string, string>))
             {
@@ -188,7 +248,7 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void TestFactoryOverloadMethodForNoGenericsCompoundKey()
         {
-            var repos = RepositoryFactory.GetCompoundKeyInstance(typeof(Contact));
+            var repos = factory.GetCompoundKeyInstance(typeof(Contact));
 
             if (!(repos is InMemoryCompoundKeyRepository<Contact>))
             {

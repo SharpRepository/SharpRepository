@@ -11,6 +11,7 @@ using SharpRepository.Repository.Configuration;
 using StructureMap;
 using StructureMap.Graph;
 using SharpRepository.Ioc.StructureMap;
+using Microsoft.Extensions.Configuration;
 
 namespace SharpRepository.Benchmarks.Configuration
 {
@@ -101,7 +102,7 @@ namespace SharpRepository.Benchmarks.Configuration
     public class Benchmarks
     {
         public IContainer StructureMapContainer { get; set; }
-
+        
         public Benchmarks()
         {
             StructureMapContainer = new Container(x =>
@@ -112,7 +113,21 @@ namespace SharpRepository.Benchmarks.Configuration
                     scan.WithDefaultConventions();
                 });
 
-                x.ForRepositoriesUseSharpRepository();
+                var config = new ConfigurationBuilder()
+               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .AddJsonFile("appsettings.json")
+               .Build();
+
+                var sectionName = "sharpRepository";
+
+                IConfigurationSection sharpRepoSection = config.GetSection(sectionName);
+
+                if (sharpRepoSection == null)
+                    throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+                var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoSection);
+               
+                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
             });
         }
 
@@ -125,7 +140,21 @@ namespace SharpRepository.Benchmarks.Configuration
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void CreateFromConfigFile()
         {
-            RepositoryFactory.GetInstance<User, int>();
+            var config = new ConfigurationBuilder()
+               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .AddJsonFile("appsettings.json")
+               .Build();
+
+            var sectionName = "sharpRepository";
+
+            IConfigurationSection sharpRepoSection = config.GetSection(sectionName);
+
+            if (sharpRepoSection == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            var factory = new RepositoryFactory(sharpRepoSection);
+
+            factory.GetInstance<User, int>();
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -138,8 +167,8 @@ namespace SharpRepository.Benchmarks.Configuration
                 Factory = typeof(InMemoryConfigRepositoryFactory)
             };
             config.AddRepository(repoConf);
-            var option = new SharpRepositoryOptions(config);
-            new UserFromConfigRepository(option);
+
+            new UserFromConfigRepository(config);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

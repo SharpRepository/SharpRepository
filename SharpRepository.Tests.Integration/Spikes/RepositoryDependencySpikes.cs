@@ -10,6 +10,9 @@ using Shouldly;
 using StructureMap;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
+using System;
+using SharpRepository.Repository.Configuration;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -28,11 +31,26 @@ namespace SharpRepository.Tests.Integration.Spikes
                  .UseSqlite(connection)
                  .Options;
 
+            var config = new ConfigurationBuilder()
+             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+             .AddJsonFile("appsettings.json")
+             .Build();
+
+            var sectionName = "sharpRepository";
+
+            IConfigurationSection sharpRepoSection = config.GetSection(sectionName);
+
+            if (sharpRepoSection == null)
+                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
+
+            var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoSection);
+
+
             // structure map
             container = new Container(x =>
             {
                 x.AddRegistry(new StructureMapRegistry(options));
-                x.ForRepositoriesUseSharpRepository();
+                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
             });
 
             RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
