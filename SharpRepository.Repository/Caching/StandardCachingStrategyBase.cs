@@ -21,8 +21,16 @@ namespace SharpRepository.Repository.Caching
         public bool WriteThroughCachingEnabled { get; set; }
         public bool GenerationalCachingEnabled { get; set; }
         public Expression<Func<T, TPartition>> Partition { get; set; }
-        
-        internal StandardCachingStrategyBase(int? maxResults,ICachingProvider cachingProvider)
+
+        internal StandardCachingStrategyBase(int? maxResults)
+            : base(maxResults)
+        {
+            WriteThroughCachingEnabled = true;
+            GenerationalCachingEnabled = true;
+            Partition = null;
+        }
+
+        internal StandardCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
             : base(maxResults, cachingProvider)
         {
             WriteThroughCachingEnabled = true;

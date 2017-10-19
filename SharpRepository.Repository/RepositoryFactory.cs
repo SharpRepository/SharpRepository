@@ -25,13 +25,92 @@ namespace SharpRepository.Repository
         public static ISharpRepositoryConfiguration BuildSharpRepositoryConfiguation(IConfigurationSection configurationSection)
         {
             var conf = new SharpRepositoryConfiguration();
-
+            ConfigureRepositories(configurationSection, ref conf);
+            ConfigureCachingProviders(configurationSection, ref conf);
+            ConfigureCachingStrategies(configurationSection, ref conf);
+            return conf;
+        }
+        
+        private static void ConfigureRepositories(IConfigurationSection configurationSection, ref SharpRepositoryConfiguration conf)
+        {
             IConfigurationSection repositories = configurationSection.GetSection("repositories");
+
+            if (repositories == null)
+            {
+                return;
+            }
+
+            var defaultRepoConfigAttributes = new string[] { "factory", "cachingStrategy", "cachingProvider" };
             string defaultRepository = repositories.GetSection("default").Value;
             conf.DefaultRepository = defaultRepository;
 
-            return conf;
+            var repositoriesConfig = repositories.GetChildren().Where(s => s.Key != "default");
+
+            foreach (var repoConfig in repositoriesConfig)
+            {
+                var attributes = repoConfig.GetChildren().Where(c => !defaultRepoConfigAttributes.Contains(c.Key));
+                var factoryType = Type.GetType(repoConfig.GetSection("factory").Value);
+                if (factoryType == null)
+                {
+                    throw new FactoryConfigurationErrorsException(repoConfig.GetSection("factory").Value);
+                }
+
+                conf.AddRepository(repoConfig.Key, factoryType,
+                    repoConfig.GetSection("cachingStrategy")?.Value,
+                    repoConfig.GetSection("cachingProvider")?.Value,
+                    attributes.ToDictionary(a => a.Key, a => a.Value)
+                );
+            }
         }
+
+        private static void ConfigureCachingProviders(IConfigurationSection configurationSection, ref SharpRepositoryConfiguration conf)
+        {
+            IConfigurationSection providersConf = configurationSection.GetSection("cachingProviders");
+
+            if (providersConf == null)
+            {
+                return;
+            }
+
+            conf.DefaultCachingProvider = providersConf.GetSection("default").Value;
+
+            foreach (var provider in providersConf.GetChildren().Where(s => s.Key != "default"))
+            {
+                var attributes = provider.GetChildren().Where(c => c.Key != "factory").ToDictionary(a => a.Key, a => a.Value);
+                var factoryType = Type.GetType(provider.GetSection("factory").Value);
+                if (factoryType == null)
+                {
+                    throw new FactoryConfigurationErrorsException(provider.GetSection("factory").Value);
+                }
+
+                conf.AddCachingProvider(provider.Key, factoryType, attributes);
+            }
+        }
+
+        private static void ConfigureCachingStrategies(IConfigurationSection configurationSection, ref SharpRepositoryConfiguration conf)
+        {
+            IConfigurationSection strategiesConf = configurationSection.GetSection("cachingStrategies");
+
+            if (strategiesConf == null)
+            {
+                return;
+            }
+
+            conf.DefaultCachingStrategy = strategiesConf.GetSection("default").Value;
+
+            foreach (var strategy in strategiesConf.GetChildren().Where(s => s.Key != "default"))
+            {
+                var attributes = strategy.GetChildren().Where(c => c.Key != "factory").ToDictionary(a => a.Key, a => a.Value);
+                var factoryType = Type.GetType(strategy.GetSection("factory").Value);
+                if (factoryType == null)
+                {
+                    throw new FactoryConfigurationErrorsException(strategy.GetSection("factory").Value);
+                }
+
+                conf.AddCachingStrategy(strategy.Key, factoryType, attributes);
+            }
+        }
+
 
         public IRepository<T, int> GetInstance<T>(string repositoryName = null) where T : class, new()
         {

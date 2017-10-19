@@ -59,7 +59,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void EfConfigRepositoryFactory_Using_Ioc_Should_Not_Require_ConnectionString()
         {
-            var config = new EfCoreRepositoryConfiguration("TestConfig", null, typeof (TestObjectContextCore));
+            var config = new EfCoreRepositoryConfiguration("TestConfig");
             var factory = new EfCoreConfigRepositoryFactory(config);
 
             factory.GetInstance<Contact, string>();
@@ -81,7 +81,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void EfConfigRepositoryFactory_Using_Ioc_Should_Share_DbContext()
         {
-            var config = new EfCoreRepositoryConfiguration("TestConfig", "tmp", typeof (TestObjectContextCore));
+            var config = new EfCoreRepositoryConfiguration("TestConfig", "tmp");
             var factory = new EfCoreConfigRepositoryFactory(config);
 
             var repos1 = factory.GetInstance<Contact, string>();

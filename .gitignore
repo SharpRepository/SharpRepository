@@ -241,3 +241,4 @@ _Pvt_Extensions
 /packages
 /packages
 /nlog.txt
+/SharpRepository.Tests.Integration/Data/Db4o

@@ -1,20 +1,17 @@
-﻿using System;
-using Microsoft.Extensions.Caching.Memory;
-using SharpRepository.Repository.Configuration;
+﻿using SharpRepository.Repository.Configuration;
+using System;
 
 namespace SharpRepository.Repository.Caching
 {
     public class TimeoutConfigCachingStrategyFactory : ConfigCachingStrategyFactory
     {
-        protected IMemoryCache Cache;
 
-        public TimeoutConfigCachingStrategyFactory(ICachingStrategyConfiguration config, IMemoryCache cache)
+        public TimeoutConfigCachingStrategyFactory(ICachingStrategyConfiguration config)
             : base(config)
         {
-            Cache = cache;
         }
 
-        public override ICachingStrategy<T, TKey> GetInstance<T, TKey>()
+        public override ICachingStrategy<T, TKey> GetInstance<T, TKey>(ICachingProvider cachingProvider)
         {
             if (!Int32.TryParse(CachingStrategyConfiguration["timeout"], out int timeout))
             {
@@ -22,13 +19,13 @@ namespace SharpRepository.Repository.Caching
                 throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
             }
 
-            return new TimeoutCachingStrategy<T, TKey>(timeout, new InMemoryCachingProvider(Cache))
+            return new TimeoutCachingStrategy<T, TKey>(timeout, cachingProvider)
                        {
                            MaxResults = CachingStrategyConfiguration.MaxResults
                        };
         }
 
-        public override ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(ICachingProvider cachingProvider)
         {
             if (!Int32.TryParse(CachingStrategyConfiguration["timeout"], out int timeout))
             {
@@ -36,13 +33,13 @@ namespace SharpRepository.Repository.Caching
                 throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
             }
 
-            return new TimeoutCachingStrategy<T, TKey, TKey2>(timeout, new InMemoryCachingProvider(Cache))
+            return new TimeoutCachingStrategy<T, TKey, TKey2>(timeout, cachingProvider)
                        {
                            MaxResults = CachingStrategyConfiguration.MaxResults
                        };
         }
 
-        public override ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(ICachingProvider cachingProvider)
         {
             if (!Int32.TryParse(CachingStrategyConfiguration["timeout"], out int timeout))
             {
@@ -50,13 +47,13 @@ namespace SharpRepository.Repository.Caching
                 throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
             }
 
-            return new TimeoutCachingStrategy<T, TKey, TKey2, TKey3>(timeout, new InMemoryCachingProvider(Cache))
+            return new TimeoutCachingStrategy<T, TKey, TKey2, TKey3>(timeout, cachingProvider)
             {
                 MaxResults = CachingStrategyConfiguration.MaxResults
             };
         }
 
-        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>()
+        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>(ICachingProvider cachingProvider)
         {
             if (!Int32.TryParse(CachingStrategyConfiguration["timeout"], out int timeout))
             {
@@ -64,7 +61,7 @@ namespace SharpRepository.Repository.Caching
                 throw new ConfigurationErrorsException("The timeout attribute is required in order to use the TimeoutCachingStrategy via the configuration file.");
             }
 
-            return new TimeoutCompoundKeyCachingStrategy<T>(timeout, new InMemoryCachingProvider(Cache))
+            return new TimeoutCompoundKeyCachingStrategy<T>(timeout, cachingProvider)
             {
                 MaxResults = CachingStrategyConfiguration.MaxResults
             };

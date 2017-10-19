@@ -8,6 +8,10 @@ namespace SharpRepository.Repository.Caching
         internal CompoundKeyCachingStrategyBase()
         {
         }
+        internal CompoundKeyCachingStrategyBase(int? maxResults)
+            : base(maxResults)
+        {
+        }
 
         internal CompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
             : base(maxResults, cachingProvider)
@@ -37,7 +41,12 @@ namespace SharpRepository.Repository.Caching
        {
        }
 
-       internal CompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
+        internal CompoundKeyCachingStrategyBase(int? maxResults)
+          : base(maxResults)
+        {
+        }
+        
+        internal CompoundKeyCachingStrategyBase(int? maxResults, ICachingProvider cachingProvider)
            : base(maxResults, cachingProvider)
        {
        }
@@ -67,6 +76,11 @@ namespace SharpRepository.Repository.Caching
     public abstract class CompoundKeyCachingStrategyBase<T, TKey, TKey2, TKey3> : CompoundKeyCachingStrategyCommon<T>, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> where T : class
     {
         internal CompoundKeyCachingStrategyBase()
+        {
+        }
+
+        internal CompoundKeyCachingStrategyBase(int? maxResults)
+            : base(maxResults)
         {
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 
 namespace SharpRepository.Repository.Configuration
@@ -10,7 +9,7 @@ namespace SharpRepository.Repository.Configuration
         {
             if (type == null || interfaceType == null) return;
             
-            if (type.GetTypeInfo().GetRuntimeInterfaceMap(interfaceType).InterfaceType == interfaceType)
+            if (type.IsAssignableFrom(interfaceType))
                 throw new Exception("The type " + type.AssemblyQualifiedName + " must implement " + interfaceType.AssemblyQualifiedName);
         }
 
@@ -33,18 +32,14 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var cachingStrategy = strategyConfiguration.GetInstance<T, int>();
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            var cachingProvider = providerConfiguration.GetInstance();
+            var cachingStrategy = strategyConfiguration.GetInstance<T, int>(cachingProvider);
             if (cachingStrategy == null)
             {
                 return repository;
             }
-
-            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
-            if (providerConfiguration != null)
-            {
-                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
-            }
-
+            
             repository.CachingStrategy = cachingStrategy;
 
             return repository;
@@ -69,18 +64,15 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey>();
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            var cachingProvider = providerConfiguration?.GetInstance();
+
+            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey>(cachingProvider);
             if (cachingStrategy == null)
             {
                 return repository;
             }
-
-            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
-            if (providerConfiguration != null)
-            {
-                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
-            }
-
+            
             repository.CachingStrategy = cachingStrategy;
 
             return repository;
@@ -105,18 +97,14 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey, TKey2>();
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            var cachingProvider = providerConfiguration.GetInstance();
+            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey, TKey2>(cachingProvider);
             if (cachingStrategy == null)
             {
                 return repository;
             }
-
-            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
-            if (providerConfiguration != null)
-            {
-                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
-            }
-
+            
             repository.CachingStrategy = cachingStrategy;
 
             return repository;
@@ -141,16 +129,13 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey, TKey2, TKey3>();
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            var cachingProvider = providerConfiguration?.GetInstance();
+
+            var cachingStrategy = strategyConfiguration.GetInstance<T, TKey, TKey2, TKey3>(cachingProvider);
             if (cachingStrategy == null)
             {
                 return repository;
-            }
-
-            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
-            if (providerConfiguration != null)
-            {
-                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
             }
 
             repository.CachingStrategy = cachingStrategy;
@@ -177,16 +162,13 @@ namespace SharpRepository.Repository.Configuration
                 return repository;
             }
 
-            var cachingStrategy = strategyConfiguration.GetCompoundKeyInstance<T>();
+            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
+            var cachingProvider = providerConfiguration?.GetInstance();
+
+            var cachingStrategy = strategyConfiguration.GetCompoundKeyInstance<T>(cachingProvider);
             if (cachingStrategy == null)
             {
                 return repository;
-            }
-
-            var providerConfiguration = configuration.GetCachingProvider(repositoryConfiguration.CachingProvider);
-            if (providerConfiguration != null)
-            {
-                cachingStrategy.CachingProvider = providerConfiguration.GetInstance();
             }
 
             repository.CachingStrategy = cachingStrategy;

@@ -61,6 +61,7 @@ namespace SharpRepository.Tests.Integration.Data
                 context.Database.EnsureCreated();
                 yield return new TestCaseData(new EfCoreRepository<Contact, string>(context)).SetName("EfCoreRepository Test");
             }
+
             if (includeType.Contains(RepositoryType.Dbo4))
             {
                 var dbPath = Db4oDataDirectoryFactory.Build("Contact");

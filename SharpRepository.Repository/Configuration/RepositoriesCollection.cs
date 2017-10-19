@@ -9,8 +9,7 @@ namespace SharpRepository.Repository.Configuration
     {
         public string Default
         {
-            get;
-            set;
+            get; set;
         }
 
         public IList<IRepositoryConfiguration> ToRepositoryConfigurationList()

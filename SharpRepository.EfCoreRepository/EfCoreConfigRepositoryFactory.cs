@@ -13,10 +13,13 @@ namespace SharpRepository.EfCoreRepository
         {
         }
 
-        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
+        public EfCoreConfigRepositoryFactory(IRepositoryConfiguration config, DbContext dbContext)
+            : base(config)
         {
-            throw new NotImplementedException();
+            DbContext = dbContext;
         }
+
+        protected DbContext DbContext { get; set; }
 
         public override IRepository<T> GetInstance<T>()
         {
@@ -38,14 +41,22 @@ namespace SharpRepository.EfCoreRepository
             return new EfCoreRepository<T, TKey, TKey2, TKey3>(GetDbContext());
         }
 
-        private DbContext GetDbContext()
+        public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
         {
-            var connectionString = RepositoryConfiguration["connectionString"];
+            return new EfCoreCompoundKeyRepository<T>(GetDbContext());
+        }
 
+        protected DbContext GetDbContext()
+        {
             // check for required parameters
-            if (RepositoryDependencyResolver.Current == null && string.IsNullOrEmpty(connectionString))
+            if (RepositoryDependencyResolver.Current == null && DbContext == null)
             {
-                throw new ConfigurationErrorsException("The connectionString attribute is required in order to use the EfCoreRepository via the configuration file, unless you set the RepositoryDependencyResolver to use an Ioc container.");
+                throw new ConfigurationErrorsException("The EfCore repository Factory gets DbContext or DbContextOptionBuilder from RepositoryDependencyResolver containing the Ioc container passing directly DbContextOptions");
+            }
+
+            if (DbContext != null)
+            {
+                return DbContext;
             }
 
             Type dbContextType = null;
@@ -55,30 +66,27 @@ namespace SharpRepository.EfCoreRepository
             {
                 dbContextType = Type.GetType(tmpDbContextType);
             }
-
+            
             // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters
-            DbContext dbContext = null;
+            DbContext dbContext = dbContextType == null
+                            ? RepositoryDependencyResolver.Current?.Resolve<DbContext>()
+                            : (DbContext)RepositoryDependencyResolver.Current?.Resolve(dbContextType);
 
-            // if there is an IOC dependency resolver configured then use that one to get the DbContext, this will allow sharing of context across multiple repositories if the IOC is configured that way
-            if (RepositoryDependencyResolver.Current != null)
+            // if the Ioc container doesn't throw an error but still returns null we need to alert the consumer
+            if (dbContext != null)
             {
-                dbContext = dbContextType == null
-                                ? RepositoryDependencyResolver.Current.Resolve<DbContext>()
-                                : (DbContext)RepositoryDependencyResolver.Current.Resolve(dbContextType);
+                return dbContext;
+            }
 
-                // if the Ioc container doesn't throw an error but still returns null we need to alert the consumer
-                if (dbContext == null)
-                {
-                    throw new RepositoryDependencyResolverException(typeof(DbContext));
-                }
-            }
-            else // the default way of getting a DbContext if there is no Ioc container setup
+            var options = RepositoryDependencyResolver.Current.Resolve<DbContextOptions>();
+            if (options == null)
             {
-                var options = new DbContextOptionsBuilder();
-                dbContext = dbContextType == null
-                                ? new DbContext(options.Options)
-                                : (DbContext)Activator.CreateInstance(dbContextType, connectionString);
+                throw new RepositoryDependencyResolverException(typeof(DbContext));
             }
+
+            dbContext = dbContextType == null
+                        ? new DbContext(options)
+                        : (DbContext)Activator.CreateInstance(dbContextType, options);
 
             return dbContext;
         }

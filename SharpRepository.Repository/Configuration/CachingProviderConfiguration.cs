@@ -27,7 +27,7 @@ namespace SharpRepository.Repository.Configuration
 
         public IDictionary<string, string> Attributes { get; set; }
 
-        public ICachingProvider GetInstance()
+        public virtual ICachingProvider GetInstance()
         {
             // load up the factory if it exists and use it
             var factory = (IConfigCachingProviderFactory)Activator.CreateInstance(Factory, this);

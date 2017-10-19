@@ -9,18 +9,15 @@ namespace SharpRepository.Repository.Caching
 {
     public abstract class CompoundKeyCachingStrategyCommon<T> where T : class
     {
-        private ICachingProvider _cachingProvider;
         public string CachePrefix { get; set; }
         protected string TypeFullName { get; set; }
         public int? MaxResults { get; set; }
 
-        public ICachingProvider CachingProvider
-        {
-            get { return _cachingProvider; }
-            set { _cachingProvider = value; }
-        }
+        public ICachingProvider CachingProvider { get; set; }
 
         internal CompoundKeyCachingStrategyCommon() { }
+
+        internal CompoundKeyCachingStrategyCommon(int? maxResults) : this(maxResults, null) { }
 
         internal CompoundKeyCachingStrategyCommon(int? maxResults, ICachingProvider cachingProvider)
         {

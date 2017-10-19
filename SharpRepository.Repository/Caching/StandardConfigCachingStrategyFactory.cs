@@ -1,22 +1,18 @@
-﻿using System;
-using SharpRepository.Repository.Configuration;
-using Microsoft.Extensions.Caching.Memory;
+﻿using SharpRepository.Repository.Configuration;
+using System;
 
 namespace SharpRepository.Repository.Caching
 {
     public class StandardConfigCachingStrategyFactory : ConfigCachingStrategyFactory
     {
-        protected IMemoryCache Cache;
-
-        public StandardConfigCachingStrategyFactory(ICachingStrategyConfiguration config, IMemoryCache cache)
-            : base(config)
+        public StandardConfigCachingStrategyFactory(StandardCachingStrategyConfiguration config)
+           : base(config)
         {
-            Cache = cache;
         }
 
-        public override ICachingStrategy<T, TKey> GetInstance<T, TKey>()
+        public override ICachingStrategy<T, TKey> GetInstance<T, TKey>(ICachingProvider cachingProvider)
         {
-            var strategy = new StandardCachingStrategy<T, TKey>(new InMemoryCachingProvider(Cache))
+            var strategy = new StandardCachingStrategy<T, TKey>(cachingProvider)
                                {
                                    MaxResults = CachingStrategyConfiguration.MaxResults
                                };
@@ -34,9 +30,9 @@ namespace SharpRepository.Repository.Caching
             return strategy;
         }
 
-        public override ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(ICachingProvider cachingProvider)
         {
-            var strategy = new StandardCachingStrategy<T, TKey, TKey2>(new InMemoryCachingProvider(Cache))
+            var strategy = new StandardCachingStrategy<T, TKey, TKey2>(cachingProvider)
                                {
                                    MaxResults = CachingStrategyConfiguration.MaxResults
                                };
@@ -54,9 +50,9 @@ namespace SharpRepository.Repository.Caching
             return strategy;
         }
 
-        public override ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>()
+        public override ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(ICachingProvider cachingProvider)
         {
-            var strategy = new StandardCachingStrategy<T, TKey, TKey2, TKey3>(new InMemoryCachingProvider(Cache))
+            var strategy = new StandardCachingStrategy<T, TKey, TKey2, TKey3>(cachingProvider)
             {
                 MaxResults = CachingStrategyConfiguration.MaxResults
             };
@@ -74,9 +70,9 @@ namespace SharpRepository.Repository.Caching
             return strategy;
         }
         
-        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>()
+        public override ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>(ICachingProvider cachingProvider)
         {
-            var strategy = new StandardCompoundKeyCachingStrategy<T>(new InMemoryCachingProvider(Cache))
+            var strategy = new StandardCompoundKeyCachingStrategy<T>(cachingProvider)
             {
                 MaxResults = CachingStrategyConfiguration.MaxResults
             };

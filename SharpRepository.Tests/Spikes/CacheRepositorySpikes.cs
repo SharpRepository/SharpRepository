@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
 using SharpRepository.CacheRepository;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.Configuration;
-using SharpRepository.Tests.TestObjects;
 using Shouldly;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpRepository.Tests.Spikes
 {
@@ -22,8 +20,10 @@ namespace SharpRepository.Tests.Spikes
         {
             var sharpRepositoryConfiguration = new SharpRepositoryConfiguration();
             sharpRepositoryConfiguration.AddCachingStrategy(new StandardCachingStrategyConfiguration("standard"));
-            sharpRepositoryConfiguration.AddCachingProvider(new InMemoryCachingProviderConfiguration("inmemory"));
-            sharpRepositoryConfiguration.AddRepository(new CacheRepositoryConfiguration("textFilter", "TextFilter", "standard", "inmemory"));
+            var cachingProviderConfiguration = new InMemoryCachingProviderConfiguration("inmemory", new MemoryCache(new MemoryCacheOptions()));
+            sharpRepositoryConfiguration.AddCachingProvider(cachingProviderConfiguration);
+            var cachingProvider = cachingProviderConfiguration.GetInstance();
+            sharpRepositoryConfiguration.AddRepository(new CacheRepositoryConfiguration("textFilter",  "TextFilter", cachingProvider, "standard", "inmemory"));
 
             _repository = sharpRepositoryConfiguration.GetInstance<TempTestObject, int>("textFilter");
         }

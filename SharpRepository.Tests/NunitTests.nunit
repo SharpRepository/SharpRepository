@@ -1,0 +1,8 @@
+﻿<NUnitProject>
+  <Settings processModel="Default" domainUsage="Default" appbase="C:/Users/omar.piani/Documents/GitHub/SharpRepository/" activeconfig="DEBUG" />
+  <Config name="DEBUG">
+    <assembly path="SharpRepository.Tests.Integration/bin/Debug/SharpRepository.Tests.Integration.dll" />
+    <assembly path="SharpRepository.Tests/bin/Debug/SharpRepository.Tests.dll" />
+    <assembly path="SharpRepository.Samples/bin/Debug/SharpRepository.Samples.dll" />
+  </Config>
+</NUnitProject>

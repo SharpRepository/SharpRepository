@@ -25,36 +25,43 @@ namespace SharpRepository.Repository.Configuration
             }
         }
 
-        public ICachingStrategy<T, TKey> GetInstance<T, TKey>() where T : class, new()
+        public ICachingStrategy<T, TKey> GetInstance<T, TKey>(ICachingProvider cachingProvider) where T : class, new()
         {
             // load up the factory if it exists and use it
             var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
 
-            return factory.GetInstance<T, TKey>();
+            return factory.GetInstance<T, TKey>(cachingProvider);
         }
 
-        public ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>() where T : class, new()
+        public ICompoundKeyCachingStrategy<T, TKey, TKey2> GetInstance<T, TKey, TKey2>(ICachingProvider cachingProvider) where T : class, new()
         {
             // load up the factory if it exists and use it
             var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
 
-            return factory.GetInstance<T, TKey, TKey2>();
+            return factory.GetInstance<T, TKey, TKey2>(cachingProvider);
         }
-        public ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>() where T : class, new()
+
+        public ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> GetInstance<T, TKey, TKey2, TKey3>(ICachingProvider cachingProvider) where T : class, new()
         {
             // load up the factory if it exists and use it
             var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
 
-            return factory.GetInstance<T, TKey, TKey2, TKey3>();
+            return factory.GetInstance<T, TKey, TKey2, TKey3>(cachingProvider);
         }
-        public ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>() where T : class, new()
+
+        public ICompoundKeyCachingStrategy<T> GetCompoundKeyInstance<T>(ICachingProvider cachingProvider) where T : class, new()
         {
             // load up the factory if it exists and use it
             var factory = (IConfigCachingStrategyFactory)Activator.CreateInstance(Factory, this);
 
-            return factory.GetCompoundKeyInstance<T>();
+            return factory.GetCompoundKeyInstance<T>(cachingProvider);
         }
-        
+
+        ICachingStrategy<T, TKey> ICachingStrategyConfiguration.GetInstance<T, TKey>(ICachingProvider cachingProvider)
+        {
+            return GetInstance<T, TKey>(cachingProvider);
+        }
+
         public string this[string key]
         {
             get
@@ -85,11 +92,6 @@ namespace SharpRepository.Repository.Configuration
         IDictionary<string, string> ICachingStrategyConfiguration.Attributes
         {
             get => _attributes; set => _attributes = value;
-        }
-        
-        ICachingStrategy<T, TKey> ICachingStrategyConfiguration.GetInstance<T, TKey>()
-        {
-            return GetInstance<T, TKey>();
         }
     }
 }

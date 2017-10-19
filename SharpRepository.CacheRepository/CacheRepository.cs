@@ -5,6 +5,7 @@ namespace SharpRepository.CacheRepository
 {
     public class CacheRepository<T, TKey> : CacheRepositoryBase<T, TKey> where T : class, new()
     {
+        
         public CacheRepository(string prefix, ICachingProvider cachingProvider, ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(prefix, cachingProvider, cachingStrategy)
         {

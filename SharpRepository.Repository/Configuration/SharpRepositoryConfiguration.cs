@@ -66,7 +66,7 @@ namespace SharpRepository.Repository.Configuration
             get { return CachingProviders != null && CachingProviders.Any(); }
         }
 
-        public ICachingProviderConfiguration GetCachingProvider(string providerName)
+        public ICachingProviderConfiguration GetCachingProvider(string providerName = null)
         {
             if (!HasCachingProviders) return null;
 

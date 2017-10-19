@@ -8,6 +8,10 @@ using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Shouldly;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SharpRepository.Tests.Configuration
 {
@@ -35,7 +39,7 @@ namespace SharpRepository.Tests.Configuration
         }
 
         [Test]
-        public void InMemoryConfigurationNoParametersNoKeyTypes()
+        public void DefaultInMemoryConfiguration()
         {
             var repos = factory.GetInstance<Contact>();
 
@@ -46,113 +50,59 @@ namespace SharpRepository.Tests.Configuration
         }
 
         [Test]
-        public void InMemoryConfigurationNoParameters()
-        {
-            var repos = factory.GetInstance<Contact, string>();
-
-            if (!(repos is InMemoryRepository<Contact, string>))
-            {
-                throw new Exception("Not InMemoryRepository");
-            }
-        }
-
-        [Test]
-        public void LoadConfigurationRepositoryByName()
+        public void InMemoryLoadConfigurationRepositoryByName()
         {
             var sectionName = "sharpRepository2";
             var config = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddXmlFile("app.config")
-               .Build();
-            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
+              .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+              .AddJsonFile("appsettings.json")
+              .Build();
+            var sharpRepoConfig2 = config.GetSection(sectionName);
             if (sharpRepoConfig2 == null)
                 throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
 
-            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, "efRepos");
+            var sharpConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoConfig2);
+            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpConfig, "inMem");
 
-            if (!(repos is EfCoreRepository<Contact, string>))
+            if (!(repos is InMemoryRepository<Contact, string>))
             {
                 throw new Exception("Not EfRepository");
             }
         }
 
         [Test]
-        public void LoadConfigurationRepositoryBySectionName()
+        public void StandardCacheNeedsIocConfiguration()
         {
-            var sectionName = "sharpRepository2";
-            var config = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddXmlFile("app.config")
-               .Build();
-            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
-            if (sharpRepoConfig2 == null)
-                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
-
-            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, null);
-
-            if (!(repos is EfCoreRepository<Contact, string>))
+            try
             {
-                throw new Exception("Not EfRepository");
+                var repos = factory.GetInstance<Contact, string>("inMemory");
+                Assert.False(true, "Repo must throw exception");
+            }
+            catch (Exception e)
+            {
+                e.InnerException.Message.ShouldBe("RepositoryDependencyResolver.Current must be configured with the instance of IMemoryCache");
             }
         }
-
+        
         [Test]
-        public void LoadConfigurationRepositoryBySectionAndRepositoryName()
+        public void EfCoreRepositoryNeedsIocConfiguration()
         {
-            var config = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddXmlFile("app.config")
-               .Build();
-
-            var sectionName = "sharpRepository2";
-
-            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
-            if (sharpRepoConfig2 == null)
-                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
-
-            var repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2, "inMem");
-
-            if (!(repos is InMemoryRepository<Contact, string>))
+            try
             {
-                throw new Exception("Not InMemoryRepository");
+                var repos = factory.GetInstance<Contact, string>("efCoreRepos");
+                Assert.False(true, "Repo must throw exception");
+            }
+            catch (ConfigurationErrorsException e)
+            {
+                e.Message.ShouldBe("The EfCore repository Factory gets DbContext or DbContextOptionBuilder from RepositoryDependencyResolver containing the Ioc container passing directly DbContextOptions");
             }
         }
 
-        [Test]
-        public void LoadRepositoryDefaultStrategyAndOverrideNone()
-        {
-            var repos = factory.GetInstance<Contact, string>();
-
-            if (!(repos.CachingStrategy is StandardCachingStrategy<Contact, string>))
-            {
-                throw new Exception("Not standard caching default");
-            }
-
-            var config = new ConfigurationBuilder()
-               .SetBasePath(Directory.GetCurrentDirectory())
-               .AddXmlFile("app.config")
-               .Build();
-
-            var sectionName = "inMemoryNoCaching";
-
-            var sharpRepoConfig2 = config.GetSection(sectionName) as ISharpRepositoryConfiguration;
-            if (sharpRepoConfig2 == null)
-                throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
-
-
-            repos = RepositoryFactory.GetInstance<Contact, string>(sharpRepoConfig2);
-
-            if (!(repos.CachingStrategy is NoCachingStrategy<Contact, string>))
-            {
-                throw new Exception("Not the override of default for no caching");
-            }
-        }
 
         [Test]
         public void LoadInMemoryRepositoryFromConfigurationObject()
         {
             var config = new SharpRepositoryConfiguration();
-//            config.AddRepository("default", typeof(InMemoryConfigRepositoryFactory));
             config.AddRepository(new InMemoryRepositoryConfiguration("default"));
             var repos = RepositoryFactory.GetInstance<Contact, string>(config);
 
@@ -168,10 +118,23 @@ namespace SharpRepository.Tests.Configuration
         }
 
         [Test]
-        public void LoadEfRepositoryFromConfigurationObject()
+        public void EfCoreRepositoryFromConfigurationObject()
         {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<TestObjectContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            var dbContext = new TestObjectContext(options);
+
             var config = new SharpRepositoryConfiguration();
-            config.AddRepository(new EfCoreRepositoryConfiguration("default", "DefaultConnection", typeof(TestObjectContext)));
+            var coreRepoconfig = new EfCoreRepositoryConfiguration("default", dbContext);
+            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContext, SharpRepository.Tests");
+
+            config.AddRepository(coreRepoconfig);
+            
             var repos = RepositoryFactory.GetInstance<Contact, string>(config);
 
             if (!(repos is EfCoreRepository<Contact, string>))
@@ -186,18 +149,58 @@ namespace SharpRepository.Tests.Configuration
         }
 
         [Test]
+        public void EfCoreRepositoryNeedsDbContextType()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<TestObjectContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            var dbContext = new TestObjectContext(options);
+
+            var config = new SharpRepositoryConfiguration();
+            var coreRepoconfig = new EfCoreRepositoryConfiguration("default", dbContext);
+
+            config.AddRepository(coreRepoconfig);
+
+            try
+            {
+                var repos = RepositoryFactory.GetInstance<Contact, string>(config);
+            } catch (Exception e)
+            {
+                e.Message.ShouldBe("The DbContextOptions passed to the DbContext constructor must be a DbContextOptions<DbContext>. When registering multiple DbContext types make sure that the constructor for each context type has a DbContextOptions<TContext> parameter rather than a non-generic DbContextOptions parameter.");
+            }
+        }
+        
+        [Test]
         public void LoadEfRepositoryAndCachingFromConfigurationObject()
         {
             var config = new SharpRepositoryConfiguration();
+
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            var options = new DbContextOptionsBuilder<TestObjectContext>()
+                .UseSqlite(connection)
+                .Options;
+
+            var dbContext = new TestObjectContext(options);
+
             config.AddRepository(new InMemoryRepositoryConfiguration("inMemory", "timeout"));
-            config.AddRepository(new EfCoreRepositoryConfiguration("ef5", "DefaultConnection", typeof(TestObjectContext), "standard", "inMemoryProvider"));
-            config.DefaultRepository = "ef5";
+
+            var coreRepoconfig = new EfCoreRepositoryConfiguration("efCore", dbContext, "standard", "inMemoryProvider");
+            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContext, SharpRepository.Tests");
+
+            config.AddRepository(coreRepoconfig);
+            config.DefaultRepository = "efCore";
 
             config.AddCachingStrategy(new StandardCachingStrategyConfiguration("standard"));
             config.AddCachingStrategy(new TimeoutCachingStrategyConfiguration("timeout", 200));
             config.AddCachingStrategy(new NoCachingStrategyConfiguration("none"));
             
-            config.AddCachingProvider(new InMemoryCachingProviderConfiguration("inMemoryProvider"));
+            config.AddCachingProvider(new InMemoryCachingProviderConfiguration("inMemoryProvider", new MemoryCache(new MemoryCacheOptions())));
 
             var repos = RepositoryFactory.GetInstance<Contact, string>(config);
 
