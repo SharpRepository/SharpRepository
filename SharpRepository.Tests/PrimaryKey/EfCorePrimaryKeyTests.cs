@@ -20,18 +20,18 @@ namespace SharpRepository.Tests.PrimaryKey
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
             
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
             // Create the schema in the database
-            using (var context = new TestObjectContext(options))
+            using (var context = new TestObjectContextCore(options))
             {
                 context.Database.EnsureCreated();
             }
 
             // Run the test against one instance of the context
-            context = new TestObjectContext(options);
+            context = new TestObjectContextCore(options);
 
         }
 
@@ -45,7 +45,7 @@ namespace SharpRepository.Tests.PrimaryKey
         [Test]
         public void Should_Return_ContactId_Property()
         {
-            var repos = new TestEfRepository<Contact, int>(context);
+            var repos = new TestEfCoreRepository<Contact, int>(context);
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
             propInfo.PropertyType.ShouldBe(typeof(int));
@@ -55,7 +55,7 @@ namespace SharpRepository.Tests.PrimaryKey
         [Test]
         public void Should_Return_Some_Another_Last_Id_Property()
         {
-            var repos = new TestTripleKeyEfRepository<TripleCompoundKeyItemInts, int, int, int>(context);
+            var repos = new TestTripleKeyEfCoreRepository<TripleCompoundKeyItemInts, int, int, int>(context);
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
             propInfo[0].PropertyType.ShouldBe(typeof(int));
@@ -67,9 +67,9 @@ namespace SharpRepository.Tests.PrimaryKey
         }
     }
 
-    internal class TestEfRepository<T, TKey> : EfCoreRepository<T, TKey> where T : class, new()
+    internal class TestEfCoreRepository<T, TKey> : EfCoreRepository<T, TKey> where T : class, new()
     {
-        public TestEfRepository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
+        public TestEfCoreRepository(DbContext dbContext, ICachingStrategy<T, TKey> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
         }
 
@@ -79,9 +79,9 @@ namespace SharpRepository.Tests.PrimaryKey
         }
     }
 
-    internal class TestTripleKeyEfRepository<T, TKey, TKey2, TKey3> : EfCoreRepository<T, TKey, TKey2, TKey3> where T : class, new()
+    internal class TestTripleKeyEfCoreRepository<T, TKey, TKey2, TKey3> : EfCoreRepository<T, TKey, TKey2, TKey3> where T : class, new()
     {
-        public TestTripleKeyEfRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null) : base(dbContext, cachingStrategy)
+        public TestTripleKeyEfCoreRepository(DbContext dbContext, ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> cachingStrategy = null) : base(dbContext, cachingStrategy)
         {
         }
 

@@ -19,10 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-	<ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.AzureBlobRepository\SharpRepository.AzureBlobRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.AzureTableRepository\SharpRepository.AzureTableRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
@@ -34,9 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -123,11 +123,11 @@ namespace SharpRepository.Tests.Configuration
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
-            var dbContext = new TestObjectContext(options);
+            var dbContext = new TestObjectContextCore(options);
 
             var config = new SharpRepositoryConfiguration();
             var coreRepoconfig = new EfCoreRepositoryConfiguration("default", dbContext);
@@ -154,11 +154,11 @@ namespace SharpRepository.Tests.Configuration
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
-            var dbContext = new TestObjectContext(options);
+            var dbContext = new TestObjectContextCore(options);
 
             var config = new SharpRepositoryConfiguration();
             var coreRepoconfig = new EfCoreRepositoryConfiguration("default", dbContext);
@@ -182,11 +182,11 @@ namespace SharpRepository.Tests.Configuration
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<TestObjectContext>()
+            var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
 
-            var dbContext = new TestObjectContext(options);
+            var dbContext = new TestObjectContextCore(options);
 
             config.AddRepository(new InMemoryRepositoryConfiguration("inMemory", "timeout"));
 

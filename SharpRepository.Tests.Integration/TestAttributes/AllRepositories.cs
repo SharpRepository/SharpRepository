@@ -10,6 +10,7 @@
                 {
                     RepositoryType.InMemory,
                     RepositoryType.EfCore,
+                    RepositoryType.Ef,
                     RepositoryType.Dbo4,
                     //RepositoryType.RavenDb,
                     RepositoryType.Xml,
