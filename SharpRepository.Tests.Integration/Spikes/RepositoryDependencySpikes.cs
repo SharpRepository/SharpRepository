@@ -50,12 +50,12 @@ namespace SharpRepository.Tests.Integration.Spikes
             // structure map
             container = new Container(x =>
             {
-                x.AddRegistry(new StructureMapRegistry(options));
-                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
                 x.Scan(_ => {
                     _.TheCallingAssembly();
                     _.WithDefaultConventions();
                 });
+                x.AddRegistry(new StructureMapRegistry(options));
+                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
             });
 
             RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
