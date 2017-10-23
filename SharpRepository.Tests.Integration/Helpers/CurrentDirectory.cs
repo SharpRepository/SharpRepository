@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 
 namespace SharpRepository.Tests.Integration.Helpers
 {
@@ -9,9 +8,8 @@ namespace SharpRepository.Tests.Integration.Helpers
         ///  Sets the relative directory location based on the environment's current directory.
         ///  Often this is the project's debug location when running locally.
         /// </summary>
-        public CurrentDirectory() : base(System.AppContext.BaseDirectory)
+        public CurrentDirectory() : base(AppDomain.CurrentDomain.BaseDirectory)
         {
-
         }
     }
 }

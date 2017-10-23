@@ -242,3 +242,4 @@ _Pvt_Extensions
 /packages
 /nlog.txt
 /SharpRepository.Tests.Integration/Data/Db4o
+/SharpRepository.Tests.Integration/Data/Xml/Contact.xml

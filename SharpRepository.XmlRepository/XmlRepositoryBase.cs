@@ -63,7 +63,6 @@ namespace SharpRepository.XmlRepository
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             return Items.AsQueryable();
-            //return CloneList(Items).AsQueryable();
         }
 
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
@@ -71,47 +70,20 @@ namespace SharpRepository.XmlRepository
             return BaseQuery(fetchStrategy).FirstOrDefault(x => MatchOnPrimaryKey(x, key));
         }
 
-//        private static IEnumerable<T> CloneList(IList<T> list)
-//        {
-//            // when you Google deep copy of generic list every answer uses either the IClonable interface on the T or having the T be Serializable
-//            //  since we can't really put those constraints on T I'm going to do it via reflection
-//
-//            var type = typeof(T);
-//            var properties = type.GetProperties();
-//
-//            var clonedList = new List<T>(list.Count);
-//
-//            foreach (T item in list)
-//            {
-//                var newItem = new T();
-//                foreach (var propInfo in properties)
-//                {
-//                    propInfo.SetValue(newItem, propInfo.GetValue(item, null), null);
-//                }
-//
-//                clonedList.Add(newItem);
-//            }
-//
-//            return clonedList;
-//        }
-
         protected override void AddItem(T entity)
         {
-            TKey id;
-
-            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out TKey id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
             }
-            
+
             Items.Add(entity);
         }
 
         protected override void DeleteItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
             var index = Items.FindIndex(x => MatchOnPrimaryKey(x, pkValue));
             if (index >= 0)
@@ -122,8 +94,7 @@ namespace SharpRepository.XmlRepository
 
         protected override void UpdateItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out TKey pkValue);
 
             var index = Items.FindIndex(x => MatchOnPrimaryKey(x, pkValue));
             if (index >= 0)
@@ -140,12 +111,10 @@ namespace SharpRepository.XmlRepository
 
         protected override void SaveChanges()
         {
-            using (var stream = new FileStream(_storagePath, FileMode.Open))
-            using (var writer = new StreamWriter(stream))
-            {
-                var serializer = new XmlSerializer(typeof(List<T>));
-                serializer.Serialize(writer, Items);
-            }
+            var writer = new StreamWriter(_storagePath, false);
+            var serializer = new XmlSerializer(typeof(List<T>));
+            serializer.Serialize(writer, Items);
+            writer.Close();
         }
 
         public override void Dispose()
@@ -168,8 +137,7 @@ namespace SharpRepository.XmlRepository
 
             if (typeof(TKey) == typeof(Int32))
             {
-                TKey pkValue;
-                GetPrimaryKey(last, out pkValue);
+                GetPrimaryKey(last, out TKey pkValue);
 
                 var nextInt = Convert.ToInt32(pkValue) + 1;
                 return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
