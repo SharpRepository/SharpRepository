@@ -8,6 +8,8 @@ using SharpRepository.Repository.Ioc;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using StructureMap;
+using StructureMap.Configuration.DSL;
+using StructureMap.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
@@ -44,13 +46,16 @@ namespace SharpRepository.Tests.Integration.Spikes
                 throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
 
             var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoSection);
-
-
+            
             // structure map
             container = new Container(x =>
             {
                 x.AddRegistry(new StructureMapRegistry(options));
                 x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
+                x.Scan(_ => {
+                    _.TheCallingAssembly();
+                    _.WithDefaultConventions();
+                });
             });
 
             RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
