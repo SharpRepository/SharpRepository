@@ -40,16 +40,16 @@ namespace SharpRepository.Ioc.StructureMap.Factories
         public override Instance CloseType(Type[] types)
         {
             var instanceType = typeof(RepositoryInstance<,,>).MakeGenericType(types);
-            
-            if (this.configuration != null) {
-                var ctor = instanceType.GetConstructor(new[] { typeof(ISharpRepositoryConfiguration) });
-                return ctor.Invoke(new object[] { this.configuration }) as Instance;
-            } else {
-                var ctor = instanceType.GetConstructor(new[] { typeof(string) });
-                return ctor.Invoke(new object[] { this.repositoryName }) as Instance;
+
+            if (configuration == null)
+            {
+                return null;
             }
+
+            var ctor = instanceType.GetConstructor(new[] { typeof(ISharpRepositoryConfiguration), typeof(string)  });
+            return ctor.Invoke(new object[] { configuration, repositoryName }) as Instance;
         }
-}
+    }
 
     public class RepositoryInstance<T, TKey, TKey2> : LambdaInstance<ICompoundKeyRepository<T, TKey, TKey2>> where T : class, new()
     {

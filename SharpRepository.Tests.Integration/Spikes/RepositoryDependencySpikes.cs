@@ -1,20 +1,19 @@
 ﻿
-using System.Reflection;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
 using SharpRepository.Ioc.StructureMap;
 using SharpRepository.Repository;
+using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Ioc;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using StructureMap;
-using StructureMap.Configuration.DSL;
-using StructureMap.Configuration;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration;
 using System;
-using SharpRepository.Repository.Configuration;
+using System.Reflection;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -46,7 +45,10 @@ namespace SharpRepository.Tests.Integration.Spikes
                 throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
 
             var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoSection);
-            
+            sharpRepoConfig.DefaultRepository = "efCoreRepos";
+            var memoryCache = new MemoryCache(new MemoryCacheOptions());
+            var dbContext = new TestObjectContextCore(options);
+
             // structure map
             container = new Container(x =>
             {
@@ -54,7 +56,14 @@ namespace SharpRepository.Tests.Integration.Spikes
                     _.TheCallingAssembly();
                     _.WithDefaultConventions();
                 });
-                x.AddRegistry(new StructureMapRegistry(options));
+                x.For<DbContext>()
+                    .Use(dbContext);
+
+                x.For<TestObjectContextCore>()
+                    .Use(dbContext);
+
+                x.For<IMemoryCache>().Use(memoryCache);
+
                 x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
             });
 
@@ -100,14 +109,7 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             dbContext1.ShouldBe(dbContext2);
         }
-
-        [Test]
-        public void Ioc_For_IRepository_T_Should_Be_EfRepository_T()
-        {
-            var repos = container.GetInstance<IRepository<ContactType>>();
-            repos.ShouldBeOfType<EfCoreRepository<ContactType>>();
-        }
-
+        
         [Test]
         public void Ioc_For_IRepository_T_TKey_Should_Be_EfRepository_T_TKey()
         {
@@ -134,26 +136,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         {
             var repos = container.GetInstance<ICompoundKeyRepository<ContactType>>();
             repos.ShouldBeOfType<EfCoreCompoundKeyRepository<ContactType>>();
-        }
-    }
-
-    public class StructureMapRegistry : Registry
-    {
-        public StructureMapRegistry(DbContextOptions<TestObjectContextCore> options)
-        {
-            Scan(scanner =>
-            {
-                scanner.TheCallingAssembly();
-                scanner.WithDefaultConventions();
-            });
-
-            For<DbContext>()
-                .Use<TestObjectContextCore>()
-                .Ctor<DbContextOptions<TestObjectContextCore>>("options").Is(options);
-
-            For<TestObjectContextCore>()
-                .Use<TestObjectContextCore>()
-                .Ctor<DbContextOptions<TestObjectContextCore>>("options").Is(options);
         }
     }
 }

@@ -10,7 +10,10 @@ namespace SharpRepository.Ioc.StructureMap
     {
         public static void ForRepositoriesUseSharpRepository(this ConfigurationExpression initialization, ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
-            initialization.Scan(scan => scan.IncludeNamespaceContainingType<IAmInRepository>());
+            initialization.Scan(scan => { 
+                scan.IncludeNamespaceContainingType<IAmInRepository>();
+                scan.WithDefaultConventions();
+            });
 
             initialization.For(typeof(IRepository<>)).Use(new RepositoryNoKeyInstanceFactory(configuration, repositoryName));
 
