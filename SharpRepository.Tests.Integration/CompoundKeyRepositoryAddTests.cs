@@ -1,10 +1,10 @@
 using System.Linq;
-//using System.Transactions;
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
+using System.Transactions;
 
 namespace SharpRepository.Tests.Integration
 {
@@ -44,10 +44,10 @@ namespace SharpRepository.Tests.Integration
         {
             repository.Get("test", 1); // used to create the SqlCe database before being inside the transaction scope since that throws an error
 
-            //using (var trans = new TransactionScope())
-            //{
+            using (var trans = new TransactionScope())
+            {
                 repository.Add(new User { Username = "Test User", Age = 11, FullName = "Test User - 11" });
-            //}
+            }
 
             repository.GetAll().Count().ShouldBe(0);
         }
@@ -57,12 +57,12 @@ namespace SharpRepository.Tests.Integration
         {
             repository.Get("test", 1); // used to create the SqlCe database before being inside the transaction scope since that throws an error
 
-            //using (var trans = new TransactionScope())
-            //{
+            using (var trans = new TransactionScope())
+            {
                 repository.Add(new User { Username = "Test User", Age = 11, FullName = "Test User - 11" });
 
-            //    trans.Complete();
-            //}
+                trans.Complete();
+            }
 
             repository.GetAll().Count().ShouldBe(1);
         }
