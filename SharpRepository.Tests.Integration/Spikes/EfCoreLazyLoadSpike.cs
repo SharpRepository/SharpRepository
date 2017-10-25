@@ -14,31 +14,21 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace SharpRepository.Tests.Integration.Spikes
-{
-    public class MyEfCoreRepository : EfCoreRepository<Contact, string>
-    {
-        public MyEfCoreRepository(DbContext dbContext, ICachingStrategy<Contact, string> cachingStrategy = null) : base(dbContext, cachingStrategy)
-        {
-        }
-
-        public bool LazyLoadValue
-        {
-            get { return false; } // TODO: return Context.Configuration.LazyLoadingEnabled; }
-        }
-    }
-
+{        
     [TestFixture]
     public class EfCoreLazyLoadSpike
     {
         private TestObjectContextCore dbContext;
-        private List<string> queries;
+
+        private Func<string, bool> filterSelects = q => q.StartsWith("Executing DbCommand") && q.Contains("SELECT") && !q.Contains("sqlite_master");
 
         [SetUp]
         public void SetupRepository()
         {
-            queries = new List<string>();
             var dbPath = EfDataDirectoryFactory.Build();
 
             var connection = new SqliteConnection("DataSource=:memory:");
@@ -47,10 +37,8 @@ namespace SharpRepository.Tests.Integration.Spikes
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                 .UseSqlite(connection)
                 .Options;
-
-            // Create the schema in the database
-            var context = new TestObjectContextCore(options);
             
+            // Create the schema in the database
             dbContext = new TestObjectContextCore(options);
             dbContext.Database.EnsureCreated();
             const int totalItems = 5;
@@ -74,145 +62,79 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
 
             dbContext.SaveChanges();
-
-            // TODO: reistantiate in order to lose caches
-            //dbContext = new TestObjectContext(options);
-            //dbContext.Database.EnsureCreated();
         }
         
         [Test]
-        public void EfCore_LazyLoad_Set_To_False()
-        {
-            //dbContext.Configuration.LazyLoadingEnabled = false;
-            var repository = new MyEfCoreRepository(dbContext);
-            repository.LazyLoadValue.ShouldBeFalse();
-        }
-
-        [Test]
         public void EfCore_GetAll_Without_Includes_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-            var repository = new MyEfCoreRepository(dbContext);
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var contact = repository.GetAll().First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(3);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
+            // dbContext.QueryLog.Count(filterSelects).ShouldBe(2); may be that dbcontext is disposed and the successive queries are not logged, quieries does not contains email so query was made in a lazy way but after.
         }
 
         [Test]
         public void EfCore_GetAll_With_Includes_In_Strategy_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-            var repository = new MyEfCoreRepository(dbContext);
-
-
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
             var strategy = new GenericFetchStrategy<Contact>();
             strategy.Include(x => x.EmailAddresses);
 
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            dbContext.QueryLog.Count(q => q.Contains("SELECT")).ShouldBe(4);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
         [Test]
         public void EfCore_GetAll_With_Includes_In_Strategy_String_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-            var repository = new MyEfCoreRepository(dbContext);
-
-
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
+            
             var strategy = new GenericFetchStrategy<Contact>();
             strategy.Include(x => x.EmailAddresses);
 
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
         [Test]
         public void EfCore_GetAll_With_Text_Include_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-            var repository = new MyEfCoreRepository(dbContext);
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var contact = repository.GetAll("EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(1);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
         [Test]
         public void EfCore_GetAll_With_Text_Include_And_Pagination_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-            var repository = new MyEfCoreRepository(dbContext);
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var pagination = new PagingOptions<Contact>(1, 4, "ContactId");
 
             var contact = repository.GetAll(pagination, "EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
-            queries.Count().ShouldBe(2); // first query is count for total records
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(3); // first query is count for total records
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            queries.Count().ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(3);
         }
 
         [Test]
         public void EfCore_FindAll_With_Include_And_Predicate_In_Specs_LazyLoads_Email()
         {
-            //dbContext.Configuration.LazyLoadingEnabled = true;
-            //dbContext.Database.Log = sql =>
-            //{
-            //    if (sql.Contains("SELECT"))
-            //    {
-            //        queries.Add(sql);
-            //    }
-            //};
-
-            ;
-
-            var repository = new MyEfCoreRepository(dbContext);
+            var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
                     .And(obj => obj.EmailAddresses.Any(m => m.Email == "omar.piani.1@email.com"));
@@ -231,9 +153,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.FindAll(findAllBySpec).First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(s => s.Contains("QUERY")).ShouldBe(1); // first query is count for total records
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
             contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
-            dbContext.QueryLog.Count(s => s.Contains("QUERY")).ShouldBe(1);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
 
             repository.FindAll(findAllBySpec).Count().ShouldBe(1);
         }

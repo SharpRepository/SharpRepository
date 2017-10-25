@@ -14,7 +14,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Use_Raven_Db_Embedded_For_Tests()
         {
-            IDocumentStore documentStore = new EmbeddableDocumentStore() {RunInMemory = true};
+            var documentStore = new EmbeddableDocumentStore() {RunInMemory = true };
+            documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
             using (var repos = new RavenDbRepository<RavenTestStringKey>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestStringKey() {Name = "Jeff", Age = 33});
@@ -34,6 +35,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Use_Raven_Db_Embedded_For_Tests_With_Int_Key()
         {
             var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
+            documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+
             using (var repos = new RavenDbRepository<RavenTestIntKey, int>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestIntKey() {Name = "Jeff", Age = 33});
@@ -56,6 +59,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Use_Raven_Db_Embedded_For_Tests_With_Custom_Int_Key()
         {
             var documentStore = new EmbeddableDocumentStore() { RunInMemory = true };
+            documentStore.Configuration.Storage.Voron.AllowOn32Bits = true;
+
             using (var repos = new RavenDbRepository<RavenTestCustomIntKey, int>(documentStore: documentStore))
             {
                 repos.Add(new RavenTestCustomIntKey() { Name = "Jeff", Age = 33 });
