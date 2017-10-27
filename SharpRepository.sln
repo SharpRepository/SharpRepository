@@ -88,9 +88,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.AzureDocume
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.EfCoreRepository", "SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj", "{736B9737-FEC8-480F-B52A-18B0E6151F1B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.CoreWebClient", "SharpRepository.CoreWebClient\SharpRepository.CoreWebClient.csproj", "{EA190218-E5E6-4D26-8411-B33B08EE1E3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Samples.CoreMvc", "SharpRepository.Sample.CoreMvc\SharpRepository.Samples.CoreMvc.csproj", "{EA190218-E5E6-4D26-8411-B33B08EE1E3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Microsoft.DependencyInjection", "SharpRepository.Ioc.NetCoreServices\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj", "{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Microsoft.DependencyInjection", "SharpRepository.Ioc.Microsoft.DependencyInjection\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj", "{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -382,7 +382,7 @@ Global
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC} = {7D84196E-1183-46E8-944F-C43B0627B931}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {819CFA5F-D8EF-4CB4-80CC-954C136BA9B6}
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+		SolutionGuid = {819CFA5F-D8EF-4CB4-80CC-954C136BA9B6}
 	EndGlobalSection
 EndGlobal

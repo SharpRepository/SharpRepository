@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
-    <ProjectReference Include="..\SharpRepository.Ioc.NetCoreServices\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj" />
+    <ProjectReference Include="..\SharpRepository.Ioc.Microsoft.DependencyInjection\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>
