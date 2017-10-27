@@ -2,7 +2,6 @@
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using StructureMap;
-using StructureMap.Pipeline;
 
 namespace SharpRepository.Ioc.StructureMap
 {
@@ -14,15 +13,17 @@ namespace SharpRepository.Ioc.StructureMap
                 scan.IncludeNamespaceContainingType<IAmInRepository>();
                 scan.WithDefaultConventions();
             });
+            
+            initialization.For(typeof(IRepository<>)).Singleton();
+            initialization.For(typeof(IRepository<,>)).Singleton();
+            initialization.For(typeof(ICompoundKeyRepository<,,>)).Singleton();
+            initialization.For(typeof(ICompoundKeyRepository<,,,>)).Singleton();
+            initialization.For(typeof(ICompoundKeyRepository<>)).Singleton();
 
             initialization.For(typeof(IRepository<>)).Use(new RepositoryNoKeyInstanceFactory(configuration, repositoryName));
-
             initialization.For(typeof(IRepository<,>)).Use(new RepositorySingleKeyInstanceFactory(configuration, repositoryName));
-
             initialization.For(typeof(ICompoundKeyRepository<,,>)).Use(new RepositoryDoubleKeyInstanceFactory(configuration, repositoryName));
-
             initialization.For(typeof(ICompoundKeyRepository<,,,>)).Use(new RepositoryTripleKeyInstanceFactory(configuration, repositoryName));
-
             initialization.For(typeof(ICompoundKeyRepository<>)).Use(new RepositoryCompoundKeyInstanceFactory(configuration, repositoryName));
         }
     }

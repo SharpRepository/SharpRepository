@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;netstandard1.5;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3</TargetFrameworks>
 	<Product>SharpRepository for AzureBlob</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	<PackageId>SharpRepository.AzureTableRepository</PackageId>
-    <PackageVersion>2.0.0-alpha2</PackageVersion>
-	<PackageReleaseNotes>2.0.0-alpha2: merge all code</PackageReleaseNotes>
+    <PackageVersion>2.0.1-alpha3</PackageVersion>
+	<PackageReleaseNotes>2.0.1-alpha3: configurable via appsettings.json</PackageReleaseNotes>
 	<PackageTags>SharpRepository Repository Azure Blob</PackageTags>
 	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -15,14 +15,11 @@
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>2.0.0-alpha2</Version>
+	<Version>2.0.1-alpha3</Version>
 	<FileVersion>2.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WindowsAzure.Storage" Version="8.4.0" />

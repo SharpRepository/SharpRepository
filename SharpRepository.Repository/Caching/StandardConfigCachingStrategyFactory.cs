@@ -5,7 +5,7 @@ namespace SharpRepository.Repository.Caching
 {
     public class StandardConfigCachingStrategyFactory : ConfigCachingStrategyFactory
     {
-        public StandardConfigCachingStrategyFactory(StandardCachingStrategyConfiguration config)
+        public StandardConfigCachingStrategyFactory(ICachingStrategyConfiguration config)
            : base(config)
         {
         }

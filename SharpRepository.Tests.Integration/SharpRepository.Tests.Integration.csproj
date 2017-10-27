@@ -15,21 +15,17 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
     <PackageReference Include="RavenDB.Embedded" Version="3.5.4" />
     <PackageReference Include="Shouldly" Version="2.8.3" />
-    <PackageReference Include="StructureMap" Version="4.5.1" />
+    <PackageReference Include="StructureMap" Version="4.5.2" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.105.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj" />
-	<ProjectReference Include="..\SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj" />
+	  <ProjectReference Include="..\SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />

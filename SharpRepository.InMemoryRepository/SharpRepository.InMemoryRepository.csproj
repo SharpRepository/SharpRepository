@@ -4,13 +4,13 @@
     <RootNamespace>SharpRepository.InMemoryRepository</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.5;netstandard1.3;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.3</TargetFrameworks>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	<PackageId>SharpRepository.InMemoryRepository</PackageId>
-    <PackageVersion>2.0.0-alpha2</PackageVersion>
-	<PackageReleaseNotes>2.0.0-alpha2: merge all code</PackageReleaseNotes>
+    <PackageVersion>2.0.1-beta1</PackageVersion>
+	<PackageReleaseNotes>2.0.1-beta1: configurable via appconfig.json</PackageReleaseNotes>
 	<PackageTags>SharpRepository Repository InMemoryRepositoryRepository InMemory Memory</PackageTags>
 	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -18,13 +18,13 @@
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<Version>2.0.0-alpha2</Version>
+	<Version>2.0.1-beta1</Version>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3' or '$(TargetFramework)' == 'netstandard1.5' or '$(TargetFramework)' == 'netstandard1.6'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
   </ItemGroup>
