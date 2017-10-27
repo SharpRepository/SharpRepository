@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharpRepository.Ioc.NetCoreServices;
-using SharpRepository.Repository;
-using SharpRepository.CoreWebClient.Models;
-using SharpRepository.InMemoryRepository;
-using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace SharpRepository.CoreWebClient
 {
@@ -27,7 +20,7 @@ namespace SharpRepository.CoreWebClient
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"));
+            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,8 +44,6 @@ namespace SharpRepository.CoreWebClient
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            var provider = app.ApplicationServices;
         }
     }
 }
