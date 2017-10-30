@@ -1,19 +1,50 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using Microsoft.Extensions.Configuration;
+using SharpRepository.Ioc.StructureMap;
+using SharpRepository.Repository;
+using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Ioc;
+using StructureMap;
+using System;
+using System.Web.Http;
+using System.Web.Mvc;
 
 namespace SharpRepository.Ioc.Mvc
 {
-    public class MvcDependencyResolver : IRepositoryDependencyResolver
+    public static class MvcDependencyResolver
     {
-        public T Resolve<T>()
+        public static void ForRepositoriesUseSharpRepository(string jsonConfigurationFileName, string sharpRepositoryConfigurationSectionName, string repoisitoryName = null)
         {
-            return DependencyResolver.Current.GetService<T>();
+            var config = new ConfigurationBuilder()
+              .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+              .AddJsonFile(jsonConfigurationFileName)
+              .Build();
+
+            var section = config.GetSection(sharpRepositoryConfigurationSectionName);
+            var sharpConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(section);
+            
+            ForRepositoriesUseSharpRepository(sharpConfig, repoisitoryName);
         }
 
-        public object Resolve(Type type)
+        public static void ForRepositoriesUseSharpRepository(ISharpRepositoryConfiguration sharpConfig, string repositoryName = null)
         {
-            return DependencyResolver.Current.GetService(type);
+            var container = new Container(c =>
+            {
+                c.Scan(s =>
+                {
+                    s.TheCallingAssembly();
+                    s.AssembliesAndExecutablesFromApplicationBaseDirectory();
+                    s.LookForRegistries();
+                    s.WithDefaultConventions();
+                });
+
+                c.ForRepositoriesUseSharpRepository(sharpConfig, repositoryName);
+            });
+
+            var dependencyResolver = new StructureMapDependencyResolver(container);
+            DependencyResolver.SetResolver(dependencyResolver);
+            GlobalConfiguration.Configuration.DependencyResolver = dependencyResolver;
+
+            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
         }
     }
 }
