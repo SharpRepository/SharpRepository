@@ -65,6 +65,11 @@ namespace SharpRepository.EfCoreRepository
             if (!String.IsNullOrEmpty(tmpDbContextType))
             {
                 dbContextType = Type.GetType(tmpDbContextType);
+
+                if (dbContextType == null)
+                {
+                    throw new NotImplementedException("Unable to find " + tmpDbContextType + " class");
+                }
             }
             
             // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters

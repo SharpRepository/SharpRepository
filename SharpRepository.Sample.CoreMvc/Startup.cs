@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharpRepository.Ioc.NetCoreServices;
 using System;
 
-namespace SharpRepository.CoreWebClient
+namespace SharpRepository.CoreMvc
 {
     public class Startup
     {
@@ -20,7 +21,13 @@ namespace SharpRepository.CoreWebClient
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb");
+
+            services.AddDbContext<ContactContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // return services.UseSharpRepository(Configuration.GetSection("sharpRepository")); //default InMemory
+            // return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb"); // for Mongo Db
+            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "efCore"); // for Ef Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,4 @@
-﻿namespace SharpRepository.CoreWebClient
+﻿namespace SharpRepository.CoreMvc
 {
     public class Title : ITitle
     {

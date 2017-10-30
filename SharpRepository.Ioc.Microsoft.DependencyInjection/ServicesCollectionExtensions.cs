@@ -17,7 +17,12 @@ namespace SharpRepository.Ioc.NetCoreServices
                 throw new ConfigurationErrorsException("Configuration section not found.");
 
             var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(configurationSection);
-            
+
+            return services.UseSharpRepository(sharpRepoConfig, repositoryName);
+        }
+        
+        public static IServiceProvider UseSharpRepository(this IServiceCollection services, ISharpRepositoryConfiguration sharpRepoConfig, string repositoryName = null)
+        {
             var container = new Container();
             container.Configure(config =>
             {

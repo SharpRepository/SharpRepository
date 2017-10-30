@@ -1,4 +1,4 @@
-﻿namespace SharpRepository.CoreWebClient.Models
+﻿namespace SharpRepository.CoreMvc.Models
 {
     public class Email
     {

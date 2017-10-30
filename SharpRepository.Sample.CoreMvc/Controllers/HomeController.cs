@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SharpRepository.CoreWebClient.Models;
+using SharpRepository.CoreMvc.Models;
 using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.Repository;
 
-namespace SharpRepository.CoreWebClient.Controllers
+namespace SharpRepository.CoreMvc.Controllers
 {
     public class HomeController : Controller
     {

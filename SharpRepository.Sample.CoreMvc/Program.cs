@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SharpRepository.Ioc.NetCoreServices;
 
-namespace SharpRepository.CoreWebClient
+namespace SharpRepository.CoreMvc
 {
     public class Program
     {

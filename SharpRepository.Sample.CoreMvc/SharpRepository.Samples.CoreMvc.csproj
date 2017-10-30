@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Ioc.Microsoft.DependencyInjection\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj" />
   </ItemGroup>
 

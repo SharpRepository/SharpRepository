@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharpRepository.Repository;
-using SharpRepository.CoreWebClient.Models;
+using SharpRepository.CoreMvc.Models;
 
-namespace SharpRepository.CoreWebClient.Controllers
+namespace SharpRepository.CoreMvc.Controllers
 {
     public class ContactsController : Controller
     {
-        protected IRepository<Contact, int> repository;
+        protected IRepository<Contact, string> repository;
 
-        public ContactsController(IRepository<Contact, int> repository)
+        public ContactsController(IRepository<Contact, string> repository)
         {
             this.repository = repository;
         }
@@ -27,7 +27,7 @@ namespace SharpRepository.CoreWebClient.Controllers
         }
 
         // GET: Contacts/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
             var contact = repository.Get(id);
 
@@ -45,20 +45,13 @@ namespace SharpRepository.CoreWebClient.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Contact contact)
         {
-            try
-            {
-                repository.Add(contact);
+            repository.Add(contact);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Contacts/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
             var contact = repository.Get(id);
             return View(contact);
@@ -67,7 +60,7 @@ namespace SharpRepository.CoreWebClient.Controllers
         // POST: Contacts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Contact contact)
+        public ActionResult Edit(string id, Contact contact)
         {
             try
             {
@@ -82,7 +75,7 @@ namespace SharpRepository.CoreWebClient.Controllers
         }
 
         // GET: Contacts/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             var contact = repository.Get(id);
 
@@ -92,7 +85,7 @@ namespace SharpRepository.CoreWebClient.Controllers
         // POST: Contacts/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id, IFormCollection collection)
         {
             try
             {
