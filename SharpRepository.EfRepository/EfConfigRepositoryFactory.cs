@@ -33,6 +33,7 @@ namespace SharpRepository.EfRepository
         {
             return new EfRepository<T, TKey, TKey2, TKey3>(GetDbContext());
         }
+
         public override ICompoundKeyRepository<T> GetCompoundKeyInstance<T>()
         {
             return new EfCompoundKeyRepository<T>(GetDbContext());
