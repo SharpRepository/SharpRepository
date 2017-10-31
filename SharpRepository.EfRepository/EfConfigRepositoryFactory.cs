@@ -48,38 +48,31 @@ namespace SharpRepository.EfRepository
                 dbContextType = Type.GetType(dbContextTypeString);
             }
 
-            // check for required parameters
-            if (RepositoryDependencyResolver.Current == null && (String.IsNullOrEmpty(connectionString) || dbContextType == null))
-            {
-                throw new ConfigurationErrorsException("The connectionString and dbContextType attribute are required in order to use the EfRepository via the configuration file, unless you set the RepositoryDependencyResolver to use an Ioc container.");
-            }
-            
             // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters
             DbContext dbContext = null;
 
-            // if there is an IOC dependency resolver configured then use that one to get the DbContext, this will allow sharing of context across multiple repositories if the IOC is configured that way
-            if (RepositoryDependencyResolver.Current != null)
+            // the default way of getting a DbContext if there is no Ioc container setup
+            if (dbContextType != null)
             {
-                try
-                {
-                    dbContext = dbContextType == null
+                dbContext = String.IsNullOrEmpty(connectionString) ?
+                        (DbContext)Activator.CreateInstance(dbContextType) :
+                        (DbContext)Activator.CreateInstance(dbContextType, connectionString);
+
+                return dbContext;
+            }
+
+            // check for required parameters
+            if (RepositoryDependencyResolver.Current == null)
+            {
+                throw new ConfigurationErrorsException("The connectionString and dbContextType attribute are required in order to use the EfRepository via the configuration file, unless you set the RepositoryDependencyResolver to use an Ioc container.");
+            }
+            else
+            {
+                // if there is an IOC dependency resolver configured then use that one to get the DbContext, this will allow sharing of context across multiple repositories if the IOC is configured that way
+                return dbContextType == null
                                     ? RepositoryDependencyResolver.Current.Resolve<DbContext>()
                                     : (DbContext)RepositoryDependencyResolver.Current.Resolve(dbContextType);
-                    
-                    if (dbContext != null)
-                    {
-                        return dbContext;
-                    }
-                } catch (Exception)
-                {}
             }
-            
-            // the default way of getting a DbContext if there is no Ioc container setup
-            dbContext = dbContextType == null
-                    ? new DbContext(connectionString)
-                    : (DbContext)Activator.CreateInstance(dbContextType, connectionString);
-
-            return dbContext;
         }
     }
 }

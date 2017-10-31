@@ -4,11 +4,11 @@ namespace SharpRepository.Samples.MVC5.Models
 {
     public class ContactsDbContext : DbContext
     {
-        public ContactsDbContext()
-            : base("name=ContactsDbContext")
+        public ContactsDbContext(string connectionString) : base(connectionString)
         {
+
         }
-        
+
         public virtual DbSet<Contact> Contacts { get; set; }
     }
 }
