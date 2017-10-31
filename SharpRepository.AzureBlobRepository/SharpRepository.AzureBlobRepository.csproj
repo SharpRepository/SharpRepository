@@ -5,7 +5,7 @@
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
-	<PackageId>SharpRepository.AzureTableRepository</PackageId>
+	<PackageId>SharpRepository.AzureBlobRepository</PackageId>
     <PackageVersion>2.0.1-alpha3</PackageVersion>
 	<PackageReleaseNotes>2.0.1-alpha3: configurable via appsettings.json</PackageReleaseNotes>
 	<PackageTags>SharpRepository Repository Azure Blob</PackageTags>
@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<Version>2.0.1-alpha3</Version>
-	<FileVersion>2.0.0.0</FileVersion>
+	<FileVersion>2.0.1.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
