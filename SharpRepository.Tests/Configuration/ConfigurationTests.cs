@@ -131,7 +131,7 @@ namespace SharpRepository.Tests.Configuration
 
             var config = new SharpRepositoryConfiguration();
             var coreRepoconfig = new EfCoreRepositoryConfiguration("default", dbContext);
-            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContext, SharpRepository.Tests");
+            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContextCore, SharpRepository.Tests");
 
             config.AddRepository(coreRepoconfig);
             
@@ -191,7 +191,7 @@ namespace SharpRepository.Tests.Configuration
             config.AddRepository(new InMemoryRepositoryConfiguration("inMemory", "timeout"));
 
             var coreRepoconfig = new EfCoreRepositoryConfiguration("efCore", dbContext, "standard", "inMemoryProvider");
-            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContext, SharpRepository.Tests");
+            coreRepoconfig.Attributes.Add("dbContextType", "SharpRepository.Tests.TestObjects.TestObjectContextCore, SharpRepository.Tests");
 
             config.AddRepository(coreRepoconfig);
             config.DefaultRepository = "efCore";
