@@ -2,7 +2,7 @@
 using SharpRepository.Repository.Ioc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SharpRepository.Ioc.NetCoreServices
+namespace SharpRepository.Ioc.Microsoft.DependencyInjection
 {
     public class DependencyResolverWrapper : IRepositoryDependencyResolver
     {

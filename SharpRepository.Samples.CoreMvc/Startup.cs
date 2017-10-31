@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SharpRepository.Ioc.NetCoreServices;
+using SharpRepository.Ioc.Microsoft.DependencyInjection;
 using System;
 
 namespace SharpRepository.CoreMvc
@@ -24,6 +24,8 @@ namespace SharpRepository.CoreMvc
 
             services.AddDbContext<ContactContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // services.AddTransient<DbContext, ContactContext>(); // needed if you don't write dbContextClass on json configuration
 
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository")); //default InMemory
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb"); // for Mongo Db

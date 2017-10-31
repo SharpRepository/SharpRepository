@@ -7,7 +7,7 @@ using SharpRepository.Repository.Ioc;
 using StructureMap;
 using System;
 
-namespace SharpRepository.Ioc.NetCoreServices
+namespace SharpRepository.Ioc.Microsoft.DependencyInjection
 {
     public static class ServicesCollectionExtensions
     {
