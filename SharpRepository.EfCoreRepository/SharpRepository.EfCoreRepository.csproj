@@ -1,24 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
-  <PropertyGroup Label="Configuration">
-    <AssemblyName>SharpRepository.EfCoreRepository</AssemblyName>
-    <RootNamespace>SharpRepository.EfCoreRepository</RootNamespace>
-  </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;netstandard2.0</TargetFrameworks>
-	<Authors>Eivind Gussiås Løkseth, Omar Piani</Authors>
-    <Description>SharpRepository is a generic repository</Description>
+	  <Authors>Eivind Gussiås Løkseth, Omar Piani</Authors>
+    <Description>SharpRepository generic repository implementation for Entity Framework 1.1 and 2</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
-	<PackageId>SharpRepository.EfCoreRepository</PackageId>
-  <PackageVersion>2.0.1-beta1</PackageVersion>
-	<PackageReleaseNotes>2.0.1-beta1: Configurable via appsettings.json</PackageReleaseNotes>
-	<PackageTags>SharpRepository Repository EfRepository EntityFramework Entity Framework EF6</PackageTags>
-	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
-	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
-	<PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
-	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	  <PackageId>SharpRepository.EfCoreRepository</PackageId>
+    <PackageVersion>2.0.1-beta1</PackageVersion>
+	  <PackageReleaseNotes>2.0.1-beta1: Configurable via appsettings.json</PackageReleaseNotes>
+	  <PackageTags>SharpRepository Repository EfRepository EntityFramework Entity Framework EF6</PackageTags>
+	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
+	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
+	  <PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
+	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
-	<RepositoryType>git</RepositoryType>
-	<Version>2.0.1-beta1</Version>
+	  <RepositoryType>git</RepositoryType>
+	  <Version>2.0.1-beta1</Version>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
