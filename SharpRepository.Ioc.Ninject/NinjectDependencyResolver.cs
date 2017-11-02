@@ -6,8 +6,8 @@ namespace SharpRepository.Ioc.Ninject
 {
     public class NinjectDependencyResolver : BaseRepositoryDependencyResolver
     {
-        private readonly IReadOnlyKernel _kernel;
-        public NinjectDependencyResolver(IReadOnlyKernel kernel)
+        private readonly IKernel _kernel;
+        public NinjectDependencyResolver(IKernel kernel)
         {
             _kernel = kernel;
         }

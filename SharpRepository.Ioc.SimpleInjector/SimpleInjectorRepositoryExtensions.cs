@@ -29,6 +29,14 @@ namespace SharpRepository.Ioc.SimpleInjector
                     {
                         e.Register(() => RepositoryFactory.GetInstance(args[0], args[1], args[2], configuration, repositoryName));
                     }
+                    else if (typedef == typeof(ICompoundKeyRepository<,,,>))
+                    {
+                        e.Register(() => RepositoryFactory.GetInstance(args[0], args[1], args[2], args[2], configuration, repositoryName));
+                    }
+                    else if (typedef == typeof(ICompoundKeyRepository<>))
+                    {
+                        e.Register(() => RepositoryFactory.GetInstance(args[0], configuration, repositoryName));
+                    }
                 }
             };
         }
