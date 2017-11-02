@@ -9,19 +9,14 @@ InMemory repository implementations as well. SharpRepository offers built-in cac
 Memcached and standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, 
 Batches and Traits. 
 
-
 How do I get started?
 --------------------------------
-Check out the [getting started guide](https://github.com/SharpRepository/SharpRepository/wiki/Getting-started). When you're done there, review the SharpRepository.Samples, SharpRepository.Tests.Integration and SharpRepository.Tests 
+Check out the [getting started guide](https://github.com/SharpRepository/SharpRepository/wiki/Getting-started). When you're done there, review the SharpRepository.Samples, SharpRepository.Samples.MvcCore, SharpRepository.Samples.MVC5, SharpRepository.Tests.Integration and SharpRepository.Tests 
 project for additional sample usage and implementation details.
-
-Important EntityFramework Notice
---------------------------------
-Please use SharpRepository.EfRepository moving forward instead of Ef5Repository.  Both will work with EF5 and EF6 but the naming was confusing once EF6 was released so we basically renamed the package.  All updates will be made to EfRepository moving forward.
 
 Compatibility Issues
 --------------------------------
-- Project targets .NET Framework 4.5.2
+- All packages support .NET Framework 4.6 and .NET Standard 2.0. A good part of them supports .NET Standard 1.3
 - CouchDB Repository is not compatible with CouchDB 2.0.0 (removed temporary views support)
 
 Running tests
