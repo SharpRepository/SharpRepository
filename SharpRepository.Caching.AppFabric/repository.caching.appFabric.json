@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "cachingProviders": {
+      "default": "appFabricProvider",
+      "appFabricProvider": {
+        "factory": "SharpRepository.Caching.AppFabric.AppFabricConfigCachingProviderFactory, SharpRepository.Caching.AppFabric",
+        "cacheName": "cache"
+      }
+    }
+  }
+}

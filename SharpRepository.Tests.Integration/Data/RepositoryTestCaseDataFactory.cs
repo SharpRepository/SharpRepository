@@ -109,7 +109,7 @@ namespace SharpRepository.Tests.Integration.Data
                     CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
                     CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
 
-                    yield return new TestCaseData(new CouchDbRepository<Contact>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");
+                    yield return new TestCaseData(new CouchDbRepository<Contact, string>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository Test");
                 }
 
             }

@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "cachingProviders": {
+      "default": "windowsAzureProvider",
+      "windowsAzureProvider": {
+        "factory": "SharpRepository.Caching.WindowsAzure.MemCachedConfigCachingProviderFactory, SharpRepository.Caching.WindowsAzure",
+        "cacheName": "name"
+      }
+    }
+  }
+}

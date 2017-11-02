@@ -1,0 +1,10 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "inMemory",
+      "inMemory": {
+        "factory": "SharpRepository.InMemoryRepository.InMemoryConfigRepositoryFactory, SharpRepository.InMemoryRepository"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "cachingProviders": {
+      "default": "memCachedProvider",
+      "memCachedProvider": {
+        "factory": "SharpRepository.Caching.Memcached.MemCachedConfigCachingProviderFactory, SharpRepository.Caching.Memcached",
+        "sectionName": "memcached"
+      }
+    }
+  }
+}

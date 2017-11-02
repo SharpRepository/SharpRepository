@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "cacheRepo",
+      "cacheRepo": {
+        "factory": "SharpRepository.CacheRepository.CacheConfigRepositoryFactory, SharpRepository.CacheRepository",
+        "cacheProvider": "cacheProviderSectionName"
+      }
+    }
+  }
+}

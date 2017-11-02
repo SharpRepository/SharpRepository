@@ -19,7 +19,7 @@ namespace SharpRepository.RavenDbRepository
 
         public override IRepository<T, TKey> GetInstance<T, TKey>()
         {
-            var documentStore =new DocumentStore();
+            var documentStore = new DocumentStore();
 
             if (!String.IsNullOrEmpty(RepositoryConfiguration["connectionStringName"]))
             {

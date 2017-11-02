@@ -17,6 +17,12 @@
 	  <Version>2.0.1-alpha3</Version>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="repository.ravenDb.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>

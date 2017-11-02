@@ -39,9 +39,7 @@ namespace SharpRepository.Caching.WindowsAzure
         /// <param name="cacheName">Name of the cache.</param>
         public WindowsAzureCachingProvider(DataCacheFactory cacheFactory, string cacheName = null)
         {
-            if (cacheFactory == null) throw new ArgumentNullException("cacheFactory");
-
-            CacheFactory = cacheFactory;
+            CacheFactory = cacheFactory ?? throw new ArgumentNullException("cacheFactory");
 
             // TODO: don't know enough about Azure caching to know if we should use the GetDefaultCache() if no cache name provided, or if we should use our own name like SharpRepository
             Cache = String.IsNullOrEmpty(cacheName) ? cacheFactory.GetDefaultCache() : cacheFactory.GetCache(cacheName);
@@ -103,8 +101,7 @@ namespace SharpRepository.Caching.WindowsAzure
 
             lock (LockObject)
             {
-                int current;
-                if (!Get(key, out current))
+                if (!Get(key, out int current))
                 {
                     current = defaultValue;
                 }

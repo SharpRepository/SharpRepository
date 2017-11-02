@@ -17,6 +17,12 @@
 	  <Version>2.0.1-alpha1</Version>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="repository.db4o.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="db4o-devel" Version="8.1.184.15492" />
   </ItemGroup>
   <ItemGroup>

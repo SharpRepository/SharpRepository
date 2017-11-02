@@ -1,0 +1,12 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "efCore",
+      "efCore": {
+        "factory": "SharpRepository.EfCoreRepository.EfCoreConfigRepositoryFactory, SharpRepository.EfCoreRepository",
+        "connectionString": "EfCoreConnectionString", // optional, you can configure it with dependency resolver
+        "dbContextType": "TestObjectContextCore, SharpRepository.Tests.Integration" // optional, you can configure it with dependency resolver
+      }
+    }
+  }
+}

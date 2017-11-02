@@ -1,9 +1,0 @@
-<configuration>
-
-  <sharpRepository>
-    <cachingProviders>
-      <cachingProvider name="redisProvider" host="127.0.0.1" port="6379" ssl="True" factory="SharpRepository.Caching.Redis.RedisConfigCachingProviderFactory, SharpRepository.Caching.Redis" />
-    </cachingProviders>
-  </sharpRepository>
-
-</configuration>

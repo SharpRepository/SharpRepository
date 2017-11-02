@@ -16,6 +16,12 @@
 	  <RepositoryType>git</RepositoryType>
 	  <Version>2.0.1-beta1</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="repository.mongoDb.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Bson" Version="2.4.4" />

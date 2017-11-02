@@ -36,4 +36,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="repository.efCore.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

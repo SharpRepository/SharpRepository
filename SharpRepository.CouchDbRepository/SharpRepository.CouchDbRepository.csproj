@@ -23,6 +23,12 @@
 	
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="repository.couchDb.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Remotion.Linq" Version="2.1.2" />
   </ItemGroup>

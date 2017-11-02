@@ -1,0 +1,15 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "azureDocumentDb",
+      "azureDocumentDb": {
+        "factory": "SharpRepository.AzureDocumentDbRepository.DocumentDbConfigRepositoryFactory, SharpRepository.AzureDocumentDbRepository",
+        "endpointUrl": "https://example.com:443/",
+        "authorizationKey": "DocumentDBSample",
+        "databaseId": "Entertainment",
+        "collectionId": "Games",
+        "createIfNotExists": "true"
+      }
+    }
+  }
+}

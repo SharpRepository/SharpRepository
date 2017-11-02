@@ -1,0 +1,12 @@
+{
+  "sharpRepository": {
+    "cachingProviders": {
+      "default": "redisProvider",
+      "redisProvider": {
+        "factory": "SharpRepository.Caching.Redis.RedisConfigCachingProviderFactory, SharpRepository.Caching.Redis",
+        "host": "127.0.0.1",
+        "port": "6379"
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "xml",
+      "xml": {
+        "factory": "SharpRepository.XmlRepository.XmlConfigRepositoryFactory, SharpRepository.XmlRepository",
+        "directory": "xmlDestinationDirectory"
+      }
+    }
+  }
+}

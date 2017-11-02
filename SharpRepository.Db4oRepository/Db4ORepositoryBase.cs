@@ -35,15 +35,12 @@ namespace SharpRepository.Db4oRepository
 
         private bool MatchOnPrimaryKey(T item, TKey keyValue)
         {
-            TKey value;
-            return GetPrimaryKey(item, out value) && keyValue.Equals(value);
+            return GetPrimaryKey(item, out TKey value) && keyValue.Equals(value);
         }
 
         protected override void AddItem(T entity)
         {
-            TKey id;
-
-            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out id) && Equals(id, default(TKey)))
+            if (GenerateKeyOnAdd && GetPrimaryKey(entity, out TKey id) && Equals(id, default(TKey)))
             {
                 id = GeneratePrimaryKey();
                 SetPrimaryKey(entity, id);
@@ -88,10 +85,8 @@ namespace SharpRepository.Db4oRepository
 
             if (typeof (TKey) == typeof (Int32))
             {
-                TKey pkValue;
-
                 T last = GetAll().LastOrDefault() ?? new T();
-                GetPrimaryKey(last, out pkValue);
+                GetPrimaryKey(last, out TKey pkValue);
 
                 int nextInt = Convert.ToInt32(pkValue) + 1;
                 return (TKey) Convert.ChangeType(nextInt, typeof (TKey));

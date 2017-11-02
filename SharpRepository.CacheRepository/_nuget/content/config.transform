@@ -1,9 +1,0 @@
-<configuration>
-
-<sharpRepository>
-  <repositories>
-     <repository name="cacheRepository" factory="SharpRepository.CacheRepository.CacheConfigRepositoryFactory, SharpRepository.CacheRepository" />
-  </repositories>
-</sharpRepository>
-
-</configuration>

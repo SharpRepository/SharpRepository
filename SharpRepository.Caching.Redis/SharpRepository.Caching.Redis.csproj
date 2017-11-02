@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5;net46</TargetFrameworks>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
-    <Description>SharpRepository is a generic repository</Description>
+    <Description>SharpRepository is a generic repository, add redis as caching provider</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	<PackageId>SharpRepository.Caching.Redis</PackageId>
     <PackageVersion>2.0.1-alpha3</PackageVersion>
@@ -16,6 +16,12 @@
 	<RepositoryType>git</RepositoryType>
 	<Version>2.0.1-alpha3</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="repository.caching.redis.json">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />

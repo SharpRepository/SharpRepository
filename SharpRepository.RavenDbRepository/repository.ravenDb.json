@@ -1,0 +1,12 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "ravenDb",
+      "ravenDb": {
+        "factory": "SharpRepository.RavenDbRepository.RavenDbConfigRepositoryFactory, SharpRepository.RavenDbRepository",
+        "url": "url",
+        "connectionStringName": "connectionStringName"
+      }
+    }
+  }
+}

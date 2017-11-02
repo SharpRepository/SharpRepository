@@ -1,0 +1,13 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "azureBlob",
+      "azureBlob": {
+        "factory": "SharpRepository.AzureBlobRepository.AzureBlobConfigRepositoryFactory, SharpRepository.AzureBlobRepository",
+        "connectionString": "connectionStringOrName",
+        "container": "containerName",
+        "createIfNotExists": "true"
+      }
+    }
+  }
+}

@@ -44,9 +44,7 @@ namespace SharpRepository.Caching.AppFabric
         /// <param name="cacheName">Name of the cache.</param>
         public AppFabricCachingProvider(DataCacheFactory cacheFactory, string cacheName = null)
         {
-            if (cacheFactory == null) throw new ArgumentNullException("cacheFactory");
-
-            CacheFactory = cacheFactory;
+            CacheFactory = cacheFactory ?? throw new ArgumentNullException("cacheFactory");
 
             // TODO: don't know enough about AppFabric to know if we should use the GetDefaultCache() if no cache name provided, or if we should use our own name like SharpRepository
             Cache = String.IsNullOrEmpty(cacheName) ? cacheFactory.GetDefaultCache() : cacheFactory.GetCache(cacheName);
@@ -108,8 +106,7 @@ namespace SharpRepository.Caching.AppFabric
 
             lock (LockObject)
             {
-                int current;
-                if (!Get(key, out current))
+                if (!Get(key, out int current))
                 {
                     current = defaultValue;
                 }

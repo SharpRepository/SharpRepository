@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "db4o",
+      "db4o": {
+        "factory": "SharpRepository.Db4oRepository.Db4oConfigRepositoryFactory, SharpRepository.Db4oRepository",
+        "directory": "pathOfDb"
+      }
+    }
+  }
+}

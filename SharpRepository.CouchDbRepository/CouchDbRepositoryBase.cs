@@ -9,7 +9,7 @@ using SharpRepository.Repository.Specifications;
 
 namespace SharpRepository.CouchDbRepository
 {
-    public class CouchDbRepositoryBase<T> : LinqRepositoryBase<T, string> where T : class, new()
+    public class CouchDbRepositoryBase<T,TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         protected CouchDbClient<T> Client;
         private readonly string _serverUrl;
@@ -49,16 +49,15 @@ namespace SharpRepository.CouchDbRepository
         }
 
         // we override the implementation of LinqBaseRepository because this is built in 
-        protected override T GetQuery(string key, IFetchStrategy<T> fetchStrategy)
+        protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
-            var item = Client.GetDocument(key);
+            var item = Client.GetDocument(key.ToString());
 
             if (item == null)
                 return null;
 
             // this always returns an object, so check to see if the PK is null, if so then return null
-            string id;
-            GetPrimaryKey(item, out id);
+            GetPrimaryKey(item, out TKey id);
 
             return id == null ? null : item;
         }
@@ -267,31 +266,42 @@ namespace SharpRepository.CouchDbRepository
 
         protected override void AddItem(T entity)
         {
-            string id;
-            if (GetPrimaryKey(entity, out id) && GenerateKeyOnAdd && Equals(id, default(string)))
+            string id = null;
+            if (GetPrimaryKey(entity, out TKey entityId) && GenerateKeyOnAdd && Equals(entityId.ToString(), default(string)))
             {
                 id = GeneratePrimaryKey();
-                SetPrimaryKey(entity, id);
+                SetCouchDbPrimaryKey(entity, id);
             }
 
             Client.CreateDocument(entity, id);
         }
 
+        protected bool SetCouchDbPrimaryKey(T entity, string key)
+        {
+            var propInfo = GetPrimaryKeyPropertyInfo();
+
+            // if there is no property that matches then return false
+            if (propInfo == null)
+                return false;
+
+            propInfo.SetValue(entity, key, null);
+
+            return true;
+        }
+
         protected override void DeleteItem(T entity)
         {
-            string id;
-            if (!GetPrimaryKey(entity, out id))
+            if (!GetPrimaryKey(entity, out TKey id))
                 return;
 
-            Client.DeleteDocument(id);
+            Client.DeleteDocument(id.ToString());
         }
 
         protected override void UpdateItem(T entity)
         {
-            string id;
-            GetPrimaryKey(entity, out id);
+            GetPrimaryKey(entity, out TKey id);
 
-            Client.UpdateDocument(entity, id);
+            Client.UpdateDocument(entity, id.ToString());
         }
 
         protected override void SaveChanges()

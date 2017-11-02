@@ -1,0 +1,12 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "azureTable",
+      "azureTable": {
+        "factory": "SharpRepository.AzureTable.AzureTableConfigRepositoryFactory, SharpRepository.AzureTable",
+        "connectionString": "ArzureTableConnectionString",
+        "tableName": "tableName"
+      }
+    }
+  }
+}

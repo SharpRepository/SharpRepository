@@ -1,9 +1,0 @@
-<configuration>
-
-<sharpRepository>
-  <repositories>
-     <repository name="efRepository" connectionString="DefaultConnection" factory="SharpRepository.EfRepository.EfConfigRepositoryFactory, SharpRepository.EfRepository" />
-  </repositories>
-</sharpRepository>
-
-</configuration>

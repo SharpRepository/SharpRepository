@@ -1,0 +1,11 @@
+{
+  "sharpRepository": {
+    "repositories": {
+      "default": "mongoDb",
+      "mongoDb": {
+        "factory": "SharpRepository.MongoDbRepository.MongoDbConfigRepositoryFactory, SharpRepository.MongoDbRepository",
+        "connectionString": "mongodb:://127.0.0.1"
+      }
+    }
+  }
+}
