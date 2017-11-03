@@ -3,7 +3,7 @@
     <TargetFrameworks>netstandard1.5</TargetFrameworks>
 	<Product>SharpRepository for AzureDocumentDb</Product>
 	<Authors>Ben Griswold, Jeff Treuting</Authors>
-    <Description>SharpRepository is a generic repository, Azure DocumentDb implementation</Description>
+    <Description>SharpRepository generic repository Azure DocumentDb implementation</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	<PackageId>SharpRepository.AzureDocumentDbRepository</PackageId>
     <PackageVersion>2.0.1-alpha3</PackageVersion>
