@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5</TargetFrameworks>
+    <TargetFrameworks>netstandard1.5;net452</TargetFrameworks>
 	  <Product>SharpRepository for AzureTable</Product>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository, Azure Table implementation</Description>

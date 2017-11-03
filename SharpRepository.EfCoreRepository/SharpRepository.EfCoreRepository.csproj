@@ -7,7 +7,7 @@
 	  <PackageId>SharpRepository.EfCoreRepository</PackageId>
     <PackageVersion>2.0.1-beta1</PackageVersion>
 	  <PackageReleaseNotes>2.0.1-beta1: Configurable via appsettings.json</PackageReleaseNotes>
-	  <PackageTags>SharpRepository Repository EfRepository EntityFramework Entity Framework EF6</PackageTags>
+	  <PackageTags>SharpRepository Repository EfCoreRepository EntityFrameworkCore Entity Framework Core 2</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
 	  <PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
@@ -17,17 +17,19 @@
 	  <Version>2.0.1-beta1</Version>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />

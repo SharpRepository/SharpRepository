@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net451</TargetFramework>
 	  <Product>SharpRepository WebApi</Product>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository, adds windows Azure Cache as cache provider</Description>

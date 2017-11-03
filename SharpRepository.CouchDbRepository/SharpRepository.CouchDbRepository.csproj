@@ -4,7 +4,7 @@
     <RootNamespace>SharpRepository.CouchDbRepository</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
 	  <Product>SharpRepository for CouchDb</Product>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository, implementation for CouchDb</Description>

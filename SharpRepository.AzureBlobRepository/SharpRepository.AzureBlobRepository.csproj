@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard1.3;net451</TargetFrameworks>
 	  <Product>SharpRepository for AzureBlob</Product>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository is a generic repository, AzureBlob implementation</Description>
