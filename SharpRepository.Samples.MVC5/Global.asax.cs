@@ -1,6 +1,7 @@
 ﻿using SharpRepository.Ioc.Mvc;
 using SharpRepository.Samples.MVC5.Models;
 using StructureMap;
+using StructureMap.Pipeline;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -21,7 +22,7 @@ namespace SharpRepository.Samples.MVC5
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             // MvcDependencyResolver.ForRepositoriesUseSharpRepository("repository.json", "sharpRepository", "efConnectionString"); // holds connection string on repository.json
-            MvcDependencyResolver.ForRepositoriesUseSharpRepository("repository.json", "sharpRepository"); // no connection string on repository.json
+            MvcDependencyResolver.ForRepositoriesUseSharpRepository("repository.json", "sharpRepository", lifecycle: Lifecycles.Unique); // no connection string on repository.json
         }
     }
 
@@ -32,7 +33,7 @@ namespace SharpRepository.Samples.MVC5
     {
         public DbContexRegistry()
         {
-            For<DbContext>().Use(new ContactsDbContext("name=ContactsDbContext"));
+            For<DbContext>().Use(() => new ContactsDbContext("name=ContactsDbContext"));
         }
     }
 }

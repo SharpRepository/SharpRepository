@@ -4,6 +4,7 @@ using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Ioc;
 using StructureMap;
+using StructureMap.Pipeline;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,7 +13,14 @@ namespace SharpRepository.Ioc.Mvc
 {
     public static class MvcDependencyResolver
     {
-        public static void ForRepositoriesUseSharpRepository(string jsonConfigurationFileName, string sharpRepositoryConfigurationSectionName, string repoisitoryName = null)
+        /// <summary>
+        /// Configures DependencyResolver with configured SharpRepository as implementation of IRepository and ICompoundRepository instances
+        /// </summary>
+        /// <param name="jsonConfigurationFileName"></param>
+        /// <param name="sharpRepositoryConfigurationSectionName"></param>
+        /// <param name="repositoryName">name of repository implementation in configuration, null tell to use default in configuration</param>
+        /// <param name="lifecycle">StructureMap coping of variables default is Lifecycle.Transient</param>
+        public static void ForRepositoriesUseSharpRepository(string jsonConfigurationFileName, string sharpRepositoryConfigurationSectionName, string repoisitoryName = null, ILifecycle lifecycle = null)
         {
             var config = new ConfigurationBuilder()
               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
@@ -22,10 +30,16 @@ namespace SharpRepository.Ioc.Mvc
             var section = config.GetSection(sharpRepositoryConfigurationSectionName);
             var sharpConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(section);
             
-            ForRepositoriesUseSharpRepository(sharpConfig, repoisitoryName);
+            ForRepositoriesUseSharpRepository(sharpConfig, repoisitoryName, lifecycle);
         }
 
-        public static void ForRepositoriesUseSharpRepository(ISharpRepositoryConfiguration sharpConfig, string repositoryName = null)
+        /// <summary>
+        /// Configures DependencyResolver with configured SharpRepository as implementation of IRepository and ICompoundRepository instances
+        /// </summary>
+        /// <param name="sharpConfig"></param>
+        /// <param name="repositoryName">name of repository implementation in configuration, null tell to use default in configuration</param>
+        /// <param name="lifecycle">StructureMap coping of variables default is Lifecycle.Transient</param>
+        public static void ForRepositoriesUseSharpRepository(ISharpRepositoryConfiguration sharpConfig, string repositoryName = null, ILifecycle lifecycle = null)
         {
             var container = new Container(c =>
             {
@@ -37,13 +51,12 @@ namespace SharpRepository.Ioc.Mvc
                     s.WithDefaultConventions();
                 });
 
-                c.ForRepositoriesUseSharpRepository(sharpConfig, repositoryName);
+                c.ForRepositoriesUseSharpRepository(sharpConfig, repositoryName, lifecycle);
             });
 
             var dependencyResolver = new StructureMapDependencyResolver(container);
             DependencyResolver.SetResolver(dependencyResolver);
             GlobalConfiguration.Configuration.DependencyResolver = dependencyResolver;
-
             RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
         }
     }

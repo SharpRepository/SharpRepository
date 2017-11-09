@@ -17,6 +17,16 @@ namespace SharpRepository.Samples.MVC5.Controllers
             this.repository = repository;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                repository.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
         // GET: Contacts
         public ActionResult Index()
         {
