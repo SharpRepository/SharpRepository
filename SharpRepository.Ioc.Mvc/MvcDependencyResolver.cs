@@ -48,7 +48,6 @@ namespace SharpRepository.Ioc.Mvc
                     s.TheCallingAssembly();
                     s.AssembliesAndExecutablesFromApplicationBaseDirectory();
                     s.LookForRegistries();
-                    s.WithDefaultConventions();
                 });
 
                 c.ForRepositoriesUseSharpRepository(sharpConfig, repositoryName, lifecycle);

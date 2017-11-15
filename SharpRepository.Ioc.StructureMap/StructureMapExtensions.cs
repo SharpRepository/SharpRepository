@@ -17,11 +17,6 @@ namespace SharpRepository.Ioc.StructureMap
         /// <param name="lifecycle">StructureMap coping of variables default is Lifecycle.Transient</param>
         public static void ForRepositoriesUseSharpRepository(this ConfigurationExpression init, ISharpRepositoryConfiguration configuration, string repositoryName = null, ILifecycle lifeCycle = null)
         {
-            init.Scan(scan => { 
-                scan.IncludeNamespaceContainingType<IAmInRepository>();
-                scan.WithDefaultConventions();
-            });
-
             if (lifeCycle == null)
             {
                 lifeCycle = Lifecycles.Transient;
