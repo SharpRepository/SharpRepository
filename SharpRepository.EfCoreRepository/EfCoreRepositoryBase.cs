@@ -124,7 +124,7 @@ namespace SharpRepository.EfCoreRepository
             Context = null;
         }
 
-        private TKey GeneratePrimaryKey()
+        protected virtual TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
             {

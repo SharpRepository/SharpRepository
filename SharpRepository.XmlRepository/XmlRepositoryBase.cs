@@ -121,7 +121,7 @@ namespace SharpRepository.XmlRepository
         {
         }
 
-        private TKey GeneratePrimaryKey()
+        protected virtual TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
             {

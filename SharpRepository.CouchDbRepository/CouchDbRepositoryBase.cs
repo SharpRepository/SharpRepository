@@ -314,7 +314,7 @@ namespace SharpRepository.CouchDbRepository
             
         }
 
-        private static string GeneratePrimaryKey()
+        protected static string GeneratePrimaryKey()
         {
             return (string) Convert.ChangeType(Guid.NewGuid().ToString("N"), typeof (string));
         }

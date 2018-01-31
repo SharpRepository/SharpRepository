@@ -356,7 +356,7 @@ namespace SharpRepository.RavenDbRepository
             }
         }
 
-        private TKey GeneratePrimaryKey()
+        protected virtual TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
             {

@@ -71,7 +71,7 @@ namespace SharpRepository.Db4oRepository
                 Container.Dispose();
         }
 
-        private TKey GeneratePrimaryKey()
+        protected virtual TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
             {

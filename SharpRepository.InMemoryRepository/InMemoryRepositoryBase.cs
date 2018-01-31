@@ -90,7 +90,7 @@ namespace SharpRepository.InMemoryRepository
             
         }
 
-        private TKey GeneratePrimaryKey()
+        protected virtual TKey GeneratePrimaryKey()
         {
             if (typeof(TKey) == typeof(Guid))
             {
@@ -103,6 +103,22 @@ namespace SharpRepository.InMemoryRepository
             }
 
             if (typeof(TKey) == typeof(Int32))
+            {
+                var pkValue = _items.Keys.LastOrDefault();
+
+                var nextInt = Convert.ToInt32(pkValue) + 1;
+                return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
+            }
+
+            if (typeof(TKey) == typeof(Int32))
+            {
+                var pkValue = _items.Keys.LastOrDefault();
+
+                var nextInt = Convert.ToInt32(pkValue) + 1;
+                return (TKey)Convert.ChangeType(nextInt, typeof(TKey));
+            }
+
+            if (typeof(TKey) == typeof(Int64))
             {
                 var pkValue = _items.Keys.LastOrDefault();
 
