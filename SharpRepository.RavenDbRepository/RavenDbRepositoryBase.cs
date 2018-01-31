@@ -337,9 +337,6 @@ namespace SharpRepository.RavenDbRepository
         {
             if (Session != null)
                 Session.Dispose();
-
-            if (DocumentStore != null)
-                DocumentStore.Dispose();
         }
 
         public override bool GenerateKeyOnAdd
