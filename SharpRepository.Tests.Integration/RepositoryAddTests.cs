@@ -75,7 +75,7 @@ namespace SharpRepository.Tests.Integration
             result.Count().ShouldBe(1);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Add_InBatchMode_Should_Delay_The_Action")]
         public void Add_InBatchMode_Should_Delay_The_Action(IRepository<Contact, string> repository)
         {
             using (var batch = repository.BeginBatch())

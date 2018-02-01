@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>    
-    <TargetFramework>net461</TargetFramework>    
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <DebugType>Full</DebugType>
     <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>    
     <RootNamespace>SharpRepository.Tests.Integration</RootNamespace>
   </PropertyGroup>
@@ -17,7 +18,6 @@
     <PackageReference Include="Shouldly" Version="2.8.3" />
     <PackageReference Include="StructureMap" Version="4.5.2" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.105.2" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
   </ItemGroup>
 

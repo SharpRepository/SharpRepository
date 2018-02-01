@@ -11,7 +11,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get
             {
-                return RepositoryTestCaseDataFactory.Build(RemoveExceptions(RepositoryTypes.All));
+                return RepositoryTestCaseDataFactory.Build(RemoveExceptions(RepositoryTypes.All), _testName);
             }
         }
 
@@ -31,11 +31,18 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         }
 
         private static RepositoryType[] _exceptions;
+        private static string _testName;
         public string Reason { get; set;  }
 
-        public ExecuteForAllRepositoriesExceptAttribute(params RepositoryType[] exceptions) : this()
+
+        public ExecuteForAllRepositoriesExceptAttribute(string testName, params RepositoryType[] exceptions) : this()
         {
             _exceptions = exceptions;
+            _testName = testName;
+        }
+
+        public ExecuteForAllRepositoriesExceptAttribute(params RepositoryType[] exceptions) : this("Test", exceptions)
+        {
         }
 
         public ExecuteForAllRepositoriesExceptAttribute()
