@@ -1,23 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-	<Authors>Ben Griswold, Jeff Treuting</Authors>
-    <Description>SharpRepository is a generic repository</Description>
+    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+	  <Authors>Ben Griswold, Jeff Treuting</Authors>
+    <Description>SharpRepository performance test</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
-	<PackageId>SharpRepository.Caching.AppFabric</PackageId>
-    <PackageVersion>2.0.0-alpha2</PackageVersion>
-	<PackageReleaseNotes>2.0.0-alpha2: merge all code</PackageReleaseNotes>
-	<PackageTags>SharpRepository Repository Cache AppFabric</PackageTags>
-	<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
-	<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
-	<PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
-	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
-	<RepositoryType>git</RepositoryType>
+	  <RepositoryType>git</RepositoryType>
+	  <ApplicationIcon />
+	  <OutputType>Exe</OutputType>
+	  <StartupObject>SharpRepository.Benchmarks.Configuration.Program</StartupObject>
+    <RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="repository.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="repository.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
-	  <ProjectReference Include="..\SharpRepository.Caching.Memcached\SharpRepository.Caching.Memcached.csproj" />
 	  <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
 	  <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />
   </ItemGroup>

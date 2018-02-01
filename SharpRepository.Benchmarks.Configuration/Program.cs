@@ -9,7 +9,6 @@ using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using StructureMap;
-using StructureMap.Graph;
 using SharpRepository.Ioc.StructureMap;
 using Microsoft.Extensions.Configuration;
 
@@ -115,7 +114,7 @@ namespace SharpRepository.Benchmarks.Configuration
 
                 var config = new ConfigurationBuilder()
                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("repository.json")
                .Build();
 
                 var sectionName = "sharpRepository";
@@ -142,7 +141,7 @@ namespace SharpRepository.Benchmarks.Configuration
         {
             var config = new ConfigurationBuilder()
                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-               .AddJsonFile("appsettings.json")
+               .AddJsonFile("repository.json")
                .Build();
 
             var sectionName = "sharpRepository";
