@@ -13,6 +13,13 @@ using Microsoft.Extensions.Options;
 
 namespace SharpRepository.Repository
 {
+    public class ConfigurationBasedRepository<T> : ConfigurationBasedRepository<T, int> where T : class, new()
+    {
+        public ConfigurationBasedRepository(ISharpRepositoryConfiguration configuration, string repositoryName = null) : base(configuration, repositoryName)
+        {
+        }
+    }
+
     /// <summary>
     /// Inherit from this when you want to create a custom Repository and have the specific type based on the configuration file
     /// </summary>

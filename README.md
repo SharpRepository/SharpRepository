@@ -33,8 +33,10 @@ nunit3-console -v "SharpRepository.Samples\bin\Debug\SharpRepository.Samples.dll
 
 Have Questions?
 --------------------------------
-Please use the google group for SharpRepository:
-* sharprepository@googlegroups.com
+
+* https://github.com/SharpRepository/SharpRepository/issues
+* mail to sharprepository@googlegroups.com
 * https://groups.google.com/d/forum/sharprepository
+* open a question on stackoverflow.com with sharp-repository tag https://stackoverflow.com/questions/tagged/sharp-repository
 
 

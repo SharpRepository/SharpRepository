@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharpRepository.Ioc.Microsoft.DependencyInjection;
+using SharpRepository.Repository;
+using SharpRepository.Samples.CoreMvc.CustomRepositories;
 using System;
 
 namespace SharpRepository.CoreMvc
@@ -22,10 +24,11 @@ namespace SharpRepository.CoreMvc
         {
             services.AddMvc();
 
-            services.AddDbContext<ContactContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ContactContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
 
             // services.AddTransient<DbContext, ContactContext>(); // needed if you don't write dbContextClass on json configuration
+
+            services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository"))));
 
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository")); //default InMemory
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb"); // for Mongo Db
