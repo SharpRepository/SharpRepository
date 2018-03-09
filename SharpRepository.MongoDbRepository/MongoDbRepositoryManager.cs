@@ -20,11 +20,20 @@ namespace SharpRepository.MongoDbRepository
             return true;
         }
 
-        public static bool ServerIsRunning(string connectionString)
+        public static bool ServerIsRunning(string connectionString, SslSettings sslSettings = null)
         {
-            var db_name = MongoUrl.Create(connectionString).DatabaseName;
-            var cli = new MongoClient(connectionString);
-            return ServerIsRunning(cli.GetDatabase(db_name));
+            MongoClient cli;
+            if (sslSettings != null)
+            {
+                var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+                settings.SslSettings = sslSettings;
+                cli = new MongoClient(settings);
+            }
+            else
+                cli = new MongoClient(connectionString);
+
+            var dbName = DatabaseName(connectionString);
+            return ServerIsRunning(cli.GetDatabase(dbName));
         }
 
         public static string DatabaseName(string connectionString)
@@ -32,11 +41,20 @@ namespace SharpRepository.MongoDbRepository
             return MongoUrl.Create(connectionString).DatabaseName;
         }
 
-        public static void DropDatabase(string connectionString)
+        public static void DropDatabase(string connectionString, SslSettings sslSettings = null)
         {
-            var cli = new MongoClient(connectionString);
-            var db_name = MongoUrl.Create(connectionString).DatabaseName;
-            cli.DropDatabase(db_name);
+            MongoClient cli;
+            if (sslSettings != null)
+            {
+                var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+                settings.SslSettings = sslSettings;
+                cli = new MongoClient(settings);
+            }
+            else
+                cli = new MongoClient(connectionString);
+
+            var dbName = DatabaseName(connectionString);
+            cli.DropDatabase(dbName);
         }
     }
 }

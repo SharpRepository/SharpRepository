@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Authentication;
+using MongoDB.Driver;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 
@@ -24,7 +26,11 @@ namespace SharpRepository.MongoDbRepository
                 throw new ConfigurationErrorsException("The connectionString attribute is required in order to use the MongoDbRepository via the configuration file.");
             }
 
-            return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"]);
+            SslSettings sslSettings = null;
+            if (Boolean.Parse(RepositoryConfiguration["sslEnabled"]))
+                sslSettings = new SslSettings() { EnabledSslProtocols = (SslProtocols)Enum.Parse(typeof(SslProtocols), RepositoryConfiguration["sslProtocol"]) };
+
+            return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"], sslSettings);
         }
 
         public override ICompoundKeyRepository<T, TKey, TKey2> GetInstance<T, TKey, TKey2>()

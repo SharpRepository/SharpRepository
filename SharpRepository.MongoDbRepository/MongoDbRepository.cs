@@ -1,4 +1,5 @@
 ﻿using System;
+using MongoDB.Driver;
 using SharpRepository.Repository.Caching;
 
 namespace SharpRepository.MongoDbRepository
@@ -24,7 +25,19 @@ namespace SharpRepository.MongoDbRepository
         /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
         public MongoDbRepository(string connectionString, ICachingStrategy<T, TKey> cachingStrategy = null)
-            : base(connectionString, cachingStrategy)
+            : base(connectionString, cachingStrategy, null)
+        {
+            if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T, TKey&gt;"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
+        /// <param name="sslSettings">Ssl Settings for mongo connection</param>
+        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T, TKey&gt;" />.</param>
+        public MongoDbRepository(string connectionString, SslSettings sslSettings, ICachingStrategy<T, TKey> cachingStrategy = null)
+            : base(connectionString, cachingStrategy, sslSettings)
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
         }
@@ -51,7 +64,18 @@ namespace SharpRepository.MongoDbRepository
         /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
         /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
         public MongoDbRepository(string connectionString, ICachingStrategy<T, string> cachingStrategy = null)
-            : base(connectionString, cachingStrategy)
+            : base(connectionString, cachingStrategy, null)
+        {
+            if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MongoDbRepository&lt;T&gt;"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connectionString of the MongoDb instance.</param>
+        /// <param name="cachingStrategy">The caching strategy.  Defaults to <see cref="NoCachingStrategy&lt;T&gt;" />.</param>
+        public MongoDbRepository(string connectionString, SslSettings sslSettings, ICachingStrategy<T, string> cachingStrategy = null)
+            : base(connectionString, cachingStrategy, sslSettings)
         {
             if (String.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
         }
