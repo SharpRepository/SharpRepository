@@ -24,7 +24,7 @@ namespace SharpRepository.MongoDbRepository
         private readonly string _databaseName;
         protected IMongoDatabase Database;
 
-        private readonly Dictionary<Type, BsonType> _keyTypeToBsonType = 
+        private readonly Dictionary<Type, BsonType> _keyTypeToBsonType =
             new Dictionary<Type, BsonType>
             {
                 {typeof(string), BsonType.String},
@@ -33,7 +33,7 @@ namespace SharpRepository.MongoDbRepository
                 {typeof(byte[]), BsonType.ObjectId}
             };
 
-        private readonly Dictionary<Type, IIdGenerator> _keyTypeToBsonGenerator = 
+        private readonly Dictionary<Type, IIdGenerator> _keyTypeToBsonGenerator =
             new Dictionary<Type, IIdGenerator>
             {
                 {typeof (string), new StringObjectIdGenerator() },
@@ -42,17 +42,29 @@ namespace SharpRepository.MongoDbRepository
                 {typeof(byte[]), new BsonBinaryDataGuidGenerator(GuidRepresentation.Standard)}
             };
 
+        #region Constructors
+
         internal MongoDbRepositoryBase(ICachingStrategy<T, TKey> cachingStrategy = null)
             : base(cachingStrategy)
         {
             Initialize();
         }
 
-        internal MongoDbRepositoryBase(string connectionString, ICachingStrategy<T, TKey> cachingStrategy = null)
+        internal MongoDbRepositoryBase(string connectionString, ICachingStrategy<T, TKey> cachingStrategy, SslSettings sslSettings)
             : base(cachingStrategy)
         {
             _databaseName = MongoUrl.Create(connectionString).DatabaseName;
-            var cli = new MongoClient(connectionString);
+
+            MongoClient cli;
+            if (sslSettings != null)
+            {
+                var settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+                settings.SslSettings = sslSettings;
+                cli = new MongoClient(settings);
+            }
+            else
+                cli = new MongoClient(connectionString);
+
             Initialize(cli.GetDatabase(_databaseName));
         }
 
@@ -62,16 +74,13 @@ namespace SharpRepository.MongoDbRepository
             Initialize(mongoDatabase);
         }
 
-        private string DatabaseName
-        {
-            get { return string.IsNullOrEmpty(_databaseName) ? TypeName : _databaseName; }
-        }
+        #endregion
 
         private void Initialize(IMongoDatabase mongoDatabase = null)
         {
             Database = mongoDatabase ?? new MongoClient("mongodb://localhost/default").GetDatabase(MongoUrl.Create("mongodb://localhost/default").DatabaseName);
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof (T)))
+            if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
             {
                 var primaryKeyPropInfo = GetPrimaryKeyPropertyInfo();
                 var primaryKeyName = primaryKeyPropInfo.Name;
@@ -87,7 +96,7 @@ namespace SharpRepository.MongoDbRepository
                             {
                                 cm.IdMemberMap.SetSerializer(new StringSerializer(_keyTypeToBsonType[typeof(TKey)]));
                                 cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
-                            }    
+                            }
                         }
 
                         cm.Freeze();
@@ -110,13 +119,16 @@ namespace SharpRepository.MongoDbRepository
         {
             var keyBsonType = ((StringSerializer)BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.GetSerializer()).Representation;
             var keyMemberName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName;
-            if (IsValidKey(key)) {
+            if (IsValidKey(key))
+            {
                 var keyBsonValue = BsonTypeMapper.MapToBsonValue(key, keyBsonType);
                 var filter = Builders<T>.Filter.Eq(keyMemberName, keyBsonValue);
                 return BaseCollection().Find(filter).FirstOrDefault();
-            } else return default(T);
+            }
+            else return default(T);
         }
 
+        #region Math
         public override int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
         {
             return QueryManager.ExecuteSum(
@@ -297,6 +309,8 @@ namespace SharpRepository.MongoDbRepository
                  );
         }
 
+        #endregion
+
         protected override void AddItem(T entity)
         {
             BaseCollection().InsertOne(entity);
@@ -304,82 +318,27 @@ namespace SharpRepository.MongoDbRepository
 
         protected override void DeleteItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out var pkValue);
 
             if (IsValidKey(pkValue))
             {
-                var keyPropertyName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName;
-                var keyPair = GetMongoProperty(entity, keyPropertyName);
-                var filter = Builders<T>.Filter.Eq(keyPair.Key, keyPair.Value);
-
+                var pkName = GetPrimaryKeyPropertyInfo().Name;
+                var filter = Builders<T>.Filter.Eq(pkName, pkValue);
                 BaseCollection().DeleteOne(filter);
             }
         }
 
         protected override void UpdateItem(T entity)
         {
-            TKey pkValue;
-            GetPrimaryKey(entity, out pkValue);
+            GetPrimaryKey(entity, out var pkValue);
             if (IsValidKey(pkValue))
             {
-                var keyMap = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap;
-                var keyPropertyName = keyMap.MemberName;
-                var keyBsonType = ((StringSerializer)keyMap.GetSerializer()).Representation;
-                var keyBsonPropertyValue = BsonTypeMapper.MapToBsonValue(pkValue, keyBsonType);
-                var keyPair = new KeyValuePair<string, BsonValue>(keyPropertyName, keyBsonPropertyValue);
-                var filter = Builders<T>.Filter.Eq(keyPair.Key, keyPair.Value);
-
-
-                var bsonMembers = BsonClassMap.LookupClassMap(typeof(T)).AllMemberMaps.Where(m => m.MemberName != keyPropertyName);
-                var updates = new List<UpdateDefinition<T>>();
-                foreach (var members in bsonMembers)
-                {
-                    var propPair = GetMongoProperty(entity, members.MemberName);
-                    updates.Add(Builders<T>.Update.Set(propPair.Key, propPair.Value));
-                }
-
-                BaseCollection().UpdateOne(filter, Builders<T>.Update.Combine(updates));
+                var pkName = GetPrimaryKeyPropertyInfo().Name;
+                var filter = Builders<T>.Filter.Eq(pkName, pkValue);
+                BaseCollection().ReplaceOne(filter, entity);
             }
-
         }
-
-        public static KeyValuePair<string, BsonValue> GetMongoProperty(T entity, string propertyName)
-        {
-            var value = typeof(T).GetProperty(propertyName).GetValue(entity);
-            var memberMap = BsonClassMap.LookupClassMap(typeof(T)).GetMemberMap(propertyName);
-            var memberBsonType = GetBsonType(value, memberMap);
-
-            // some "non-string types are mapped to string"
-            if (memberBsonType == BsonType.String)
-            {
-                value = value.ToString();
-            }
-
-            var bsonPropertyValue = BsonTypeMapper.MapToBsonValue(value, memberBsonType);
-            return new KeyValuePair<string, BsonValue>(propertyName, bsonPropertyValue);
-        }
-
-        protected static BsonType GetBsonType(object value, BsonMemberMap memberMap)
-        {
-            BsonType keyBsonType;
-
-            if (value == null) {
-                keyBsonType = BsonType.Null;
-            } else {
-                var propertyInfo = memberMap.GetSerializer().GetType().GetProperty("Representation");
-                if (propertyInfo != null)
-                {
-                    keyBsonType = (BsonType)propertyInfo.GetValue(memberMap.GetSerializer());
-                } else
-                {
-                    keyBsonType = BsonType.Array;
-                }
-            }
-
-            return keyBsonType;
-        }
-
+        
         protected override void SaveChanges()
         {
         }

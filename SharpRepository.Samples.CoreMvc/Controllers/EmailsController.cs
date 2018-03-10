@@ -3,6 +3,7 @@ using SharpRepository.CoreMvc.Models;
 using SharpRepository.Repository;
 using SharpRepository.Samples.CoreMvc.CustomRepositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharpRepository.CoreMvc.Controllers
 {
@@ -20,7 +21,7 @@ namespace SharpRepository.CoreMvc.Controllers
         // GET: Mails
         public ActionResult Index()
         {
-            var mails = repository.GetMails();
+            var mails = repository.GetMails().ToArray();
 
             return View(mails);
         }
