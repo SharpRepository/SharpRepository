@@ -17,6 +17,8 @@ namespace SharpRepository.CoreMvc.Models
         [Key] //Ef primary key
         public string Id { get; set; }
         public string Name { get; set; }
+
+        [UIHint("_Emails")]
         public virtual ICollection<Email> Emails { get; set; }
     }
 }
