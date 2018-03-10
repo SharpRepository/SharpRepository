@@ -41,10 +41,10 @@ namespace SharpRepository.CoreMvc.Controllers
 
             if (contact.Emails == null)
             {
-                contact.Emails = new List<Email>();
+                contact.Emails = new List<string>();
             }
 
-            contact.Emails.Add(email);
+            contact.Emails.Add(email.EmailAddress);
             repositoryContacts.Update(contact);
 
             return RedirectToAction("Index");

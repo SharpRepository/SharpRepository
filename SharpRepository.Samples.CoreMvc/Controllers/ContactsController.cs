@@ -45,6 +45,7 @@ namespace SharpRepository.CoreMvc.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Contact contact)
         {
+            contact.Emails = new List<string> { "default@mail.com" };
             repository.Add(contact);
 
             return RedirectToAction(nameof(Index));

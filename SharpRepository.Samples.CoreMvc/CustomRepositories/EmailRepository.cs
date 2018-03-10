@@ -16,7 +16,7 @@ namespace SharpRepository.Samples.CoreMvc.CustomRepositories
 
         public IEnumerable<string> GetMails()
         {
-            return this.AsQueryable().Where(c => c.Emails != null & c.Emails.Any()).SelectMany(c => c.Emails).Select(m => m.EmailAddress)
+            return this.GetAll().SelectMany(c => c.Emails)
                 .Distinct();
         }
     }

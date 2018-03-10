@@ -19,6 +19,6 @@ namespace SharpRepository.CoreMvc.Models
         public string Name { get; set; }
 
         [UIHint("_Emails")]
-        public virtual ICollection<Email> Emails { get; set; }
+        public virtual ICollection<string> Emails { get; set; }
     }
 }

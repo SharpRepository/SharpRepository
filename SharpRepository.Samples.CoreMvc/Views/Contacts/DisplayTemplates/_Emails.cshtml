@@ -1,8 +1,8 @@
-﻿@model ICollection<Email>
+﻿@model ICollection<string>
 <ul>
     @foreach (var item in Model)
     {
-        <li>@item.EmailAddress</li>
+        <li>@item</li>
     }
 </ul>
 
