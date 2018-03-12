@@ -83,14 +83,13 @@ namespace SharpRepository.MongoDbRepository
             if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
             {
                 var primaryKeyPropInfo = GetPrimaryKeyPropertyInfo();
-                var primaryKeyName = primaryKeyPropInfo.Name;
 
                 BsonClassMap.RegisterClassMap<T>(cm =>
                     {
                         cm.AutoMap();
                         if (cm.IdMemberMap == null)
                         {
-                            cm.SetIdMember(cm.GetMemberMap(primaryKeyName));
+                            cm.SetIdMember(new BsonMemberMap(cm, primaryKeyPropInfo));
 
                             if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
                             {
@@ -338,7 +337,7 @@ namespace SharpRepository.MongoDbRepository
                 BaseCollection().ReplaceOne(filter, entity);
             }
         }
-        
+
         protected override void SaveChanges()
         {
         }
