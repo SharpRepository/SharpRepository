@@ -58,9 +58,9 @@ namespace SharpRepository.Repository
 
         public Type EntityType
         {
-            get { return typeof (T); }
+            get { return typeof(T); }
         }
-        
+
         public Type KeyType
         {
             get { return typeof(TKey); }
@@ -72,7 +72,7 @@ namespace SharpRepository.Repository
         {
             get { return _typeName; }
         }
-        
+
         public bool CacheUsed
         {
             get { return QueryManager.CacheUsed; }
@@ -96,21 +96,21 @@ namespace SharpRepository.Repository
         {
             CachingStrategy.ClearAll();
         }
-      
+
         private bool BatchMode { get; set; }
 
-        public ICachingStrategy<T, TKey> CachingStrategy 
+        public ICachingStrategy<T, TKey> CachingStrategy
         {
-            get { return _cachingStrategy; } 
+            get { return _cachingStrategy; }
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey>();
-				QueryManager = new QueryManager<T, TKey>(_cachingStrategy)
-				               {
-					               CacheEnabled = !(_cachingStrategy is NoCachingStrategy<T, TKey>)
-				               };
+                QueryManager = new QueryManager<T, TKey>(_cachingStrategy)
+                {
+                    CacheEnabled = !(_cachingStrategy is NoCachingStrategy<T, TKey>)
+                };
             }
-        } 
+        }
 
         public bool CachingEnabled
         {
@@ -125,7 +125,7 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
         protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
-        
+
         //Managing aspects
         protected void DisableAspect(Type aspectType)
         {
@@ -144,7 +144,7 @@ namespace SharpRepository.Repository
         private void ValidateArgument(Type aspectType)
         {
             var baseAttribute = typeof(RepositoryActionBaseAttribute);
-            
+
             if (!baseAttribute.GetTypeInfo().IsAssignableFrom(aspectType.GetTypeInfo()))
                 throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
 
@@ -311,7 +311,7 @@ namespace SharpRepository.Repository
             return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
 
-        
+
 
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy);
@@ -401,7 +401,7 @@ namespace SharpRepository.Repository
                 var selectFunc = selector.Compile();
                 var selectedResult = result == null
                     ? default(TResult)
-                    : new[] {result}.AsEnumerable().Select(selectFunc).First();
+                    : new[] { result }.AsEnumerable().Select(selectFunc).First();
 
                 context.Result = selectedResult;
                 RunAspect(attribute => attribute.OnGetExecuted(context));
@@ -442,7 +442,7 @@ namespace SharpRepository.Repository
 
         public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
         {
-            return  GetMany(keys).ToDictionary(GetPrimaryKey);
+            return GetMany(keys).ToDictionary(GetPrimaryKey);
         }
 
         public bool Exists(TKey key)
@@ -625,14 +625,14 @@ namespace SharpRepository.Repository
                 var selectFunc = context.Selector.Compile();
                 var item = QueryManager.ExecuteFind(
                     () =>
-	                    {
+                        {
                             var result = FindQuery(context.Specification, context.QueryOptions);
-	                        if (result == null)
-	                            return default(TResult);
+                            if (result == null)
+                                return default(TResult);
 
-	                        var results = new[] { result };
+                            var results = new[] { result };
                             return results.AsEnumerable().Select(selectFunc).First();
-	                    },
+                        },
 
                     context.Specification,
                     context.Selector,
@@ -658,7 +658,7 @@ namespace SharpRepository.Repository
 
         public bool TryFind(ISpecification<T> criteria, out T entity)
         {
-            return TryFind(criteria, ( IQueryOptions<T>)null, out entity);
+            return TryFind(criteria, (IQueryOptions<T>)null, out entity);
         }
 
         public bool TryFind(ISpecification<T> criteria, IQueryOptions<T> queryOptions, out T entity)
@@ -1337,7 +1337,7 @@ namespace SharpRepository.Repository
         {
             return GroupLongCount(predicate == null ? null : CreateSpecification(predicate), selector);
         }
-        
+
 
         private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
         {
@@ -1391,11 +1391,11 @@ namespace SharpRepository.Repository
 
             Save();
 
-	        NotifyQueryManagerOfAddedEntity(entity);
+            NotifyQueryManagerOfAddedEntity(entity);
         }
 
-	    private void NotifyQueryManagerOfAddedEntity(T entity)
-	    {
+        private void NotifyQueryManagerOfAddedEntity(T entity)
+        {
             if (GetPrimaryKey(entity, out TKey key))
                 QueryManager.OnItemAdded(key, entity);
         }
@@ -1455,11 +1455,11 @@ namespace SharpRepository.Repository
 
             Save();
 
-	        NotifyQueryManagerOfDeletedEntity(entity);
+            NotifyQueryManagerOfDeletedEntity(entity);
         }
 
-		private void NotifyQueryManagerOfDeletedEntity(T entity)
-		{
+        private void NotifyQueryManagerOfDeletedEntity(T entity)
+        {
             if (GetPrimaryKey(entity, out TKey key))
                 QueryManager.OnItemDeleted(key, entity);
         }
@@ -1548,24 +1548,24 @@ namespace SharpRepository.Repository
         }
 
         // used from the Update method above and the Save below for the batch save
-	    private void ProcessUpdate(T entity, bool batchMode)
-	    {
+        private void ProcessUpdate(T entity, bool batchMode)
+        {
             if (!RunAspect(attribute => attribute.OnUpdateExecuting(entity, _repositoryActionContext)))
                 return;
 
-		    UpdateItem(entity);
+            UpdateItem(entity);
 
             RunAspect(attribute => attribute.OnUpdateExecuted(entity, _repositoryActionContext));
 
-		    if (batchMode) return;
+            if (batchMode) return;
 
-		    Save();
+            Save();
 
-		    NotifyQueryManagerOfUpdatedEntity(entity);
-	    }
+            NotifyQueryManagerOfUpdatedEntity(entity);
+        }
 
-	    private void NotifyQueryManagerOfUpdatedEntity(T entity)
-	    {
+        private void NotifyQueryManagerOfUpdatedEntity(T entity)
+        {
             if (GetPrimaryKey(entity, out TKey key))
                 QueryManager.OnItemUpdated(key, entity);
         }
@@ -1603,7 +1603,7 @@ namespace SharpRepository.Repository
                     return;
 
                 SaveChanges();
-            
+
                 QueryManager.OnSaveExecuted();
 
                 RunAspect(attribute => attribute.OnSaveExecuted(_repositoryActionContext));
@@ -1642,7 +1642,7 @@ namespace SharpRepository.Repository
             return default(TKey);
         }
 
-        protected virtual bool GetPrimaryKey(T entity, out TKey key) 
+        protected virtual bool GetPrimaryKey(T entity, out TKey key)
         {
             key = default(TKey);
 
@@ -1652,9 +1652,9 @@ namespace SharpRepository.Repository
             if (propInfo == null)
                 return false;
 
-           key = (TKey) propInfo.GetValue(entity, null);
-           
-           return true;
+            key = (TKey)propInfo.GetValue(entity, null);
+
+            return true;
         }
 
         protected virtual bool SetPrimaryKey(T entity, TKey key)
@@ -1674,10 +1674,10 @@ namespace SharpRepository.Repository
         {
             var propInfo = GetPrimaryKeyPropertyInfo();
 
-            var parameter = Expression.Parameter(typeof (T), "x");
+            var parameter = Expression.Parameter(typeof(T), "x");
             var lambda = Expression.Lambda<Func<T, bool>>(
                     Expression.Equal(
-                        Expression.PropertyOrField(parameter, propInfo.Name), 
+                        Expression.PropertyOrField(parameter, propInfo.Name),
                         Expression.Constant(key)
                     ),
                     parameter
@@ -1739,8 +1739,13 @@ namespace SharpRepository.Repository
             var propertyName = Conventions.GetPrimaryKeyName(type);
 
             if (String.IsNullOrEmpty(propertyName)) return null;
-            
+
             var propInfo = type.GetTypeInfo().GetDeclaredProperty(propertyName);
+            while (propInfo == null && type.GetTypeInfo().BaseType != null)
+            {
+                type = type.GetTypeInfo().BaseType;
+                propInfo = type.GetTypeInfo().GetDeclaredProperty(propertyName);
+            }
             propInfo = propInfo == null || propInfo.PropertyType != pkType ? null : propInfo;
 
             InternalCache.PrimaryKeyMapping[tupleKey] = propInfo;
