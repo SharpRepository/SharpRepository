@@ -27,7 +27,7 @@ namespace SharpRepository.MongoDbRepository
             }
 
             SslSettings sslSettings = null;
-            if (Boolean.Parse(RepositoryConfiguration["sslEnabled"]))
+            if (!String.IsNullOrEmpty(RepositoryConfiguration["sslEnabled"]) && Boolean.Parse(RepositoryConfiguration["sslEnabled"]))
                 sslSettings = new SslSettings() { EnabledSslProtocols = (SslProtocols)Enum.Parse(typeof(SslProtocols), RepositoryConfiguration["sslProtocol"]) };
 
             return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"], sslSettings);
