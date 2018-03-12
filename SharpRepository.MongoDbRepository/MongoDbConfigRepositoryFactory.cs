@@ -27,8 +27,9 @@ namespace SharpRepository.MongoDbRepository
             }
 
             SslSettings sslSettings = null;
-            if (Boolean.Parse(RepositoryConfiguration["sslEnabled"]))
-                sslSettings = new SslSettings() { EnabledSslProtocols = (SslProtocols)Enum.Parse(typeof(SslProtocols), RepositoryConfiguration["sslProtocol"]) };
+            if (!string.IsNullOrEmpty(RepositoryConfiguration["sslEnabled"]))
+                if (Boolean.Parse(RepositoryConfiguration["sslEnabled"]))
+                    sslSettings = new SslSettings() { EnabledSslProtocols = (SslProtocols)Enum.Parse(typeof(SslProtocols), RepositoryConfiguration["sslProtocol"]) };
 
             return new MongoDbRepository<T, TKey>(RepositoryConfiguration["connectionString"], sslSettings);
         }
