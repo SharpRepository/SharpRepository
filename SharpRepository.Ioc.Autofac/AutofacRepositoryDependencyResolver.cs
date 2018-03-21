@@ -4,10 +4,10 @@ using SharpRepository.Repository.Ioc;
 
 namespace SharpRepository.Ioc.Autofac
 {
-    public class AutofacDependencyResolver : BaseRepositoryDependencyResolver
+    public class AutofacRepositoryDependencyResolver : BaseRepositoryDependencyResolver
     {
         private readonly IContainer _container;
-        public AutofacDependencyResolver(IContainer container)
+        public AutofacRepositoryDependencyResolver(IContainer container)
         {
             _container = container;
         }

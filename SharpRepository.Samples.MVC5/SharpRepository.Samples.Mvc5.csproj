@@ -258,6 +258,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ContactsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="CustomAutofacRepositoryDependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -347,14 +348,6 @@
     <ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj">
       <Project>{14e6af4a-b613-418f-b046-d84074963c0f}</Project>
       <Name>SharpRepository.Ioc.Autofac</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj">
-      <Project>{1aa81acd-74d6-4619-ac34-b3ed8b2035a8}</Project>
-      <Name>SharpRepository.Ioc.Mvc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj">
-      <Project>{0b4bdc6d-6030-48fd-b22a-f9a9a7a00812}</Project>
-      <Name>SharpRepository.Ioc.StructureMap</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj">
       <Project>{710dee79-25ce-4f68-b8b1-d08a135ad154}</Project>

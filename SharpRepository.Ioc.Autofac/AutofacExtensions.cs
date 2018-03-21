@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Core;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
+using SharpRepository.Repository.Ioc;
 
 namespace SharpRepository.Ioc.Autofac
 {

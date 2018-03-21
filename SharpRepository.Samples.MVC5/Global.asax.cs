@@ -3,14 +3,11 @@ using Autofac.Core.Lifetime;
 using Autofac.Integration.Mvc;
 using Microsoft.Extensions.Configuration;
 using SharpRepository.Ioc.Autofac;
-using SharpRepository.Ioc.Mvc;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
+using SharpRepository.Repository.Ioc;
 using SharpRepository.Samples.MVC5.Models;
-using StructureMap;
-using StructureMap.Pipeline;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -28,9 +25,8 @@ namespace SharpRepository.Samples.MVC5
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            // MvcDependencyResolver.ForRepositoriesUseSharpRepository("repository.json", "sharpRepository", "efConnectionString"); // holds connection string on repository.json
-            MvcDependencyResolver.ForRepositoriesUseSharpRepository("repository.json", "sharpRepository", lifecycle: Lifecycles.Unique); // no connection string on repository.json
             
+            // get configuration from repository.json
             var config = new ConfigurationBuilder()
               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
               .AddJsonFile("repository.json")
@@ -39,28 +35,19 @@ namespace SharpRepository.Samples.MVC5
             var section = config.GetSection("sharpRepository");
             ISharpRepositoryConfiguration configuration = RepositoryFactory.BuildSharpRepositoryConfiguation(section);
 
+            // configure autofac
             var builder = new ContainerBuilder();
 
             // Register your MVC controllers. (MvcApplication is the name of
             // the class in Global.asax.)
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
             builder.RegisterSharpRepository(configuration, null, MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-            builder.RegisterType<ContactsDbContext>().As<DbContext>().InstancePerRequest();
+            builder.RegisterType<ContactsDbContext>().As<DbContext>().WithParameter(new TypedParameter(typeof(string), "name=ContactsDbContext")).InstancePerRequest();
             var container = builder.Build();
-            
+
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-        }
-    }
-
-    /// <summary>
-    /// Registers ContactsDbContext, that knows the connection string, as DbContext
-    /// </summary>
-    public class DbContexRegistry : Registry
-    {
-        public DbContexRegistry()
-        {
-            For<DbContext>().Use(() => new ContactsDbContext("name=ContactsDbContext"));
+            RepositoryDependencyResolver.SetDependencyResolver(new CustomAutofacRepositoryDependencyResolver(DependencyResolver.Current));
         }
     }
 }
