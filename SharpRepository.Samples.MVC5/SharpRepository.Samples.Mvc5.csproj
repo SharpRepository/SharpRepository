@@ -47,6 +47,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.6.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.1\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -337,6 +343,10 @@
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj">
       <Project>{13ad3fca-4c9d-4674-b786-f30843638d3b}</Project>
       <Name>SharpRepository.InMemoryRepository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj">
+      <Project>{14e6af4a-b613-418f-b046-d84074963c0f}</Project>
+      <Name>SharpRepository.Ioc.Autofac</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpRepository.Ioc.Mvc\SharpRepository.Ioc.Mvc.csproj">
       <Project>{1aa81acd-74d6-4619-ac34-b3ed8b2035a8}</Project>

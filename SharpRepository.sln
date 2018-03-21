@@ -88,6 +88,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Samples.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Microsoft.DependencyInjection", "SharpRepository.Ioc.Microsoft.DependencyInjection\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj", "{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpRepository.Samples.Mvc5", "SharpRepository.Samples.MVC5\SharpRepository.Samples.Mvc5.csproj", "{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -336,6 +338,14 @@ Global
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}.Release|x64.ActiveCfg = Release|Any CPU
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}.Release|x64.Build.0 = Release|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Debug|x64.Build.0 = Debug|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -358,9 +368,10 @@ Global
 		{772C205D-D4DC-4581-9B77-C672D54F2558} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{EA190218-E5E6-4D26-8411-B33B08EE1E3E} = {9DEAA991-4B0E-4C9C-85AE-6FF398D34401}
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{0DBF8CB0-E7EC-4EAB-9A84-8DDE0FC3AB7E} = {9DEAA991-4B0E-4C9C-85AE-6FF398D34401}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {819CFA5F-D8EF-4CB4-80CC-954C136BA9B6}
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
+		SolutionGuid = {819CFA5F-D8EF-4CB4-80CC-954C136BA9B6}
 	EndGlobalSection
 EndGlobal
