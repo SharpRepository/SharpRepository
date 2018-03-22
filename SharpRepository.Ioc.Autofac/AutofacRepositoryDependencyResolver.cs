@@ -1,10 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Autofac;
+using SharpRepository.Repository.Ioc;
 
 namespace SharpRepository.Ioc.Autofac
 {
-    class Class1
+    public class AutofacRepositoryDependencyResolver : BaseRepositoryDependencyResolver
     {
+        private readonly IContainer _container;
+        public AutofacRepositoryDependencyResolver(IContainer container)
+        {
+            _container = container;
+        }
+
+        protected override T ResolveInstance<T>()
+        {
+            return _container.Resolve<T>();
+        }
+
+        protected override object ResolveInstance(Type type)
+        {
+            return _container.Resolve(type);
+        }
     }
 }
