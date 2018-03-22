@@ -38,6 +38,7 @@ namespace SharpRepository.Samples.MVC5.Controllers
         public ActionResult Details(int id)
         {
             var contact = repository.Get(id);
+            var contact2 = DependencyResolver.Current.GetService<IRepository<Contact, int>>().Get(id);
             return View(contact);
         }
 
