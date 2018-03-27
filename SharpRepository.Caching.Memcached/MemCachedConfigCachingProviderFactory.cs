@@ -25,7 +25,7 @@ namespace SharpRepository.Caching.Memcached
 #if NET451
             return new MemcachedCachingProvider(ClientConfiguration);
 #elif NETSTANDARD2_0
-            return new MemcachedCachingProvider(LoggerFactory, ClientConfiguration);
+            return new MemcachedCachingProvider(LoggerFactory ?? new Microsoft.Extensions.Logging.LoggerFactory(), ClientConfiguration);
 #endif
         }
     }

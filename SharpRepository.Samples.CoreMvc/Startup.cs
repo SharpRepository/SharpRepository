@@ -9,6 +9,7 @@ using SharpRepository.Samples.CoreMvc.CustomRepositories;
 using System;
 using MongoDB.Bson.Serialization;
 using SharpRepository.CoreMvc.Models;
+using Microsoft.Extensions.Logging;
 
 namespace SharpRepository.CoreMvc
 {
@@ -40,6 +41,7 @@ namespace SharpRepository.CoreMvc
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
