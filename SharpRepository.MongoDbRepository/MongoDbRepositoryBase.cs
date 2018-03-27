@@ -23,6 +23,7 @@ namespace SharpRepository.MongoDbRepository
     {
         private readonly string _databaseName;
         protected IMongoDatabase Database;
+        static readonly object _lock = new object();
 
         private readonly Dictionary<Type, BsonType> _keyTypeToBsonType =
             new Dictionary<Type, BsonType>
@@ -80,28 +81,32 @@ namespace SharpRepository.MongoDbRepository
         {
             Database = mongoDatabase ?? new MongoClient("mongodb://localhost/default").GetDatabase(MongoUrl.Create("mongodb://localhost/default").DatabaseName);
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
-            {
-                var primaryKeyPropInfo = GetPrimaryKeyPropertyInfo();
+            if (BsonClassMap.IsClassMapRegistered(typeof(T)))
+                return;
 
-                BsonClassMap.RegisterClassMap<T>(cm =>
-                    {
-                        cm.AutoMap();
-                        if (cm.IdMemberMap == null)
+            lock (_lock)
+                if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
+                {
+                    var primaryKeyPropInfo = GetPrimaryKeyPropertyInfo();
+
+                    BsonClassMap.RegisterClassMap<T>(cm =>
                         {
-                            cm.SetIdMember(new BsonMemberMap(cm, primaryKeyPropInfo));
-
-                            if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
+                            cm.AutoMap();
+                            if (cm.IdMemberMap == null)
                             {
-                                cm.IdMemberMap.SetSerializer(new StringSerializer(_keyTypeToBsonType[typeof(TKey)]));
-                                cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
-                            }
-                        }
+                                cm.SetIdMember(new BsonMemberMap(cm, primaryKeyPropInfo));
 
-                        cm.Freeze();
-                    }
-                );
-            }
+                                if (_keyTypeToBsonType.ContainsKey(typeof(TKey)) && (_keyTypeToBsonGenerator.ContainsKey(typeof(TKey))))
+                                {
+                                    cm.IdMemberMap.SetSerializer(new StringSerializer(_keyTypeToBsonType[typeof(TKey)]));
+                                    cm.IdMemberMap.SetIdGenerator(_keyTypeToBsonGenerator[typeof(TKey)]);
+                                }
+                            }
+
+                            cm.Freeze();
+                        }
+                    );
+                }
         }
 
         private IMongoCollection<T> BaseCollection()
