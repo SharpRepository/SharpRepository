@@ -1,5 +1,5 @@
 ﻿using System;
-using Raven.Client.Document;
+using Raven.Client.Documents;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 
@@ -21,13 +21,13 @@ namespace SharpRepository.RavenDbRepository
         {
             var documentStore = new DocumentStore();
 
-            if (!String.IsNullOrEmpty(RepositoryConfiguration["connectionStringName"]))
+            //if (!String.IsNullOrEmpty(RepositoryConfiguration["connectionStringName"]))
+            //{
+            //    documentStore.ConnectionStringName = RepositoryConfiguration["connectionStringName"];
+            //}
+            if (!String.IsNullOrEmpty(RepositoryConfiguration["url"]))
             {
-                documentStore.ConnectionStringName = RepositoryConfiguration["connectionStringName"];
-            }
-            else if (!String.IsNullOrEmpty(RepositoryConfiguration["url"]))
-            {
-                documentStore.Url = RepositoryConfiguration["url"];
+                documentStore.Urls = new string[] { RepositoryConfiguration["url"] };
             }
 
             return new RavenDbRepository<T, TKey>(documentStore);

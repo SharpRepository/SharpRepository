@@ -6,8 +6,6 @@ namespace SharpRepository.RavenDbRepository
     public class RavenDbAdvancedConfigurationAttribute : RepositoryActionBaseAttribute
     {
         public bool? UseOptimisticConcurency { get; set; }
-        public bool? AllowNonAuthoritativeInformation { get; set; }
-        public TimeSpan? NonAuthoritativeInformationTimeout { get; set; }
         public int? MaxNumberOfRequestsPerSession { get; set; }
 
         public RavenDbAdvancedConfigurationAttribute()
@@ -17,9 +15,6 @@ namespace SharpRepository.RavenDbRepository
         public RavenDbAdvancedConfigurationAttribute(bool? useOptimisticConcurrency, bool? allowNonAuthoritativeInformation = null, TimeSpan? nonAuthoritativeInfoTimeout = null, int? maxRequestsPerSession = null)
         {
             UseOptimisticConcurency = useOptimisticConcurrency;
-            MaxNumberOfRequestsPerSession = maxRequestsPerSession;
-            AllowNonAuthoritativeInformation = allowNonAuthoritativeInformation;
-            NonAuthoritativeInformationTimeout = nonAuthoritativeInfoTimeout;
         }
 
         public override void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context)
@@ -30,13 +25,7 @@ namespace SharpRepository.RavenDbRepository
 
             if (UseOptimisticConcurency.HasValue)
                 ravenDbRepository.Session.Advanced.UseOptimisticConcurrency = UseOptimisticConcurency.Value;
-
-            if (AllowNonAuthoritativeInformation.HasValue)
-                ravenDbRepository.Session.Advanced.AllowNonAuthoritativeInformation = AllowNonAuthoritativeInformation.Value;
-
-            if (NonAuthoritativeInformationTimeout.HasValue)
-                ravenDbRepository.Session.Advanced.NonAuthoritativeInformationTimeout = NonAuthoritativeInformationTimeout.Value;
-
+            
             if (MaxNumberOfRequestsPerSession.HasValue)
                 ravenDbRepository.Session.Advanced.MaxNumberOfRequestsPerSession = MaxNumberOfRequestsPerSession.Value;
 

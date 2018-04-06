@@ -1,6 +1,6 @@
 ﻿using System;
 using SharpRepository.Repository.Caching;
-using Raven.Client.Document;
+using Raven.Client.Documents;
 using Raven.Client;
 
 namespace SharpRepository.RavenDbRepository

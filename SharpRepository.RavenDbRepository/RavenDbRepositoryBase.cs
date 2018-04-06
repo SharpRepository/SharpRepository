@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Raven.Client;
-using Raven.Client.Document;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -24,7 +25,7 @@ namespace SharpRepository.RavenDbRepository
 
         internal RavenDbRepositoryBase(string url, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
         {
-            Initialize(new DocumentStore { Url = url });
+            Initialize(new DocumentStore { Urls = new string[] { url } });
         }
 
         internal RavenDbRepositoryBase(IDocumentStore documentStore, ICachingStrategy<T, TKey> cachingStrategy = null) : base(cachingStrategy) 
@@ -34,7 +35,7 @@ namespace SharpRepository.RavenDbRepository
 
         private void Initialize(IDocumentStore documentStore = null)
         {
-            DocumentStore = documentStore ?? new DocumentStore { Url = "http://localhost:8080"};
+            DocumentStore = documentStore ?? new DocumentStore { Urls = new string[] { "http://localhost:8080" } };
             DocumentStore.Initialize();
             
             // see if we need to change the type name that defaults to Id
@@ -53,7 +54,7 @@ namespace SharpRepository.RavenDbRepository
             //      You can turn this error off by specifying documentStore.Conventions.AllowQueriesOnId = true;, but that is not recommend and provided for backward compatibility reasons only.
             //  So for now we will follow that advice and turn on the old convention
             // TODO: look at using a new way of doing the GetQuery to not have this issue when the PK is an int
-            DocumentStore.Conventions.AllowQueriesOnId = true;
+            // DocumentStore.Conventions.AllowQueriesOnId = true; on 4.0 are supported by default
 
             Session = DocumentStore.OpenSession();
         }
