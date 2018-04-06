@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Raven.Client.Embedded;
 using SharpRepository.RavenDbRepository;
 using Shouldly;
-using Raven.Client.Document;
+using Raven.Client.Documents;
 using Raven.Client;
 
 namespace SharpRepository.Tests.Integration.Spikes

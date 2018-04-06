@@ -3,7 +3,7 @@ using System.Collections.Generic;
 //using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
-using Raven.Client.Document;
+using Raven.Client.Documents;
 using Raven.Client.Embedded;
 using SharpRepository.CouchDbRepository;
 using SharpRepository.Db4oRepository;
