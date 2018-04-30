@@ -425,6 +425,13 @@ namespace SharpRepository.Repository
             return FindAll(ByMultipleKeysSpecification(keys));
         }
 
+        public virtual IEnumerable<T> GetMany(IEnumerable<TKey> keys, IFetchStrategy<T> fetchStrategy)
+        {
+            var specs = ByMultipleKeysSpecification(keys);
+            specs.FetchStrategy = fetchStrategy;
+            return FindAll(specs);
+        }
+        
         public virtual IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys)
         {
             return GetMany(keys.ToList(), selector);
@@ -443,6 +450,10 @@ namespace SharpRepository.Repository
         public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys)
         {
             return GetMany(keys).ToDictionary(GetPrimaryKey);
+        }
+        public virtual IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys, IFetchStrategy<T> fetchStrategy)
+        {
+            return GetMany(keys, fetchStrategy).ToDictionary(GetPrimaryKey);
         }
 
         public bool Exists(TKey key)
