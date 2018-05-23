@@ -282,7 +282,7 @@ namespace SharpRepository.Repository
                     context.Specification.FetchStrategy = fetchStrategy;
 
                     results = QueryManager.ExecuteFindAll(
-                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(selectFunc).ToList(),
+                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
                         context.Specification,
                         context.Selector,
                         context.QueryOptions
