@@ -21,14 +21,18 @@ Compatibility Issues
 
 Running tests
 --------------------------------
-Install:
-- CouchDB 1.6
+
+Integration tests uses all implementations. In order to avoid failing tests and long timeouts you have to install:
+- CouchDB 1.x (not 2.x)
 - SQL Server Compact
 - MongoDB
 
-The fastest way is use nunit3 console: you can get console here https://github.com/nunit/nunit-console/releases
-After that run tests with: 
-nunit3-console -v "SharpRepository.Samples\bin\Debug\SharpRepository.Samples.dll" "SharpRepository.Tests\bin\Debug\SharpRepository.Tests.dll" "SharpRepository.Tests.Integration\bin\Debug\SharpRepository.Tests.Integration.dll"
+We notice timeouts and long test discovery in VS2017 and timeouts in "dotnet test". 
+The best way is use nunit3 console you can get console here https://github.com/nunit/nunit-console/releases and add installation folder in your path
+After that from your project folder you can run all tests with: 
+```
+nunit3-console.exe ".\SharpRepository.Samples\bin\Debug\net461\SharpRepository.Samples.dll" ".\SharpRepository.Tests\bin\Debug\net461\SharpRepository.Tests.dll" ".\SharpRepository.Tests.Integration\bin\Debug\net461\SharpRepository.Tests.Integration.dll"
+```
 
 
 Have Questions?
