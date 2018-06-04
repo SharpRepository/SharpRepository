@@ -114,6 +114,12 @@ namespace SharpRepository.MongoDbRepository
             return Database.GetCollection<T>(TypeName);
         }
 
+        public IQueryable<T> AsQueryable(IFetchStrategy<T> fetchStrategy)
+        {
+            return BaseQuery(fetchStrategy);
+        }
+
+
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             if (fetchStrategy != null && fetchStrategy is MongoDbFetchStrategy<T> && ((MongoDbFetchStrategy<T>)fetchStrategy).AllowDiskUse)

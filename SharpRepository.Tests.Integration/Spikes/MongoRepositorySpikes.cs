@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using NUnit.Framework;
 using SharpRepository.MongoDbRepository;
+using SharpRepository.Repository;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 
@@ -169,7 +170,7 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var all = repo.GetAll(fetchStrategy);
 
-            
+            var all2 = repo.AsQueryable(fetchStrategy);
 
         }
     }
