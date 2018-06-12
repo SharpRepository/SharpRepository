@@ -13,51 +13,54 @@ namespace SharpRepository.Caching.Redis
         {
         }
 
-        public RedisCachingProvider(string host, bool ssl = true)
+        public RedisCachingProvider(string host, bool ssl = true, int? defaultDatabase = null)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
             var configOptions = new ConfigurationOptions
-                                {
-                                    EndPoints =
+            {
+                EndPoints =
                                     {
                                         {host}
                                     },
-                                    Ssl = ssl
-                                };
+                Ssl = ssl,
+                DefaultDatabase = defaultDatabase
+            };
 
             Initialize(configOptions);
         }
 
-        public RedisCachingProvider(string host, int port, bool ssl = true)
+        public RedisCachingProvider(string host, int port, bool ssl = true, int? defaultDatabase = null)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
             var configOptions = new ConfigurationOptions
-                                {
-                                    EndPoints =
+            {
+                EndPoints =
                                     {
                                         {host, port}
                                     },
-                                    Ssl = ssl
-                                };
+                Ssl = ssl,
+                DefaultDatabase = defaultDatabase
+            };
 
             Initialize(configOptions);
         }
 
-        public RedisCachingProvider(string host, int port, string password, bool ssl  =true)
+        public RedisCachingProvider(string host, int port, string password, bool ssl = true, int? defaultDatabase = null)
         {
             if (String.IsNullOrEmpty(host)) throw new ArgumentNullException("host");
 
             var configOptions = new ConfigurationOptions
-                          {
-                              EndPoints =
+            {
+                EndPoints =
                               {
                                   { host, port}
                               },
-                              Ssl = ssl,
-                              Password = password
-                          };
+                Ssl = ssl,
+                Password = password,
+                DefaultDatabase = defaultDatabase
+            };
 
             Initialize(configOptions);
         }
@@ -166,7 +169,7 @@ namespace SharpRepository.Caching.Redis
 
         public void Dispose()
         {
-            
+
         }
     }
 }
