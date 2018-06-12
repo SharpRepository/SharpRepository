@@ -11,18 +11,19 @@ namespace SharpRepository.Caching.Redis
             Factory = typeof(RedisConfigCachingProviderFactory);
         }
 
-        public RedisCachingProviderConfiguration(string name, string host, int port) : this(name, host, port, null)
+        public RedisCachingProviderConfiguration(string name, string host, int port, int? defaultDatabase = null) : this(name, host, port, null, true, defaultDatabase)
         {
         }
 
-        public RedisCachingProviderConfiguration(string name, string host, int port, string password, bool ssl = true)
+        public RedisCachingProviderConfiguration(string name, string host, int port, string password, bool ssl = true, int? defaultDatabase = null)
         {
             Name = name;
             Host = host;
             Port = port;
             Password = password;
             Ssl = ssl;
-            Factory = typeof (RedisConfigCachingProviderFactory);
+            DefaultDatabase = defaultDatabase;
+            Factory = typeof(RedisConfigCachingProviderFactory);
         }
 
         public string Host
@@ -43,6 +44,11 @@ namespace SharpRepository.Caching.Redis
         public bool Ssl
         {
             set { Attributes["ssl"] = value.ToString(); }
+        }
+
+        public int? DefaultDatabase
+        {
+            set { Attributes["defaultDatabase"] = value?.ToString(); }
         }
     }
 }

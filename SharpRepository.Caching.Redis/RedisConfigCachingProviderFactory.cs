@@ -15,10 +15,17 @@ namespace SharpRepository.Caching.Redis
         {
             int port;
             bool ssl;
+            int? defaultDatabase = null;
 
             if (!Boolean.TryParse(CachingProviderConfiguration["ssl"], out ssl))
             {
                 ssl = true;
+            }
+
+            if (!String.IsNullOrEmpty(CachingProviderConfiguration["defaultDatabase"]))
+            {
+                Int32.TryParse(CachingProviderConfiguration["defaultDatabase"], out var parsedDefaultDatabase);
+                defaultDatabase = parsedDefaultDatabase;
             }
 
             // this seems like a dumb way to do this :)
@@ -29,17 +36,17 @@ namespace SharpRepository.Caching.Redis
                     throw new ArgumentException("port");
                 }
 
-                return new RedisCachingProvider(CachingProviderConfiguration["host"], port, CachingProviderConfiguration["password"], ssl);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"], port, CachingProviderConfiguration["password"], ssl, defaultDatabase);
             }
 
             if (Int32.TryParse(CachingProviderConfiguration["port"], out port))
             {
-                return new RedisCachingProvider(CachingProviderConfiguration["host"], port, ssl);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"], port, ssl, defaultDatabase);
             }
 
             if (!String.IsNullOrEmpty(CachingProviderConfiguration["host"]))
             {
-                return new RedisCachingProvider(CachingProviderConfiguration["host"], ssl);
+                return new RedisCachingProvider(CachingProviderConfiguration["host"], ssl, defaultDatabase);
             }
 
             return new RedisCachingProvider();
