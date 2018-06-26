@@ -22,6 +22,7 @@ namespace SharpRepository.MongoDbRepository
     public class MongoDbRepositoryBase<T, TKey> : LinqRepositoryBase<T, TKey> where T : class, new()
     {
         private readonly string _databaseName;
+        private string _collectionName;
         protected IMongoDatabase Database;
         static readonly object _lock = new object();
 
@@ -107,11 +108,17 @@ namespace SharpRepository.MongoDbRepository
                         }
                     );
                 }
+
+            var collectionNameAttributes = EntityType.GetTypeInfo().GetOneAttribute<MongoDbCollectionNameAttribute>(inherit: true);
+            if (collectionNameAttributes != null)
+                _collectionName = collectionNameAttributes.CollectionName;
+            else
+                _collectionName = TypeName;
         }
 
         private IMongoCollection<T> BaseCollection()
         {
-            return Database.GetCollection<T>(TypeName);
+            return Database.GetCollection<T>(_collectionName);
         }
 
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
