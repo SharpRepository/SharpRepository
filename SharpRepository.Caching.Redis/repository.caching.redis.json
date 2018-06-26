@@ -5,7 +5,10 @@
       "redisProvider": {
         "factory": "SharpRepository.Caching.Redis.RedisConfigCachingProviderFactory, SharpRepository.Caching.Redis",
         "host": "127.0.0.1",
-        "port": "6379"
+        "port": "6379",
+        "ssl": false,
+        "password": "",
+        "defaultDatabase": "0"
       }
     }
   }

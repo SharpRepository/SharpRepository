@@ -12,5 +12,6 @@ namespace SharpRepository.Repository.Configuration
         string this[string key] { get; }
 
         ICachingProvider GetInstance();
+        bool ContainsKey(string key);
     }
 }

@@ -21,7 +21,7 @@ namespace SharpRepository.Caching.Redis
                 ssl = true;
             }
 
-            if (!String.IsNullOrEmpty(CachingProviderConfiguration["defaultDatabase"]))
+            if (CachingProviderConfiguration.ContainsKey("defaultDatabase") && !String.IsNullOrEmpty(CachingProviderConfiguration["defaultDatabase"]))
             {
                 Int32.TryParse(CachingProviderConfiguration["defaultDatabase"], out int parsedDefaultDatabase);
                 defaultDatabase = parsedDefaultDatabase;

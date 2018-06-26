@@ -35,6 +35,11 @@ namespace SharpRepository.Repository.Configuration
             return factory.GetInstance();
         }
 
+        public bool ContainsKey(string key)
+        {
+            return Attributes.ContainsKey(key);
+        }
+
         public string this[string key]
         {
             get { return Attributes[key]; }
