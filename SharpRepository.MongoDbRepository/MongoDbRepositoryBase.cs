@@ -7,9 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -82,6 +80,11 @@ namespace SharpRepository.MongoDbRepository
         {
             Database = mongoDatabase ?? new MongoClient("mongodb://localhost/default").GetDatabase(MongoUrl.Create("mongodb://localhost/default").DatabaseName);
 
+            var collectionNameAttributes = EntityType.GetTypeInfo().GetOneAttribute<MongoDbCollectionNameAttribute>(inherit: true);
+            _collectionName = collectionNameAttributes != null ?
+                collectionNameAttributes.CollectionName : 
+                TypeName;
+
             if (BsonClassMap.IsClassMapRegistered(typeof(T)))
                 return;
 
@@ -108,12 +111,6 @@ namespace SharpRepository.MongoDbRepository
                         }
                     );
                 }
-
-            var collectionNameAttributes = EntityType.GetTypeInfo().GetOneAttribute<MongoDbCollectionNameAttribute>(inherit: true);
-            if (collectionNameAttributes != null)
-                _collectionName = collectionNameAttributes.CollectionName;
-            else
-                _collectionName = TypeName;
         }
 
         private IMongoCollection<T> BaseCollection()
@@ -125,8 +122,7 @@ namespace SharpRepository.MongoDbRepository
         {
             return BaseQuery(fetchStrategy);
         }
-
-
+        
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             if (fetchStrategy != null && fetchStrategy is MongoDbFetchStrategy<T> && ((MongoDbFetchStrategy<T>)fetchStrategy).AllowDiskUse)

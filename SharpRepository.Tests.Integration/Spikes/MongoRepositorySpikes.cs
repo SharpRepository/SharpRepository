@@ -29,6 +29,11 @@ namespace SharpRepository.Tests.Integration.Spikes
         public List<PhoneNumber> PhoneNumbers { get; set; }
     }
 
+    [MongoDbCollectionName("OrderCustomName")]
+    public class OrderExtension : Order
+    {
+    }
+
     [TestFixture]
     public class MongoRepositorySpikes : TestBase
     {
@@ -169,9 +174,37 @@ namespace SharpRepository.Tests.Integration.Spikes
             read.Name.ShouldBe(create.Name);
 
             var all = repo.GetAll(fetchStrategy);
-
             var all2 = repo.AsQueryable(fetchStrategy);
+        }
+        
+        [Test]
+        public void MongoRepository_Collection_Name_Attribute()
+        {
+            const string connectionString = "mongodb://127.0.0.1/test";
 
+            if (!MongoDbRepositoryManager.ServerIsRunning(connectionString))
+            {
+                AssertIgnores.MongoServerIsNotRunning();
+            }
+
+            var cli = new MongoClient(connectionString);
+            cli.DropDatabase("test");
+
+            var repo = new MongoDbRepository<Order, string>(connectionString);
+
+            // Create 
+            var create = new Order { Name = "Big sale" };
+            repo.Add(create);
+
+            var repoExt = new MongoDbRepository<OrderExtension, string>(connectionString);
+
+            // Create 
+            var create2 = new OrderExtension { Name = "Big sale" };
+            repoExt.Add(create2);
+
+            Assert.IsTrue(cli.GetDatabase("test").ListCollections().ToList().Any(x => x["name"] == "Order"));
+            Assert.IsTrue(cli.GetDatabase("test").ListCollections().ToList().Any(x => x["name"] == "OrderCustomName"));
+            Assert.IsFalse(cli.GetDatabase("test").ListCollections().ToList().Any(x => x["name"] == "OrderExtended"));
         }
     }
 }
