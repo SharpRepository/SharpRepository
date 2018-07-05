@@ -29,7 +29,7 @@ namespace SharpRepository.CoreMvc.Controllers
         // GET: Contacts/Details/5
         public ActionResult Details(string id)
         {
-            var contact = repository.Get(id);
+            var contact = repository.Get(id, "Emails");
 
             return View(contact);
         }

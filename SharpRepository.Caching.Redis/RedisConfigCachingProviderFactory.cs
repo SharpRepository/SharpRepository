@@ -14,17 +14,16 @@ namespace SharpRepository.Caching.Redis
         public override ICachingProvider GetInstance()
         {
             int port;
-            bool ssl;
             int? defaultDatabase = null;
 
-            if (!Boolean.TryParse(CachingProviderConfiguration["ssl"], out ssl))
+            if (!Boolean.TryParse(CachingProviderConfiguration["ssl"], out bool ssl))
             {
                 ssl = true;
             }
 
             if (CachingProviderConfiguration.ContainsKey("defaultDatabase") && !String.IsNullOrEmpty(CachingProviderConfiguration["defaultDatabase"]))
             {
-                Int32.TryParse(CachingProviderConfiguration["defaultDatabase"], out var parsedDefaultDatabase);
+                Int32.TryParse(CachingProviderConfiguration["defaultDatabase"], out int parsedDefaultDatabase);
                 defaultDatabase = parsedDefaultDatabase;
             }
 

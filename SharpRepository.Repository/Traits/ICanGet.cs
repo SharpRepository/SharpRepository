@@ -28,10 +28,12 @@ namespace SharpRepository.Repository.Traits
 
         IEnumerable<T> GetMany(params TKey[] keys);
         IEnumerable<T> GetMany(IEnumerable<TKey> keys);
+        IEnumerable<T> GetMany(IEnumerable<TKey> keys, IFetchStrategy<T> fetchStrategy);
         IEnumerable<TResult> GetMany<TResult>(Expression<Func<T, TResult>> selector, params TKey[] keys);
         IEnumerable<TResult> GetMany<TResult>(IEnumerable<TKey> keys, Expression<Func<T, TResult>> selector);
         IDictionary<TKey, T> GetManyAsDictionary(params TKey[] keys);
         IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys);
+        IDictionary<TKey, T> GetManyAsDictionary(IEnumerable<TKey> keys, IFetchStrategy<T> fetchStrategy);
 
         bool Exists(TKey key);
         bool TryGet(TKey key, out T entity);

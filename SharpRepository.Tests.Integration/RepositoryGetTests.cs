@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpRepository.Repository;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
@@ -140,6 +141,25 @@ namespace SharpRepository.Tests.Integration
         }
 
         [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
+        public void GetMany_List_Should_Return_Multiple_Items_With_Strategy(IRepository<Contact, string> repository)
+        {
+            var strategy = new GenericFetchStrategy<Contact>();
+            strategy.Include(c => c.EmailAddresses);
+
+
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i };
+                repository.Add(contact);
+            }
+
+            var items = repository.GetMany(new[] { "1", "3", "4", "5" }.ToList(), strategy);
+            items.Count().ShouldBe(4);
+        }
+
+
+
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
         public void GetManyAsDictionary_Params_Should_Return_Multiple_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 5; i++)
@@ -167,6 +187,27 @@ namespace SharpRepository.Tests.Integration
             }
 
             var items = repository.GetManyAsDictionary(new [] {"1", "3", "4", "5" }.ToList());
+            items.ContainsKey("1").ShouldBeTrue();
+            items.ContainsKey("2").ShouldBeFalse();
+            items.ContainsKey("3").ShouldBeTrue();
+            items.ContainsKey("4").ShouldBeTrue();
+            items.ContainsKey("5").ShouldBeTrue();
+        }
+
+
+        [ExecuteForAllRepositoriesExcept(RepositoryType.MongoDb, Reason = "ContactId is the ObjectId, must be a 24 hex string")]
+        public void GetManyAsDictionary_List_Should_Return_Multiple_Items_With_Strategy(IRepository<Contact, string> repository)
+        {
+            var strategy = new GenericFetchStrategy<Contact>();
+            strategy.Include(c => c.EmailAddresses);
+
+            for (var i = 1; i <= 5; i++)
+            {
+                var contact = new Contact { ContactId = i.ToString(), Name = "Test User " + i };
+                repository.Add(contact);
+            }
+
+            var items = repository.GetManyAsDictionary(new[] { "1", "3", "4", "5" }.ToList(), strategy);
             items.ContainsKey("1").ShouldBeTrue();
             items.ContainsKey("2").ShouldBeFalse();
             items.ContainsKey("3").ShouldBeTrue();

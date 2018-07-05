@@ -7,9 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Bson.Serialization.Options;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
@@ -82,6 +80,11 @@ namespace SharpRepository.MongoDbRepository
         {
             Database = mongoDatabase ?? new MongoClient("mongodb://localhost/default").GetDatabase(MongoUrl.Create("mongodb://localhost/default").DatabaseName);
 
+            var collectionNameAttributes = EntityType.GetTypeInfo().GetOneAttribute<MongoDbCollectionNameAttribute>(inherit: true);
+            _collectionName = collectionNameAttributes != null ?
+                collectionNameAttributes.CollectionName : 
+                TypeName;
+
             if (BsonClassMap.IsClassMapRegistered(typeof(T)))
                 return;
 
@@ -108,12 +111,6 @@ namespace SharpRepository.MongoDbRepository
                         }
                     );
                 }
-
-            var collectionNameAttributes = EntityType.GetTypeInfo().GetOneAttribute<MongoDbCollectionNameAttribute>(inherit: true);
-            if (collectionNameAttributes != null)
-                _collectionName = collectionNameAttributes.CollectionName;
-            else
-                _collectionName = TypeName;
         }
 
         private IMongoCollection<T> BaseCollection()
@@ -121,9 +118,17 @@ namespace SharpRepository.MongoDbRepository
             return Database.GetCollection<T>(_collectionName);
         }
 
+        public IQueryable<T> AsQueryable(IFetchStrategy<T> fetchStrategy)
+        {
+            return BaseQuery(fetchStrategy);
+        }
+        
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
-            return BaseCollection().AsQueryable();
+            if (fetchStrategy != null && fetchStrategy is MongoDbFetchStrategy<T> && ((MongoDbFetchStrategy<T>)fetchStrategy).AllowDiskUse)
+                return BaseCollection().AsQueryable(new AggregateOptions { AllowDiskUse = true } );
+            else
+                return BaseCollection().AsQueryable();
         }
 
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)

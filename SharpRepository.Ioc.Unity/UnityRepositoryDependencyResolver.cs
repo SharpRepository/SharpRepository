@@ -1,13 +1,13 @@
 ﻿using System;
-using Autofac;
 using SharpRepository.Repository.Ioc;
+using Unity;
 
-namespace SharpRepository.Ioc.Autofac
+namespace SharpRepository.Ioc.Unity
 {
-    public class AutofacDependencyResolver : BaseRepositoryDependencyResolver
+    public class UnityRepositoryDependencyResolver : BaseRepositoryDependencyResolver
     {
-        private readonly IContainer _container;
-        public AutofacDependencyResolver(IContainer container)
+        private readonly IUnityContainer _container;
+        public UnityRepositoryDependencyResolver(IUnityContainer container)
         {
             _container = container;
         }
