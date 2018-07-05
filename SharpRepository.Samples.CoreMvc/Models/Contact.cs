@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using SharpRepository.MongoDbRepository;
 using SharpRepository.Repository;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SharpRepository.CoreMvc.Models
 {
+    [MongoDbCollectionName("Contacts")]
     public class Contact
     {
         [BsonId] // Needed for MongoDB
