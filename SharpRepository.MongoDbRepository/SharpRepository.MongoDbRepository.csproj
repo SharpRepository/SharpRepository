@@ -5,8 +5,8 @@
     <Description>SharpRepository generic repository implemented in MongoDb</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.MongoDbRepository</PackageId>
-    <PackageVersion>2.0.6.2</PackageVersion>
-	  <PackageReleaseNotes>2.0.6: added support to AllowDiskSave option in FetchStrategy</PackageReleaseNotes>
+    <PackageVersion>2.0.7.1-beta1</PackageVersion>
+	  <PackageReleaseNotes>2.0.7: addeded MongoDbCollectionNameAttribute that allows to change collection name, update mongo driver to 2.7.0</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository MongoDbRepository MongoDb Mongo</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -14,7 +14,7 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.6.1</Version>
+	  <Version>2.0.7.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="repository.mongoDb.json">
@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="2.4.4" />
-    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Bson" Version="2.7.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
   </ItemGroup>
 
   <ItemGroup>
