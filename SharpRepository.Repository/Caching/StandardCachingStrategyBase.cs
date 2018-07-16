@@ -430,8 +430,7 @@ namespace SharpRepository.Repository.Caching
 
             if (!CachingProvider.Get(GetGenerationKey(), out int generation))
             {
-                IncrementGeneration();
-                return GetGeneration();
+                return IncrementGeneration();
             }
             return generation;
         }
