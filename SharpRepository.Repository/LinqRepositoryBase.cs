@@ -70,6 +70,29 @@ namespace SharpRepository.Repository
             return query;
         }
 
+        protected override IQueryable<TResult> GetAllQuery<TResult>(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy, Expression<Func<T, TResult>> selector)
+        {
+            if (queryOptions is DistinctOption<T> || queryOptions is DistinctSortingOptions<T> || queryOptions is DistinctPagingOptions<T> || queryOptions is DistinctSortingOptions<TResult> || queryOptions is DistinctPagingOptions<T, TResult>)
+            {
+                if (queryOptions == null)
+                    return GetAllQuery(fetchStrategy).Select(selector);
+
+                var query = BaseQuery(fetchStrategy).Select(selector);
+
+                query = queryOptions.Apply(query);
+
+                SetTraceInfo("GetAll", query);
+
+                return query;
+            } else
+            {
+                return GetAllQuery(queryOptions, fetchStrategy).Select(selector);
+            }
+
+
+        }
+
+
         protected override IQueryable<T> FindAllQuery(ISpecification<T> criteria)
         {
             var query = BaseQuery(criteria.FetchStrategy);

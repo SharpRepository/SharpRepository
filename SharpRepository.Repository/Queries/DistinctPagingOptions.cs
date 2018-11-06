@@ -9,20 +9,10 @@ namespace SharpRepository.Repository.Queries
     /// </summary>
     /// <typeparam name="T">The entity type of the repository.</typeparam>
     /// <typeparam name="TSortKey">The type of the property that is being sorted.</typeparam>
-    public class PagingOptions<T, TSortKey> : SortingOptions<T, TSortKey>, IPagingOptions
+    public class DistinctPagingOptions<T, TSortKey> : PagingOptions<T, TSortKey>
     {
-        public int PageSize { get; set; }
-        public int PageNumber { get; set; }
-        public int Skip { get { return (PageNumber - 1) * PageSize; } }
-        public int Take { get { return PageSize; } }
-        public int TotalItems { get;  set; }
-
-        public PagingOptions(int pageNumber, int pageSize, Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
-            : base(sortExpression, isDescending)
-        {
-            PageSize = pageSize;
-            PageNumber = pageNumber;
-        }
+        public DistinctPagingOptions(int pageNumber, int pageSize, Expression<Func<T, TSortKey>> sortExpression, bool isDescending = false)
+            : base(pageNumber, pageSize, sortExpression, isDescending) { }
 
         /// <summary>
         /// Applies paging to the specified query.
@@ -31,16 +21,8 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Paged results.</returns>
         public override IQueryable<T> Apply(IQueryable<T> query)
         {
-            query = base.Apply(query);
-
-            TotalItems = query.Count();
-
-            if (Skip > 0 || Take > 0)
-            {
-                return query.Skip(Skip).Take(Take);
-            }
-            
-            return query;
+            var distinctQuery = query.Distinct();
+            return base.Apply(distinctQuery);
         }
 
         /// <summary>
@@ -49,13 +31,7 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return string.Format("PagingOptions<{0},{1}>\nPageSize: {2}\nPageNumber: {3}\nSort: {4}",
-                typeof(T).Name,
-                typeof(TSortKey).Name,
-                PageSize,
-                PageNumber,
-                base.ToString()
-                );
+            return "Distinct" + base.ToString();
         }
     }
 
@@ -63,7 +39,7 @@ namespace SharpRepository.Repository.Queries
     /// Used to define the paging criteria on queries run against a repository.
     /// </summary>
     /// <typeparam name="T">The entity type of the repository.</typeparam>
-    public class PagingOptions<T> : SortingOptions<T>, IPagingOptions
+    public class DistinctPagingOptions<T> : DistinctSortingOptions<T>, IPagingOptions
     {
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
@@ -71,12 +47,13 @@ namespace SharpRepository.Repository.Queries
         public int Take { get { return PageSize; } }
         public int TotalItems { get; set; }
 
-        public PagingOptions(int pageNumber, int pageSize, string sortProperty, bool isDescending = false)
+        public DistinctPagingOptions(int pageNumber, int pageSize, string sortProperty, bool isDescending = false)
             : base(sortProperty, isDescending)
         {
             PageSize = pageSize;
             PageNumber = pageNumber;
         }
+
 
         /// <summary>
         /// Applies paging to the specified query.
@@ -122,7 +99,7 @@ namespace SharpRepository.Repository.Queries
         /// <returns>Unique key for a query</returns>
         public override string ToString()
         {
-            return string.Format("PagingOptions<{0}>\nPageSize: {1}\nPageNumber: {2}\nSort: {3}",
+            return string.Format("DistinctPagingOptions<{0}>\nPageSize: {1}\nPageNumber: {2}\nSort: {3}",
                 typeof(T).Name,
                 PageSize,
                 PageNumber,

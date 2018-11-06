@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+//using System.Data.Entity;
+//using System.Data.Entity.Infrastructure;
 using System.Linq;
 using NUnit.Framework;
 using Raven.Client.Document;
@@ -22,27 +24,27 @@ using Raven.Client;
 
 namespace SharpRepository.Tests.Integration.Data
 {
-    public class RepositoryTestCaseDataFactory
+    public class RepositoryContactTypeTestCaseDataFactory
     {
         public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType, string testName = "Test")
         {
             if (includeType.Contains(RepositoryType.InMemory))
             {
-                yield return new TestCaseData(new InMemoryRepository<Contact, string>()).SetName("InMemoryRepository " + testName);
+                yield return new TestCaseData(new InMemoryRepository<ContactType, string>()).SetName("InMemoryRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.Xml))
             {
-                var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("Contact");
+                var xmlDataDirectoryPath = XmlDataDirectoryFactory.Build("ContactType");
                 yield return
-                    new TestCaseData(new XmlRepository<Contact, string>(xmlDataDirectoryPath)).SetName("XmlRepository" + testName);
+                    new TestCaseData(new XmlRepository<ContactType, string>(xmlDataDirectoryPath)).SetName("XmlRepository" + testName);
             }
 
             if (includeType.Contains(RepositoryType.Ef))
             {
                 var dbPath = EfDataDirectoryFactory.Build();
                 yield return
-                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectContext("Data Source=" + dbPath))).SetName("EfRepository" + testName);
+                    new TestCaseData(new EfRepository<ContactType, string>(new TestObjectContext("Data Source=" + dbPath))).SetName("EfRepository" + testName);
             }
 
             if (includeType.Contains(RepositoryType.EfCore))
@@ -57,23 +59,23 @@ namespace SharpRepository.Tests.Integration.Data
                 // Create the schema in the database
                 var context = new TestObjectContextCore(options);
                 context.Database.EnsureCreated();
-                yield return new TestCaseData(new EfCoreRepository<Contact, string>(context)).SetName("EfCoreRepository " + testName);
+                yield return new TestCaseData(new EfCoreRepository<ContactType, string>(context)).SetName("EfCoreRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.Dbo4))
             {
-                var dbPath = Db4oDataDirectoryFactory.Build("Contact");
-                yield return new TestCaseData(new Db4oRepository<Contact, string>(dbPath)).SetName("Db4oRepository " + testName);
+                var dbPath = Db4oDataDirectoryFactory.Build("ContactType");
+                yield return new TestCaseData(new Db4oRepository<ContactType, string>(dbPath)).SetName("Db4oRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.MongoDb))
             {
-                string connectionString = MongoDbConnectionStringFactory.Build("Contact");
+                string connectionString = MongoDbConnectionStringFactory.Build("ContactType");
            
                 if (MongoDbRepositoryManager.ServerIsRunning(connectionString))
                 {
                     MongoDbRepositoryManager.DropDatabase(connectionString); // Pre-test cleanup
-                    yield return new TestCaseData(new MongoDbRepository<Contact, string>(connectionString)).SetName("MongoDb " + testName);
+                    yield return new TestCaseData(new MongoDbRepository<ContactType, string>(connectionString)).SetName("MongoDb " + testName);
                 }
             }
 
@@ -90,25 +92,26 @@ namespace SharpRepository.Tests.Integration.Data
                 }
 
                 IDocumentStore x = new EmbeddableDocumentStore();
-                yield return new TestCaseData(new RavenDbRepository<Contact, string>(documentStore: documentStore)).SetName("RavenDbRepository " + testName);
+                yield return new TestCaseData(new RavenDbRepository<ContactType, string>(documentStore: documentStore)).SetName("RavenDbRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.Cache))
             {
                 var cachingProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
-                yield return new TestCaseData(new CacheRepository<Contact, string>(CachePrefixFactory.Build(), cachingProvider)).SetName("CacheRepository " + testName);
+                yield return new TestCaseData(new CacheRepository<ContactType, string>(CachePrefixFactory.Build(), cachingProvider)).SetName("CacheRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.CouchDb))
             {
                 if (CouchDbRepositoryManager.ServerIsRunning(CouchDbUrl.Host, CouchDbUrl.Port))
                 {
-                    var databaseName = CouchDbDatabaseNameFactory.Build("Contact");
+                    var databaseName = CouchDbDatabaseNameFactory.Build("ContactType");
                     CouchDbRepositoryManager.DropDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
                     CouchDbRepositoryManager.CreateDatabase(CouchDbUrl.Host, CouchDbUrl.Port, databaseName);
 
-                    yield return new TestCaseData(new CouchDbRepository<Contact, string>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository " + testName);
+                    yield return new TestCaseData(new CouchDbRepository<ContactType, string>(CouchDbUrl.Host, CouchDbUrl.Port, databaseName)).SetName("CouchDbRepository " + testName);
                 }
+
             }
         }
     }

@@ -47,6 +47,30 @@ namespace SharpRepository.Tests.Integration
             result.First().Name.ShouldBe("Test User 3");
         }
 
+        [ExecuteForAllRepositories("ContactTypeTest")]
+        public void GetAll_Distinct_Should_Return_Every_Items_With_Paging(IRepository<ContactType, string> repository)
+        {
+            const int resultingPage = 2;
+            const int pageSize = 2;
+            const int totalItems = 5;
+
+            var queryOptions = new DistinctPagingOptions<ContactType>(resultingPage, pageSize, "Name");
+
+            for (int i = 1; i <= totalItems; i++)
+            {
+                var contactType = new ContactType { Name = "Test Type " + i };
+                repository.Add(contactType);
+
+                var contactType2 = new ContactType { Name = "Test Type " + i };
+                repository.Add(contactType2);
+            }
+
+            IEnumerable<ContactType> result = repository.GetAll(queryOptions).ToList();
+            result.Count().ShouldBe(pageSize);
+            queryOptions.TotalItems.ShouldBe(totalItems);
+            result.First().Name.ShouldBe("Test Type 3");
+        }
+        
         [ExecuteForAllRepositories]
         public void GetAll_With_Selector_Should_Return_Every_Item(IRepository<Contact, string> repository)
         {

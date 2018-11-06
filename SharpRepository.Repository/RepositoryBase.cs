@@ -126,6 +126,8 @@ namespace SharpRepository.Repository
         protected abstract IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy);
         protected abstract IQueryable<T> GetAllQuery(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy);
 
+        protected abstract IQueryable<TResult> GetAllQuery<TResult>(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy, Expression<Func<T, TResult>> selector);
+
         //Managing aspects
         protected void DisableAspect(Type aspectType)
         {
@@ -271,7 +273,7 @@ namespace SharpRepository.Repository
                 if (context.Specification == null)
                 {
                     results = QueryManager.ExecuteGetAll(
-                        () => GetAllQuery(context.QueryOptions, fetchStrategy).Select(context.Selector).ToList(),
+                        () => GetAllQuery<TResult>(context.QueryOptions, fetchStrategy, context.Selector).ToList(),
                         context.Selector,
                         context.QueryOptions
                         );

@@ -10,7 +10,9 @@ namespace SharpRepository.Tests.Integration.TestAttributes
 
         private static IEnumerable<TestCaseData> ForAllRepositoriesTestCaseData
         {
-            get { return RepositoryTestCaseDataFactory.Build(RepositoryTypes.All, _testName); }
+            get { return _testName == "ContactTypeTest" 
+                    ? RepositoryContactTypeTestCaseDataFactory.Build(RepositoryTypes.All, _testName)
+                    : RepositoryTestCaseDataFactory.Build(RepositoryTypes.All, _testName); }
         }
 
         public ExecuteForAllRepositoriesAttribute(string testName = "Test") : base(typeof(ExecuteForAllRepositoriesAttribute), "ForAllRepositoriesTestCaseData")

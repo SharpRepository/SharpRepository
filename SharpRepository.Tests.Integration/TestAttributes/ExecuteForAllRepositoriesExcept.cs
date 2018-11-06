@@ -11,7 +11,9 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get
             {
-                return RepositoryTestCaseDataFactory.Build(RemoveExceptions(RepositoryTypes.All), _testName);
+                return _testName == "ContactTypeTest"
+                 ? RepositoryContactTypeTestCaseDataFactory.Build(RepositoryTypes.All, _testName)
+                 : RepositoryTestCaseDataFactory.Build(RepositoryTypes.All, _testName);
             }
         }
 

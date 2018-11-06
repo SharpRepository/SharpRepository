@@ -12,7 +12,9 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         {
             get
             {
-                return RepositoryTestCaseDataFactory.Build(_includeType, _testName);
+                return _testName == "ContactTypeTest" 
+                    ? RepositoryContactTypeTestCaseDataFactory.Build(_includeType, _testName) 
+                    : RepositoryTestCaseDataFactory.Build(_includeType, _testName);
             }
         }
 

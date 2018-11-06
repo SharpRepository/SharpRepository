@@ -9,66 +9,51 @@ using Shouldly;
 namespace SharpRepository.Tests.QueryOptions
 {
     [TestFixture]
-    public class SortingOptionsTests : TestBase
+    public class DistinctSortingOptionsTests : TestBase
     {
         [Test]
-        public void SortingOptions_Will_Sort_By_SortProperty_Asc()
+        public void DistinctSortingOptions_Will_Sort_By_SortProperty_Asc()
         {
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
                 contacts.Add(new Contact { Name = "Test User " + i });
+                contacts.Add(new Contact { Name = "Test User " + i });
             }
 
-            var qo = new SortingOptions<Contact>("Name");
+            var qo = new DistinctSortingOptions<Contact>("Name");
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
-        public void SortingOptions_Will_Sort_By_SortProperty_Asc_Not_Distinct()
-        {
-            var contacts = new List<Contact>();
-            for (var i = 5; i >= 1; i--)
-            {
-                contacts.Add(new Contact { Name = "Test User " + i });
-                contacts.Add(new Contact { Name = "Test User " + i });
-            }
-
-            var qo = new SortingOptions<Contact>("Name");
-            var queryable = qo.Apply(contacts.AsQueryable());
-            queryable.Count().ShouldBe(10);
-            queryable.First().Name.ShouldBe("Test User 1");
-        }
-
-
-
-        [Test]
-        public void SortingOptions_Will_Sort_By_SortProperty_Desc()
+        public void DistinctSortingOptions_Will_Sort_By_SortProperty_Desc()
         {
             var contacts = new List<Contact>();
             for (var i = 1; i <= 5; i++)
             {
                 contacts.Add(new Contact { Name = "Test User " + i });
+                contacts.Add(new Contact { Name = "Test User " + i });
             }
 
-            var qo = new SortingOptions<Contact>("Name", true);
+            var qo = new DistinctSortingOptions<Contact>("Name", true);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
-        public void SortingOptions_With_Multiple_Sorting_Properties()
+        public void DistinctSortingOptions_With_Multiple_Sorting_Properties()
         {
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
                 contacts.Add(new Contact { Name = "Test User " + (i % 2),ContactTypeId = i});
+                contacts.Add(new Contact { Name = "Test User " + (i % 2), ContactTypeId = i });
             }
 
-            var qo = new SortingOptions<Contact>("Name");
+            var qo = new DistinctSortingOptions<Contact>("Name");
             qo.ThenSortBy("ContactTypeId");
 
             var queryable = qo.Apply(contacts.AsQueryable());
@@ -80,30 +65,32 @@ namespace SharpRepository.Tests.QueryOptions
         }
 
         [Test]
-        public void SortingOptions_Will_Sort_By_SortExpression_Asc()
+        public void DistinctSortingOptions_Will_Sort_By_SortExpression_Asc()
         {
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
                 contacts.Add(new Contact { Name = "Test User " + i });
+                contacts.Add(new Contact { Name = "Test User " + i });
             }
 
-            var qo = new SortingOptions<Contact, string>(x => x.Name);
+            var qo = new DistinctSortingOptions<Contact, string>(x => x.Name);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
-        public void SortingOptions_Will_Sort_By_SortExpression_Desc()
+        public void DistinctSortingOptions_Will_Sort_By_SortExpression_Desc()
         {
             var contacts = new List<Contact>();
             for (var i = 1; i <= 5; i++)
             {
                 contacts.Add(new Contact { Name = "Test User " + i });
+                contacts.Add(new Contact { Name = "Test User " + i });
             }
 
-            var qo = new SortingOptions<Contact, string>(x => x.Name, isDescending: true);
+            var qo = new DistinctSortingOptions<Contact, string>(x => x.Name, isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 5");
@@ -115,10 +102,11 @@ namespace SharpRepository.Tests.QueryOptions
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
+                contacts.Add(new Contact { Name = "Test User " + (i % 2), ContactTypeId = i });
                 contacts.Add(new Contact { Name = "Test User " + (i % 2),ContactTypeId = i});
             }
 
-            var qo = new SortingOptions<Contact, string>(x => x.Name);
+            var qo = new DistinctSortingOptions<Contact, string>(x => x.Name);
             qo.ThenSortBy(x => x.ContactTypeId);
 
             var queryable = qo.Apply(contacts.AsQueryable());
@@ -135,10 +123,11 @@ namespace SharpRepository.Tests.QueryOptions
             var contacts = new List<Contact>();
             for (var i = 1; i <= 5; i++)
             {
-                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i)} });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
             }
 
-            var qo = new SortingOptions<Contact, string>(x => x.ContactType.Name);
+            var qo = new DistinctSortingOptions<Contact, string>(x => x.ContactType.Name);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 5");
@@ -150,40 +139,43 @@ namespace SharpRepository.Tests.QueryOptions
             var contacts = new List<Contact>();
             for (var i = 1; i <= 5; i++)
             {
-                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i)} });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
             }
 
-            var qo = new SortingOptions<Contact, string>(x => x.ContactType.Name, isDescending: true);
+            var qo = new DistinctSortingOptions<Contact, string>(x => x.ContactType.Name, isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 1");
         }
 
         [Test]
-        public void SortingOptions_Will_Sort_By_Multiple_Deep_SortProperty_Asc()
+        public void DistinctSortingOptions_Will_Sort_By_Multiple_Deep_SortProperty_Asc()
         {
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
                 contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
             }
 
-            var qo = new SortingOptions<Contact>("ContactType.Name");
+            var qo = new DistinctSortingOptions<Contact>("ContactType.Name");
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 5");
         }
 
         [Test]
-        public void SortingOptions_Will_Sort_By_Multiple_Deep_SortProperty_Desc()
+        public void DistinctSortingOptions_Will_Sort_By_Multiple_Deep_SortProperty_Desc()
         {
             var contacts = new List<Contact>();
             for (var i = 1; i <= 5; i++)
             {
                 contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
+                contacts.Add(new Contact { Name = "Test User " + i, ContactType = new ContactType { Name = "Type " + (5 - i) } });
             }
 
-            var qo = new SortingOptions<Contact>("ContactType.Name", isDescending: true);
+            var qo = new DistinctSortingOptions<Contact>("ContactType.Name", isDescending: true);
             var queryable = qo.Apply(contacts.AsQueryable());
             queryable.Count().ShouldBe(5);
             queryable.First().Name.ShouldBe("Test User 1");
