@@ -17,6 +17,7 @@ namespace SharpRepository.Tests.Integration.Spikes
     public class EfCoreSelectorSpike
     {
         private TestObjectContextCore dbContext;
+        private TestObjectContextCore dbContext2;
         private Func<string, bool> filterSelects = q => q.StartsWith("Executing DbCommand") && q.Contains("SELECT") && !q.Contains("sqlite_master");
 
         [SetUp]
@@ -55,6 +56,8 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
 
             dbContext.SaveChanges();
+
+            dbContext2 = new TestObjectContextCore(options); // there is some kind of cache of inserted objects in dbContext
         }
         
         [Test]
@@ -68,13 +71,31 @@ namespace SharpRepository.Tests.Integration.Spikes
             string queryLogElement = dbContext.QueryLog.Where(filterSelects).First();
             Regex regex = new Regex("SELECT(.+)FROM.+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var selectMatches = regex.Matches(queryLogElement);
-            selectMatches.Count.ShouldBe(1, "A regex match was found for the select pattern");
+            selectMatches.Count.ShouldBe(1, "One regex match must be found for the select pattern");
+            var selectPart = selectMatches[0].Groups[1].Value;
+            selectPart.ShouldContain(nameof(EmailAddress.ContactId), "ContactId was selected");
+            selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), "EmailAddressId was notselected");
+            selectPart.ShouldContain(nameof(EmailAddress.Email), "Email was not selected");
+            selectPart.ShouldNotContain(nameof(EmailAddress.Label), "Label was selected");
+        }
+        
+        [Test]
+        public void EfCore_Get_With_Selector_Selects_Only_Specified_Columns()
+        {
+            var repository = new EfCoreRepository<EmailAddress, int>(dbContext2);
+
+            var emailAddress = repository.Find(m => m.Email == "omar.piani.1@email.com", s => new { s.ContactId, s.EmailAddressId, s.Email });
+            emailAddress.Email.ShouldBe("omar.piani.1@email.com");
+            dbContext2.QueryLog.Count(filterSelects).ShouldBe(1, "One SELECT must be executed");
+            string queryLogElement = dbContext2.QueryLog.Where(filterSelects).First();
+            Regex regex = new Regex("SELECT(.+)FROM.+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+            var selectMatches = regex.Matches(queryLogElement);
+            selectMatches.Count.ShouldBe(1, "One regex match must be found for the select pattern");
             var selectPart = selectMatches[0].Groups[1].Value;
             selectPart.ShouldContain(nameof(EmailAddress.ContactId), "ContactId was selected");
             selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), "EmailAddressId was selected");
             selectPart.ShouldContain(nameof(EmailAddress.Email), "Email was selected");
             selectPart.ShouldNotContain(nameof(EmailAddress.Label), "Label was not selected");
         }
-        
     }
 }
