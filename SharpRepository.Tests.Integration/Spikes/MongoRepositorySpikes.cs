@@ -51,7 +51,10 @@ namespace SharpRepository.Tests.Integration.Spikes
             var databaseNames = cli.ListDatabases().ToList();
             foreach (var db in databaseNames)
             {
-                cli.DropDatabase(db["name"].AsString);
+                if (db["name"].AsString != "admin")
+                {
+                    cli.DropDatabase(db["name"].AsString);
+                }
             }
 
             var database = cli.GetDatabase("Order");
