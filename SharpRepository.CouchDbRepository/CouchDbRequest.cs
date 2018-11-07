@@ -29,8 +29,16 @@ namespace SharpRepository.CouchDbRepository
 
                 if (postData != null)
                 {
-                    var bytes = Encoding.UTF8.GetBytes(postData);
-                    request.Content = new ByteArrayContent(bytes);
+                    if (contentType == "application/json")
+                    {
+                        request.Content = new StringContent(postData);
+                        request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                    }
+                    else
+                    {
+                        var bytes = Encoding.UTF8.GetBytes(postData);
+                        request.Content = new ByteArrayContent(bytes);
+                    }
                 }
 
                 try
@@ -44,7 +52,7 @@ namespace SharpRepository.CouchDbRepository
 
                     return result;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     return null;
                 }
