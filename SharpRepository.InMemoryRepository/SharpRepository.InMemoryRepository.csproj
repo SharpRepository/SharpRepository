@@ -14,7 +14,7 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.1-beta1</Version>
+	  <Version>2.0.3</Version>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.2" />
