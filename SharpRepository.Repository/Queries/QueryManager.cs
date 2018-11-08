@@ -44,6 +44,23 @@ namespace SharpRepository.Repository.Queries
             return result;
         }
 
+        public TResult ExecuteGet<TResult>(Func<TResult> query, TKey key, Expression<Func<T, TResult>> selector)
+        {
+            if (CacheEnabled && _cachingStrategy.TryGetResult(key, selector, out TResult result))
+            {
+                CacheUsed = true;
+                return result;
+            }
+
+            CacheUsed = false;
+
+            result = query.Invoke();
+
+            _cachingStrategy.SaveGetResult(key, selector,  result);
+
+            return result;
+        }
+
         public IEnumerable<TResult> ExecuteGetAll<TResult>(Func<IEnumerable<TResult>> query, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
         {
             if (CacheEnabled && _cachingStrategy.TryGetAllResult(queryOptions, selector, out IEnumerable<TResult> result))

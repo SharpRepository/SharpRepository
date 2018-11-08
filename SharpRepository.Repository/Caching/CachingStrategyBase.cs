@@ -70,6 +70,34 @@ namespace SharpRepository.Repository.Caching
             }
         }
 
+        public bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
+        {
+            result = default(TResult);
+            try
+            {
+                return IsInCache(GetWriteThroughCacheKey(key, selector), out result);
+            }
+            catch (Exception)
+            {
+                // don't let an error trying to find results stop everything, it should continue and then just go get the results from the DB itself
+                return false;
+            }
+        }
+
+        public void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult item)
+        {
+            try
+            {
+                SetCache(GetWriteThroughCacheKey(key, selector), item);
+            }
+            catch (Exception)
+            {
+                // don't let an error saving cache stop everything else
+            }
+        }
+
+
+
         public virtual bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
             result = null;
@@ -468,6 +496,12 @@ namespace SharpRepository.Repository.Caching
         {
             return String.Format("{0}/{1}/{2}", FullCachePrefix, TypeFullName, key);
         }
+
+        protected string GetWriteThroughCacheKey<TResult>(TKey key, Expression<Func<T, TResult>> selector)
+        {
+            return String.Format("{0}/{1}/{2}/{3}", FullCachePrefix, TypeFullName, key, Md5Helper.CalculateMd5("Get::" + (selector != null ? selector.ToString() : "null")));
+        }
+
 
         protected virtual string GetAllCacheKey<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector)
         {

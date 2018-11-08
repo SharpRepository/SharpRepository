@@ -144,6 +144,20 @@ namespace SharpRepository.MongoDbRepository
             else return default(T);
         }
 
+        protected override TResult GetQuery<TResult>(TKey key, IFetchStrategy<T> fetchStrategy, Expression<Func<T, TResult>> selector)
+        {
+            var keyBsonType = ((StringSerializer)BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.GetSerializer()).Representation;
+            var keyMemberName = BsonClassMap.LookupClassMap(typeof(T)).IdMemberMap.MemberName;
+            if (IsValidKey(key))
+            {
+                var keyBsonValue = BsonTypeMapper.MapToBsonValue(key, keyBsonType);
+                var filter = Builders<T>.Filter.Eq(keyMemberName, keyBsonValue);
+                return BaseCollection().Find(filter).Project(selector).FirstOrDefault();
+            }
+            else return default(TResult);
+        }
+
+
         #region Math
         public override int Sum(ISpecification<T> criteria, Expression<Func<T, int>> selector)
         {

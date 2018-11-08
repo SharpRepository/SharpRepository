@@ -22,6 +22,8 @@ namespace SharpRepository.Tests.Caching
         [Test]
         public void ClearAllCache_Throws_Exception_WIthout_OutOfBox()
         {
+            Cache.CachePrefixManager = null; //static class come around tests if order change
+
             try
             {
                 Cache.ClearAll();

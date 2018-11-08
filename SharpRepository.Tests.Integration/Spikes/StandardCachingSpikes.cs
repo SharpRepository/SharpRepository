@@ -113,13 +113,13 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             const string contactId = "1";
 
-            var contactName = repository.Get(contactId, c => c.Name);
-            contactName.ShouldBe("Contact 1");
-
             var contact = repository.Get(contactId);
-            contact.Name = "Contact 1 - EDITED";
+            contact.Name.ShouldBe("Contact 1");
 
-            contactName = repository.Get(contactId, c => c.Name);
+            var contact2 = repository.Get(contactId);
+            contact2.Name = "Contact 1 - EDITED";
+
+            var contactName = repository.Get(contactId, c => c.Name);
             contactName.ShouldBe("Contact 1 - EDITED");
         }
 

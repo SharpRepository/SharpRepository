@@ -12,6 +12,9 @@ namespace SharpRepository.Repository.Caching
         bool TryGetResult(TKey key, out T result);
         void SaveGetResult(TKey key, T result);
 
+        bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result);
+        void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result);
+
         bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result);
         void SaveGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, IEnumerable<TResult> result);
 
