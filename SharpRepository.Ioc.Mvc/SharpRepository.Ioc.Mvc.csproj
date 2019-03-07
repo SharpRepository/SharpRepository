@@ -6,7 +6,7 @@
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.Ioc.Mvc</PackageId>
     <PackageVersion>2.0.3.2</PackageVersion>
-	  <PackageReleaseNotes>2.0.3.1: updated package versions</PackageReleaseNotes>
+	  <PackageReleaseNotes>2.0.3: updated package versions</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository IoC Mvc Mvc5 AspNet WebApi</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
