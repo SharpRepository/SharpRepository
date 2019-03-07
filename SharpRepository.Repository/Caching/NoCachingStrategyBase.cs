@@ -24,6 +24,17 @@ namespace SharpRepository.Repository.Caching
 
         }
 
+        public bool TryGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, out TResult result)
+        {
+            result = default(TResult);
+            return false;
+        }
+
+        public void SaveGetResult<TResult>(TKey key, Expression<Func<T, TResult>> selector, TResult result)
+        {
+
+        }
+        
         public bool TryGetAllResult<TResult>(IQueryOptions<T> queryOptions, Expression<Func<T, TResult>> selector, out IEnumerable<TResult> result)
         {
             result = default(IEnumerable<TResult>);

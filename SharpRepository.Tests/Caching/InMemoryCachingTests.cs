@@ -131,7 +131,7 @@ namespace SharpRepository.Tests.Caching
         }
 
         [Test]
-        public void ExecuteGet_With_Selector_Should_Use_Cache_After_First_Call()
+        public void ExecuteGet_With_Selector_Should_Be_Cached_After_Use()
         {
             var repos = new InMemoryRepository<Contact>(new StandardCachingStrategy<Contact>(cacheProvider));
 
@@ -139,8 +139,12 @@ namespace SharpRepository.Tests.Caching
             repos.Add(new Contact { Name = "Test2" });
 
             var item = repos.Get(1, x => x.Name);
+            repos.CacheUsed.ShouldBeFalse();
+            item.ShouldBe("Test1");
+
+            var itemSecondRead = repos.Get(1, x => x.Name);
             repos.CacheUsed.ShouldBeTrue();
-            item.ShouldNotBeNull();
+            item.ShouldBe("Test1");
         }
 
         [Test]

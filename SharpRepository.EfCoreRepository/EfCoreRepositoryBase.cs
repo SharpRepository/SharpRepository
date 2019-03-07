@@ -55,9 +55,8 @@ namespace SharpRepository.EfCoreRepository
             {
                 if (entry.State == EntityState.Detached)
                 {
-                    TKey key;
 
-                    if (GetPrimaryKey(entity, out key))
+                    if (GetPrimaryKey(entity, out TKey key))
                     {
                         // check to see if this item is already attached
                         //  if it is then we need to copy the values to the attached value instead of changing the State to modified since it will throw a duplicate key exception
@@ -93,7 +92,7 @@ namespace SharpRepository.EfCoreRepository
         }
 
         // we override the implementation fro LinqBaseRepository becausee this is built in and doesn't need to find the key column and do dynamic expressions, etc.
-        //  this also provides the EF5 first level caching out of the box
+        // this also provides the EF5 first level caching out of the box
         protected override T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy)
         {
             return fetchStrategy == null ? DbSet.Find(key) : base.GetQuery(key, fetchStrategy);
