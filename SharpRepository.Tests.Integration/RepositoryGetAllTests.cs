@@ -4,7 +4,6 @@ using SharpRepository.Repository.Queries;
 using SharpRepository.Tests.Integration.TestAttributes;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
-using SharpRepository.EfRepository;
 using System.Collections.Generic;
 using System.Linq;
 

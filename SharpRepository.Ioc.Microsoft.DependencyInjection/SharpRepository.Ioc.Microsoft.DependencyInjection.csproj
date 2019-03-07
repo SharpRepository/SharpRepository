@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3</TargetFrameworks>
     <Authors>Omar Piani, Ben Griswold, Jeff Treuting</Authors>
     <Description>Injects SharpRepository using StructureMap in your .NET Core apps or even using Microsoft.DependencyInjection library.</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
     <PackageId>SharpRepository.Ioc.Microsoft.DependencyInjection</PackageId>
-    <PackageVersion>2.0.2</PackageVersion>
-    <PackageReleaseNotes>2.0.2: stable release</PackageReleaseNotes>
+    <PackageVersion>2.0.2.2</PackageVersion>
+    <PackageReleaseNotes>2.0.2.1: stable release</PackageReleaseNotes>
     <PackageTags>SharpRepository Repository IoC .NET Core Standard ServiceProvider Microsoft.DependencyInjection SharpRepository</PackageTags>
     <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -21,7 +21,7 @@
     <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="1.4.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />

@@ -26,6 +26,11 @@ namespace SharpRepository.Repository
             return FindQuery(ByPrimaryKeySpecification(key, fetchStrategy));
         }
 
+        protected override TResult GetQuery<TResult>(TKey key, IFetchStrategy<T> fetchStrategy, Expression<Func<T, TResult>> selector)
+        {
+            return FindQuery(ByPrimaryKeySpecification(key, fetchStrategy), selector);
+        }
+
         protected override T FindQuery(ISpecification<T> criteria)
         {
             var query = BaseQuery(criteria.FetchStrategy);
@@ -34,6 +39,16 @@ namespace SharpRepository.Repository
 
             return criteria.SatisfyingEntityFrom(query);
         }
+
+        protected TResult FindQuery<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector)
+        {
+            var query = BaseQuery(criteria.FetchStrategy);
+
+            SetTraceInfo("Find", query);
+
+            return criteria.SatisfyingEntitiesFrom(query).Select(selector).FirstOrDefault();
+        }
+
 
         protected override T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions)
         {
@@ -46,6 +61,19 @@ namespace SharpRepository.Repository
 
             return criteria.SatisfyingEntityFrom(query);
         }
+        
+        protected override TResult FindQuery<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions)
+        {
+            if (queryOptions == null)
+                return FindQuery(criteria, selector);
+
+            var query = queryOptions.Apply(BaseQuery(criteria.FetchStrategy));
+
+            SetTraceInfo("Find", query);
+
+            return criteria.SatisfyingEntitiesFrom(query).Select(selector).FirstOrDefault();
+        }
+
 
         protected override IQueryable<T> GetAllQuery(IFetchStrategy<T> fetchStrategy)
         {

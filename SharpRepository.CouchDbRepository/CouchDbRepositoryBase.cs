@@ -267,7 +267,7 @@ namespace SharpRepository.CouchDbRepository
         protected override void AddItem(T entity)
         {
             string id = null;
-            if (GetPrimaryKey(entity, out TKey entityId) && GenerateKeyOnAdd && Equals(entityId.ToString(), default(string)))
+            if (GetPrimaryKey(entity, out TKey entityId) && GenerateKeyOnAdd && Equals(entityId?.ToString(), default(string)))
             {
                 id = GeneratePrimaryKey();
                 SetCouchDbPrimaryKey(entity, id);

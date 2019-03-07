@@ -31,7 +31,7 @@ namespace SharpRepository.Repository.Caching.Hash
             // for any local collection parameters in the method, make a
             // replacement argument which will print its elements
             var replacements = (from x in map
-                                where x.Param != null && x.Param.GetType().GetTypeInfo().IsGenericType
+                                where x.Param != null && x.Param.GetTypeInfo().IsGenericType
                                 let g = x.Param.GetGenericTypeDefinition()
                                 where g == typeof(IEnumerable<>) || g == typeof(List<>)
                                 where x.Arg.NodeType == ExpressionType.Constant

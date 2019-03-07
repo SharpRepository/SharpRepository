@@ -309,11 +309,11 @@ namespace SharpRepository.Repository
         {
             return GetAll(selector, queryOptions, RepositoryHelper.BuildFetchStrategy(includePaths));
         }
-
-
-
+        
         // These are the actual implementation that the derived class needs to implement
         protected abstract T GetQuery(TKey key, IFetchStrategy<T> fetchStrategy);
+
+        protected abstract TResult GetQuery<TResult>(TKey key, IFetchStrategy<T> fetchStrategy, Expression<Func<T, TResult>> selector);
 
         public abstract IRepositoryQueryable<TResult> Join<TJoinKey, TInner, TResult>(IRepositoryQueryable<TInner> innerRepository, Expression<Func<T, TJoinKey>> outerKeySelector, Expression<Func<TInner, TJoinKey>> innerKeySelector, Expression<Func<T, TInner, TResult>> resultSelector)
             where TInner : class
@@ -392,16 +392,12 @@ namespace SharpRepository.Repository
 
                 // get the full entity, possibly from cache
                 var result = QueryManager.ExecuteGet(
-                    () => GetQuery(context.Id, fetchStrategy),
-                    context.Id
+                    () => GetQuery(context.Id, fetchStrategy, selector),
+                    context.Id,
+                    selector
                     );
-
-                // return the entity with the selector applied to it
-                var selectedResult = result == null
-                    ? default(TResult)
-                    : new[] { result }.AsQueryable().Select(selector).First();
-
-                context.Result = selectedResult;
+                
+                context.Result = result;
                 RunAspect(attribute => attribute.OnGetExecuted(context));
 
                 return context.Result;
@@ -589,6 +585,7 @@ namespace SharpRepository.Repository
         // These are the actual implementation that the derived class needs to implement
         protected abstract T FindQuery(ISpecification<T> criteria);
         protected abstract T FindQuery(ISpecification<T> criteria, IQueryOptions<T> queryOptions);
+        protected abstract TResult FindQuery<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions);
 
         public T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
@@ -633,12 +630,7 @@ namespace SharpRepository.Repository
                 var item = QueryManager.ExecuteFind(
                     () =>
                         {
-                            var result = FindQuery(context.Specification, context.QueryOptions);
-                            if (result == null)
-                                return default(TResult);
-
-                            var results = new[] { result };
-                            return results.AsQueryable().Select(context.Selector).First();
+                            return FindQuery(context.Specification, context.Selector, context.QueryOptions);
                         },
 
                     context.Specification,

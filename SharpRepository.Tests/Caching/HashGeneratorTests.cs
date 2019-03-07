@@ -101,7 +101,7 @@ namespace SharpRepository.Tests.Caching
         public void Same_Predicate_With_Variable_Array_Will_Give_Same_Hash()
         {
             var name = "test";
-            var contactIds = new List<int>{1, 2};
+            var contactIds = new List<int>{ 1, 2 };
 
             Expression<Func<Contact, bool>> predicate = contact => (contact.Name == name && contactIds.Contains(contact.ContactId));
             var hash1 = HashGenerator.FromSpecification(new Specification<Contact>(predicate));
@@ -126,7 +126,7 @@ namespace SharpRepository.Tests.Caching
             Expression<Func<Contact, bool>> predicate2 = contact => (contact.Name == name && contactIds.Contains(contact.ContactId));
             var hash2 = HashGenerator.FromSpecification(new Specification<Contact>(predicate2));
 
-            hash1.ShouldBe(hash2);
+            hash1.ShouldNotBe(hash2);
         }
 
         [Test]
