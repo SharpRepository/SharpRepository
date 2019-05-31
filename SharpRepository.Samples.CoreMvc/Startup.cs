@@ -9,6 +9,7 @@ using SharpRepository.Samples.CoreMvc.CustomRepositories;
 using System;
 using MongoDB.Bson.Serialization;
 using SharpRepository.CoreMvc.Models;
+using SharpRepository.Samples.CoreMvc;
 
 namespace SharpRepository.CoreMvc
 {
@@ -32,6 +33,12 @@ namespace SharpRepository.CoreMvc
 
             services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "efCore"));
 
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUserServiceCustom, UserServiceCustom>();
+            services.AddTransient<UserRepository>(
+            r => new UserRepository(
+                RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "efCore"
+            ));
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository")); //default InMemory
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb"); // for Mongo Db
             return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "efCore"); // for Ef Core

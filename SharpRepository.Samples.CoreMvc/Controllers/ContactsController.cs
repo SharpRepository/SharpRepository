@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SharpRepository.Repository;
 using SharpRepository.CoreMvc.Models;
+using SharpRepository.Samples.CoreMvc;
 
 namespace SharpRepository.CoreMvc.Controllers
 {
@@ -13,9 +14,9 @@ namespace SharpRepository.CoreMvc.Controllers
     {
         protected IRepository<Contact, string> repository;
 
-        public ContactsController(IRepository<Contact, string> repository)
+        public ContactsController(IUserServiceCustom service)
         {
-            this.repository = repository;
+            this.repository = service.GetRepository();
         }
 
         // GET: Contacts
