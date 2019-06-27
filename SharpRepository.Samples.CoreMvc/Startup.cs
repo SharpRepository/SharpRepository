@@ -7,7 +7,6 @@ using SharpRepository.Ioc.Microsoft.DependencyInjection;
 using SharpRepository.Repository;
 using SharpRepository.Samples.CoreMvc.CustomRepositories;
 using System;
-using MongoDB.Bson.Serialization;
 using SharpRepository.CoreMvc.Models;
 using SharpRepository.Samples.CoreMvc;
 
@@ -31,17 +30,17 @@ namespace SharpRepository.CoreMvc
 
             // services.AddTransient<DbContext, ContactContext>(); // needed if you don't write dbContextClass on json configuration
 
-            services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "efCore"));
+            services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "xml"));
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserServiceCustom, UserServiceCustom>();
             services.AddTransient<UserRepository>(
             r => new UserRepository(
-                RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "efCore"
+                RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository")), "xml"
             ));
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository")); //default InMemory
             // return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "mongoDb"); // for Mongo Db
-            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "efCore"); // for Ef Core
+            return services.UseSharpRepository(Configuration.GetSection("sharpRepository"), "xml"); // for Ef Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
