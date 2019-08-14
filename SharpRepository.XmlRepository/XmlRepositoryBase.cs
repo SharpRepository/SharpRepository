@@ -27,7 +27,7 @@ namespace SharpRepository.XmlRepository
         private void Initialize(string storagePath)
         {
             _items = new List<T>();
-            _storagePath = storagePath; _storagePath = Path.Combine(storagePath, TypeName + ".xml");
+            _storagePath = Path.Combine(storagePath, TypeName + ".xml");
 
             // load up the items
             LoadItems();
