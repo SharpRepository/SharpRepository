@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.RavenDbRepository", "SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj", "{0D7303B9-3A89-4932-B0F0-73B0C1C0FAED}"
 EndProject
@@ -89,6 +89,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Microsoft.DependencyInjection", "SharpRepository.Ioc.Microsoft.DependencyInjection\SharpRepository.Ioc.Microsoft.DependencyInjection.csproj", "{46493AEB-8D0D-4A10-9911-EC567AB9AEFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Ioc.Unity", "SharpRepository.Ioc.Unity\SharpRepository.Ioc.Unity.csproj", "{0D54925A-CDAB-44FF-BEC1-75CCE4B1B804}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpRepository.Samples.Core3Mvc", "SharpRepository.Samples.Core3Mvc\SharpRepository.Samples.Core3Mvc.csproj", "{756A35FF-76B5-42DB-B435-FD15573BA06C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -346,6 +348,14 @@ Global
 		{0D54925A-CDAB-44FF-BEC1-75CCE4B1B804}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0D54925A-CDAB-44FF-BEC1-75CCE4B1B804}.Release|x64.ActiveCfg = Release|Any CPU
 		{0D54925A-CDAB-44FF-BEC1-75CCE4B1B804}.Release|x64.Build.0 = Release|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Debug|x64.Build.0 = Debug|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Release|x64.ActiveCfg = Release|Any CPU
+		{756A35FF-76B5-42DB-B435-FD15573BA06C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,9 +379,10 @@ Global
 		{EA190218-E5E6-4D26-8411-B33B08EE1E3E} = {9DEAA991-4B0E-4C9C-85AE-6FF398D34401}
 		{46493AEB-8D0D-4A10-9911-EC567AB9AEFC} = {7D84196E-1183-46E8-944F-C43B0627B931}
 		{0D54925A-CDAB-44FF-BEC1-75CCE4B1B804} = {7D84196E-1183-46E8-944F-C43B0627B931}
+		{756A35FF-76B5-42DB-B435-FD15573BA06C} = {9DEAA991-4B0E-4C9C-85AE-6FF398D34401}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
 		SolutionGuid = {819CFA5F-D8EF-4CB4-80CC-954C136BA9B6}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35
 	EndGlobalSection
 EndGlobal
