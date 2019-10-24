@@ -52,11 +52,11 @@ namespace SharpRepository.Ioc.Mvc
 
                 c.ForRepositoriesUseSharpRepository(sharpConfig, repositoryName, lifecycle);
             });
-
+            
             var dependencyResolver = new StructureMapDependencyResolver(container);
             DependencyResolver.SetResolver(dependencyResolver);
             GlobalConfiguration.Configuration.DependencyResolver = dependencyResolver;
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
+            RepositoryDependencyResolver.SetDependencyResolver(dependencyResolver);
         }
     }
 }

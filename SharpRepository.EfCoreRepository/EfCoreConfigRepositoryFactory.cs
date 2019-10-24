@@ -74,8 +74,8 @@ namespace SharpRepository.EfCoreRepository
             
             // TODO: look at dbContextType (from Enyim.Caching configuration bits) and how it caches, see about implementing cache or expanding FastActivator to take parameters
             DbContext dbContext = dbContextType == null
-                            ? RepositoryDependencyResolver.Current?.Resolve<DbContext>()
-                            : (DbContext)RepositoryDependencyResolver.Current?.Resolve(dbContextType);
+                            ? RepositoryDependencyResolver.Current?.GetService<DbContext>()
+                            : (DbContext)RepositoryDependencyResolver.Current?.GetService(dbContextType);
 
             // if the Ioc container doesn't throw an error but still returns null we need to alert the consumer
             if (dbContext != null)
@@ -83,7 +83,7 @@ namespace SharpRepository.EfCoreRepository
                 return dbContext;
             }
 
-            var options = RepositoryDependencyResolver.Current.Resolve<DbContextOptions>();
+            var options = RepositoryDependencyResolver.Current.GetService<DbContextOptions>();
             if (options == null)
             {
                 throw new RepositoryDependencyResolverException(typeof(DbContext));

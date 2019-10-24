@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Ioc
         {
             try
             {
-                new TestDependencyResolver().Resolve<ISomeFakeInterface>();
+                new TestDependencyResolver().GetService<ISomeFakeInterface>();
 
                 Assert.Fail(); // exception was not throws
             }
@@ -28,14 +28,9 @@ namespace SharpRepository.Tests.Ioc
         }
     }
     
-    public class TestDependencyResolver : BaseRepositoryDependencyResolver
+    public class TestDependencyResolver : IServiceProvider
     {
-        protected override T ResolveInstance<T>()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override object ResolveInstance(Type type)
+        public object GetService(Type serviceType)
         {
             throw new NotImplementedException();
         }

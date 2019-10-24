@@ -17,7 +17,7 @@ namespace SharpRepository.Repository.Caching
                 throw new Exception("RepositoryDependencyResolver.Current must be configured with the instance of IMemoryCache");
             }
             
-            Cache = RepositoryDependencyResolver.Current.Resolve<IMemoryCache>();
+            Cache = RepositoryDependencyResolver.Current.GetService<IMemoryCache>();
 
             if (Cache == null)
             {

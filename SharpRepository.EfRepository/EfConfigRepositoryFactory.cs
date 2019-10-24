@@ -71,8 +71,8 @@ namespace SharpRepository.EfRepository
             {
                 // if there is an IOC dependency resolver configured then use that one to get the DbContext, this will allow sharing of context across multiple repositories if the IOC is configured that way
                 return dbContextType == null
-                                    ? RepositoryDependencyResolver.Current.Resolve<DbContext>()
-                                    : (DbContext)RepositoryDependencyResolver.Current.Resolve(dbContextType);
+                                    ? RepositoryDependencyResolver.Current.GetService<DbContext>()
+                                    : (DbContext)RepositoryDependencyResolver.Current.GetService(dbContextType);
             }
         }
     }

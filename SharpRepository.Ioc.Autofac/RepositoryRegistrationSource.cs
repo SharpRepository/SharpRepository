@@ -35,7 +35,7 @@ namespace SharpRepository.Ioc.Autofac
                 typeof(ICompoundKeyRepository<,,>), typeof(ICompoundKeyRepository<,,,>), typeof(ICompoundKeyRepository<>)
             };
 
-            bool isRepositoryFunc(Type repo) => repo.GetTypeInfo().IsGenericType ? repositoryInterfaces.Contains(repo.GetGenericTypeDefinition()) : repo.GetInterfaces().Where(i => i.GetTypeInfo().IsGenericType).Select(i => i.GetGenericTypeDefinition()).Any(i => repositoryInterfaces.Contains(i));
+            bool isRepositoryFunc(Type repo) => repo.GetTypeInfo().IsGenericType ? repositoryInterfaces.Contains(repo.GetGenericTypeDefinition()) : false;
             bool isCompoundRepositoryFunc(Type repo) => repo.GetTypeInfo().IsGenericType ? typeof(ICompoundKeyRepository<>) == repo.GetGenericTypeDefinition() : repo.GetInterfaces().Where(i => i.GetTypeInfo().IsGenericType).Select(i => i.GetGenericTypeDefinition()).Any(i => typeof(ICompoundKeyRepository<>) == i);
 
             if (swt == null || !isRepositoryFunc(swt.ServiceType))

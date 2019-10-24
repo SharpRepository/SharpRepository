@@ -4,7 +4,7 @@ using SharpRepository.Repository.Ioc;
 
 namespace SharpRepository.Ioc.Autofac
 {
-    public class AutofacRepositoryDependencyResolver : BaseRepositoryDependencyResolver
+    public class AutofacRepositoryDependencyResolver : IServiceProvider
     {
         private readonly IContainer _container;
         public AutofacRepositoryDependencyResolver(IContainer container)
@@ -12,14 +12,9 @@ namespace SharpRepository.Ioc.Autofac
             _container = container;
         }
 
-        protected override T ResolveInstance<T>()
+        public object GetService(Type serviceType)
         {
-            return _container.Resolve<T>();
-        }
-
-        protected override object ResolveInstance(Type type)
-        {
-            return _container.Resolve(type);
+            return _container.Resolve(serviceType);
         }
     }
 }
