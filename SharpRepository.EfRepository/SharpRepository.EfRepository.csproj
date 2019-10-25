@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net451</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net451</TargetFrameworks>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>SharpRepository generic repository implemented with Entity Framework 6</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.EfRepository</PackageId>
-    <PackageVersion>2.0.3.1</PackageVersion>
-	  <PackageReleaseNotes>2.0.3: update to Ef6.2</PackageReleaseNotes>
+    <PackageVersion>2.1.0-prerelease</PackageVersion>
+	  <PackageReleaseNotes>2.1.0: update to EF6.3 that supports Core 3, compatibilty with generic dependency resolver</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository EfRepository EntityFramework Entity Framework EF6</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -15,7 +15,7 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.2</Version>
+	  <Version>2.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Ioc;
+using ConfigurationErrorsException = SharpRepository.Repository.Configuration.ConfigurationErrorsException;
 
 namespace SharpRepository.EfRepository
 {

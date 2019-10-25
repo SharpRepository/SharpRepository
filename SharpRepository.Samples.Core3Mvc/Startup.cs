@@ -42,13 +42,11 @@ namespace SharpRepository.Samples.Core3Mvc
         // This is the default if you don't have an environment specific method.
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(Configuration.GetSection("sharpRepository"));
-
             // builder.RegisterSharpRepository(sharpRepoConfig); //default InMemory
             // builder.RegisterSharpRepository(sharpRepoConfig, "mongoDb"); // for Mongo Db
             // builder.RegisterSharpRepository(sharpRepoConfig, "efCore"); // for Ef Core
 
-            builder.RegisterSharpRepository(sharpRepoConfig, "efCore"); // for Ef Core
+            builder.RegisterSharpRepository(Configuration.GetSection("sharpRepository"), "efCore"); // for Ef Core
         }
 
 
