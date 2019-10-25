@@ -15,18 +15,18 @@ namespace SharpRepository.Ioc.Ninject
 
             var configuration = RepositoryFactory.BuildSharpRepositoryConfiguation(configurationSection);
 
-            kernel.BindSharpRepository(configuration, repositoryName)M
-    }
+            kernel.BindSharpRepository(configuration, repositoryName);
+        }
 
 
         public static void BindSharpRepository(this IKernel kernel, ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
-            kernel.Bind(typeof (IRepository<>)).ToMethod(context =>
-                {
-                    var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
+            kernel.Bind(typeof(IRepository<>)).ToMethod(context =>
+               {
+                   var genericArgs = context.Request.Service.GetTypeInfo().GenericTypeArguments;
 
-                    return RepositoryFactory.GetInstance(genericArgs[0], configuration, repositoryName);
-                });
+                   return RepositoryFactory.GetInstance(genericArgs[0], configuration, repositoryName);
+               });
 
             kernel.Bind(typeof(IRepository<,>)).ToMethod(context =>
                 {
