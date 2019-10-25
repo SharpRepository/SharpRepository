@@ -17,10 +17,7 @@
 	  <Version>2.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.9" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5" />
+    <PackageReference Include="Autofac" Version="[4.9,5.0)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />

@@ -6,8 +6,8 @@
     <Description>Configures Windsor to resolve IRepository as the right configured implementation of SharpRepository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.Ioc.Windsor</PackageId>
-    <PackageVersion>2.0.2-alpha4</PackageVersion>
-	  <PackageReleaseNotes>2.0.2-alpha4: Updated package</PackageReleaseNotes>
+    <PackageVersion>2.1.0-alpha</PackageVersion>
+	  <PackageReleaseNotes>2.1.0: removed dependency resolver, update to Castle.Windsor 5</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository Ioc DependencyInjection DepencencyResolver Windsor</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -15,12 +15,12 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.2-alpha4</Version>
+	  <Version>2.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Castle.Windsor" Version="4.1.1" />
+    <PackageReference Include="Castle.Windsor" Version="5" />
   </ItemGroup>
 </Project>

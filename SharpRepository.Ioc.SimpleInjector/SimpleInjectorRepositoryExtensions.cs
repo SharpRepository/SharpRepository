@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository;
+﻿using Microsoft.Extensions.Configuration;
+using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using SimpleInjector;
 using System.Reflection;
@@ -7,6 +8,16 @@ namespace SharpRepository.Ioc.SimpleInjector
 {
     public static class SimpleInjectorRepositoryExtensions
     {
+        public static void RegisterSharpRepository(this Container container, IConfigurationSection configurationSection, string repositoryName = null)
+        {
+            if (configurationSection == null)
+                throw new ConfigurationErrorsException("Configuration section not found.");
+
+            var configuration = RepositoryFactory.BuildSharpRepositoryConfiguation(configurationSection);
+
+            container.RegisterSharpRepository(configuration, repositoryName);
+        }
+
         public static void RegisterSharpRepository(this Container container, ISharpRepositoryConfiguration configuration, string repositoryName = null)
         {
 

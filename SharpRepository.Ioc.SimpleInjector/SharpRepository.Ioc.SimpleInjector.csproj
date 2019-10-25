@@ -5,8 +5,8 @@
     <Description>Configures SimpleInjector to resolve IRepository as the right configured implementation of SharpRepository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.Ioc.SimpleInjector</PackageId>
-    <PackageVersion>2.0.2-alpha4</PackageVersion>
-	  <PackageReleaseNotes>2.0.2-alpha4: targets standard 1.3 and 2.0</PackageReleaseNotes>
+    <PackageVersion>2.1.0-alpha</PackageVersion>
+	  <PackageReleaseNotes>2.1.0: removed dependency resolver</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository IoC SimpleInjector</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -14,10 +14,10 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.2-alpha4</Version>
+	  <Version>2.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SimpleInjector" Version="4.4.0" />
+    <PackageReference Include="SimpleInjector" Version="4.7" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
