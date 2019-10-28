@@ -71,7 +71,7 @@ namespace SharpRepository.EfRepository
         {
             var query = DbSet.AsQueryable();
 
-            if (fetchStrategy.NoTracking)
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
             {
                 query = query.AsNoTracking();
             }
@@ -165,7 +165,7 @@ namespace SharpRepository.EfRepository
         {
             var query = DbSet.AsQueryable();
 
-            if (fetchStrategy.NoTracking)
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
             {
                 query = query.AsNoTracking();
             }
@@ -260,7 +260,7 @@ namespace SharpRepository.EfRepository
         {
             var query = DbSet.AsQueryable();
 
-            if (fetchStrategy.NoTracking)
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
             {
                 query = query.AsNoTracking();
             }

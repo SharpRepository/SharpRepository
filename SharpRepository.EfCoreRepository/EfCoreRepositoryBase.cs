@@ -88,7 +88,7 @@ namespace SharpRepository.EfCoreRepository
         {
             var query = DbSet.AsQueryable();
 
-            if (fetchStrategy.NoTracking)
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
             {
                 query = query.AsNoTracking();
             }
