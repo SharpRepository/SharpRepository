@@ -62,6 +62,26 @@ namespace SharpRepository.Tests.QueryOptions
         }
 
         [Test]
+        public void SortingOptions_With_String_And_Expression_Properties()
+        {
+            var contacts = new List<Contact>();
+            for (var i = 5; i >= 1; i--)
+            {
+                contacts.Add(new Contact { Name = "Test User " + (i % 2), ContactTypeId = i });
+            }
+
+            var qo = new SortingOptions<Contact>("Name");
+            qo.ThenSortBy(x => x.ContactTypeId);
+
+            var queryable = qo.Apply(contacts.AsQueryable());
+            queryable.Count().ShouldBe(5);
+
+            var contact = queryable.First();
+            contact.Name.ShouldBe("Test User 0");
+            contact.ContactTypeId.ShouldBe(2);
+        }
+
+        [Test]
         public void SortingOptions_Will_Sort_By_SortExpression_Asc()
         {
             var contacts = new List<Contact>();
@@ -92,12 +112,32 @@ namespace SharpRepository.Tests.QueryOptions
         }
 
         [Test]
-        public void SortingOptions_With_Multiple_SortExpression_Properties()
+        public void SortingOptions_With_SortExpression_And_String_Properties()
         {
             var contacts = new List<Contact>();
             for (var i = 5; i >= 1; i--)
             {
                 contacts.Add(new Contact { Name = "Test User " + (i % 2),ContactTypeId = i});
+            }
+
+            var qo = new SortingOptions<Contact, string>(x => x.Name);
+            qo.ThenSortBy("ContactTypeId");
+
+            var queryable = qo.Apply(contacts.AsQueryable());
+            queryable.Count().ShouldBe(5);
+
+            var contact = queryable.First();
+            contact.Name.ShouldBe("Test User 0");
+            contact.ContactTypeId.ShouldBe(2);
+        }
+
+        [Test]
+        public void SortingOptions_With_Multiple_SortExpression_Properties()
+        {
+            var contacts = new List<Contact>();
+            for (var i = 5; i >= 1; i--)
+            {
+                contacts.Add(new Contact { Name = "Test User " + (i % 2), ContactTypeId = i });
             }
 
             var qo = new SortingOptions<Contact, string>(x => x.Name);

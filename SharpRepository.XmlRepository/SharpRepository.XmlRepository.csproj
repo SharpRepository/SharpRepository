@@ -5,8 +5,8 @@
     <Description>SharpRepository generic repository implementation that stores data in a XML Serialized file</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.XmlRepository</PackageId>
-    <PackageVersion>2.0.1-alpha3</PackageVersion>
-	  <PackageReleaseNotes>2.0.1-alpha3: configurabile via appsettings.json</PackageReleaseNotes>
+    <PackageVersion>2.0.2.1</PackageVersion>
+	  <PackageReleaseNotes>2.0.2: configurabile via appsettings.json, linux path !239</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository XmlRepository Xml</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -14,7 +14,7 @@
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.0.1-alpha3</Version>
+	  <Version>2.0.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="repository.xml.json">
