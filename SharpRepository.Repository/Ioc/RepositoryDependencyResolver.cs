@@ -2,12 +2,6 @@
 
 namespace SharpRepository.Repository.Ioc
 {
-    public interface IRepositoryDependencyResolver
-    {
-        T Resolve<T>();
-        object Resolve(Type type);
-    }
-
     public static class RepositoryDependencyResolver
     {
         static RepositoryDependencyResolver()
@@ -15,9 +9,9 @@ namespace SharpRepository.Repository.Ioc
             Current = null;
         }
 
-        public static IRepositoryDependencyResolver Current { get; private set; }
+        public static IServiceProvider Current { get; private set; }
 
-        public static void SetDependencyResolver(IRepositoryDependencyResolver resolver)
+        public static void SetDependencyResolver(IServiceProvider resolver)
         {
             Current = resolver;
         }

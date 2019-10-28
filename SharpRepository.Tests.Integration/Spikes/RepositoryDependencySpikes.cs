@@ -67,8 +67,24 @@ namespace SharpRepository.Tests.Integration.Spikes
                 x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
             });
 
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapRepositoryDependencyResolver(container));
+            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapProvider(container));
         }
+
+        class StructureMapProvider : IServiceProvider
+        {
+            protected Container container;
+
+            public StructureMapProvider(Container container)
+            {
+                this.container = container;
+            }
+
+            public object GetService(Type serviceType)
+            {
+                return container.GetInstance(serviceType);
+            }
+        }
+
 
         [Test]
         public void EfConfigRepositoryFactory_Using_Ioc_Should_Not_Require_ConnectionString()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using Unity;
@@ -10,6 +11,23 @@ namespace SharpRepository.Ioc.Unity
 {
     public static class UnityExtensions
     {
+        /// <summary>
+        /// Registers in unity container all IRepository and ICompoundKeyRepository resolutions.
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="configuration"></param>
+        /// <param name="repositoryName"></param>
+        /// <param name="lifetimeScopeTag">Accepts any MatchingScopeLifetimeTags scope enum tag</param>
+        public static void RegisterSharpRepository(this IUnityContainer container, IConfigurationSection configurationSection, string repositoryName = null)
+        {
+            if (configurationSection == null)
+                throw new ConfigurationErrorsException("Configuration section not found.");
+
+            var configuration = RepositoryFactory.BuildSharpRepositoryConfiguation(configurationSection);
+
+            container.RegisterSharpRepository(configuration, repositoryName);
+        }
+
         /// <summary>
         /// Registers in unity container all IRepository and ICompoundKeyRepository resolutions.
         /// </summary>

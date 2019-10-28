@@ -39,7 +39,7 @@ namespace SharpRepository.Ioc.Microsoft.DependencyInjection
 
             var resolver = container.GetInstance<IServiceProvider>();
 
-            RepositoryDependencyResolver.SetDependencyResolver(new DependencyResolverWrapper(resolver));
+            RepositoryDependencyResolver.SetDependencyResolver(resolver);
 
             // Finally, make sure we return an IServiceProvider. This makes
             // ASP.NET use the StructureMap container to resolve its services.

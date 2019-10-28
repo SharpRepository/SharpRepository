@@ -5,7 +5,7 @@ namespace SharpRepository.Repository.Ioc
     public class RepositoryDependencyResolverException : Exception
     {
         public Type DependencyType { get; internal set; }
-        public IRepositoryDependencyResolver DependencyResolver { get; internal set; }
+        public IServiceProvider DependencyResolver { get; internal set; }
 
         public RepositoryDependencyResolverException(Type dependencyType, Exception innerException = null)
             : base(
