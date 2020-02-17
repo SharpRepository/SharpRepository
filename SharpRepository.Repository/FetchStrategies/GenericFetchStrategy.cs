@@ -12,15 +12,31 @@ namespace SharpRepository.Repository.FetchStrategies
     public class GenericFetchStrategy<T> : AbstractFetchStrategy<T>
     {
         private readonly IList<string> _properties;
+        private bool _noTracking;
 
         public GenericFetchStrategy()
         {
             _properties = new List<string>();
+            _noTracking = false;
         }
 
         public override IEnumerable<string> IncludePaths
         {
             get { return _properties; }
+        }
+
+        public override bool NoTracking
+        {
+            get { return _noTracking; }
+        }
+
+
+
+        public override IFetchStrategy<T> AsNoTracking()
+        {
+            _noTracking = true;
+
+            return this;
         }
 
         public override IFetchStrategy<T> Include(Expression<Func<T, object>> path)

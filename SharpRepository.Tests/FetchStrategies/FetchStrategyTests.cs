@@ -53,5 +53,21 @@ namespace SharpRepository.Tests.FetchStrategies
 
             strategy.IncludePaths.ShouldContain("EmailAddresses.Email");
         }
+
+        [Test]
+        public void FetchStrategy_AsNoTracking_Default_Is_False()
+        {
+            new GenericFetchStrategy<Contact>()
+                .NoTracking.ShouldBeFalse();
+        }
+
+        [Test]
+        public void FetchStrategy_AsNoTracking_Set_AsNoTracking()
+        {
+            var strategy = new GenericFetchStrategy<Contact>().AsNoTracking();
+
+            strategy.NoTracking.ShouldBeTrue();
+        }
+
     }
 }

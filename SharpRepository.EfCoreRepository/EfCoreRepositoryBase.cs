@@ -88,6 +88,11 @@ namespace SharpRepository.EfCoreRepository
         {
             var query = DbSet.AsQueryable();
 
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
         }
 

@@ -13,8 +13,12 @@ namespace SharpRepository.Repository.FetchStrategies
     {
         IEnumerable<string> IncludePaths { get; }
 
+        bool NoTracking { get; }
+
         IFetchStrategy<T> Include(Expression<Func<T, object>> path);
 
         IFetchStrategy<T> Include(string path);
+
+        IFetchStrategy<T> AsNoTracking();
     }
 }

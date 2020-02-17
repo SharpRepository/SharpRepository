@@ -70,6 +70,12 @@ namespace SharpRepository.EfRepository
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             var query = DbSet.AsQueryable();
+
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
         }
 
@@ -158,6 +164,12 @@ namespace SharpRepository.EfRepository
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             var query = DbSet.AsQueryable();
+
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
         }
 
@@ -247,6 +259,12 @@ namespace SharpRepository.EfRepository
         protected override IQueryable<T> BaseQuery(IFetchStrategy<T> fetchStrategy = null)
         {
             var query = DbSet.AsQueryable();
+
+            if (fetchStrategy != null && fetchStrategy.NoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
             return fetchStrategy == null ? query : fetchStrategy.IncludePaths.Aggregate(query, (current, path) => current.Include(path));
         }
 
