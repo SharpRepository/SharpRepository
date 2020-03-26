@@ -428,7 +428,11 @@ namespace SharpRepository.Repository.Caching
         {
             if (!GenerationalCachingEnabled) return 1; // no need to use the caching provider
 
-            return !CachingProvider.Get(GetGenerationKey(), out int generation) ? 1 : generation;
+            if (!CachingProvider.Get(GetGenerationKey(), out int generation))
+            {
+                return IncrementGeneration();
+            }
+            return generation;
         }
 
         private int IncrementGeneration()
