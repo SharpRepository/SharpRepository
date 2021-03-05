@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.3;net451</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.3;net451;net5.0</TargetFrameworks>
 	  <Authors>Ben Griswold, Jeff Treuting</Authors>
     <Description>Configures Autofac to resolve IRepository as the right configured implementation of SharpRepository</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.Ioc.Autofac</PackageId>
-    <PackageVersion>2.1.2</PackageVersion>
-	  <PackageReleaseNotes>2.1.0: DependencyResolver is IServiceProvider, local implementation of IRepository will not be resolver by container, update Autofac 4.9 and Autofac 5 for .NET Standard 2.*</PackageReleaseNotes>
+    <PackageVersion>2.2.0</PackageVersion>
+	  <PackageReleaseNotes>2.2.0: support for Autofac 6 and net5</PackageReleaseNotes>
 	  <PackageTags>SharpRepository Repository IoC Autofac</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -18,6 +18,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Autofac" Version="6.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'  Or '$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="Autofac" Version="[5.0,6.0)" />
