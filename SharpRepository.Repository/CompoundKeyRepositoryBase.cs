@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using SharpRepository.Repository.Aspects;
 using SharpRepository.Repository.Caching;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
@@ -34,7 +35,14 @@ namespace SharpRepository.Repository
         protected CompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T> cachingStrategy = null)
         {
             CachingStrategy = cachingStrategy ?? new NoCompoundKeyCachingStrategy<T>();
+
+            _repositoryActionContext = new RepositoryActionContext<T>(this);
+
+            RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
         }
+
+        private readonly RepositoryActionContext<T> _repositoryActionContext;
+        private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
 
         public ICompoundKeyCachingStrategy<T> CachingStrategy
         {
@@ -43,6 +51,26 @@ namespace SharpRepository.Repository
             {
                 _cachingStrategy = value ?? new NoCompoundKeyCachingStrategy<T>();
                 _queryManager = new CompoundKeyQueryManager<T>(_cachingStrategy);
+            }
+        }
+
+        private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
+        {
+            return _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order)
+                .All(action);
+        }
+
+        private void RunAspect(Action<RepositoryActionBaseAttribute> action)
+        {
+            var aspects = _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order);
+
+            foreach (var attribute in aspects)
+            {
+                action(attribute);
             }
         }
 
