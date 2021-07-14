@@ -192,22 +192,31 @@ namespace SharpRepository.Repository.Aspects
             return true;
         }
 
-        public virtual bool OnGetExecuting<T, TKey, TKey2, TResult>(RepositoryGetContext<T, TKey, TKey2, TResult> context) where T : class
+        public virtual bool OnGetExecuting<T, TKey, TKey2, TResult>(CompoundKeyRepositoryGetContext<T, TKey, TKey2, TResult> context) where T : class
         {
             return true;
         }
 
-        public virtual bool OnGetExecuting<T, TKey, TKey2, TKey3, TResult>(RepositoryGetContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        public virtual bool OnGetExecuting<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryGetContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
         {
             return true;
         }
 
-        public virtual bool OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
+        public virtual bool OnGetExecuting<T, TResult>(CompoundKeyRepositoryGetContext<T, TResult> context) where T : class
         {
             return true;
         }
 
         public virtual void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context) where T : class
+        {
+        }
+        public virtual void OnGetExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryGetContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+        }
+        public virtual void OnGetExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryGetContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+        }
+        public virtual void OnGetExecuted<T, TResult>(RepositoryGetContext<T, TResult> context) where T : class
         {
         }
 
@@ -216,7 +225,34 @@ namespace SharpRepository.Repository.Aspects
             return true;
         }
 
+        public virtual bool OnGetAllExecuting<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnGetAllExecuting<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnGetAllExecuting<T, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TResult> context) where T : class
+        {
+            return true;
+        }
+
         public virtual void OnGetAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnGetAllExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnGetAllExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnGetAllExecuted<T, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TResult> context) where T : class
         {
         }
         #endregion
@@ -227,7 +263,34 @@ namespace SharpRepository.Repository.Aspects
             return true;
         }
 
+        public virtual bool OnFindExecuting<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQuerySingleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnFindExecuting<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQuerySingleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnFindExecuting<T, TResult>(CompoundKeyRepositoryQuerySingleContext<T, TResult> context) where T : class
+        {
+            return true;
+        }
+
         public virtual void OnFindExecuted<T, TKey, TResult>(RepositoryQuerySingleContext<T, TKey, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnFindExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQuerySingleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnFindExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQuerySingleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+        }
+
+        public virtual void OnFindExecuted<T, TResult>(CompoundKeyRepositoryQuerySingleContext<T, TResult> context) where T : class
         {
         }
 
@@ -236,7 +299,31 @@ namespace SharpRepository.Repository.Aspects
             return true;
         }
 
+        public virtual bool OnFindAllExecuting<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnFindAllExecuting<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+            return true;
+        }
+
+        public virtual bool OnFindAllExecuting<T, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TResult> context) where T : class
+        {
+            return true;
+        }
+
         public virtual void OnFindAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
+        {
+        }
+        public virtual void OnFindAllExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult> context) where T : class
+        {
+        }
+        public virtual void OnFindAllExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
+        {
+        }
+        public virtual void OnFindAllExecuted<T, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TResult> context) where T : class
         {
         }
         #endregion
