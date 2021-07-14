@@ -216,7 +216,7 @@ namespace SharpRepository.Repository.Aspects
         public virtual void OnGetExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryGetContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
         {
         }
-        public virtual void OnGetExecuted<T, TResult>(RepositoryGetContext<T, TResult> context) where T : class
+        public virtual void OnGetExecuted<T, TResult>(CompoundKeyRepositoryGetContext<T, TResult> context) where T : class
         {
         }
 
@@ -317,12 +317,15 @@ namespace SharpRepository.Repository.Aspects
         public virtual void OnFindAllExecuted<T, TKey, TResult>(RepositoryQueryMultipleContext<T, TKey, TResult> context) where T : class
         {
         }
+
         public virtual void OnFindAllExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult> context) where T : class
         {
         }
+
         public virtual void OnFindAllExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3, TResult> context) where T : class
         {
         }
+
         public virtual void OnFindAllExecuted<T, TResult>(CompoundKeyRepositoryQueryMultipleContext<T, TResult> context) where T : class
         {
         }

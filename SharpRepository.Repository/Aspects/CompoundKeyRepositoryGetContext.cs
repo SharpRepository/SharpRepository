@@ -42,14 +42,14 @@ namespace SharpRepository.Repository.Aspects
 
     public class CompoundKeyRepositoryGetContext<T, TResult> : RepositoryActionContext<T> where T : class
     {
-        public CompoundKeyRepositoryGetContext(ICompoundKeyRepository<T> repository, IEnumerable<object> ids, Expression<Func<T, TResult>> selector = null)
+        public CompoundKeyRepositoryGetContext(ICompoundKeyRepository<T> repository, object[] ids, Expression<Func<T, TResult>> selector = null)
             : base(repository)
         {
             Ids = ids;
             Selector = selector;
         }
 
-        public IEnumerable<object> Ids { get; set; }
+        public object[] Ids { get; set; }
         public TResult Result { get; set; }
 
         public bool HasResult
