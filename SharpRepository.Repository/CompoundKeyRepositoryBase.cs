@@ -11,7 +11,7 @@ using SharpRepository.Repository.Transactions;
 
 namespace SharpRepository.Repository
 {
-    public abstract partial class CompoundKeyRepositoryBase<T> : CompoundKeyRepositoryBaseCommon<T>, ICompoundKeyRepository<T> 
+    public abstract partial class CompoundKeyRepositoryBase<T> : CompoundKeyRepositoryBaseCommon<T>, ICompoundKeyRepository<T>
         where T : class
     {
         // the caching strategy used
@@ -36,7 +36,7 @@ namespace SharpRepository.Repository
         }
 
         private readonly RepositoryActionContext<T> _repositoryActionContext;
-        private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
+
 
         protected CompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T> cachingStrategy = null)
         {
@@ -59,29 +59,11 @@ namespace SharpRepository.Repository
             RunAspect(aspect => aspect.OnError(new RepositoryActionContext<T>(this), ex));
         }
 
-        private bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
-        {
-            return _aspects.Values
-                .Where(a => a.Enabled)
-                .OrderBy(a => a.Order)
-                .All(action);
-        }
-
-        private void RunAspect(Action<RepositoryActionBaseAttribute> action)
-        {
-            var aspects = _aspects.Values
-                .Where(a => a.Enabled)
-                .OrderBy(a => a.Order);
-
-            foreach (var attribute in aspects)
-            {
-                action(attribute);
-            }
-        }
 
         public override IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
-            try {
+            try
+            {
                 var context = new CompoundKeyRepositoryQueryMultipleContext<T>(this, null, queryOptions);
                 if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
                     return context.Results;
@@ -95,7 +77,8 @@ namespace SharpRepository.Repository
                     null,
                     queryOptions
                     );
-                } else
+                }
+                else
                 {
                     context.Specification.FetchStrategy = fetchStrategy;
                     results = _queryManager.ExecuteFindAll(
@@ -276,7 +259,7 @@ namespace SharpRepository.Repository
                 Error(ex);
                 throw;
             }
-            
+
         }
 
         public override IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
@@ -309,7 +292,7 @@ namespace SharpRepository.Repository
                 throw;
             }
         }
-        
+
         public override T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
             try
@@ -511,11 +494,12 @@ namespace SharpRepository.Repository
 
             _queryManager.OnSaveExecuted();
 
+
             RunAspect(attribute => attribute.OnSaveExecuted(_repositoryActionContext));
         }
     }
 
-    public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2> 
+    public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2>
         : CompoundKeyRepositoryBaseCommon<T>, ICompoundKeyRepository<T, TKey, TKey2> where T : class
     {
         // the caching strategy used
@@ -523,18 +507,13 @@ namespace SharpRepository.Repository
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
         private CompoundKeyQueryManager<T, TKey, TKey2> _queryManager;
-                
+
         public override bool CacheUsed
         {
             get { return _queryManager.CacheUsed; }
         }
 
-        public override IBatch<T> BeginBatch()
-        {
-            // Return the privately scoped batch via the publicly available interface. 
-            // This ensures that a repository alone can initiate a new batch.
-            return new Batch(this);
-        }
+        private readonly RepositoryActionContext<T, TKey, TKey2> _repositoryActionContext;
 
         protected CompoundKeyRepositoryBase(ICompoundKeyCachingStrategy<T, TKey, TKey2> cachingStrategy = null)
         {
@@ -545,36 +524,118 @@ namespace SharpRepository.Repository
             }
 
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey, TKey2>();
+
+            _repositoryActionContext = new RepositoryActionContext<T, TKey, TKey2>(this);
+            RunAspect(aspect => aspect.OnInitialized(_repositoryActionContext));
         }
 
-        public ICompoundKeyCachingStrategy<T, TKey, TKey2> CachingStrategy 
+        public ICompoundKeyCachingStrategy<T, TKey, TKey2> CachingStrategy
         {
-            get { return _cachingStrategy; } 
+            get { return _cachingStrategy; }
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey, TKey2>();
                 _queryManager = new CompoundKeyQueryManager<T, TKey, TKey2>(_cachingStrategy);
             }
-        } 
-        
+        }
+
+        public override IBatch<T> BeginBatch()
+        {
+            // Return the privately scoped batch via the publicly available interface. 
+            // This ensures that a repository alone can initiate a new batch.
+            return new Batch(this);
+        }
+        private void Error(Exception ex)
+        {
+            RunAspect(aspect => aspect.OnError(new RepositoryActionContext<T, TKey, TKey2>(this), ex));
+        }
+
         public override IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
-            return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).ToList(),
-                null,
-                queryOptions
-                );
+            try
+            {
+                var context = new CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2>(this, null, queryOptions);
+                if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
+                    return context.Results;
+
+                // if the aspect altered the specificaiton then we need to run a FindAll with that specification
+                IEnumerable<T> results;
+
+                if (context.Specification == null)
+                {
+                    results = _queryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).ToList(),
+                        null,
+                        context.QueryOptions
+                        );
+                }
+                else
+                {
+                    context.Specification.FetchStrategy = fetchStrategy;
+
+                    results = _queryManager.ExecuteFindAll(
+                        () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
+                        context.Specification,
+                        null,
+                        context.QueryOptions
+                        );
+                }
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnGetAllExecuted(context));
+
+                return context.Results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).Select(selector).ToList(),
-                selector,
-                queryOptions
-                );
+                var context = new CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult>(this, null, queryOptions, selector);
+                if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
+                    return context.Results;
+
+                // if the aspect altered the specificaiton then we need to run a FindAll with that specification
+                IEnumerable<TResult> results;
+
+                if (context.Specification == null)
+                {
+                    results = _queryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).Select(context.Selector).ToList(),
+                        context.Selector,
+                        context.QueryOptions
+                        );
+                }
+                else
+                {
+                    context.Specification.FetchStrategy = fetchStrategy;
+
+                    results = _queryManager.ExecuteFindAll(
+                        () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
+                        context.Specification,
+                        context.Selector,
+                        context.QueryOptions
+                        );
+                }
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnGetAllExecuted(context));
+
+                return context.Results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         // These are the actual implementation that the derived class needs to implement
@@ -592,22 +653,40 @@ namespace SharpRepository.Repository
 
         public TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector)
         {
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteGet(
-                () =>
-                {
-                    var result = GetQuery(key, key2);
-                    if (result == null)
-                        return default(TResult);
+                var context = new CompoundKeyRepositoryGetContext<T, TKey, TKey2, TResult>(this, key, key2, selector);
+                if (!RunAspect(attribute => attribute.OnGetExecuting(context)))
+                    return context.Result;
 
-                    var results = new[] { result };
-                    return results.AsQueryable().Select(selector).First();
-                },
+                // get the full entity, possibly from cache
+                var result = _queryManager.ExecuteGet(
+                    () =>
+                    {
+                        var item = GetQuery(key, key2);
+                        if (item == null)
+                            return default(TResult);
+
+                        var results = new[] { item };
+                        return results.AsQueryable().Select(selector).First();
+                    },
                 selector,
                 key,
                 key2
                 );
+
+                context.Result = result;
+                RunAspect(attribute => attribute.OnGetExecuted(context));
+
+                return context.Result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public bool Exists(TKey key, TKey2 key2)
@@ -647,47 +726,106 @@ namespace SharpRepository.Repository
 
         public override IEnumerable<T> FindAll(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(queryOptions);
 
-            return _queryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).ToList(),
-                criteria,
-                null,
-                queryOptions
-                );
+            try
+            {
+                var context = new CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2>(this, criteria, queryOptions);
+                if (!RunAspect(attribute => attribute.OnFindAllExecuting(context)))
+                    return context.Results;
+
+                var results = _queryManager.ExecuteFindAll(
+                    () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
+                    context.Specification,
+                    null,
+                    context.QueryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+                return context.Results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override IEnumerable<TResult> FindAll<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            if (criteria == null) return GetAll(selector, queryOptions);
 
-            return _queryManager.ExecuteFindAll(
-                () => FindAllQuery(criteria, queryOptions).Select(selector).ToList(),
-                criteria,
-                selector,
-                queryOptions
-                );
+            try
+            {
+                if (selector == null) throw new ArgumentNullException("selector");
+
+                var context = new CompoundKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TResult>(this, criteria, queryOptions, selector);
+                if (!RunAspect(attribute => attribute.OnFindAllExecuting(context)))
+                    return context.Results;
+
+                var results = _queryManager.ExecuteFindAll(
+                    () => FindAllQuery(context.Specification, context.QueryOptions).Select(context.Selector).ToList(),
+                    context.Specification,
+                    context.Selector,
+                    context.QueryOptions
+                    );
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnFindAllExecuted(context));
+
+                return context.Results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override T Find(ISpecification<T> criteria, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
 
-            return _queryManager.ExecuteFind(
-                () => FindQuery(criteria, queryOptions),
-                criteria,
-                null,
-                null
-                );
+                var context = new CompoundKeyRepositoryQuerySingleContext<T, TKey, TKey2>(this, criteria, queryOptions);
+                if (!RunAspect(attribute => attribute.OnFindExecuting(context)))
+                    return context.Result;
+
+                var item = _queryManager.ExecuteFind(
+                    () => FindQuery(context.Specification, context.QueryOptions),
+                    context.Specification,
+                    null,
+                    null
+                    );
+
+                context.Result = item;
+                RunAspect(attribute => attribute.OnFindExecuted(context));
+
+                return context.Result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override TResult Find<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteFind(
-                () =>
+                var context = new CompoundKeyRepositoryQuerySingleContext<T, TKey, TKey2, TResult>(this, criteria, queryOptions, selector);
+                if (!RunAspect(attribute => attribute.OnFindExecuting(context)))
+                    return context.Result;
+
+                var item = _queryManager.ExecuteFind(
+                    () =>
                     {
                         var result = FindQuery(criteria, queryOptions);
                         if (result == null)
@@ -696,17 +834,35 @@ namespace SharpRepository.Repository
                         var results = new[] { result };
                         return results.AsQueryable().Select(selector).First();
                     },
-                criteria,
-                selector,
-                null
-                );
+
+                    context.Specification,
+                    context.Selector,
+                    null
+                    );
+
+                context.Result = item;
+                RunAspect(attribute => attribute.OnFindExecuted(context));
+
+                return context.Result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override void Add(T entity)
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
+            if (!RunAspect(attribute => attribute.OnAddExecuting(entity, _repositoryActionContext)))
+                return;
+
             AddItem(entity);
+
+            RunAspect(attribute => attribute.OnAddExecuted(entity, _repositoryActionContext));
+
             if (BatchMode) return;
 
             Save();
@@ -719,7 +875,13 @@ namespace SharpRepository.Repository
         {
             if (entity == null) throw new ArgumentNullException("entity");
 
+            if (!RunAspect(attribute => attribute.OnDeleteExecuting(entity, _repositoryActionContext)))
+                return;
+
             DeleteItem(entity);
+
+            RunAspect(attribute => attribute.OnDeleteExecuted(entity, _repositoryActionContext));
+
             if (BatchMode) return;
 
             Save();
@@ -753,11 +915,11 @@ namespace SharpRepository.Repository
         private void Save()
         {
             SaveChanges();
-            
-            _queryManager.OnSaveExecuted(); 
+
+            _queryManager.OnSaveExecuted();
         }
 
-        protected virtual bool GetPrimaryKey(T entity, out TKey key, out TKey2 key2) 
+        protected virtual bool GetPrimaryKey(T entity, out TKey key, out TKey2 key2)
         {
             key = default(TKey);
             key2 = default(TKey2);
@@ -768,10 +930,10 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 2)
                 return false;
 
-            key = (TKey) propInfo[0].GetValue(entity, null);
-            key2 = (TKey2) propInfo[1].GetValue(entity, null);
-           
-           return true;
+            key = (TKey)propInfo[0].GetValue(entity, null);
+            key2 = (TKey2)propInfo[1].GetValue(entity, null);
+
+            return true;
         }
 
         protected virtual bool SetPrimaryKey(T entity, TKey key, TKey2 key2)
@@ -814,7 +976,7 @@ namespace SharpRepository.Repository
         }
     }
 
-    public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2, TKey3> 
+    public abstract partial class CompoundKeyRepositoryBase<T, TKey, TKey2, TKey3>
         : CompoundKeyRepositoryBaseCommon<T>, ICompoundKeyRepository<T, TKey, TKey2, TKey3> where T : class
     {
         // the caching strategy used
@@ -822,10 +984,14 @@ namespace SharpRepository.Repository
 
         // the query manager uses the caching strategy to determine if it should check the cache or run the query
         private CompoundKeyQueryManager<T, TKey, TKey2, TKey3> _queryManager;
-                
+
         public override bool CacheUsed
         {
             get { return _queryManager.CacheUsed; }
+        }
+        private void Error(Exception ex)
+        {
+            RunAspect(aspect => aspect.OnError(new RepositoryActionContext<T, TKey, TKey2, TKey3>(this), ex));
         }
 
         public override IBatch<T> BeginBatch()
@@ -846,9 +1012,9 @@ namespace SharpRepository.Repository
             CachingStrategy = cachingStrategy ?? new NoCachingStrategy<T, TKey, TKey2, TKey3>();
         }
 
-        public ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> CachingStrategy 
+        public ICompoundKeyCachingStrategy<T, TKey, TKey2, TKey3> CachingStrategy
         {
-            get { return _cachingStrategy; } 
+            get { return _cachingStrategy; }
             set
             {
                 _cachingStrategy = value ?? new NoCachingStrategy<T, TKey, TKey2, TKey3>();
@@ -858,11 +1024,45 @@ namespace SharpRepository.Repository
 
         public override IEnumerable<T> GetAll(IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
         {
-            return _queryManager.ExecuteGetAll(
-                () => GetAllQuery(queryOptions, fetchStrategy).ToList(),
-                null,
-                queryOptions
-                );
+            try
+            {
+                var context = new CompoundTripleKeyRepositoryQueryMultipleContext<T, TKey, TKey2, TKey3>(this, null, queryOptions);
+                if (!RunAspect(attribute => attribute.OnGetAllExecuting(context)))
+                    return context.Results;
+
+                // if the aspect altered the specificaiton then we need to run a FindAll with that specification
+                IEnumerable<T> results;
+
+                if (context.Specification == null)
+                {
+                    results = _queryManager.ExecuteGetAll(
+                        () => GetAllQuery(context.QueryOptions, fetchStrategy).ToList(),
+                        null,
+                        context.QueryOptions
+                        );
+                }
+                else
+                {
+                    context.Specification.FetchStrategy = fetchStrategy;
+
+                    results = _queryManager.ExecuteFindAll(
+                        () => FindAllQuery(context.Specification, context.QueryOptions).ToList(),
+                        context.Specification,
+                        null,
+                        context.QueryOptions
+                        );
+                }
+
+                context.Results = results;
+                RunAspect(attribute => attribute.OnGetAllExecuted(context));
+
+                return context.Results;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public override IEnumerable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions, IFetchStrategy<T> fetchStrategy)
@@ -983,23 +1183,41 @@ namespace SharpRepository.Repository
 
         public override TResult Find<TResult>(ISpecification<T> criteria, Expression<Func<T, TResult>> selector, IQueryOptions<T> queryOptions = null)
         {
-            if (criteria == null) throw new ArgumentNullException("criteria");
-            if (selector == null) throw new ArgumentNullException("selector");
+            try
+            {
+                if (criteria == null) throw new ArgumentNullException("criteria");
+                if (selector == null) throw new ArgumentNullException("selector");
 
-            return _queryManager.ExecuteFind(
-                () =>
-                    {
-                        var result = FindQuery(criteria, queryOptions);
-                        if (result == null)
-                            return default(TResult);
+                var context = new CompoundTripleKeyRepositoryQuerySingleContext<T, TKey, TKey2, TKey3, TResult>(this, criteria, queryOptions, selector);
+                if (!RunAspect(attribute => attribute.OnFindExecuting(context)))
+                    return context.Result;
 
-                        var results = new[] { result };
-                        return results.AsQueryable().Select(selector).First();
-                    },
-                criteria,
-                selector,
-                null
-                );
+                var item = _queryManager.ExecuteFind(
+                    () =>
+                        {
+                            var result = FindQuery(context.Specification, context.QueryOptions);
+                            if (result == null)
+                                return default(TResult);
+
+                            var results = new[] { result };
+                            return results.AsQueryable().Select(selector).First();
+                        },
+                        context.Specification,
+                     context.Selector,
+                    null
+                    );
+
+
+                context.Result = item;
+                RunAspect(attribute => attribute.OnFindExecuted(context));
+                return context.Result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
+
         }
 
         public override void Add(T entity)
@@ -1053,11 +1271,11 @@ namespace SharpRepository.Repository
         private void Save()
         {
             SaveChanges();
-            
-            _queryManager.OnSaveExecuted(); 
+
+            _queryManager.OnSaveExecuted();
         }
 
-        protected virtual bool GetPrimaryKey(T entity, out TKey key, out TKey2 key2, out TKey3 key3) 
+        protected virtual bool GetPrimaryKey(T entity, out TKey key, out TKey2 key2, out TKey3 key3)
         {
             key = default(TKey);
             key2 = default(TKey2);
@@ -1069,11 +1287,11 @@ namespace SharpRepository.Repository
             if (propInfo == null || propInfo.Length != 3)
                 return false;
 
-            key = (TKey) propInfo[0].GetValue(entity, null);
-            key2 = (TKey2) propInfo[1].GetValue(entity, null);
-            key3 = (TKey3) propInfo[2].GetValue(entity, null);
-           
-           return true;
+            key = (TKey)propInfo[0].GetValue(entity, null);
+            key2 = (TKey2)propInfo[1].GetValue(entity, null);
+            key3 = (TKey3)propInfo[2].GetValue(entity, null);
+
+            return true;
         }
 
         protected virtual bool SetPrimaryKey(T entity, TKey key, TKey2 key2, TKey3 key3)

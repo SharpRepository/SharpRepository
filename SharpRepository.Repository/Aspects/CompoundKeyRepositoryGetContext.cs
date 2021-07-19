@@ -13,7 +13,7 @@ namespace SharpRepository.Repository.Aspects
 
     public class CompoundKeyRepositoryGetContext<T> : CompoundKeyRepositoryGetContext<T, T> where T : class
     {
-        public CompoundKeyRepositoryGetContext(ICompoundKeyRepository<T> repository, IEnumerable<object> ids) : base(repository, ids)
+        public CompoundKeyRepositoryGetContext(ICompoundKeyRepository<T> repository, object[] ids) : base(repository, ids)
         {
         }
     }
