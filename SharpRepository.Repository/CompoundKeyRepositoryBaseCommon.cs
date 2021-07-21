@@ -20,6 +20,12 @@ namespace SharpRepository.Repository
 
         private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
 
+        // For purposes of testing
+        protected IEnumerable<RepositoryActionBaseAttribute> Aspects
+        {
+            get { return _aspects.Values; }
+        }
+
         public CompoundKeyRepositoryBaseCommon()
         {
             TypeName = this.GetType().Name;

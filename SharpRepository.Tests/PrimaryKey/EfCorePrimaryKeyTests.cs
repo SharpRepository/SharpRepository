@@ -55,7 +55,7 @@ namespace SharpRepository.Tests.PrimaryKey
         [Test]
         public void Should_Return_Some_Another_Last_Id_Property()
         {
-            var repos = new TestTripleKeyEfCoreRepository<TripleCompoundKeyItemInts, int, int, int>(context);
+            var repos = new TestTripleKeyEfCoreRepository<CompoundTripleKeyItemInts, int, int, int>(context);
             var propInfo = repos.TestGetPrimaryKeyPropertyInfo();
 
             propInfo[0].PropertyType.ShouldBe(typeof(int));

@@ -138,4 +138,27 @@ namespace SharpRepository.Tests.PrimaryKey
             return Aspects;
         }
     }
+
+    internal class CompoundKeyTestRepository<T, TKey, TKey2> : InMemoryRepository.InMemoryRepository<T, TKey, TKey2> where T : class, new()
+    {
+        public PropertyInfo[] TestGetPrimaryKeyPropertyInfo()
+        {
+            return GetPrimaryKeyPropertyInfo();
+        }
+
+        public void SuppressAudit()
+        {
+            DisableAspect(typeof(AuditAttributeMock));
+        }
+
+        public void RestoreAudit()
+        {
+            EnableAspect(typeof(AuditAttributeMock));
+        }
+
+        public IEnumerable<RepositoryActionBaseAttribute> GetAspects()
+        {
+            return Aspects;
+        }
+    }
 }

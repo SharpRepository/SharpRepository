@@ -3,7 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SharpRepository.Tests.TestObjects
 {
-    public class TripleCompoundKeyItemInts
+    [AuditAttributeMock(Order = 1)]
+    [SpecificAudit(Order = 2)]
+    public class CompoundTripleKeyItemInts
     {
         [RepositoryPrimaryKey(Order = 1)]
         public int SomeId { get; set; }

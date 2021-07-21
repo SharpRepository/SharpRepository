@@ -50,14 +50,14 @@ namespace SharpRepository.Tests.Spikes
         [Test]
         public void TripleCompoundKeyRepository_Should_Work()
         {
-            var repository = new InMemoryRepository<TripleCompoundKeyItemInts, int, int, int>();
+            var repository = new InMemoryRepository<CompoundTripleKeyItemInts, int, int, int>();
 
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
 
             repository.Get(1, 1, 10).Title.ShouldBe("1-1-10");
             repository.Get(2, 1, 11).Title.ShouldBe("2-1-11");
@@ -69,14 +69,14 @@ namespace SharpRepository.Tests.Spikes
         [Test]
         public void TripleCompoundKeyRepositoryNoGenerics_Should_Work()
         {
-            var repository = new InMemoryCompoundKeyRepository<TripleCompoundKeyItemInts>();
+            var repository = new InMemoryCompoundKeyRepository<CompoundTripleKeyItemInts>();
 
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
-            repository.Add(new TripleCompoundKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 1, LastId = 10, Title = "1-1-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 2, LastId = 11, Title = "1-2-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 1, AnotherId = 3, LastId = 10, Title = "1-3-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 1, LastId = 11, Title = "2-1-11" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 2, LastId = 10, Title = "2-2-10" });
+            repository.Add(new CompoundTripleKeyItemInts { SomeId = 2, AnotherId = 3, LastId = 11, Title = "2-3-11" });
 
             repository.Get(1, 1, 10).Title.ShouldBe("1-1-10");
             repository.Get(2, 1, 11).Title.ShouldBe("2-1-11");

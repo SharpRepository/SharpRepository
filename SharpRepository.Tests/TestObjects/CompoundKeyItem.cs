@@ -2,6 +2,8 @@
 
 namespace SharpRepository.Tests.TestObjects
 {
+    [AuditAttributeMock(Order = 1)]
+    [SpecificAudit(Order = 2)]
     public class CompoundKeyItemInts
     {
         [RepositoryPrimaryKey(Order = 1)]

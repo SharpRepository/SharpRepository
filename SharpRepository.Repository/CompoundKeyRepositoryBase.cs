@@ -643,12 +643,29 @@ namespace SharpRepository.Repository
 
         public T Get(TKey key, TKey2 key2)
         {
-            return _queryManager.ExecuteGet(
-                () => GetQuery(key, key2),
-                null,
-                key,
-                key2
-                );
+            try
+            {
+                var context = new CompoundKeyRepositoryGetContext<T, TKey, TKey2>(this, key, key2);
+                if (!RunAspect(attribute => attribute.OnGetExecuting(context)))
+                    return context.Result;
+
+                var result = _queryManager.ExecuteGet(
+                        () => GetQuery(context.Id, context.Id2),
+                        context.Selector,
+                        context.Id,
+                        context.Id2
+                    );
+
+                context.Result = result;
+                RunAspect(attribute => attribute.OnGetExecuted(context));
+
+                return context.Result;
+            }
+            catch (Exception ex)
+            {
+                Error(ex);
+                throw;
+            }
         }
 
         public TResult Get<TResult>(TKey key, TKey2 key2, Expression<Func<T, TResult>> selector)
