@@ -9,6 +9,7 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     public class AzureBlobSpikes
     {
+#if TEST_AZURE
         [Test]
         public void TestAzureBlobGet()
         {
@@ -30,6 +31,7 @@ namespace SharpRepository.Tests.Spikes
 
             text.ShouldNotBeNull();
         }
+#endif
     }
 
     public class TestBlob
