@@ -27,7 +27,5 @@ namespace SharpRepository.Repository.Aspects
         {
             get { return Results == null ? 0 : Results.Count(); }
         }
-
-        
     }
 }

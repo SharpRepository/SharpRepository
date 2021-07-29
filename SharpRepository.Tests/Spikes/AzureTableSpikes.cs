@@ -8,6 +8,7 @@ namespace SharpRepository.Tests.Spikes
     [TestFixture]
     public class AzureTableSpikes
     {
+#if TEST_AZURE
         [Test]
         public void TestAzureTableGet()
         {
@@ -16,6 +17,7 @@ namespace SharpRepository.Tests.Spikes
 
             item.ShouldNotBeNull();
         }
+#endif
     }
 
     public class PoisonMessage : TableEntity

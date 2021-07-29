@@ -12,18 +12,18 @@ namespace SharpRepository.Tests.TestObjects
 
         public DateTime ExecutedOn { get; set; }
 
-        public override void OnInitialized<T, TKey>(RepositoryActionContext<T, TKey> context)
+        public override void OnInitializedBase<T>()
         {
             OnInitializedCalled = true;
         }
 
-        public override bool OnGetExecuting<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
+        public override bool OnGetExecutingBase<T, TResult>()
         {
             OnGetExecutingCalled = true;
             return OnGetExecutingCalled;
         }
 
-        public override void OnGetExecuted<T, TKey, TResult>(RepositoryGetContext<T, TKey, TResult> context)
+        public override void OnGetExecutedBase<T, TResult>()
         {
             OnGetExecutedCalled = true;
             ExecutedOn = DateTime.UtcNow;
@@ -37,7 +37,23 @@ namespace SharpRepository.Tests.TestObjects
             Thread.Sleep(50);
             base.OnGetExecuted(context);
         }
+
+        public override void OnGetExecuted<T, TKey, TKey2, TResult>(CompoundKeyRepositoryGetContext<T, TKey, TKey2, TResult> context)
+        {
+            Thread.Sleep(50);
+            base.OnGetExecuted(context);
+        }
+
+        public override void OnGetExecuted<T, TKey, TKey2, TKey3, TResult>(CompoundTripleKeyRepositoryGetContext<T, TKey, TKey2, TKey3, TResult> context)
+        {
+            Thread.Sleep(50);
+            base.OnGetExecuted(context);
+        }
+
+        public override void OnGetExecuted<T, TResult>(CompoundKeyRepositoryGetContext<T, TResult> context)
+        {
+            Thread.Sleep(50);
+            base.OnGetExecuted(context);
+        }
     }
-
-
 }

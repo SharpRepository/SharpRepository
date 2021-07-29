@@ -1,4 +1,5 @@
-﻿using SharpRepository.Repository.FetchStrategies;
+﻿using SharpRepository.Repository.Aspects;
+using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Helpers;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
@@ -17,9 +18,67 @@ namespace SharpRepository.Repository
         public abstract bool CacheUsed { get; }
         protected internal bool BatchMode { get; set; }
 
+        private readonly Dictionary<string, RepositoryActionBaseAttribute> _aspects;
+
+        // For purposes of testing
+        protected IEnumerable<RepositoryActionBaseAttribute> Aspects
+        {
+            get { return _aspects.Values; }
+        }
+
         public CompoundKeyRepositoryBaseCommon()
         {
             TypeName = this.GetType().Name;
+            var entityType = typeof(T);
+            _aspects = entityType.GetTypeInfo().GetAllAttributes<RepositoryActionBaseAttribute>(inherit: true)
+                .OrderBy(x => x.Order)
+                .ToDictionary(a => a.GetType().FullName, a => a);
+        }
+
+        protected bool RunAspect(Func<RepositoryActionBaseAttribute, bool> action)
+        {
+            return _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order)
+                .All(action);
+        }
+
+        protected void RunAspect(Action<RepositoryActionBaseAttribute> action)
+        {
+            var aspects = _aspects.Values
+                .Where(a => a.Enabled)
+                .OrderBy(a => a.Order);
+
+            foreach (var attribute in aspects)
+            {
+                action(attribute);
+            }
+        }
+
+        //Managing aspects
+        protected void DisableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = false;
+        }
+
+        protected void EnableAspect(Type aspectType)
+        {
+            ValidateArgument(aspectType);
+            var aspect = _aspects[aspectType.FullName];
+            aspect.Enabled = true;
+        }
+
+        private void ValidateArgument(Type aspectType)
+        {
+            var baseAttribute = typeof(RepositoryActionBaseAttribute);
+
+            if (!baseAttribute.GetTypeInfo().IsAssignableFrom(aspectType.GetTypeInfo()))
+                throw new ArgumentException(string.Format("Only aspects derived from a type {0} are valid arguments", baseAttribute.Name));
+
+            if (!_aspects.ContainsKey(aspectType.FullName))
+                throw new InvalidOperationException(string.Format("There is no aspect of a type {0}", aspectType.Name));
         }
 
         public abstract IBatch<T> BeginBatch();
