@@ -28,6 +28,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
-    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />
   </ItemGroup>
 </Project>

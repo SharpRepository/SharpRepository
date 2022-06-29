@@ -22,15 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\SharpRepository.CacheRepository\SharpRepository.CacheRepository.csproj" />
 	  <ProjectReference Include="..\SharpRepository.EfRepository\SharpRepository.EfRepository.csproj" />
-	  <ProjectReference Include="..\SharpRepository.RavenDbRepository\SharpRepository.RavenDbRepository.csproj" />
-	  <ProjectReference Include="..\SharpRepository.Db4oRepository\SharpRepository.Db4oRepository.csproj" />
-	  <ProjectReference Include="..\SharpRepository.XmlRepository\SharpRepository.XmlRepository.csproj" />
-	  <ProjectReference Include="..\SharpRepository.CouchDbRepository\SharpRepository.CouchDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
-    <ProjectReference Include="..\SharpRepository.Ioc.StructureMap\SharpRepository.Ioc.StructureMap.csproj" />
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
