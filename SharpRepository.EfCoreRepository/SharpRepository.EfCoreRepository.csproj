@@ -1,38 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard2.1;netstandard2.0</TargetFrameworks>
 	  <Authors>Eivind Gussiås Løkseth, Omar Piani</Authors>
-    <Description>SharpRepository generic repository implementation for Entity Framework 1.1 and 2</Description>
+    <Description>SharpRepository generic repository implementation for Entity Framework Core</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
 	  <PackageId>SharpRepository.EfCoreRepository</PackageId>
-    <PackageVersion>2.1.2</PackageVersion>
-	  <PackageReleaseNotes>2.1: Support for EFCore 3.0, AsNoTracking fetch strategy</PackageReleaseNotes>
-	  <PackageTags>SharpRepository Repository EfCoreRepository EntityFrameworkCore Entity Framework Core 2</PackageTags>
+    <PackageVersion>3.0.0</PackageVersion>
+	  <PackageReleaseNotes>3.0: Support for EFCore 5.0 and 6.0</PackageReleaseNotes>
+	  <PackageTags>SharpRepository Repository EfCoreRepository EntityFrameworkCore EntityFramework Core EFCore</PackageTags>
 	  <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
 	  <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
 	  <PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
 	  <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-	  <Version>2.1.1</Version>
+	  <Version>3.0.0</Version>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.6" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
-  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.26" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3' Or '$(TargetFramework)' == 'netstandard2.0'  Or '$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>

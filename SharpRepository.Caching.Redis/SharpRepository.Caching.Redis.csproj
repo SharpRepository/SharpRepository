@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <Authors>Ben Griswold, Jeff Treuting, Giorgio Tresoldi</Authors>
     <Description>SharpRepository is a generic repository, add redis as caching provider</Description>
     <Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
     <PackageId>SharpRepository.Caching.Redis</PackageId>
-    <PackageVersion>2.0.2.3</PackageVersion>
-    <PackageReleaseNotes>2.0.2: Added default configuration</PackageReleaseNotes>
+    <PackageVersion>3.0.0</PackageVersion>
+    <PackageReleaseNotes>3.0: update redis 2.6, drop net451 and standard1.5</PackageReleaseNotes>
     <PackageTags>SharpRepository Repository Redis Cache</PackageTags>
     <PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
@@ -14,7 +14,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>2.0.2.3</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="repository.caching.redis.json">
@@ -23,8 +23,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.48" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />

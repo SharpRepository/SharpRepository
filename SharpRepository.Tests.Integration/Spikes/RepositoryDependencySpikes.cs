@@ -5,13 +5,11 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
-using SharpRepository.Ioc.StructureMap;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
 using SharpRepository.Repository.Ioc;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
-using StructureMap;
 using System;
 using System.Reflection;
 
@@ -20,7 +18,7 @@ namespace SharpRepository.Tests.Integration.Spikes
     [TestFixture]
     public class RepositoryDependencySpikes
     {
-        protected Container container;
+        //protected Container container;
 
         [SetUp]
         public void Setup()
@@ -49,41 +47,41 @@ namespace SharpRepository.Tests.Integration.Spikes
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
             var dbContext = new TestObjectContextCore(options);
 
-            // structure map
-            container = new Container(x =>
-            {
-                x.Scan(_ => {
-                    _.TheCallingAssembly();
-                    _.WithDefaultConventions();
-                });
-                x.For<DbContext>()
-                    .Use(dbContext);
+            //// structure map
+            //container = new Container(x =>
+            //{
+            //    x.Scan(_ => {
+            //        _.TheCallingAssembly();
+            //        _.WithDefaultConventions();
+            //    });
+            //    x.For<DbContext>()
+            //        .Use(dbContext);
 
-                x.For<TestObjectContextCore>()
-                    .Use(dbContext);
+            //    x.For<TestObjectContextCore>()
+            //        .Use(dbContext);
 
-                x.For<IMemoryCache>().Use(memoryCache);
+            //    x.For<IMemoryCache>().Use(memoryCache);
 
-                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
-            });
+            //    x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
+            //});
 
-            RepositoryDependencyResolver.SetDependencyResolver(new StructureMapProvider(container));
+            //RepositoryDependencyResolver.SetDependencyResolver(new StructureMapProvider(container));
         }
 
-        class StructureMapProvider : IServiceProvider
-        {
-            protected Container container;
+        //class StructureMapProvider : IServiceProvider
+        //{
+        //    protected Container container;
 
-            public StructureMapProvider(Container container)
-            {
-                this.container = container;
-            }
+        //    public StructureMapProvider(Container container)
+        //    {
+        //        this.container = container;
+        //    }
 
-            public object GetService(Type serviceType)
-            {
-                return container.GetInstance(serviceType);
-            }
-        }
+        //    public object GetService(Type serviceType)
+        //    {
+        //        return container.GetInstance(serviceType);
+        //    }
+        //}
 
 
         [Test]
@@ -129,29 +127,36 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Ioc_For_IRepository_T_TKey_Should_Be_EfRepository_T_TKey()
         {
-            var repos = container.GetInstance<IRepository<ContactType, int>>();
-            repos.ShouldBeOfType<EfCoreRepository<ContactType, int>>();
+            //var repos = container.GetInstance<IRepository<ContactType, int>>();
+            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int>>();
+
+            throw new NotImplementedException();
         }
 
         [Test]
         public void Ioc_For_ICompoundKeyRepository_T_TKey_TKey2_Should_Be_EfRepository_T_TKey_TKey2()
         {
-            var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string>>();
-            repos.ShouldBeOfType<EfCoreRepository<ContactType, int, string>>();
+            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string>>();
+            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int, string>>();
+
+            throw new NotImplementedException();
         }
 
         [Test]
         public void Ioc_For_ICompoundRepository_T_TKey_TKey2_TKey3_Should_Be_EfRepository_T_TKey_TKey2_TKey3()
         {
-            var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string, string>>();
-            repos.ShouldBeOfType<EfCoreRepository<ContactType, int,string,string>>();
+            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string, string>>();
+            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int,string,string>>();
+            throw new NotImplementedException();
+
         }
 
         [Test]
         public void Ioc_For_ICompoundRepository_T_Should_Be_EfCompoundRepository_T()
         {
-            var repos = container.GetInstance<ICompoundKeyRepository<ContactType>>();
-            repos.ShouldBeOfType<EfCoreCompoundKeyRepository<ContactType>>();
+            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType>>();
+            //repos.ShouldBeOfType<EfCoreCompoundKeyRepository<ContactType>>();
+            throw new NotImplementedException();
         }
     }
 }

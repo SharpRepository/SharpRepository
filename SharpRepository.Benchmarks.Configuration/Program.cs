@@ -8,8 +8,6 @@ using SharpRepository.Benchmarks.Configuration.Repositories;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Configuration;
-using StructureMap;
-using SharpRepository.Ioc.StructureMap;
 using Microsoft.Extensions.Configuration;
 
 namespace SharpRepository.Benchmarks.Configuration
@@ -58,12 +56,6 @@ namespace SharpRepository.Benchmarks.Configuration
                                         Title = "Custom repo config: [UserRepository : ConfigurationBasedRepository<User, int>]",
                                         Test = Benchmarks.CustomRepositoryFromConfig,
                                         Order = 5
-                                    },
-                                new BenchmarkItem()
-                                    {
-                                        Title = "StructureMap w/ config: [container.GetInstance<IRepository<User, int>>()]",
-                                        Test = benchmarks.DirectFromStructureMap,
-                                        Order = 6
                                     }
                             };
 
@@ -100,35 +92,7 @@ namespace SharpRepository.Benchmarks.Configuration
 
     public class Benchmarks
     {
-        public IContainer StructureMapContainer { get; set; }
         
-        public Benchmarks()
-        {
-            StructureMapContainer = new Container(x =>
-            {
-                x.Scan(scan =>
-                {
-                    scan.TheCallingAssembly();
-                    scan.WithDefaultConventions();
-                });
-
-                var config = new ConfigurationBuilder()
-               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-               .AddJsonFile("repository.json")
-               .Build();
-
-                var sectionName = "sharpRepository";
-
-                IConfigurationSection sharpRepoSection = config.GetSection(sectionName);
-
-                if (sharpRepoSection == null)
-                    throw new ConfigurationErrorsException("Section " + sectionName + " is not found.");
-
-                var sharpRepoConfig = RepositoryFactory.BuildSharpRepositoryConfiguation(sharpRepoSection);
-               
-                x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
-            });
-        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void DirectCreation()
@@ -176,11 +140,6 @@ namespace SharpRepository.Benchmarks.Configuration
             new UserRepository();
         }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public void DirectFromStructureMap()
-        {
-            StructureMapContainer.GetInstance<IRepository<User, int>>();
-        }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static void CreateFromConfigObject()

@@ -40,13 +40,13 @@ namespace SharpRepository.Tests.Spikes
         }
 
         [Test]
-        public void TestAsyncRequest()
+        public async void TestAsyncRequest()
         {
             var repo = new EfCoreRepository<Contact>(context);
 
-            var contacts = repo.GetAll().ToAsyncEnumerable().ToList();
+            var contacts = await repo.GetAll().ToAsyncEnumerable().ToArrayAsync();
 
-            contacts.Result.Count.ShouldBe(0);
+            contacts.ToList().Count.ShouldBe(0);
         }
     }
 }

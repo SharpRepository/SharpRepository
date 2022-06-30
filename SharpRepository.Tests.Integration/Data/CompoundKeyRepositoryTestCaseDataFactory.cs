@@ -2,7 +2,6 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NUnit.Framework;
-using SharpRepository.CacheRepository;
 using SharpRepository.EfCoreRepository;
 using SharpRepository.EfRepository;
 using SharpRepository.InMemoryRepository;
@@ -42,12 +41,6 @@ namespace SharpRepository.Tests.Integration.Data
                 var context = new TestObjectContextCore(options);
                 context.Database.EnsureCreated();
                 yield return new TestCaseData(new EfCoreRepository<User, string, int>(context)).SetName("EfCoreRepository Test");
-            }
-
-            if (includeType.Contains(RepositoryType.Cache))
-            {
-                var cachingProvider = new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions()));
-                yield return new TestCaseData(new CacheRepository<User, string, int>(CachePrefixFactory.Build(), cachingProvider)).SetName("CacheRepository Test");
             }
         }
     }

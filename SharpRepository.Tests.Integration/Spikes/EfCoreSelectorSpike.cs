@@ -73,10 +73,10 @@ namespace SharpRepository.Tests.Integration.Spikes
             var selectMatches = regex.Matches(queryLogElement);
             selectMatches.Count.ShouldBe(1, "One regex match must be found for the select pattern");
             var selectPart = selectMatches[0].Groups[1].Value;
-            selectPart.ShouldContain(nameof(EmailAddress.ContactId), "ContactId was selected");
-            selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), "EmailAddressId was notselected");
-            selectPart.ShouldContain(nameof(EmailAddress.Email), "Email was not selected");
-            selectPart.ShouldNotContain(nameof(EmailAddress.Label), "Label was selected");
+            selectPart.ShouldContain(nameof(EmailAddress.ContactId), customMessage: "ContactId was selected") ;
+            selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), customMessage: "EmailAddressId was notselected");
+            selectPart.ShouldContain(nameof(EmailAddress.Email), customMessage: "Email was not selected");
+            selectPart.ShouldNotContain(nameof(EmailAddress.Label), customMessage: "Label was selected");
         }
         
         [Test]
@@ -92,10 +92,10 @@ namespace SharpRepository.Tests.Integration.Spikes
             var selectMatches = regex.Matches(queryLogElement);
             selectMatches.Count.ShouldBe(1, "One regex match must be found for the select pattern");
             var selectPart = selectMatches[0].Groups[1].Value;
-            selectPart.ShouldContain(nameof(EmailAddress.ContactId), "ContactId was selected");
-            selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), "EmailAddressId was selected");
-            selectPart.ShouldContain(nameof(EmailAddress.Email), "Email was selected");
-            selectPart.ShouldNotContain(nameof(EmailAddress.Label), "Label was not selected");
+            selectPart.ShouldContain(nameof(EmailAddress.ContactId), customMessage: "ContactId was selected");
+            selectPart.ShouldContain(nameof(EmailAddress.EmailAddressId), customMessage: "EmailAddressId was selected");
+            selectPart.ShouldContain(nameof(EmailAddress.Email), customMessage: "Email was selected");
+            selectPart.ShouldNotContain(nameof(EmailAddress.Label), customMessage: "Label was not selected");
         }
     }
 }

@@ -28,11 +28,7 @@ namespace SharpRepository.Ioc.Autofac
 
         public bool IsAdapterForIndividualComponents => true;
 
-#if NET5_0
         public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<ServiceRegistration>> registrationAccessor)
-#else
-        public IEnumerable<IComponentRegistration> RegistrationsFor(Service service, Func<Service, IEnumerable<IComponentRegistration>> registrationAccessor)
-#endif
         {
             var swt = service as IServiceWithType;
             IEnumerable<Type> repositoryInterfaces = new List<Type> { typeof(IRepository<>), typeof(IRepository<,>),

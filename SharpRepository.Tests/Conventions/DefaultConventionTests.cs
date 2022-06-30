@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SharpRepository.Repository;
 using SharpRepository.Repository.Caching;
-using SharpRepository.RavenDbRepository;
 using SharpRepository.Tests.TestObjects;
 using Shouldly;
 using System;
@@ -71,25 +70,7 @@ namespace SharpRepository.Tests.Conventions
             repos.CachingStrategy.FullCachePrefix.ShouldStartWith(newPrefix);
         }
 
-        [Test]
-        public void RavenDb_Throws_NotSupportedException_When_GenerateKeyOnAdd_Is_Set_False()
-        {
-            var ravenDbRepo = new RavenDbRepository<Contact>();
-            Exception actualException = null;
-
-            try
-            {
-                ravenDbRepo.GenerateKeyOnAdd = false;
-            }
-            catch(Exception ex)
-            {
-                actualException = ex;
-            }
-
-            actualException.ShouldNotBeNull();
-            actualException.ShouldBeOfType<NotSupportedException>();
-        }
-
+       
         internal class TestConventionObject
         {
             public int PK_TestConventionObject_Id { get; set; }
