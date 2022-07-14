@@ -7,7 +7,6 @@ using SharpRepository.EfCoreRepository;
 using SharpRepository.MongoDbRepository;
 using SharpRepository.InMemoryRepository;
 using System;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace SharpRepository.Tests.Integration.Data
@@ -30,11 +29,8 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeType.Contains(RepositoryType.EfCore))
             {
-                var connection = new SqliteConnection("DataSource=:memory:");
-                connection.Open();
-
                 var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                     .UseSqlite(connection)
+                     .UseInMemoryDatabase("integration test")
                      .Options;
 
                 // Create the schema in the database

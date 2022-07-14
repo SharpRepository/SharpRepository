@@ -6,7 +6,6 @@ using SharpRepository.Tests.Integration.TestObjects;
 using System.Collections.Generic;
 using Shouldly;
 using SharpRepository.Repository.FetchStrategies;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace SharpRepository.Tests.Integration.Spikes
@@ -21,11 +20,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         {
             var dbPath = EfDataDirectoryFactory.Build();
 
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                 .UseSqlite(connection)
+                 .UseInMemoryDatabase("integration test")
                  .Options;
 
             using (dbContext = new TestObjectContextCore(options))

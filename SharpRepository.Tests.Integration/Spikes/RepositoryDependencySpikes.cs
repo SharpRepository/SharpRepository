@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -23,11 +21,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void Setup()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                 .UseSqlite(connection)
+                 .UseInMemoryDatabase("integration test")
                  .Options;
 
             var config = new ConfigurationBuilder()

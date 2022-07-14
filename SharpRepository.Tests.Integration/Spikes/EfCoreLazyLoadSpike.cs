@@ -13,7 +13,6 @@ using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -29,13 +28,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void SetupRepository()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("integration test")
                 .Options;
             
             // Create the schema in the database

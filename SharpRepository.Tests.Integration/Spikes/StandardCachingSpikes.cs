@@ -7,7 +7,6 @@ using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using Microsoft.Extensions.Caching.Memory;
 using SharpRepository.EfCoreRepository;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace SharpRepository.Tests.Integration.Spikes
@@ -128,11 +127,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         {
             var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
 
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("integration test")
                 .Options;
 
             var context = new TestObjectContextCore(options);
@@ -151,11 +147,9 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void Delete_Loop_With_Cache_And_Ef()
         {
             var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
+           
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("integration test")
                 .Options;
 
             var context = new TestObjectContextCore(options);

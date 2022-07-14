@@ -7,7 +7,6 @@ using Shouldly;
 using SharpRepository.InMemoryRepository;
 using SharpRepository.EfCoreRepository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 using SharpRepository.Tests.Integration.Data;
 using SharpRepository.MongoDbRepository;
 using System;
@@ -28,11 +27,8 @@ namespace SharpRepository.Tests.Integration
         [Test]
         public void Join_GetAll_Should_Return_All_Items_EfCore()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                    .UseSqlite(connection)
+                    .UseInMemoryDatabase("integration test")
                     .Options;
 
             // Create the schema in the database

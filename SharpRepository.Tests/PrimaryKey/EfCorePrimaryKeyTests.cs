@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
 using SharpRepository.Repository.Caching;
@@ -16,12 +15,9 @@ namespace SharpRepository.Tests.PrimaryKey
 
         [SetUp]
         public void Setup()
-        {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-            
+        {            
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("test")
                 .Options;
 
             // Create the schema in the database

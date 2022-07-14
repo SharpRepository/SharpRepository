@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
 using SharpRepository.Tests.Integration.Data;
@@ -23,13 +21,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void SetupRepository()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("integration test")
                 .Options;
             
             // Create the schema in the database

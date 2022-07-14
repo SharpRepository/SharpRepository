@@ -7,7 +7,6 @@ using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -19,11 +18,8 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void Setup()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("integration test")
                 .Options;
             
             // Run the test against one instance of the context

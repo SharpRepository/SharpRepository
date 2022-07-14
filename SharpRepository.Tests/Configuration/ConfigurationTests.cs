@@ -9,7 +9,6 @@ using SharpRepository.Repository;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Shouldly;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -23,8 +22,10 @@ namespace SharpRepository.Tests.Configuration
         [SetUp]
         public void Setup()
         {
+            var dir = Directory.GetParent(this.GetType().Assembly.Location).FullName;
+
             var config = new ConfigurationBuilder()
-               .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+               .SetBasePath(dir)
                .AddJsonFile("appsettings.json")
                .Build();
 
@@ -53,8 +54,10 @@ namespace SharpRepository.Tests.Configuration
         public void InMemoryLoadConfigurationRepositoryByName()
         {
             var sectionName = "sharpRepository2";
+
+            var dir = Directory.GetParent(this.GetType().Assembly.Location).FullName;
             var config = new ConfigurationBuilder()
-              .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+              .SetBasePath(dir)
               .AddJsonFile("appsettings.json")
               .Build();
             var sharpRepoConfig2 = config.GetSection(sectionName);
@@ -120,11 +123,8 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void EfCoreRepositoryFromConfigurationObject()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("test")
                 .Options;
 
             var dbContext = new TestObjectContextCore(options);
@@ -151,11 +151,8 @@ namespace SharpRepository.Tests.Configuration
         [Test]
         public void EfCoreRepositoryNeedsDbContextType()
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("test")
                 .Options;
 
             var dbContext = new TestObjectContextCore(options);
@@ -179,11 +176,8 @@ namespace SharpRepository.Tests.Configuration
         {
             var config = new SharpRepositoryConfiguration();
 
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseSqlite(connection)
+                .UseInMemoryDatabase("test")
                 .Options;
 
             var dbContext = new TestObjectContextCore(options);
