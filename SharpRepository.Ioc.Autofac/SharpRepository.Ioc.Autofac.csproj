@@ -20,6 +20,6 @@
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.0" />
+    <PackageReference Include="Autofac" Version="6.4.0" />
   </ItemGroup>
 </Project>

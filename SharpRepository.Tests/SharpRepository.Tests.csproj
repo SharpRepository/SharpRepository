@@ -17,8 +17,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
-    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
   </ItemGroup>
 
