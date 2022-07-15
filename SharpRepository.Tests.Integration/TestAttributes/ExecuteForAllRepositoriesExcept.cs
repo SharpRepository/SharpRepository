@@ -35,19 +35,10 @@ namespace SharpRepository.Tests.Integration.TestAttributes
         public string Reason { get; set;  }
 
 
-        public ExecuteForAllRepositoriesExceptAttribute(string testName, params RepositoryType[] exceptions) : this()
+        public ExecuteForAllRepositoriesExceptAttribute(string testName, params RepositoryType[] exceptions) : base(typeof(ExecuteForAllRepositoriesExceptAttribute), "ForAllRepositoriesExceptTestCaseData")
         {
             _exceptions = exceptions;
             _testName = testName;
-        }
-
-        public ExecuteForAllRepositoriesExceptAttribute(params RepositoryType[] exceptions) : this("Test", exceptions)
-        {
-        }
-
-        public ExecuteForAllRepositoriesExceptAttribute()
-            : base(typeof(ExecuteForAllRepositoriesExceptAttribute), "ForAllRepositoriesExceptTestCaseData")
-        {
         }
     }
 }

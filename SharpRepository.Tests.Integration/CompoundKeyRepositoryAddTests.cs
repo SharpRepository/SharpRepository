@@ -11,7 +11,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class CompoundKeyRepositoryAddTests : TestBase
     {
-        [ExecuteForAllCompoundKeyRepositories]
+        [ExecuteForAllCompoundKeyRepositories("Add_Should_Result_In_Proper_Total_Items")]
         public void Add_Should_Result_In_Proper_Total_Items(ICompoundKeyRepository<User, string, int> repository)
         {
             repository.Add(new User { Username = "Test User", Age = 11, FullName = "Test User - 11"});
@@ -20,7 +20,7 @@ namespace SharpRepository.Tests.Integration
             result.Count().ShouldBe(1);
         }
 
-        [ExecuteForAllCompoundKeyRepositories]
+        [ExecuteForAllCompoundKeyRepositories("Add_InBatchMode_Should_Delay_The_Action")]
         public void Add_InBatchMode_Should_Delay_The_Action(ICompoundKeyRepository<User, string, int> repository)
         {
             using (var batch = repository.BeginBatch())
@@ -39,7 +39,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldBe(2);
         }
 
-        [ExecuteForCompoundKeyRepositories(RepositoryType.Ef)]
+        [ExecuteForCompoundKeyRepositories("Using_TransactionScope_Without_Complete_Should_Not_Add", RepositoryType.Ef)]
         public void Using_TransactionScope_Without_Complete_Should_Not_Add(ICompoundKeyRepository<User, string, int> repository)
         {
             repository.Get("test", 1); // used to create the SqlCe database before being inside the transaction scope since that throws an error
@@ -52,7 +52,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldBe(0);
         }
 
-        [ExecuteForCompoundKeyRepositories(RepositoryType.Ef)]
+        [ExecuteForCompoundKeyRepositories("Using_TransactionScope_With_Complete_Should_Add", RepositoryType.Ef)]
         public void Using_TransactionScope_With_Complete_Should_Add(ICompoundKeyRepository<User, string, int> repository)
         {
             repository.Get("test", 1); // used to create the SqlCe database before being inside the transaction scope since that throws an error

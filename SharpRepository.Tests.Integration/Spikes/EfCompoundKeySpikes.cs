@@ -19,8 +19,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void CompoundKeyRepository_Should_Work()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-            ICompoundKeyRepository<User, string, int> repository = new EfRepository<User, string, int>(new TestObjectContext("Data Source=" + dbPath));
+            ICompoundKeyRepository<User, string, int> repository = new EfRepository<User, string, int>(new TestObjectContext(Effort.DbConnectionFactory.CreateTransient()));
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });
             repository.Add(new User { Username = "jeff", Age = 31, FullName = "Jeff - 31" });
@@ -40,8 +39,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void CompoundKeyRepositoryNoGenerics_Should_Work()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-            ICompoundKeyRepository<User> repository = new EfCompoundKeyRepository<User>(new TestObjectContext("Data Source=" + dbPath));
+            ICompoundKeyRepository<User> repository = new EfCompoundKeyRepository<User>(new TestObjectContext(Effort.DbConnectionFactory.CreateTransient()));
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });
             repository.Add(new User { Username = "jeff", Age = 31, FullName = "Jeff - 31" });

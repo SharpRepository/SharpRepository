@@ -30,6 +30,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [TearDown]
         public void TearDown()
         {
+            context.Database.EnsureDeleted();
             context.Dispose();
             context = null;
         }
@@ -37,7 +38,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void CompoundKeyRepository_Should_Work()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
             ICompoundKeyRepository<User, string, int> repository = new EfCoreRepository<User, string, int>(context);
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });
@@ -58,7 +58,6 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void CompoundKeyRepositoryNoGenerics_Should_Work()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
             ICompoundKeyRepository<User> repository = new EfCoreCompoundKeyRepository<User>(context);
 
             repository.Add(new User { Username = "jeff", Age = 21, FullName = "Jeff - 21" });

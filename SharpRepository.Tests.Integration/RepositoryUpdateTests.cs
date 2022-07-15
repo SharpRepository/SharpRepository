@@ -12,7 +12,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class RepositoryUpdateTests : TestBase
     {
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Update_Should_Save_Modified_Business_Name")]
         public void Update_Should_Save_Modified_Business_Name(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };
@@ -31,7 +31,7 @@ namespace SharpRepository.Tests.Integration
             notUpdated.Name.ShouldBe("Test User 2");
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Update_Should_Throw_Exception_If_Item_Does_Not_Exist")]
         public void Update_Should_Throw_Exception_If_Item_Does_Not_Exist(IRepository<Contact, string> repository)
         {
             try
@@ -42,7 +42,7 @@ namespace SharpRepository.Tests.Integration
             catch (Exception) { }
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Update_Should_Update_Multiple_Items")]
         public void Update_Should_Update_Multiple_Items(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>

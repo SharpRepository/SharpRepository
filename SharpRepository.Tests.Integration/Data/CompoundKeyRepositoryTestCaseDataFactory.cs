@@ -14,29 +14,32 @@ namespace SharpRepository.Tests.Integration.Data
 {
     public class CompoundKeyRepositoryTestCaseDataFactory
     {
-        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType)
+        private static int efCoreProgressive = 0;
+
+        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType, string testName)
         {
             if (includeType.Contains(RepositoryType.InMemory))
             {
-                yield return new TestCaseData(new InMemoryRepository<User, string, int>()).SetName("InMemoryRepository Test");
+                yield return new TestCaseData(new InMemoryRepository<User, string, int>()).SetName("InMemoryRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.Ef))
             {
-                var dbPath = EfDataDirectoryFactory.Build();
-                yield return new TestCaseData(new EfRepository<User, string, int>(new TestObjectContext("Data Source=" + dbPath))).SetName("EfRepository Test");
+                yield return new TestCaseData(new EfRepository<User, string, int>(new TestObjectContext(Effort.DbConnectionFactory.CreateTransient()))).SetName("EfRepository " + testName);
             }
 
             if (includeType.Contains(RepositoryType.EfCore))
             {
+                efCoreProgressive++;
+
                 var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                     .UseInMemoryDatabase("integration test")
+                     .UseInMemoryDatabase($"EfCore {testName} {efCoreProgressive}")
                      .Options;
 
                 // Create the schema in the database
                 var context = new TestObjectContextCore(options);
                 context.Database.EnsureCreated();
-                yield return new TestCaseData(new EfCoreRepository<User, string, int>(context)).SetName("EfCoreRepository Test");
+                yield return new TestCaseData(new EfCoreRepository<User, string, int>(context)).SetName("EfCoreRepository " + testName);
             }
         }
     }

@@ -11,7 +11,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class AggregateQueriesTests
     {
-        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        [ExecuteForAllRepositoriesExcept("GroupCount_Should_Return_Proper_Counts", RepositoryType.MongoDb, Reason = "GroupBy Not Supported")]
         public void GroupCount_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -32,7 +32,7 @@ namespace SharpRepository.Tests.Integration
             groups[2].ShouldBe(4);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        [ExecuteForAllRepositoriesExcept("GroupLongCount_Should_Return_Proper_Counts", RepositoryType.MongoDb, Reason = "GroupBy Not Supported")]
         public void GroupLongCount_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -56,7 +56,7 @@ namespace SharpRepository.Tests.Integration
             groups[2].ShouldBe(expected2);
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
+        [ExecuteForAllRepositoriesExcept("Group_Should_Return_Proper_Items", RepositoryType.MongoDb, Reason = "GroupBy Not Supported")]
         public void Group_Should_Return_Proper_Items(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -82,7 +82,7 @@ namespace SharpRepository.Tests.Integration
             groups.Last().Average.ShouldBe(2.0);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Count_Should_Return_All_Count")]
         public void Count_Should_Return_All_Count(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -99,7 +99,7 @@ namespace SharpRepository.Tests.Integration
             repository.Count().ShouldBe(7);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("LongCount_Should_Return_All_Count")]
         public void LongCount_Should_Return_All_Count(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -117,7 +117,7 @@ namespace SharpRepository.Tests.Integration
             repository.LongCount().ShouldBe(expected);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Count_With_Predicate_Should_Return_Count")]
         public void Count_With_Predicate_Should_Return_Count(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -134,7 +134,7 @@ namespace SharpRepository.Tests.Integration
             repository.Count(x => x.ContactTypeId == 2).ShouldBe(4);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("LongCount_With_Predicate_Should_Return_Count")]
         public void LongCount_With_Predicate_Should_Return_Count(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -152,7 +152,7 @@ namespace SharpRepository.Tests.Integration
             repository.LongCount(x => x.ContactTypeId == 2).ShouldBe(expected);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Sum_All_Should_Return_Sum")]
         public void Sum_All_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -164,7 +164,7 @@ namespace SharpRepository.Tests.Integration
             repository.Sum(x => x.ContactTypeId).ShouldBe(6);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Sum_With_Predicate_Should_Return_Sum")]
         public void Sum_With_Predicate_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -176,7 +176,7 @@ namespace SharpRepository.Tests.Integration
             repository.Sum(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldBe(5);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Sum_With_Specification_Should_Return_Sum")]
         public void Sum_With_Specification_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -188,7 +188,7 @@ namespace SharpRepository.Tests.Integration
             repository.Sum(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldBe(5);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Sum_Decimal_All_Should_Return_Sum")]
         public void Sum_Decimal_All_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -200,7 +200,7 @@ namespace SharpRepository.Tests.Integration
             repository.Sum(x => x.SumDecimal).ShouldBe(7.5m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Sum_Decimal_With_Predicate_Should_Return_Sum")]
         public void Sum_Decimal_With_Predicate_Should_Return_Sum(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -212,7 +212,7 @@ namespace SharpRepository.Tests.Integration
             repository.Sum(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldBe(6m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Average_All_Should_Return_Average")]
         public void Average_All_Should_Return_Average(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -224,7 +224,7 @@ namespace SharpRepository.Tests.Integration
             repository.Average(x => x.ContactTypeId).ShouldBe(2.0);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Average_With_Predicate_Should_Return_Average")]
         public void Average_With_Predicate_Should_Return_Average(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -236,7 +236,7 @@ namespace SharpRepository.Tests.Integration
             repository.Average(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldBe(2.5);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Average_With_Specification_Should_Return_Average")]
         public void Average_With_Specification_Should_Return_Average(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -248,7 +248,7 @@ namespace SharpRepository.Tests.Integration
             repository.Average(new Specification<Contact>(x => x.ContactTypeId > 1), x => x.ContactTypeId).ShouldBe(2.5);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Average_Decimal_All_Should_Return_Average")]
         public void Average_Decimal_All_Should_Return_Average(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -260,7 +260,7 @@ namespace SharpRepository.Tests.Integration
             repository.Average(x => x.SumDecimal).ShouldBe(2.5m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Average_Decimal_With_Predicate_Should_Return_Average")]
         public void Average_Decimal_With_Predicate_Should_Return_Average(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -272,7 +272,7 @@ namespace SharpRepository.Tests.Integration
             repository.Average(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldBe(3m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Min_All_Should_Return_One")]
         public void Min_All_Should_Return_One(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -284,7 +284,7 @@ namespace SharpRepository.Tests.Integration
             repository.Min(x => x.ContactTypeId).ShouldBe(1);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Min_With_Predicate_Should_Return_Min")]
         public void Min_With_Predicate_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -296,7 +296,7 @@ namespace SharpRepository.Tests.Integration
             repository.Min(x => x.ContactTypeId > 1, x => x.ContactTypeId).ShouldBe(2);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Min_Decimal_All_Should_Return_Min")]
         public void Min_Decimal_All_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -308,7 +308,7 @@ namespace SharpRepository.Tests.Integration
             repository.Min(x => x.SumDecimal).ShouldBe(1.5m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Min_Decimal_With_Predicate_Should_Return_Min")]
         public void Min_Decimal_With_Predicate_Should_Return_Min(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -320,7 +320,7 @@ namespace SharpRepository.Tests.Integration
             repository.Min(x => x.ContactTypeId > 1, x => x.SumDecimal).ShouldBe(2.5m);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Max_All_Should_Return_Max")]
         public void Max_All_Should_Return_Max(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -332,7 +332,7 @@ namespace SharpRepository.Tests.Integration
             repository.Max(x => x.ContactTypeId).ShouldBe(3);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Max_With_Predicate_Should_Return_Max")]
         public void Max_With_Predicate_Should_Return_Max(IRepository<Contact, string> repository)
         {
             for (var i = 1; i <= 3; i++)
@@ -343,57 +343,5 @@ namespace SharpRepository.Tests.Integration
 
             repository.Max(x => x.ContactTypeId < 3, x => x.ContactTypeId).ShouldBe(2);
         }
-        
-        //[ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
-        //public void GroupMin_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
-        //{
-        //    for (var i = 1; i <= 3; i++)
-        //    {
-        //        var contact = new Contact { Name = "Test User " + i, ContactTypeId = 1, SumDecimal = 0.5m + i };
-        //        repository.Add(contact);
-        //    }
-        //    for (var i = 4; i <= 7; i++)
-        //    {
-        //        var contact = new Contact { Name = "Test User " + i, ContactTypeId = 2, SumDecimal = 0.5m + i };
-        //        repository.Add(contact);
-        //    }
-
-        //    var groups = repository.GroupMin(x => x.ContactTypeId, x => x.SumDecimal);
-
-        //    groups.Count().ShouldBe(2);
-
-
-        //    groups[1].ShouldBe(1.5m);
-        //    groups[2].ShouldBe(4.5m);
-        //}
-
-        //[ExecuteForAllRepositoriesExcept(RepositoryType.CouchDb, RepositoryType.MongoDb, RepositoryType.RavenDb, Reason = "GroupBy Not Supported")]
-        //public void GroupMax_Should_Return_Proper_Counts(IRepository<Contact, string> repository)
-        //{
-        //    for (var i = 1; i <= 3; i++)
-        //    {
-        //        var contact = new Contact { Name = "Test User " + i, ContactTypeId = 1, SumDecimal = 0.5m + i };
-        //        repository.Add(contact);
-        //    }
-        //    for (var i = 4; i <= 7; i++)
-        //    {
-        //        var contact = new Contact { Name = "Test User " + i, ContactTypeId = 2, SumDecimal = 0.5m + i };
-        //        repository.Add(contact);
-        //    }
-
-        //    var groups = repository.GroupBy(x => x.ContactTypeId,
-        //                                               x => new { Key = x.Key, Max = x.Max(o => o.SumDecimal) });
-
-        //    var groups = repository.GroupMax(x => x.ContactTypeId, x => x.SumDecimal);
-
-        //    groups.Count().ShouldBe(2);
-        //    groups.First().Key.ShouldBe(1);
-        //    groups.First().Max.ShouldBe(3.5m);
-        //    groups.Last().Key.ShouldBe(2);
-        //    groups.Last().Max.ShouldBe(7.5m);
-        //    groups[1].ShouldBe(3.5m);
-        //    groups[2].ShouldBe(7.5m);
-        //}
-
     }
 }

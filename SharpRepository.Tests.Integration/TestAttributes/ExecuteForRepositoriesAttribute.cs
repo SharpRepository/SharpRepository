@@ -7,6 +7,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
     public class ExecuteForRepositoriesAttribute : TestCaseSourceAttribute
     {
         private static string _testName;
+        private static RepositoryType[] _includeType;
 
         private static IEnumerable<TestCaseData> ForRepositoriesTestCaseData
         {
@@ -16,20 +17,10 @@ namespace SharpRepository.Tests.Integration.TestAttributes
             }
         }
 
-        private static RepositoryType[] _includeType;
-                
-        public ExecuteForRepositoriesAttribute(params RepositoryType[] repositoryType) : this()
+        public ExecuteForRepositoriesAttribute(string testName, params RepositoryType[] repositoryType ) : base(typeof(ExecuteForRepositoriesAttribute), "ForRepositoriesTestCaseData")
         {
+            _testName = testName;
             _includeType = repositoryType;
-        }
-
-        public ExecuteForRepositoriesAttribute(string testName = "Test", params RepositoryType[] repositoryType ) : this()
-        {
-            _includeType = repositoryType;
-        }
-
-        public ExecuteForRepositoriesAttribute(string testName = "Test") : base(typeof(ExecuteForRepositoriesAttribute), "ForRepositoriesTestCaseData")
-        {
         }
     }
 }

@@ -6,24 +6,22 @@ namespace SharpRepository.Tests.Integration.TestAttributes
 {
     public class ExecuteForCompoundKeyRepositoriesAttribute : TestCaseSourceAttribute
     {
+        private static string _testName;
+
+        private static RepositoryType[] _includeType;
+
         private static IEnumerable<TestCaseData> ForCompoundKeyRepositoriesTestCaseData
         {
             get
             {
-                return CompoundKeyRepositoryTestCaseDataFactory.Build(_includeType);
+                return CompoundKeyRepositoryTestCaseDataFactory.Build(_includeType, _testName);
             }
         }
-
-        private static RepositoryType[] _includeType;
-                
-        public ExecuteForCompoundKeyRepositoriesAttribute(params RepositoryType[] repositoryType) : this()
+                        
+        public ExecuteForCompoundKeyRepositoriesAttribute(string testName, params RepositoryType[] repositoryType) : base(typeof(ExecuteForCompoundKeyRepositoriesAttribute), "ForCompoundKeyRepositoriesTestCaseData")
         {
+            _testName = testName;
             _includeType = repositoryType;
-        }
-
-        public ExecuteForCompoundKeyRepositoriesAttribute()
-            : base(typeof(ExecuteForCompoundKeyRepositoriesAttribute), "ForCompoundKeyRepositoriesTestCaseData")
-        {
         }
     }
 }

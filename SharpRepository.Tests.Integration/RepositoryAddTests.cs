@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using Effort;
 using NUnit.Framework;
 using SharpRepository.EfRepository;
 using SharpRepository.InMemoryRepository;
@@ -15,7 +16,7 @@ namespace SharpRepository.Tests.Integration
     [TestFixture]
     public class RepositoryAddTests : TestBase
     {
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Add_Should_Save_And_Assigned_New_Id")]
         public void Add_Should_Save_And_Assigned_New_Id(IRepository<Contact, string> repository)
         {
             var contact = new Contact { Name = "Test User" };
@@ -23,7 +24,7 @@ namespace SharpRepository.Tests.Integration
             contact.ContactId.ShouldNotBeEmpty();
         }
 
-        [ExecuteForAllRepositoriesExcept(RepositoryType.RavenDb, RepositoryType.MongoDb, Reason = "Depends on driver to generate a value")]
+        [ExecuteForAllRepositoriesExcept("Add_Should_Save_But_Not_Assign_New_String_Id_When_GenerateKeyOnAdd_Is_False", RepositoryType.MongoDb, Reason = "Depends on driver to generate a value")]
         public void Add_Should_Save_But_Not_Assign_New_String_Id_When_GenerateKeyOnAdd_Is_False(IRepository<Contact, string> repository)
         {
             var contact = new Contact { ContactId = string.Empty, Name = "Test User" };
@@ -35,8 +36,8 @@ namespace SharpRepository.Tests.Integration
         [TestCase]
         public void Add_Should_Save_And_Assign_1_To_Ef_Int_Id_When_GenerateKeyOnAdd_Is_False()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-            var repository = new EfRepository<ContactInt, int>(new TestObjectContext("Data Source=" + dbPath));
+            var connection = DbConnectionFactory.CreateTransient();
+            var repository = new EfRepository<ContactInt, int>(new TestObjectContext(connection));
             var contact = new ContactInt { Name = "Test User" };
             repository.GenerateKeyOnAdd = false;
             repository.Add(contact);
@@ -46,7 +47,6 @@ namespace SharpRepository.Tests.Integration
         [TestCase]
         public void Add_Should_Save_And_Assign_1_To_InMemory_Int_Id()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
             var repository = new InMemoryRepository<ContactInt, int>();
             var contact = new ContactInt { Name = "Test User" };
             
@@ -57,7 +57,6 @@ namespace SharpRepository.Tests.Integration
         [TestCase]
         public void Add_Should_Save_But_Not_Assign_New_InMemory_Int_Id_When_GenerateKeyOnAdd_Is_False()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
             var repository = new InMemoryRepository<ContactInt, int>();
             var contact = new ContactInt { Name = "Test User" };
             repository.GenerateKeyOnAdd = false;
@@ -66,7 +65,7 @@ namespace SharpRepository.Tests.Integration
             contact.ContactIntId.ShouldBe(0);
         }
         
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Add_Should_Result_In_Proper_Total_Items")]
         public void Add_Should_Result_In_Proper_Total_Items(IRepository<Contact, string> repository)
         {
             repository.Add(new Contact { Name = "Test User" });
@@ -94,7 +93,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldBe(2);
         }
 
-        [ExecuteForAllRepositories]
+        [ExecuteForAllRepositories("Add_Should_Save_And_Assigned_New_Ids_To_Multiple")]
         public void Add_Should_Save_And_Assigned_New_Ids_To_Multiple(IRepository<Contact, string> repository)
         {
             IList<Contact> contacts = new List<Contact>
@@ -113,7 +112,7 @@ namespace SharpRepository.Tests.Integration
             added.Count().ShouldBe(3);
         }
 
-        [ExecuteForRepositories(RepositoryType.Ef)]
+        [ExecuteForRepositories("Using_TransactionScope_Without_Complete_Should_Not_Add", RepositoryType.Ef)]
         public void Using_TransactionScope_Without_Complete_Should_Not_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error
@@ -126,7 +125,7 @@ namespace SharpRepository.Tests.Integration
             repository.GetAll().Count().ShouldBe(0);
         }
 
-        [ExecuteForRepositories(RepositoryType.Ef)]
+        [ExecuteForRepositories("Using_TransactionScope_With_Complete_Should_Add", RepositoryType.Ef)]
         public void Using_TransactionScope_With_Complete_Should_Add(IRepository<Contact, string> repository)
         {
             repository.Get("test"); // used to create the SqlCe database before being inside the transaction scope since that throws an error

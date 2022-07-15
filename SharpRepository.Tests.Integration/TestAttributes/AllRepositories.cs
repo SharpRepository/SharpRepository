@@ -11,11 +11,7 @@
                     RepositoryType.InMemory,
                     RepositoryType.EfCore,
                     RepositoryType.Ef,
-                    RepositoryType.Dbo4,
-                    RepositoryType.RavenDb,
-                    RepositoryType.Xml,
-                    RepositoryType.MongoDb,
-                    RepositoryType.CouchDb
+                    RepositoryType.MongoDb
                 };
             }
         }
@@ -28,8 +24,7 @@
                 {
                     RepositoryType.InMemory,
                     RepositoryType.Ef,
-                    RepositoryType.EfCore,
-                    RepositoryType.Cache
+                    RepositoryType.EfCore
                 };
             }
         }

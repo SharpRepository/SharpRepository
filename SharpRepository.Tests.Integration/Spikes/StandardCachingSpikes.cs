@@ -128,7 +128,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
 
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseInMemoryDatabase("integration test")
+                .UseInMemoryDatabase("integration test Delete_With_Cache_And_Ef")
                 .Options;
 
             var context = new TestObjectContextCore(options);
@@ -149,7 +149,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var cachingStrategy = new StandardCachingStrategy<Contact, string>(cacheProvider);
            
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseInMemoryDatabase("integration test")
+                .UseInMemoryDatabase("integration test Delete_Loop_With_Cache_And_Ef")
                 .Options;
 
             var context = new TestObjectContextCore(options);

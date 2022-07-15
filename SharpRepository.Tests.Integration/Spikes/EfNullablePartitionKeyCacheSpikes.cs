@@ -25,15 +25,13 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Deleted_Entity_With_Nullable_PartitionKey_Should_Not_Be_Returned_From_Cache()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-
             // Standard partition cache and expression.
             var strategy = new StandardCachingStrategyWithPartition<Node, int, int?>(new InMemoryCachingProvider(new MemoryCache(new MemoryCacheOptions())),
                 n => n.ParentId);
             
             // Standard EF repo.
             IRepository<Node, int> repository =
-                new EfRepository<Node, int>(new TestObjectContext("Data Source=" + dbPath), strategy);
+                new EfRepository<Node, int>(new TestObjectContext(Effort.DbConnectionFactory.CreateTransient()), strategy);
             
             // Create a root node (ParentId = null).
             var rootNode = new Node() {ParentId = null, Name = "Root"};

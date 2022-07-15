@@ -8,14 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CompoundKeyRepositoryDeleteTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryFindAllTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryFindTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryGetAllTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryGetTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryJoinTests.cs" />
+    <Compile Remove="CompoundKeyRepositoryUpdateTests.cs" />
+    <Compile Remove="RepositoryDeleteTests.cs" />
+    <Compile Remove="RepositoryFindAllTests.cs" />
+    <Compile Remove="RepositoryFindTests.cs" />
+    <Compile Remove="RepositoryGetAllTests.cs" />
+    <Compile Remove="RepositoryGetTests.cs" />
+    <Compile Remove="RepositoryJoinTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Effort.EF6" Version="2.2.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
-    <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.4.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Moq" Version="4.18.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
   </ItemGroup>
 
@@ -39,6 +54,10 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Spikes\" />
   </ItemGroup>
 
 </Project>

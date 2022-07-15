@@ -36,8 +36,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         public void SetupRepository()
         {
             queries = new List<string>();
-            var dbPath = EfDataDirectoryFactory.Build();
-            dbContext = new TestObjectContext("Data Source=" + dbPath);
+            dbContext = new TestObjectContext(Effort.DbConnectionFactory.CreateTransient());
 
             const int totalItems = 5;
 
@@ -52,8 +51,8 @@ namespace SharpRepository.Tests.Integration.Spikes
                             new EmailAddress {
                                 ContactId = i.ToString(),
                                 EmailAddressId = i,
-                                Email = "omar.piani." + i.ToString() + "@email.com",
-                                Label = "omar.piani." + i.ToString()
+                                Email = "repo.test." + i.ToString() + "@email.com",
+                                Label = "repo.test." + i.ToString()
                             }
                         }
                     });
@@ -62,7 +61,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             dbContext.SaveChanges();
 
             // reistantiate in order to lose caches
-            dbContext = new TestObjectContext("Data Source=" + dbPath);
+            dbContext = new TestObjectContext(Effort.DbConnectionFactory.CreateTransient());
         }
 
         [Test]
@@ -89,7 +88,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll().First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(1);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(2);
         }
 
@@ -113,7 +112,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(1);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(1);
         }
 
@@ -137,7 +136,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(1);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(1);
         }
 
@@ -157,7 +156,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll("EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(1);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(1);
         }
 
@@ -179,7 +178,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(pagination, "EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(2); // first query is count for total records
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(2);
         }
 
@@ -197,7 +196,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new MyEfRepository(dbContext);
 
             var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
-                    .And(obj => obj.EmailAddresses.Any(m => m.Email == "omar.piani.1@email.com"));
+                    .And(obj => obj.EmailAddresses.Any(m => m.Email == "repo.test.1@email.com"));
 
             var specification = new Specification<Contact>(obj => obj.Name == "Test User 1");
 
@@ -214,7 +213,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.FindAll(findAllBySpec).First();
             contact.Name.ShouldBe("Test User 1");
             queries.Count().ShouldBe(1); // first query is count for total records
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("repo.test.1@email.com");
             queries.Count().ShouldBe(1);
 
             repository.FindAll(findAllBySpec).Count().ShouldBe(1);

@@ -1,13 +1,13 @@
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Common;
 
 namespace SharpRepository.Tests.Integration.TestObjects
 {
-    [DbConfigurationType(typeof(TestConfiguration))]
     public class TestObjectContext : DbContext
     {
-        public TestObjectContext(string connectionString) : base(connectionString)
+        public TestObjectContext(DbConnection connection) : base(connection, false)
         {
         }
 
@@ -38,7 +38,7 @@ namespace SharpRepository.Tests.Integration.TestObjects
     {
         public TestConfiguration()
         {
-            SetDefaultConnectionFactory(new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0"));
+            SetDefaultConnectionFactory(new SqlConnectionFactory("Effort.EF6"));
         }
     }
 }

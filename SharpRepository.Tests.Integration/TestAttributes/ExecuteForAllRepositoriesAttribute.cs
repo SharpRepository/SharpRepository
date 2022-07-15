@@ -13,7 +13,7 @@ namespace SharpRepository.Tests.Integration.TestAttributes
             get { return RepositoryTestCaseDataFactory.Build(RepositoryTypes.All, _testName); }
         }
 
-        public ExecuteForAllRepositoriesAttribute(string testName = "Test") : base(typeof(ExecuteForAllRepositoriesAttribute), "ForAllRepositoriesTestCaseData")
+        public ExecuteForAllRepositoriesAttribute(string testName) : base(typeof(ExecuteForAllRepositoriesAttribute), "ForAllRepositoriesTestCaseData")
         {
             _testName = testName;
         }

@@ -13,7 +13,9 @@ namespace SharpRepository.Tests.Integration.Data
 {
     public class RepositoryTestCaseDataFactory
     {
-        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType, string testName = "Test")
+        private static int efCoreExecution = 0;
+
+        public static IEnumerable<TestCaseData> Build(RepositoryType[] includeType, string testName)
         {
             if (includeType.Contains(RepositoryType.InMemory))
             {
@@ -22,15 +24,15 @@ namespace SharpRepository.Tests.Integration.Data
 
             if (includeType.Contains(RepositoryType.Ef))
             {
-                var dbPath = EfDataDirectoryFactory.Build();
                 yield return
-                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectContext("Data Source=" + dbPath))).SetName("EfRepository" + testName);
+                    new TestCaseData(new EfRepository<Contact, string>(new TestObjectContext(Effort.DbConnectionFactory.CreateTransient()))).SetName("EfRepository" + testName);
             }
 
             if (includeType.Contains(RepositoryType.EfCore))
             {
+                efCoreExecution++;
                 var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                     .UseInMemoryDatabase("integration test")
+                     .UseInMemoryDatabase($"{testName} {efCoreExecution}")
                      .Options;
 
                 // Create the schema in the database

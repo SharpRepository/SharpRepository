@@ -18,8 +18,7 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void SetupRepository()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
-            dbContext = new TestObjectContext("Data Source=" + dbPath);
+            dbContext = new TestObjectContext(Effort.DbConnectionFactory.CreateTransient());
 
             const int totalItems = 5;
 
@@ -42,9 +41,6 @@ namespace SharpRepository.Tests.Integration.Spikes
             }
 
             dbContext.SaveChanges();
-
-            // reistantiate in order to lose caches
-            dbContext = new TestObjectContext("Data Source=" + dbPath);
         }
 
         [Test]

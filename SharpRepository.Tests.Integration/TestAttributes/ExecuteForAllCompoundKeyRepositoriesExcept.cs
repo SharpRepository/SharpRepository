@@ -7,11 +7,15 @@ namespace SharpRepository.Tests.Integration.TestAttributes
 {
     public class ExecuteForAllCompoundKeyRepositoriesExceptAttribute : TestCaseSourceAttribute
     {
+        private static string _testName;
+        private static RepositoryType[] _exceptions;
+        public static string Reason;
+
         private static IEnumerable<TestCaseData> ForAllCompoundKeyRepositoriesExceptTestCaseData
         {
             get
             {
-                return CompoundKeyRepositoryTestCaseDataFactory.Build(RemoveExceptions(RepositoryTypes.CompoundKey));
+                return CompoundKeyRepositoryTestCaseDataFactory.Build(RemoveExceptions(RepositoryTypes.CompoundKey), _testName);
             }
         }
 
@@ -30,18 +34,10 @@ namespace SharpRepository.Tests.Integration.TestAttributes
             return list.ToArray();
         }
 
-        private static RepositoryType[] _exceptions;
-        private static string _reason;
-
-        public ExecuteForAllCompoundKeyRepositoriesExceptAttribute(string reason, params RepositoryType[] exceptions) : this()
+        public ExecuteForAllCompoundKeyRepositoriesExceptAttribute(string testName, params RepositoryType[] exceptions) : base(typeof(ExecuteForAllCompoundKeyRepositoriesExceptAttribute), "ForAllCompoundKeyRepositoriesExceptTestCaseData")
         {
-            _reason = reason; // TODO: it would be nice to find a way to display this in the Unit test results, but helpful in the unit test for human readable in the code
+            _testName = testName;
             _exceptions = exceptions;
-        }
-
-        public ExecuteForAllCompoundKeyRepositoriesExceptAttribute()
-            : base(typeof(ExecuteForAllCompoundKeyRepositoriesExceptAttribute), "ForAllCompoundKeyRepositoriesExceptTestCaseData")
-        {
         }
     }
 }

@@ -18,41 +18,43 @@ namespace SharpRepository.Tests.Integration.Spikes
         [SetUp]
         public void SetupRepository()
         {
-            var dbPath = EfDataDirectoryFactory.Build();
 
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
                  .UseInMemoryDatabase("integration test")
                  .Options;
 
-            using (dbContext = new TestObjectContextCore(options))
+            dbContext = new TestObjectContextCore(options);
+            dbContext.Database.EnsureCreated();
+
+            const int totalItems = 5;
+
+            for (int i = 1; i <= totalItems; i++)
             {
-                dbContext.Database.EnsureCreated();
-
-                const int totalItems = 5;
-
-                for (int i = 1; i <= totalItems; i++)
-                {
-                    dbContext.Contacts.Add(
-                        new Contact
-                        {
+                dbContext.Contacts.Add(
+                    new Contact
+                    {
+                        ContactId = i.ToString(),
+                        Name = "Test User " + i,
+                        EmailAddresses = new List<EmailAddress> {
+                        new EmailAddress {
                             ContactId = i.ToString(),
-                            Name = "Test User " + i,
-                            EmailAddresses = new List<EmailAddress> {
-                            new EmailAddress {
-                                ContactId = i.ToString(),
-                                EmailAddressId = i,
-                                Email = "omar.piani." + i.ToString() + "@email.com",
-                                Label = "omar.piani." + i.ToString()
-                            }
-                            }
-                        });
-                }
-
-                dbContext.SaveChanges();
+                            EmailAddressId = i,
+                            Email = "omar.piani." + i.ToString() + "@email.com",
+                            Label = "omar.piani." + i.ToString()
+                        }
+                        }
+                    });
             }
 
-            // reistantiate in order to lose caches
-            dbContext = new TestObjectContextCore(options);
+            dbContext.SaveChanges();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
+            dbContext.Dispose();
+            dbContext = null;
         }
 
         [Test]

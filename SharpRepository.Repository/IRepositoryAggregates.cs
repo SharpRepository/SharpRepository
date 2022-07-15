@@ -99,16 +99,5 @@ namespace SharpRepository.Repository
         IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> selector);
         IDictionary<TGroupKey, long> GroupLongCount<TGroupKey>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> selector);
 
-        // I can't get these to work with Expression<Func<T, TResult>> selector so it's throwing an error in EF5 when trying to use the Func<T. TResult> selector
-        //  so for now I'm going to leave these convenience methods out and we can use GroupBy to handle it ourselves
-//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-//        IDictionary<TGroupKey, TResult> GroupMin<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-//
-//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(ISpecification<T> criteria, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-//        IDictionary<TGroupKey, TResult> GroupMax<TGroupKey, TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TGroupKey>> groupSelector, Func<T, TResult> selector);
-
-
     }
 }
