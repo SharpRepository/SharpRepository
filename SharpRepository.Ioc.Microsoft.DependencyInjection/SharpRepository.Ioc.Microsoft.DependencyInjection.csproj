@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<Authors>Omar Piani, Ben Griswold, Jeff Treuting</Authors>
+		<Description>Injects SharpRepository using StructureMap in your .NET Core apps or even using Microsoft.DependencyInjection library.</Description>
+		<Summary>Written in C#, includes support for various relational, document and object databases including Entity Framework, RavenDB, MongoDB, CouchDB and Db4o. SharpRepository includes Xml and InMemory repository implementations as well. SharpRepository offers built-in caching options for AppFabric, memcached and the standard System.Runtime.Caching. SharpRepository also supports Specifications, FetchStrategies, Batches and Traits!</Summary>
+		<PackageId>SharpRepository.Ioc.Microsoft.DependencyInjection</PackageId>
+		<PackageVersion>3.0.0</PackageVersion>
+		<PackageReleaseNotes>3.0.0: removed support for standard 1.3 </PackageReleaseNotes>
+		<PackageTags>SharpRepository Repository IoC .NET Core Standard ServiceProvider Microsoft.DependencyInjection SharpRepository</PackageTags>
+		<PackageIconUrl>https://user-images.githubusercontent.com/6349515/28491142-7b6350c4-6eeb-11e7-9c5b-e3b8ef1e73b8.png</PackageIconUrl>
+		<PackageProjectUrl>https://github.com/SharpRepository/SharpRepository</PackageProjectUrl>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/SharpRepository/SharpRepository/master/license.txt</PackageLicenseUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<RepositoryUrl>https://github.com/SharpRepository/SharpRepository.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Version>3.0.0</Version>
+		<Company>Omar Piani, Ben Griswold, Jeff Treuting</Company>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
+		<ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj" />
+	</ItemGroup>
+</Project>
