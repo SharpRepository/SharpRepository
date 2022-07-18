@@ -18,9 +18,9 @@ namespace SharpRepository.Ioc.Autofac
         /// <param name="configuration"></param>
         /// <param name="repositoryName"></param>
         /// <param name="lifetimeScopeTag">Accepts any MatchingScopeLifetimeTags scope enum tag</param>
-        public static void RegisterSharpRepository(this ContainerBuilder containerBuilder, ISharpRepositoryConfiguration configuration, string repositoryName = null, params object[] lifetimeScopeTag)
+        public static void RegisterSharpRepository(this ContainerBuilder containerBuilder, ISharpRepositoryConfiguration configuration, string repositoryName = null, IComponentLifetime lifetime = null, InstanceSharing instanceSharing = InstanceSharing.None)
         {
-            containerBuilder.RegisterSource(new RepositoryRegistrationSource(configuration, repositoryName, lifetimeScopeTag));
+            containerBuilder.RegisterSource(new RepositoryRegistrationSource(configuration, repositoryName, lifetime, instanceSharing));
         }
 
         /// <summary>
@@ -30,14 +30,14 @@ namespace SharpRepository.Ioc.Autofac
         /// <param name="configuration"></param>
         /// <param name="repositoryName"></param>
         /// <param name="lifetimeScopeTag">Accepts any MatchingScopeLifetimeTags scope enum tag</param>
-        public static void RegisterSharpRepository(this ContainerBuilder containerBuilder, IConfigurationSection configurationSection, string repositoryName = null, params object[] lifetimeScopeTag)
+        public static void RegisterSharpRepository(this ContainerBuilder containerBuilder, IConfigurationSection configurationSection, string repositoryName = null, IComponentLifetime lifetime = null, InstanceSharing instanceSharing = InstanceSharing.None)
         {
             if (configurationSection == null)
                 throw new ConfigurationErrorsException("Configuration section not found.");
 
             var configuration = RepositoryFactory.BuildSharpRepositoryConfiguation(configurationSection);
 
-            containerBuilder.RegisterSharpRepository(configuration, repositoryName, lifetimeScopeTag);
+            containerBuilder.RegisterSharpRepository(configuration, repositoryName, lifetime, instanceSharing);
         }
     }
 }

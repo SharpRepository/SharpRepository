@@ -16,14 +16,17 @@ namespace SharpRepository.Ioc.Autofac
     class RepositoryRegistrationSource : IRegistrationSource
     {
         protected ISharpRepositoryConfiguration Configuration;
-        protected object[] LifetimeScopeTag;
+        protected IComponentLifetime Lifetime;
+        InstanceSharing InstanceSharing;
+
         protected string RepositoryName;
 
-        public RepositoryRegistrationSource(ISharpRepositoryConfiguration configuration, string repositoryName = null, params object[] lifetimeScopeTag)
+        public RepositoryRegistrationSource(ISharpRepositoryConfiguration configuration, string repositoryName = null, IComponentLifetime lifetime = null, InstanceSharing instanceSharing = InstanceSharing.None)
         {
             Configuration = configuration;
             RepositoryName = repositoryName;
-            LifetimeScopeTag = lifetimeScopeTag;
+            Lifetime = lifetime ?? new CurrentScopeLifetime();
+            InstanceSharing = instanceSharing;
         }
 
         public bool IsAdapterForIndividualComponents => true;
@@ -44,16 +47,6 @@ namespace SharpRepository.Ioc.Autofac
                 return Enumerable.Empty<IComponentRegistration>();
             }
 
-            IComponentLifetime lifetime;
-            var instanceSharing = InstanceSharing.None;
-            if (LifetimeScopeTag != null && LifetimeScopeTag.Count() > 0)
-            {
-                lifetime = new MatchingScopeLifetime(LifetimeScopeTag);
-                instanceSharing = InstanceSharing.Shared;
-            }
-            else
-                lifetime = new CurrentScopeLifetime();
-            
             var registration = new ComponentRegistration(
                   Guid.NewGuid(),
                   new DelegateActivator(swt.ServiceType, (c, p) =>
@@ -88,8 +81,8 @@ namespace SharpRepository.Ioc.Autofac
                         else
                             throw new NotImplementedException("Error resolving repository: " + swt.ServiceType.Name);
                     }),
-                  lifetime,
-                  instanceSharing,
+                  Lifetime,
+                  InstanceSharing,
                   InstanceOwnership.OwnedByLifetimeScope,
                   new[] { service },
                   new Dictionary<string, object>()

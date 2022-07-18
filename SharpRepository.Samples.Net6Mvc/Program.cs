@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Core.Lifetime;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(b =>
     // reads configuratio from appsettings.json
     var sharpRepoConfig = builder.Configuration.GetSection("sharpRepository");
     
-    b.RegisterSharpRepository(sharpRepoConfig, null, MatchingScopeLifetimeTags.RequestLifetimeScopeTag); //default InMemory
+    b.RegisterSharpRepository(sharpRepoConfig, null, new RootScopeLifetime(), InstanceSharing.Shared); //default InMemory, instances must be treaded as singletons to work
     // b.RegisterSharpRepository(sharpRepoConfig, "mongoDb"); // for Mongo Db
     // b.RegisterSharpRepository(sharpRepoConfig, "efCore");// for Ef Core
 });
@@ -30,7 +31,8 @@ builder.Services.AddDbContext<ContactContext>(options => options.UseInMemoryData
 
 // services.AddTransient<DbContext, ContactContext>(); // needed if you don't write dbContextClass on json configuration
 
-builder.Services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(builder.Configuration.GetSection("sharpRepository")), "efCore"));
+//builder.Services.AddTransient<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(builder.Configuration.GetSection("sharpRepository")), "efCore"));
+builder.Services.AddSingleton<EmailRepository>(r => new EmailRepository(RepositoryFactory.BuildSharpRepositoryConfiguation(builder.Configuration.GetSection("sharpRepository")), "inMemory")); // will not work as expected it doesn't share same memory repository
 
 
 var app = builder.Build();
