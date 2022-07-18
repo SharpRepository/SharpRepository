@@ -5,6 +5,7 @@
     <DebugType>Full</DebugType>
     <AssemblyName>SharpRepository.Tests.Integration</AssemblyName>    
     <RootNamespace>SharpRepository.Tests.Integration</RootNamespace>
+    <UserSecretsId>627a7ed1-b2c9-408a-a341-c01fc197a606</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,12 +27,14 @@
   <ItemGroup>
     <PackageReference Include="Effort.EF6" Version="2.2.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="Moq" Version="4.18.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
     <PackageReference Include="Shouldly" Version="4.0.3" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +44,6 @@
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj" />
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Transactions" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,20 +1,15 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
-using SharpRepository.Repository;
-using SharpRepository.Repository.Caching;
-using SharpRepository.Tests.Integration.Data;
 using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using System.Collections.Generic;
-using System.Diagnostics;
 using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {        
@@ -23,13 +18,26 @@ namespace SharpRepository.Tests.Integration.Spikes
     {
         private TestObjectContextCore dbContext;
 
-        private Func<string, bool> filterSelects = q => q.StartsWith("Executing DbCommand") && q.Contains("SELECT") && !q.Contains("sqlite_master");
+        private Func<string, bool> filterSelects = q => q.StartsWith("Executing DbCommand") && q.Contains("SELECT");
+
+        public static IConfigurationRoot GetIConfigurationRoot(string outputPath)
+        {            
+            return new ConfigurationBuilder()
+                .SetBasePath(outputPath)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddUserSecrets("627a7ed1-b2c9-408a-a341-c01fc197a606")
+                .Build();
+        }
 
         [SetUp]
         public void SetupRepository()
         {
+            var configurationRoot = GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
+
+            var connectionString = configurationRoot.GetConnectionString("EfCoreConnectionString");
+
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseInMemoryDatabase("integration test")
+                .UseSqlServer(connectionString)
                 .Options;
             
             // Create the schema in the database
@@ -48,8 +56,8 @@ namespace SharpRepository.Tests.Integration.Spikes
                             new EmailAddress {
                                 ContactId = i.ToString(),
                                 EmailAddressId = i,
-                                Email = "omar.piani." + i.ToString() + "@email.com",
-                                Label = "omar.piani." + i.ToString()
+                                Email = "test.addr." + i.ToString() + "@email.com",
+                                Label = "test.addr." + i.ToString()
                             }
                         }
                     });
@@ -66,7 +74,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll().First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             // dbContext.QueryLog.Count(filterSelects).ShouldBe(2); may be that dbcontext is disposed and the successive queries are not logged, quieries does not contains email so query was made in a lazy way but after.
         }
 
@@ -80,7 +88,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
@@ -95,7 +103,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
@@ -107,7 +115,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll("EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
@@ -121,7 +129,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.GetAll(pagination, "EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(3); // first query is count for total records
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(3);
         }
 
@@ -131,7 +139,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var findAllBySpec = new Specification<Contact>(obj => obj.ContactId == "1")
-                    .And(obj => obj.EmailAddresses.Any(m => m.Email == "omar.piani.1@email.com"));
+                    .And(obj => obj.EmailAddresses.Any(m => m.Email == "test.addr.1@email.com"));
 
             var specification = new Specification<Contact>(obj => obj.Name == "Test User 1");
 
@@ -148,7 +156,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var contact = repository.FindAll(findAllBySpec).First();
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
-            contact.EmailAddresses.First().Email.ShouldBe("omar.piani.1@email.com");
+            contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
 
             repository.FindAll(findAllBySpec).Count().ShouldBe(1);

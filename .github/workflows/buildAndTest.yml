@@ -20,6 +20,9 @@ jobs:
       uses: supercharge/mongodb-github-action@1.7.0
       with:
         mongodb-version: 5.0
+
+    - name: Start SQLServer
+      run: docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=MyPass@word" -p 1433:1433 -d --name=sql mcr.microsoft.com/azure-sql-edge
         
     - run: dotnet test
   
