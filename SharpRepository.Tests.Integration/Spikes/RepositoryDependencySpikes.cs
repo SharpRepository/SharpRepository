@@ -18,7 +18,7 @@ namespace SharpRepository.Tests.Integration.Spikes
     [TestFixture]
     public class RepositoryDependencySpikes
     {
-        //protected Container container;
+        protected IContainer container;
 
         [SetUp]
         public void Setup()
@@ -50,7 +50,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             builder.Register<TestObjectContextCore>(c => dbContext);
             builder.Register<IMemoryCache>(c => memoryCache);
             builder.RegisterSharpRepository(sharpRepoConfig);
-            var container = builder.Build();
+            container = builder.Build();
 
             RepositoryDependencyResolver.SetDependencyResolver(new AutofacProvider(container));
         }
@@ -114,36 +114,29 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void Ioc_For_IRepository_T_TKey_Should_Be_EfRepository_T_TKey()
         {
-            //var repos = container.GetInstance<IRepository<ContactType, int>>();
-            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int>>();
-
-            throw new NotImplementedException();
+            var repos = container.Resolve<IRepository<ContactType, int>>();
+            repos.ShouldBeOfType<EfCoreRepository<ContactType, int>>();
         }
 
         [Test]
         public void Ioc_For_ICompoundKeyRepository_T_TKey_TKey2_Should_Be_EfRepository_T_TKey_TKey2()
         {
-            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string>>();
-            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int, string>>();
-
-            throw new NotImplementedException();
+            var repos = container.Resolve<ICompoundKeyRepository<ContactType, int, string>>();
+            repos.ShouldBeOfType<EfCoreRepository<ContactType, int, string>>();
         }
 
         [Test]
         public void Ioc_For_ICompoundRepository_T_TKey_TKey2_TKey3_Should_Be_EfRepository_T_TKey_TKey2_TKey3()
         {
-            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType, int, string, string>>();
-            //repos.ShouldBeOfType<EfCoreRepository<ContactType, int,string,string>>();
-            throw new NotImplementedException();
-
+            var repos = container.Resolve<ICompoundKeyRepository<ContactType, int, string, string>>();
+            repos.ShouldBeOfType<EfCoreRepository<ContactType, int,string,string>>();
         }
 
         [Test]
         public void Ioc_For_ICompoundRepository_T_Should_Be_EfCompoundRepository_T()
         {
-            //var repos = container.GetInstance<ICompoundKeyRepository<ContactType>>();
-            //repos.ShouldBeOfType<EfCoreCompoundKeyRepository<ContactType>>();
-            throw new NotImplementedException();
+            var repos = container.Resolve<ICompoundKeyRepository<ContactType>>();
+            repos.ShouldBeOfType<EfCoreCompoundKeyRepository<ContactType>>();
         }
     }
 }
