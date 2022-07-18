@@ -39,6 +39,7 @@
     <ProjectReference Include="..\SharpRepository.EfCoreRepository\SharpRepository.EfCoreRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.InMemoryRepository\SharpRepository.InMemoryRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
+    <ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj" />
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
   </ItemGroup>
 

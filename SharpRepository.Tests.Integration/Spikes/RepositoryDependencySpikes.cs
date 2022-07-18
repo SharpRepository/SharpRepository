@@ -10,6 +10,8 @@ using SharpRepository.Tests.Integration.TestObjects;
 using Shouldly;
 using System;
 using System.Reflection;
+using Autofac;
+using SharpRepository.Ioc.Autofac;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -42,41 +44,31 @@ namespace SharpRepository.Tests.Integration.Spikes
             var memoryCache = new MemoryCache(new MemoryCacheOptions());
             var dbContext = new TestObjectContextCore(options);
 
-            //// structure map
-            //container = new Container(x =>
-            //{
-            //    x.Scan(_ => {
-            //        _.TheCallingAssembly();
-            //        _.WithDefaultConventions();
-            //    });
-            //    x.For<DbContext>()
-            //        .Use(dbContext);
+            //// autofac            
+            var builder = new ContainerBuilder();
+            builder.Register<DbContext>(c => dbContext);
+            builder.Register<TestObjectContextCore>(c => dbContext);
+            builder.Register<IMemoryCache>(c => memoryCache);
+            builder.RegisterSharpRepository(sharpRepoConfig);
+            var container = builder.Build();
 
-            //    x.For<TestObjectContextCore>()
-            //        .Use(dbContext);
-
-            //    x.For<IMemoryCache>().Use(memoryCache);
-
-            //    x.ForRepositoriesUseSharpRepository(sharpRepoConfig);
-            //});
-
-            //RepositoryDependencyResolver.SetDependencyResolver(new StructureMapProvider(container));
+            RepositoryDependencyResolver.SetDependencyResolver(new AutofacProvider(container));
         }
 
-        //class StructureMapProvider : IServiceProvider
-        //{
-        //    protected Container container;
+        class AutofacProvider : IServiceProvider
+        {
+           protected IContainer container;
 
-        //    public StructureMapProvider(Container container)
-        //    {
-        //        this.container = container;
-        //    }
+           public AutofacProvider(IContainer container)
+           {
+               this.container = container;
+           }
 
-        //    public object GetService(Type serviceType)
-        //    {
-        //        return container.GetInstance(serviceType);
-        //    }
-        //}
+           public object GetService(Type serviceType)
+           {
+               return container.Resolve(serviceType);
+           }
+        }
 
 
         [Test]
