@@ -42,6 +42,11 @@ namespace SharpRepository.Tests.Integration.Spikes
                 .Build();
         }
 
+        [TearDown]
+        public void TearDown() {
+            dbContext.Database.Delete();
+        }
+
 
         [SetUp]
         public void SetupRepository()

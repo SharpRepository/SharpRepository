@@ -35,6 +35,7 @@
     <PackageReference Include="Shouldly" Version="4.0.3" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,12 +45,16 @@
     <ProjectReference Include="..\SharpRepository.MongoDbRepository\SharpRepository.MongoDbRepository.csproj" />
     <ProjectReference Include="..\SharpRepository.Ioc.Autofac\SharpRepository.Ioc.Autofac.csproj" />
     <ProjectReference Include="..\SharpRepository.Repository\SharpRepository.Repository.csproj" />
+    <ProjectReference Include="..\SharpRepository.Caching.Redis\SharpRepository.Caching.Redis.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Microsoft.EntityFrameworkCore.Proxies" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

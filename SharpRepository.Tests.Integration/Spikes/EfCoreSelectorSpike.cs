@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using SharpRepository.EfCoreRepository;
 using SharpRepository.Tests.Integration.Data;
@@ -14,19 +15,40 @@ namespace SharpRepository.Tests.Integration.Spikes
     [TestFixture]
     public class EfCoreSelectorSpike
     {
+        public static IConfigurationRoot GetIConfigurationRoot(string outputPath)
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(outputPath)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddUserSecrets("627a7ed1-b2c9-408a-a341-c01fc197a606")
+                .Build();
+        }
+
         private TestObjectContextCore dbContext;
-        private TestObjectContextCore dbContext2;
         private Func<string, bool> filterSelects = q => q.StartsWith("Executing DbCommand") && q.Contains("SELECT") && !q.Contains("sqlite_master");
+
+
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
+        }
 
         [SetUp]
         public void SetupRepository()
         {
+            var configurationRoot = GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
+
+            var connectionString = configurationRoot.GetConnectionString("EfCoreConnectionString");
+
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
-                .UseInMemoryDatabase("integration test")
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString)
                 .Options;
-            
+
             // Create the schema in the database
             dbContext = new TestObjectContextCore(options);
+            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
             const int totalItems = 5;
 
@@ -37,20 +59,24 @@ namespace SharpRepository.Tests.Integration.Spikes
                     {
                         ContactId = i.ToString(),
                         Name = "Test User " + i,
-                        EmailAddresses = new List<EmailAddress> {
-                            new EmailAddress {
-                                ContactId = i.ToString(),
-                                EmailAddressId = i,
-                                Email = "omar.piani." + i.ToString() + "@email.com",
-                                Label = "omar.piani." + i.ToString()
-                            }
-                        }
+                        EmailAddresses = new List<EmailAddress>()
                     });
+            }
+            
+            dbContext.SaveChanges();
+
+            foreach (var contact in dbContext.Contacts)
+            {
+                contact.EmailAddresses.Add(new EmailAddress
+                {
+                    Email = "test.addr." + contact.ContactId + "@email.com",
+                    Label = "test.addr." + contact.ContactId
+                });
             }
 
             dbContext.SaveChanges();
 
-            dbContext2 = new TestObjectContextCore(options); // there is some kind of cache of inserted objects in dbContext
+            dbContext = new TestObjectContextCore(options); // there is some kind of cache of inserted objects in dbContext
         }
         
         [Test]
@@ -59,7 +85,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             var repository = new EfCoreRepository<EmailAddress, int>(dbContext);
 
             var emailAddress = repository.GetAll(s => new { s.ContactId, s.EmailAddressId, s.Email }).First();
-            emailAddress.Email.ShouldStartWith("omar.piani.");
+            emailAddress.Email.ShouldStartWith("test.addr.");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(1, "A select was executed");
             string queryLogElement = dbContext.QueryLog.Where(filterSelects).First();
             Regex regex = new Regex("SELECT(.+)FROM.+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -75,12 +101,12 @@ namespace SharpRepository.Tests.Integration.Spikes
         [Test]
         public void EfCore_Get_With_Selector_Selects_Only_Specified_Columns()
         {
-            var repository = new EfCoreRepository<EmailAddress, int>(dbContext2);
+            var repository = new EfCoreRepository<EmailAddress, int>(dbContext);
 
-            var emailAddress = repository.Find(m => m.Email == "omar.piani.1@email.com", s => new { s.ContactId, s.EmailAddressId, s.Email });
-            emailAddress.Email.ShouldBe("omar.piani.1@email.com");
-            dbContext2.QueryLog.Count(filterSelects).ShouldBe(1, "One SELECT must be executed");
-            string queryLogElement = dbContext2.QueryLog.Where(filterSelects).First();
+            var emailAddress = repository.Find(m => m.Email == "test.addr.1@email.com", s => new { s.ContactId, s.EmailAddressId, s.Email });
+            emailAddress.Email.ShouldBe("test.addr.1@email.com");
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1, "One SELECT must be executed");
+            string queryLogElement = dbContext.QueryLog.Where(filterSelects).First();
             Regex regex = new Regex("SELECT(.+)FROM.+", RegexOptions.IgnoreCase | RegexOptions.Singleline);
             var selectMatches = regex.Matches(queryLogElement);
             selectMatches.Count.ShouldBe(1, "One regex match must be found for the select pattern");

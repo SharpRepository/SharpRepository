@@ -29,6 +29,13 @@ namespace SharpRepository.Tests.Integration.Spikes
                 .Build();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            dbContext.Database.EnsureDeleted();
+        }
+
+
         [SetUp]
         public void SetupRepository()
         {
@@ -37,11 +44,13 @@ namespace SharpRepository.Tests.Integration.Spikes
             var connectionString = configurationRoot.GetConnectionString("EfCoreConnectionString");
 
             var options = new DbContextOptionsBuilder<TestObjectContextCore>()
+                .UseLazyLoadingProxies()
                 .UseSqlServer(connectionString)
                 .Options;
             
             // Create the schema in the database
             dbContext = new TestObjectContextCore(options);
+            
             dbContext.Database.EnsureCreated();
             const int totalItems = 5;
 
@@ -50,19 +59,28 @@ namespace SharpRepository.Tests.Integration.Spikes
                 dbContext.Contacts.Add(
                     new Contact
                     {
-                        Name = "Test User " + i,
-                        EmailAddresses = new List<EmailAddress> {
-                            new EmailAddress {
-                                ContactId = i.ToString(),
-                                EmailAddressId = i,
-                                Email = "test.addr." + i.ToString() + "@email.com",
-                                Label = "test.addr." + i.ToString()
-                            }
-                        }
+                        ContactId = i.ToString(),
+                        Name = "Test User " + i.ToString(),
+                        EmailAddresses = new List<EmailAddress>()
                     });
             }
 
             dbContext.SaveChanges();
+
+            foreach (var contact in dbContext.Contacts)
+            {
+                contact.EmailAddresses.Add(
+                    new EmailAddress
+                    {
+                        Email = "test.addr." + contact.ContactId + "@email.com",
+                        Label = "test.addr." + contact.ContactId
+                    });
+            }
+
+            dbContext.SaveChanges();
+
+            // reistantiate in order to lose caches
+            dbContext = new TestObjectContextCore(options);
         }
         
         [Test]
@@ -74,11 +92,11 @@ namespace SharpRepository.Tests.Integration.Spikes
             contact.Name.ShouldBe("Test User 1");
             dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            // dbContext.QueryLog.Count(filterSelects).ShouldBe(2); may be that dbcontext is disposed and the successive queries are not logged, quieries does not contains email so query was made in a lazy way but after.
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2); //may be that dbcontext is disposed and the successive queries are not logged, quieries does not contains email so query was made in a lazy way but after.
         }
 
         [Test]
-        public void EfCore_GetAll_With_Includes_In_Strategy_LazyLoads_Email()
+        public void EfCore_GetAll_With_Includes_In_Strategy_EagerLoads_Email()
         {
             var repository = new EfCoreRepository<Contact, string>(dbContext);
             var strategy = new GenericFetchStrategy<Contact>();
@@ -86,13 +104,13 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
         }
 
         [Test]
-        public void EfCore_GetAll_With_Includes_In_Strategy_String_LazyLoads_Email()
+        public void EfCore_GetAll_With_Includes_In_Strategy_String_EagerLoads_Email()
         {
             var repository = new EfCoreRepository<Contact, string>(dbContext);
             
@@ -101,25 +119,25 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.GetAll(strategy).First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
         }
 
         [Test]
-        public void EfCore_GetAll_With_Text_Include_LazyLoads_Email()
+        public void EfCore_GetAll_With_Text_Include_EagerLoads_Email()
         {
             var repository = new EfCoreRepository<Contact, string>(dbContext);
 
             var contact = repository.GetAll("EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
         }
 
         [Test]
-        public void EfCore_GetAll_With_Text_Include_And_Pagination_LazyLoads_Email()
+        public void EfCore_GetAll_With_Text_Include_And_Pagination_EagerLoads_Email()
         {
             var repository = new EfCoreRepository<Contact, string>(dbContext);
 
@@ -127,13 +145,13 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.GetAll(pagination, "EmailAddresses").First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(3); // first query is count for total records
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2); // first query is count for total records
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(3);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
         }
 
         [Test]
-        public void EfCore_FindAll_With_Include_And_Predicate_In_Specs_LazyLoads_Email()
+        public void EfCore_FindAll_With_Include_And_Predicate_In_Specs_EagerLoads_Email()
         {
             var repository = new EfCoreRepository<Contact, string>(dbContext);
 
@@ -154,9 +172,9 @@ namespace SharpRepository.Tests.Integration.Spikes
 
             var contact = repository.FindAll(findAllBySpec).First();
             contact.Name.ShouldBe("Test User 1");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1); // seems SqlServer does not makes statistic queries
             contact.EmailAddresses.First().Email.ShouldBe("test.addr.1@email.com");
-            dbContext.QueryLog.Count(filterSelects).ShouldBe(2);
+            dbContext.QueryLog.Count(filterSelects).ShouldBe(1);
 
             repository.FindAll(findAllBySpec).Count().ShouldBe(1);
         }

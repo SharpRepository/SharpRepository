@@ -99,7 +99,7 @@ namespace SharpRepository.Tests.Integration.Spikes
                 Console.WriteLine(order.Name + ", " + order.OrderId);
             }
 
-            orders.Count(filter).ShouldBe(0);
+            orders.CountDocuments(filter).ShouldBe(0);
 
             Console.WriteLine("* DELETE ALL *");
             orders.DeleteMany(new BsonDocument());
