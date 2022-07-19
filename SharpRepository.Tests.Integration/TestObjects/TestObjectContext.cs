@@ -11,6 +11,10 @@ namespace SharpRepository.Tests.Integration.TestObjects
         {
         }
 
+        public TestObjectContext(string connectionString) : base(connectionString)
+        {
+        }
+
         public DbSet<ContactInt> ContactInts { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<PhoneNumber> PhoneNumbers { get; set; }

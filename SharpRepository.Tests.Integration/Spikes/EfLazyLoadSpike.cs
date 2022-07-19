@@ -11,6 +11,7 @@ using SharpRepository.Repository.FetchStrategies;
 using SharpRepository.Repository.Queries;
 using SharpRepository.Repository.Specifications;
 using Shouldly;
+using Microsoft.Extensions.Configuration;
 
 namespace SharpRepository.Tests.Integration.Spikes
 {
@@ -32,11 +33,26 @@ namespace SharpRepository.Tests.Integration.Spikes
         private TestObjectContext dbContext;
         private List<string> queries;
 
+        public static IConfigurationRoot GetIConfigurationRoot(string outputPath)
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(outputPath)
+                .AddJsonFile("appsettings.json", optional: true)
+                .AddUserSecrets("627a7ed1-b2c9-408a-a341-c01fc197a606")
+                .Build();
+        }
+
+
         [SetUp]
         public void SetupRepository()
         {
+
+            var configurationRoot = GetIConfigurationRoot(TestContext.CurrentContext.TestDirectory);
+
+            var connectionString = configurationRoot.GetConnectionString("EfCoreConnectionString");
+
             queries = new List<string>();
-            dbContext = new TestObjectContext(Effort.DbConnectionFactory.CreateTransient());
+            dbContext = new TestObjectContext(connectionString);
 
             const int totalItems = 5;
 
@@ -61,7 +77,7 @@ namespace SharpRepository.Tests.Integration.Spikes
             dbContext.SaveChanges();
 
             // reistantiate in order to lose caches
-            dbContext = new TestObjectContext(Effort.DbConnectionFactory.CreateTransient());
+            dbContext = new TestObjectContext(connectionString);
         }
 
         [Test]
