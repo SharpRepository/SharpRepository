@@ -50,7 +50,6 @@ namespace SharpRepository.Tests.Integration.Spikes
                 dbContext.Contacts.Add(
                     new Contact
                     {
-                        ContactId = i.ToString(),
                         Name = "Test User " + i,
                         EmailAddresses = new List<EmailAddress> {
                             new EmailAddress {
