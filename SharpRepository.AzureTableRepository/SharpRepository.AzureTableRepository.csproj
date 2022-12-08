@@ -26,7 +26,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
